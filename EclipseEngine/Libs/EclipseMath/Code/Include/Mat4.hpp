@@ -20,6 +20,7 @@ namespace Math
 		~Mat4() = default;
 
 		// Functions
+		float& GetValues();
 		Vec4 Diagonal() const;
 		void Transpose();
 		float Trace() const;

@@ -1,3 +1,6 @@
 [submodule "EclipseEngine/Libs/glfw"]
 	path = EclipseEngine/Libs/glfw
 	url = https://github.com/glfw/glfw
+[submodule "EclipseEngine/Libs/Stb"]
+	path = EclipseEngine/Libs/Stb
+	url = https://github.com/nothings/stb
