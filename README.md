@@ -15,6 +15,9 @@ This project is made using c++ 20 and Visual Studio 2022.
 - [GLFW](https://www.glfw.org/)
 - [GLEW](https://glew.sourceforge.net/)
 
+## ⚠️ Requirements
+
+The project needs Git installed, internet access and you need to run the "UpdateSubmodules.bat" file.
 
 ## ​🌘​ Authors
 - [Arthur GUEDU](https://gitlabstudents.isartintra.com/a.guedu)
