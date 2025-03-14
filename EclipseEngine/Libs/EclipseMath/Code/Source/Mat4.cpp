@@ -67,6 +67,11 @@ Mat4::Mat4(const Mat4& _copy)
 
 //####################### FUNCTIONS #######################
 
+float& Mat4::GetValues()
+{
+	return *value[0];
+}
+
 Vec4 Mat4::Diagonal() const
 {
 	return { value[0][0], value[1][1], value[2][2], value[3][3] };

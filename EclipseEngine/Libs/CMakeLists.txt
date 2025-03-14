@@ -15,3 +15,10 @@ set(ECLIPSE_MATH_LIB_UNITTEST_OPT OFF CACHE BOOL "" FORCE)
 add_subdirectory(EclipseMath)
 
 target_link_libraries(ECLIPSE_ENGINE PUBLIC ECLIPSE_MATH)
+
+# GLAD
+add_subdirectory(Glad)
+target_link_libraries(ECLIPSE_ENGINE PRIVATE glad)
+
+# STB
+target_include_directories(ECLIPSE_ENGINE PUBLIC "Stb")
