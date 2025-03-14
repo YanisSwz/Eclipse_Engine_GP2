@@ -123,16 +123,16 @@ bool GLFWWindow::GetMouseButton(MOUSE_CODE _code, INPUT_ACTION _action)
     return m_mouseButtons[_code] == _action;
 }
 
-Vec2 GLFWWindow::GetCursorPos()
+Math::Vec2 GLFWWindow::GetCursorPos()
 {
     // TODO
-    return Vec2();
+    return Math::Vec2();
 }
 
-void GLFWWindow::SetCursorPos(Vec2 _pos)
+void GLFWWindow::SetCursorPos(Math::Vec2 _pos)
 {
     // TODO
-    Vec2 v = _pos;
+    Math::Vec2 v = _pos;
     return;
 }
 

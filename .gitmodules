@@ -1,0 +1,3 @@
+[submodule "EclipseEngine/Libs/glfw"]
+	path = EclipseEngine/Libs/glfw
+	url = https://github.com/glfw/glfw

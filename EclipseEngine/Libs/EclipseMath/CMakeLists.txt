@@ -22,13 +22,10 @@ else()
 endif()
 
 
-option(ECLIPSE_MATH_LIB_UNITTEST_OPT "Enable Unit Tests" OFF)
-
-
-# Enable CTests
-enable_testing()
+option(ECLIPSE_MATH_LIB_UNITTEST_OPT "Enable Unit Tests" ON)
 
 # Enable GoogleTest & GLM
 if (ECLIPSE_MATH_LIB_UNITTEST_OPT)
+    enable_testing()
     add_subdirectory(Tests)
 endif()

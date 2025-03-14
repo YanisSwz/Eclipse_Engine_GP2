@@ -2,7 +2,7 @@
 
 add_executable(ECLIPSE_EDITOR "Editor/main.cpp")
 
-target_link_libraries(ECLIPSE_EDITOR ECLIPSE_ENGINE)
+target_link_libraries(ECLIPSE_EDITOR PRIVATE ECLIPSE_ENGINE)
 
 # Set C++ standard version
 target_compile_features(ECLIPSE_EDITOR PRIVATE cxx_std_20)

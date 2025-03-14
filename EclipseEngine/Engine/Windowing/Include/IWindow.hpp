@@ -1,11 +1,6 @@
 #include <map>
 #include "Inputs.hpp"
-
-struct Vec2
-{
-	float x;
-	float y;
-};
+#include "Vec2.hpp"
 
 class IWindow
 {
@@ -29,7 +24,7 @@ public:
 	virtual void UpdateInputs() = 0;
 	virtual bool GetKey(KEY_CODE _code, INPUT_ACTION _action) = 0;
 	virtual bool GetMouseButton(MOUSE_CODE _code, INPUT_ACTION _action) = 0;
-	virtual Vec2 GetCursorPos() = 0;
-	virtual void SetCursorPos(Vec2 _pos) = 0;
+	virtual Math::Vec2 GetCursorPos() = 0;
+	virtual void SetCursorPos(Math::Vec2 _pos) = 0;
 	virtual void SetCursorMode(CURSOR_MODE _mode) = 0;
 };

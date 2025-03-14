@@ -18,8 +18,8 @@ public:
     void UpdateInputs() override;
 	bool GetKey(KEY_CODE _code, INPUT_ACTION _action) override;
 	bool GetMouseButton(MOUSE_CODE _code, INPUT_ACTION _action) override;
-	Vec2 GetCursorPos() override;
-	void SetCursorPos(Vec2 _pos) override;
+	Math::Vec2 GetCursorPos() override;
+	void SetCursorPos(Math::Vec2 _pos) override;
 	void SetCursorMode(CURSOR_MODE _mode) override;
 };
 
