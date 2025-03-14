@@ -125,15 +125,14 @@ bool GLFWWindow::GetMouseButton(MOUSE_CODE _code, INPUT_ACTION _action)
 
 Math::Vec2 GLFWWindow::GetCursorPos()
 {
-    // TODO
-    return Math::Vec2();
+    double x, y;
+    glfwGetCursorPos(m_window, &x, &y);
+    return Math::Vec2(static_cast<float>(x), static_cast<float>(y));
 }
 
 void GLFWWindow::SetCursorPos(Math::Vec2 _pos)
 {
-    // TODO
-    Math::Vec2 v = _pos;
-    return;
+    glfwSetCursorPos(m_window, static_cast<double>(_pos.x), static_cast<double>(_pos.y));
 }
 
 void GLFWWindow::SetCursorMode(CURSOR_MODE _mode)
