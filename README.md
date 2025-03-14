@@ -13,7 +13,7 @@ This project is made using c++ 20 and Visual Studio 2022.
 ### 💻​ Rendering
 - [ImGUI](https://github.com/ocornut/imgui)
 - [GLFW](https://www.glfw.org/)
-- [GLEW](https://glew.sourceforge.net/)
+- [Glad](https://glad.dav1d.de/)
 
 ## ⚠️ Requirements
 
