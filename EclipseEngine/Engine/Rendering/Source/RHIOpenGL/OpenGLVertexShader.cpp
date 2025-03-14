@@ -14,7 +14,10 @@ void OpenGLVertexShader::Init(std::string _path)
     // Verify if Vertex file path exists
     std::filesystem::path filePath{ _path };
     if (!std::filesystem::exists(filePath))
+    {
         std::cout << "The file: " << filePath << " not found!" << std::endl;
+        return;
+    }
     
     // Get Vertex file content
     std::ifstream vertFile(filePath);

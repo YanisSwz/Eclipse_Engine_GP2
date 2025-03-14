@@ -1,0 +1,49 @@
+Model:
+VikingRoom.obj
+
+Texture:
+VikingRoom.img
+
+Shader:
+Default.shd
+
+crntShd:
+Default.shd
+
+Skybox:
+Default.skb
+
+Skybox:
+Space.skb
+
+crntSkb:
+Default.skb
+
+skbEnable:
+true
+
+lightEnable:
+true
+
+blackAndWhiteEnable:
+true
+
+blackAndWhitePower:
+1.000000
+
+node:
+{
+nodeName
+mesh->modelName
+mesh->shaderName
+mesh->textureName
+mesh->isOutlineEnable
+mesh->outlining
+mesh->outlineColor
+0.f 0.f 0.f 1.f
+0.f 0.f 0.f 1.f
+1.f 1.f 1.f 1.f
+nullptr						// if light is nullptr
+directional/point/spot		// for the type of the light 
+							// properties of the light here
+}

@@ -18,7 +18,7 @@ target_link_libraries(ECLIPSE_ENGINE PUBLIC ECLIPSE_MATH)
 
 # GLAD
 add_subdirectory(Glad)
-target_link_libraries(ECLIPSE_ENGINE PRIVATE glad)
+target_link_libraries(ECLIPSE_ENGINE PUBLIC glad)
 
 # STB
 target_include_directories(ECLIPSE_ENGINE PUBLIC "Stb")

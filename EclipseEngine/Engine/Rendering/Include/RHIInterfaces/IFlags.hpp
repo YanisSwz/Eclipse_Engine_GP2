@@ -1,6 +1,5 @@
 #pragma once
-
-#include <Glad/glad.h>
+#include <glad/glad.h>
 #include <array>
 
 namespace RHI
