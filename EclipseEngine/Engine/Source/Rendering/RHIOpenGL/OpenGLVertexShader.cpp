@@ -43,7 +43,7 @@ void OpenGLVertexShader::Init(std::string _path)
     }
 }
 
-int OpenGLVertexShader::GetID() const
+unsigned int OpenGLVertexShader::GetID() const
 {
     return vertexShaderID;
 }

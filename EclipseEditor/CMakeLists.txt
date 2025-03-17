@@ -15,3 +15,11 @@ else()
 endif()
 
 add_subdirectory(Libs)
+
+add_custom_command(
+TARGET ECLIPSE_EDITOR
+POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_directory
+${CMAKE_CURRENT_SOURCE_DIR}/Assets
+$<TARGET_FILE_DIR:ECLIPSE_EDITOR>/Assets
+)

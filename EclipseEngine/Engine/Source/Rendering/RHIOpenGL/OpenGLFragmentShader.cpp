@@ -40,7 +40,7 @@ void OpenGLFragmentShader::Init(std::string _path)
     }
 }
 
-int RHI::OpenGL::OpenGLFragmentShader::GetID() const
+unsigned int RHI::OpenGL::OpenGLFragmentShader::GetID() const
 {
     return fragmentShaderID;
 }

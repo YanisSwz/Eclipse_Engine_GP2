@@ -13,7 +13,7 @@ namespace RHI
 			~OpenGLFragmentShader() override;
 
 			void Init(std::string _path) override;
-			int GetID() const override;
+			unsigned int GetID() const override;
 			void Delete() override;
 
 		private:
