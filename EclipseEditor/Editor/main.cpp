@@ -2,6 +2,8 @@
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
 #include "GLFWWindow.hpp"
 #include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #include <iostream>
 
 int main()
@@ -27,6 +29,13 @@ int main()
 		window->DestroyWindow();
 		return -1;
 	}
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window->CastGLFW()->GetWindow(), true);
+	ImGui_ImplOpenGL3_Init("#version 330");
 
 #pragma region Generate Shader
 	RHI::IVertexShader* vert = rdrInter->InstantiateVertexShader();
@@ -69,6 +78,11 @@ int main()
 	texture->Init("Assets/Textures/Avion.jpg");
 #pragma endregion
 
+#pragma region Generate FrameBuffer
+	RHI::IFrameBuffer* FB = rdrInter->InstantiateFrameBuffer();
+	FB->Init(window->width, window->height);
+#pragma endregion
+
 	float deltaTime = 0.f;
 	float oldTime = 0.f;
 	float crtAngle = 0.f;
@@ -88,6 +102,28 @@ int main()
 		oldTime = window->GetTime();
 		crtAngle += (deltaTime * speed);
 
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		// SCENE WINDOW
+		ImGui::Begin("Scene", 0);
+		ImVec2 sceneSize = ImGui::GetContentRegionAvail();
+		FB->Rescale(static_cast<int>(sceneSize.x), static_cast<int>(sceneSize.y));
+		//glViewport(0, 0, static_cast<GLsizei>(sceneSize.x), static_cast<GLsizei>(sceneSize.y));
+		ImVec2 windowPos = ImGui::GetCursorScreenPos();
+
+		ImGui::GetWindowDrawList()->AddImage(
+			(intptr_t)(FB->GetTextureID()),
+			ImVec2(windowPos.x, windowPos.y),
+			ImVec2(windowPos.x + sceneSize.x, windowPos.y + sceneSize.y),
+			ImVec2(0, 1),
+			ImVec2(1, 0));
+
+		ImGui::End();
+		ImGui::Render();
+
+		FB->Bind();
 #pragma region Draw
 		//Draw Background of OpenGL Window
 		rdrInter->ClearBackgroundColor({ 0.07f, 0.13f, 0.17f });
@@ -105,6 +141,9 @@ int main()
 		texture->Unbind();
 		shader->Unbind();
 #pragma endregion
+		FB->Unbind();
+
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		window->SwapBuffers();
 		window->PollEvents();
@@ -128,6 +167,16 @@ int main()
 	// Delete Texture
 	texture->Delete();
 	rdrInter->DestroyTexture2D(texture);
+
+	// Delete FrameBuffer
+	FB->Delete();
+	rdrInter->DestroyFrameBuffer(FB);
+#pragma endregion
+
+#pragma region Destroy ImGUI
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 #pragma endregion
 
 	window->DestroyWindow();

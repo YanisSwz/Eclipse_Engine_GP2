@@ -2,4 +2,4 @@
 
 # ImGUI
 add_subdirectory(ImGUI)
-target_link_libraries(ECLIPSE_ENGINE PUBLIC imgui)
+target_link_libraries(ECLIPSE_EDITOR PUBLIC imgui)

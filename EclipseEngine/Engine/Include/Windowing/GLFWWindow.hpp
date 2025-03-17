@@ -21,6 +21,9 @@ public:
 	Math::Vec2 GetCursorPos() override;
 	void SetCursorPos(Math::Vec2 _pos) override;
 	void SetCursorMode(CURSOR_MODE _mode) override;
+	inline GLFWwindow* GetWindow() { return m_window; }
+
+	inline virtual GLFWWindow* CastGLFW() { return this; }
 };
 
 inline int CastGlfwKeyCode(KEY_CODE _code)
