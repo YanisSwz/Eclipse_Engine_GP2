@@ -1,6 +1,6 @@
 ##### EclipseEngine #####
 
-file(GLOB_RECURSE ECLIPSE_ENGINE_SOURCES "Engine/*.cpp")
+file(GLOB_RECURSE ECLIPSE_ENGINE_SOURCES "Engine/Source/*.cpp")
 
 add_library(ECLIPSE_ENGINE SHARED ${ECLIPSE_ENGINE_SOURCES})
 
