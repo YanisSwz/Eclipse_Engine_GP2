@@ -13,3 +13,11 @@ if(MSVC)
 else()
     target_compile_options(ECLIPSE_EDITOR PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
+
+add_custom_command(
+TARGET ECLIPSE_EDITOR
+POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_directory
+${CMAKE_CURRENT_SOURCE_DIR}/Assets
+$<TARGET_FILE_DIR:ECLIPSE_EDITOR>/Assets
+)
