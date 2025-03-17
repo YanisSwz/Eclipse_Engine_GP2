@@ -40,6 +40,7 @@ namespace RHI
 			void DestroyCubeMap(ICubeMap* _cubeMap) const override;
 			void DestroyFrameBuffer(IFrameBuffer* _frameBuffer) const override;
 
+			bool InitGraphicsAPI() const override;
 			void EnableContextCapability(IFLAGS _capability) const override;
 			void ClearBackgroundColor(Math::Vec4 _color) const override;
 			void ClearBuffer(IFLAGS _buffers) const override;

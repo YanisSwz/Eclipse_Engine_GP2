@@ -39,6 +39,7 @@ namespace RHI
 		virtual void DestroyCubeMap(ICubeMap* _cubeMap) const = 0;
 		virtual void DestroyFrameBuffer(IFrameBuffer* _frameBuffer) const = 0;
 
+		virtual bool InitGraphicsAPI() const = 0;
 		virtual void EnableContextCapability(IFLAGS _capability) const = 0;
 		virtual void ClearBackgroundColor(Math::Vec4 _color) const = 0;
 		virtual void ClearBuffer(IFLAGS _buffers) const = 0;

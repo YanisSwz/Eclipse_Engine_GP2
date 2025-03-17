@@ -1,5 +1,6 @@
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
 #include <Glad/glad.h>
+#include <iostream>
 using namespace RHI::OpenGL;
 
 RHI::IVertexArray* OpenGLRenderInterface::InstantiateVertexArray() const
@@ -108,6 +109,16 @@ void OpenGLRenderInterface::DestroyFrameBuffer(IFrameBuffer* _frameBuffer) const
 	if (!_frameBuffer)
 		return;
 	delete _frameBuffer;
+}
+
+bool OpenGLRenderInterface::InitGraphicsAPI() const
+{
+	if (!gladLoadGL())
+	{
+		std::cout << "Failed to load opengl function pointers!" << std::endl;
+		return false;
+	}
+	return true;
 }
 
 void OpenGLRenderInterface::EnableContextCapability(IFLAGS _capability) const
