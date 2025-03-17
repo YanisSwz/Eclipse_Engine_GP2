@@ -3,8 +3,6 @@
 #include "Maths.hpp"
 #include <string>
 
-class Mat4; // TODO Remove
-
 namespace RHI
 {
 	namespace OpenGL
