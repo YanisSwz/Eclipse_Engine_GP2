@@ -13,3 +13,5 @@ if(MSVC)
 else()
     target_compile_options(ECLIPSE_EDITOR PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
+
+add_subdirectory(Libs)
