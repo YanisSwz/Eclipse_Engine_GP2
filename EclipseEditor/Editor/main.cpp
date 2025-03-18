@@ -123,6 +123,10 @@ int main()
 		ImGui::End();
 		ImGui::Render();
 
+		rdrInter->ClearBackgroundColor({ 0.f, 0.f, 0.f });
+		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
+		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
+
 		FB->Bind();
 #pragma region Draw
 		//Draw Background of OpenGL Window
