@@ -10,13 +10,36 @@ int main()
 {
 	std::vector<RHI::Vertex> vertexBuffer
 	{
+		// FRONT
 		{{ 0.5f, 0.5f, 0.0f },		{ 1.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top right
 		{{ 0.5f, -0.5f, 0.0f },		{ 1.0f, 0.0f },		{ 0.f, 0.f, 1.f }},  // bottom right
 		{{ -0.5f, -0.5f, 0.0f },	{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},  // bottom left
-		{{ -0.5f, 0.5f, 0.0f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }}   // top left 
+		{{ -0.5f, 0.5f, 0.0f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top left 
+
+
+		// RIGHT
+		{{ 0.5f, 0.5f, -1.f },		{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},
+		{{ 0.5f, -0.5f, -1.f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},
+
+		// LEFT
+		{ { -0.5f, -0.5f, -1.f },		{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f } },
+		{{ -0.5f, 0.5f, -1.f },			{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},
+
+		// BACK
+		{{ 0.5f, 0.5f, -1.f },		{ 1.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top right
+		{{ 0.5f, -0.5f, -1.f },		{ 1.0f, 0.0f },		{ 0.f, 0.f, 1.f }},  // bottom right
+		{{ -0.5f, -0.5f, -1.f },	{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},  // bottom left
+		{{ -0.5f, 0.5f, -1.f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top left 
 	};
 
-	std::vector<uint32_t> indexBuffer{ 0, 1, 2, 2, 3, 0 };
+	std::vector<uint32_t> indexBuffer{ 
+		0, 1, 2, 2, 3, 0,  
+		0, 1, 4, 4, 5, 1,
+		2, 3, 6, 6, 7, 3,
+		8, 9, 10, 10, 11, 8,
+		0, 3, 7, 7, 4, 0,
+		1, 2, 6, 6, 5, 1
+	};
 
 	IWindow* window = new GLFWWindow;
 	window->CreateWindow("Eclipse Engine", 1280, 720);
@@ -29,6 +52,9 @@ int main()
 		window->DestroyWindow();
 		return -1;
 	}
+
+	rdrInter->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
+	rdrInter->DepthFunc(RHI::IFLAGS::DEPTH_LESS);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -135,7 +161,8 @@ int main()
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
 		// Update TRS Rotation
-		TRS.RotateY(crtAngle);
+		TRS.Rotate(Math::Vec3(crtAngle, crtAngle, 0.f));
+		TRS *= Math::Mat4::s_Scale(Math::Vec3(0.5f, 0.5f, 0.5f));
 
 		// Draw Model with the texture
 		shader->Bind();

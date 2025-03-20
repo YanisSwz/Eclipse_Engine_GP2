@@ -12,6 +12,7 @@ namespace RHI
         STENCIL_BUFFER_BIT = 3,
         DEPTH_LESS = 4,
         DEPTH_LEQUAL = 5,
+        DEPTH_TEST = 6,
         COUNT
 	};
 
@@ -22,7 +23,8 @@ namespace RHI
         {
             GL_FLOAT,           // TYPE
             GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GL_STENCIL_BUFFER_BIT,        // BUFFER_BIT
-            GL_LESS, GL_LEQUAL      // DEPTH_COMPARISON
+            GL_LESS, GL_LEQUAL,      // DEPTH_COMPARISON
+            GL_DEPTH_TEST
         };
 
         return openGLMacro[typeIndex];
