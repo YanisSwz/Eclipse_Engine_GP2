@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include "Inputs.hpp"
 #include "Vec2.hpp"
