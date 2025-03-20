@@ -1,5 +1,6 @@
 #pragma once
 #include "RHIInterfaces/IVertexShader.hpp"
+#include "ProjectExports.hpp"
 #include <glad/glad.h>
 
 namespace RHI
@@ -9,12 +10,12 @@ namespace RHI
 		class OpenGLVertexShader : public IVertexShader
 		{
 		public:
-			OpenGLVertexShader() = default;
-			~OpenGLVertexShader() override;
+			ECLIPSE_ENGINE OpenGLVertexShader() = default;
+			ECLIPSE_ENGINE ~OpenGLVertexShader() override;
 
-			void Init(std::string _path) override;
-			unsigned int GetID() const override;
-			void Delete() override;
+			ECLIPSE_ENGINE void Init(std::string _path) override;
+			ECLIPSE_ENGINE unsigned int GetID() const override;
+			ECLIPSE_ENGINE void Delete() override;
 
 		private:
 			GLuint vertexShaderID = GL_NONE;

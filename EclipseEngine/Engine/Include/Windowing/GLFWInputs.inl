@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Inputs.hpp"
+#include "ProjectExports.hpp"
 #include <GLFW/glfw3.h>
 #include <array>
 
-inline int CastGlfwKeyCode(KEY_CODE _code)
+ECLIPSE_ENGINE inline int CastGlfwKeyCode(KEY_CODE _code)
 {
 	int index = (int)_code;
 
