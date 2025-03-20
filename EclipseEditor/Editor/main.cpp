@@ -11,25 +11,25 @@ int main()
 	std::vector<RHI::Vertex> vertexBuffer
 	{
 		// FRONT
-		{{ 0.5f, 0.5f, 0.0f },		{ 1.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top right
-		{{ 0.5f, -0.5f, 0.0f },		{ 1.0f, 0.0f },		{ 0.f, 0.f, 1.f }},  // bottom right
-		{{ -0.5f, -0.5f, 0.0f },	{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},  // bottom left
-		{{ -0.5f, 0.5f, 0.0f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top left 
+		{{ 0.5f, 0.5f, 0.5f },		{ 1.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top right
+		{{ 0.5f, -0.5f, 0.5f },		{ 1.0f, 0.0f },		{ 0.f, 0.f, 1.f }},  // bottom right
+		{{ -0.5f, -0.5f, 0.5f },	{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},  // bottom left
+		{{ -0.5f, 0.5f, 0.5f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top left 
 
 
 		// RIGHT
-		{{ 0.5f, 0.5f, -1.f },		{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},
-		{{ 0.5f, -0.5f, -1.f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},
+		{{ 0.5f, 0.5f, -0.5f },		{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},
+		{{ 0.5f, -0.5f, -0.5f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},
 
 		// LEFT
-		{ { -0.5f, -0.5f, -1.f },		{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f } },
-		{{ -0.5f, 0.5f, -1.f },			{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},
+		{ { -0.5f, -0.5f, -0.5f },		{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f } },
+		{{ -0.5f, 0.5f, -0.5f },			{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},
 
 		// BACK
-		{{ 0.5f, 0.5f, -1.f },		{ 1.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top right
-		{{ 0.5f, -0.5f, -1.f },		{ 1.0f, 0.0f },		{ 0.f, 0.f, 1.f }},  // bottom right
-		{{ -0.5f, -0.5f, -1.f },	{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},  // bottom left
-		{{ -0.5f, 0.5f, -1.f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top left 
+		{{ 0.5f, 0.5f, -0.5f },		{ 1.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top right
+		{{ 0.5f, -0.5f, -0.5f },		{ 1.0f, 0.0f },		{ 0.f, 0.f, 1.f }},  // bottom right
+		{{ -0.5f, -0.5f, -0.5f },	{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},  // bottom left
+		{{ -0.5f, 0.5f, -0.5f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top left 
 	};
 
 	std::vector<uint32_t> indexBuffer{ 
@@ -54,7 +54,6 @@ int main()
 	}
 
 	rdrInter->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
-	rdrInter->DepthFunc(RHI::IFLAGS::DEPTH_LESS);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -161,8 +160,7 @@ int main()
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
 		// Update TRS Rotation
-		TRS.Rotate(Math::Vec3(crtAngle, crtAngle, 0.f));
-		TRS *= Math::Mat4::s_Scale(Math::Vec3(0.5f, 0.5f, 0.5f));
+		TRS.TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
 
 		// Draw Model with the texture
 		shader->Bind();
