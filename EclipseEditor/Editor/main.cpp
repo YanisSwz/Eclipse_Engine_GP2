@@ -92,7 +92,7 @@ int main()
 	while (!window->WindowShouldClose())
 	{
 		window->UpdateInputs();
-		if (window->GetKey(KEY_ESCAPE, INPUT_PRESS))
+		if (window->GetKey(KEY_CODE::KEY_ESCAPE, INPUT_ACTION::INPUT_PRESS))
 		{
 			window->SetWindowShouldClose(true);
 		}
