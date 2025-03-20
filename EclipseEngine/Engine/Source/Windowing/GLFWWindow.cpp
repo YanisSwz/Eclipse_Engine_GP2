@@ -1,4 +1,5 @@
 #include "GLFWWindow.hpp"
+#include "GLFWInputs.inl"
 
 void GLFWWindow::CreateWindow(const char* _name, int _width, int _height)
 {
@@ -70,17 +71,17 @@ void GLFWWindow::UpdateInputs()
         int action = glfwGetKey(m_window, CastGlfwKeyCode(it->first));
         if (action == GLFW_PRESS)
         {
-            if (it->second == INPUT_PRESS || it->second == INPUT_DOWN)
-                it->second = INPUT_DOWN;
+            if (it->second == INPUT_ACTION::INPUT_PRESS || it->second == INPUT_ACTION::INPUT_DOWN)
+                it->second = INPUT_ACTION::INPUT_DOWN;
             else
-                it->second = INPUT_PRESS;
+                it->second = INPUT_ACTION::INPUT_PRESS;
         }
         else if (action == GLFW_RELEASE)
         {
-            if (it->second == INPUT_RELEASE || it->second == INPUT_UP)
-                it->second = INPUT_UP;
+            if (it->second == INPUT_ACTION::INPUT_RELEASE || it->second == INPUT_ACTION::INPUT_UP)
+                it->second = INPUT_ACTION::INPUT_UP;
             else
-                it->second = INPUT_RELEASE;
+                it->second = INPUT_ACTION::INPUT_RELEASE;
         }
     }
 
@@ -90,36 +91,36 @@ void GLFWWindow::UpdateInputs()
         int action = glfwGetMouseButton(m_window, CastGlfwMouseCode(it2->first));
         if (action == GLFW_PRESS)
         {
-            if (it2->second == INPUT_PRESS || it2->second == INPUT_DOWN)
-                it2->second = INPUT_DOWN;
+            if (it2->second == INPUT_ACTION::INPUT_PRESS || it2->second == INPUT_ACTION::INPUT_DOWN)
+                it2->second = INPUT_ACTION::INPUT_DOWN;
             else
-                it2->second = INPUT_PRESS;
+                it2->second = INPUT_ACTION::INPUT_PRESS;
         }
         else if (action == GLFW_RELEASE)
         {
-            if (it2->second == INPUT_RELEASE || it2->second == INPUT_UP)
-                it2->second = INPUT_UP;
+            if (it2->second == INPUT_ACTION::INPUT_RELEASE || it2->second == INPUT_ACTION::INPUT_UP)
+                it2->second = INPUT_ACTION::INPUT_UP;
             else
-                it2->second = INPUT_RELEASE;
+                it2->second = INPUT_ACTION::INPUT_RELEASE;
         }
     }
 }
 
 bool GLFWWindow::GetKey(KEY_CODE _code, INPUT_ACTION _action)
 {
-    if (_action == INPUT_UP)
-        return m_keys[_code] == _action || m_keys[_code] == INPUT_RELEASE;
-    else if (_action == INPUT_DOWN)
-        return m_keys[_code] == _action || m_keys[_code] == INPUT_PRESS;
+    if (_action == INPUT_ACTION::INPUT_UP)
+        return m_keys[_code] == _action || m_keys[_code] == INPUT_ACTION::INPUT_RELEASE;
+    else if (_action == INPUT_ACTION::INPUT_DOWN)
+        return m_keys[_code] == _action || m_keys[_code] == INPUT_ACTION::INPUT_PRESS;
     return m_keys[_code] == _action;
 }
 
 bool GLFWWindow::GetMouseButton(MOUSE_CODE _code, INPUT_ACTION _action)
 {
-    if (_action == INPUT_UP)
-        return m_mouseButtons[_code] == _action || m_mouseButtons[_code] == INPUT_RELEASE;
-    else if (_action == INPUT_DOWN)
-        return m_mouseButtons[_code] == _action || m_mouseButtons[_code] == INPUT_PRESS;
+    if (_action == INPUT_ACTION::INPUT_UP)
+        return m_mouseButtons[_code] == _action || m_mouseButtons[_code] == INPUT_ACTION::INPUT_RELEASE;
+    else if (_action == INPUT_ACTION::INPUT_DOWN)
+        return m_mouseButtons[_code] == _action || m_mouseButtons[_code] == INPUT_ACTION::INPUT_PRESS;
     return m_mouseButtons[_code] == _action;
 }
 

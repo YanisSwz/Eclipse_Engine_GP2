@@ -1,5 +1,6 @@
 #pragma once
 #include "RHIInterfaces/IFragmentShader.hpp"
+#include "ProjectExports.hpp"
 #include <Glad/glad.h>
 
 namespace RHI
@@ -9,12 +10,12 @@ namespace RHI
 		class OpenGLFragmentShader : public IFragmentShader
 		{
 		public:
-			OpenGLFragmentShader() = default;
-			~OpenGLFragmentShader() override;
+			ECLIPSE_ENGINE OpenGLFragmentShader() = default;
+			ECLIPSE_ENGINE ~OpenGLFragmentShader() override;
 
-			void Init(std::string _path) override;
-			unsigned int GetID() const override;
-			void Delete() override;
+			ECLIPSE_ENGINE void Init(std::string _path) override;
+			ECLIPSE_ENGINE unsigned int GetID() const override;
+			ECLIPSE_ENGINE void Delete() override;
 
 		private:
 			GLuint fragmentShaderID = GL_NONE;

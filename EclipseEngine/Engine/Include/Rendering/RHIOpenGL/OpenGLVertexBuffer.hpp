@@ -1,5 +1,6 @@
 #pragma once
 #include "RHIInterfaces/IVertexBuffer.hpp"
+#include "ProjectExports.hpp"
 #include <Glad/glad.h>
 
 namespace RHI
@@ -9,13 +10,13 @@ namespace RHI
 		class OpenGLVertexBuffer : public IVertexBuffer
 		{
 		public:
-			OpenGLVertexBuffer() = default;
-			~OpenGLVertexBuffer() override;
+			ECLIPSE_ENGINE OpenGLVertexBuffer() = default;
+			ECLIPSE_ENGINE ~OpenGLVertexBuffer() override;
 
-			void Init(Vertex* _vertices, size_t _size) override;
-			void Bind() override;
-			void Unbind() override;
-			void Delete() override;
+			ECLIPSE_ENGINE void Init(Vertex* _vertices, size_t _size) override;
+			ECLIPSE_ENGINE void Bind() override;
+			ECLIPSE_ENGINE void Unbind() override;
+			ECLIPSE_ENGINE void Delete() override;
 
 		private:
 			GLuint ID = GL_NONE;

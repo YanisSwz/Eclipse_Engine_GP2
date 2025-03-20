@@ -9,6 +9,7 @@
 #include "RHIOpenGL/OpenGLTexture2D.hpp"
 #include "RHIOpenGL/OpenGLCubeMap.hpp"
 #include "RHIOpenGL/OpenGLFrameBuffer.hpp"
+#include "ProjectExports.hpp"
 
 namespace RHI
 {
@@ -17,35 +18,35 @@ namespace RHI
 		class OpenGLRenderInterface : public IRenderInterface
 		{
 		public:
-			OpenGLRenderInterface() = default;
-			~OpenGLRenderInterface() override = default;
+			ECLIPSE_ENGINE OpenGLRenderInterface() = default;
+			ECLIPSE_ENGINE ~OpenGLRenderInterface() override = default;
 
-			IVertexArray* InstantiateVertexArray() const override;
-			IVertexBuffer* InstantiateVertexBuffer() const override;
-			IIndexBuffer* InstantiateIndexBuffer() const override;
-			IShaderProgram* InstantiateShaderProgram() const override;
-			IVertexShader* InstantiateVertexShader() const override;
-			IFragmentShader* InstantiateFragmentShader() const override;
-			ITexture2D* InstantiateTexture2D() const override;
-			ICubeMap* InstantiateCubeMap() const override;
-			IFrameBuffer* InstantiateFrameBuffer() const override;
+			ECLIPSE_ENGINE IVertexArray* InstantiateVertexArray() const override;
+			ECLIPSE_ENGINE IVertexBuffer* InstantiateVertexBuffer() const override;
+			ECLIPSE_ENGINE IIndexBuffer* InstantiateIndexBuffer() const override;
+			ECLIPSE_ENGINE IShaderProgram* InstantiateShaderProgram() const override;
+			ECLIPSE_ENGINE IVertexShader* InstantiateVertexShader() const override;
+			ECLIPSE_ENGINE IFragmentShader* InstantiateFragmentShader() const override;
+			ECLIPSE_ENGINE ITexture2D* InstantiateTexture2D() const override;
+			ECLIPSE_ENGINE ICubeMap* InstantiateCubeMap() const override;
+			ECLIPSE_ENGINE IFrameBuffer* InstantiateFrameBuffer() const override;
 
-			void DestroyVertexArray(IVertexArray* _vertexArray) const override;
-			void DestroyVertexBuffer(IVertexBuffer* _vertexBuffer) const override;
-			void DestroyIndexBuffer(IIndexBuffer* _indexBuffer) const override;
-			void DestroyShaderProgram(IShaderProgram* _shaderProgram) const override;
-			void DestroyVertexShader(IVertexShader* _vertexShader) const override;
-			void DestroyFragmentShader(IFragmentShader* _fragmentShader) const override;
-			void DestroyTexture2D(ITexture2D* _texture2D) const override;
-			void DestroyCubeMap(ICubeMap* _cubeMap) const override;
-			void DestroyFrameBuffer(IFrameBuffer* _frameBuffer) const override;
+			ECLIPSE_ENGINE void DestroyVertexArray(IVertexArray* _vertexArray) const override;
+			ECLIPSE_ENGINE void DestroyVertexBuffer(IVertexBuffer* _vertexBuffer) const override;
+			ECLIPSE_ENGINE void DestroyIndexBuffer(IIndexBuffer* _indexBuffer) const override;
+			ECLIPSE_ENGINE void DestroyShaderProgram(IShaderProgram* _shaderProgram) const override;
+			ECLIPSE_ENGINE void DestroyVertexShader(IVertexShader* _vertexShader) const override;
+			ECLIPSE_ENGINE void DestroyFragmentShader(IFragmentShader* _fragmentShader) const override;
+			ECLIPSE_ENGINE void DestroyTexture2D(ITexture2D* _texture2D) const override;
+			ECLIPSE_ENGINE void DestroyCubeMap(ICubeMap* _cubeMap) const override;
+			ECLIPSE_ENGINE void DestroyFrameBuffer(IFrameBuffer* _frameBuffer) const override;
 
-			bool InitGraphicsAPI() const override;
-			void EnableContextCapability(IFLAGS _capability) const override;
-			void ClearBackgroundColor(Math::Vec4 _color) const override;
-			void ClearBuffer(IFLAGS _buffers) const override;
-			void Viewport(int _x, int _y, int _width, int _height) const override;
-			void DepthFunc(IFLAGS _depthComparison) const override;
+			ECLIPSE_ENGINE bool InitGraphicsAPI() const override;
+			ECLIPSE_ENGINE void EnableContextCapability(IFLAGS _capability) const override;
+			ECLIPSE_ENGINE void ClearBackgroundColor(Math::Vec4 _color) const override;
+			ECLIPSE_ENGINE void ClearBuffer(IFLAGS _buffers) const override;
+			ECLIPSE_ENGINE void Viewport(int _x, int _y, int _width, int _height) const override;
+			ECLIPSE_ENGINE void DepthFunc(IFLAGS _depthComparison) const override;
 
 		private:
 

@@ -19,7 +19,7 @@ int main()
 	std::vector<uint32_t> indexBuffer{ 0, 1, 2, 2, 3, 0 };
 
 	IWindow* window = new GLFWWindow;
-	window->CreateWindow("Eclipse Engine", 1080, 720);
+	window->CreateWindow("Eclipse Engine", 1280, 720);
 	//window->SetCursorMode(CURSOR_MODE::CURSOR_DISABLED);
 
 	RHI::IRenderInterface* rdrInter = new RHI::OpenGL::OpenGLRenderInterface;
@@ -92,7 +92,7 @@ int main()
 	while (!window->WindowShouldClose())
 	{
 		window->UpdateInputs();
-		if (window->GetKey(KEY_ESCAPE, INPUT_PRESS))
+		if (window->GetKey(KEY_CODE::KEY_ESCAPE, INPUT_ACTION::INPUT_PRESS))
 		{
 			window->SetWindowShouldClose(true);
 		}

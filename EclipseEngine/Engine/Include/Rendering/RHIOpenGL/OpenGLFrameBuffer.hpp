@@ -1,5 +1,6 @@
 #pragma once
 #include "RHIInterfaces/IFrameBuffer.hpp"
+#include "ProjectExports.hpp"
 #include <Glad/glad.h>
 
 namespace RHI
@@ -9,15 +10,15 @@ namespace RHI
 		class OpenGLFrameBuffer : public IFrameBuffer
 		{
 		public:
-			OpenGLFrameBuffer() = default;
-			~OpenGLFrameBuffer() override;
+			ECLIPSE_ENGINE OpenGLFrameBuffer() = default;
+			ECLIPSE_ENGINE ~OpenGLFrameBuffer() override;
 
-			void Init(int _width, int _height) override;
-			void Rescale(int _width, int _height) override;
-			void Bind() override;
-			void Unbind() override;
-			unsigned int GetTextureID() const override;
-			void Delete() override;
+			ECLIPSE_ENGINE void Init(int _width, int _height) override;
+			ECLIPSE_ENGINE void Rescale(int _width, int _height) override;
+			ECLIPSE_ENGINE void Bind() override;
+			ECLIPSE_ENGINE void Unbind() override;
+			ECLIPSE_ENGINE unsigned int GetTextureID() const override;
+			ECLIPSE_ENGINE void Delete() override;
 
 		private:
 			int width = 0;

@@ -1,5 +1,6 @@
 #pragma once
 #include "RHIInterfaces/IIndexBuffer.hpp"
+#include "ProjectExports.hpp"
 #include <Glad/glad.h>
 
 namespace RHI
@@ -11,14 +12,14 @@ namespace RHI
 		class OpenGLIndexBuffer : public IIndexBuffer
 		{
 		public:
-			OpenGLIndexBuffer() = default;
-			~OpenGLIndexBuffer() override;
+			ECLIPSE_ENGINE OpenGLIndexBuffer() = default;
+			ECLIPSE_ENGINE ~OpenGLIndexBuffer() override;
 
-			void Init(unsigned int* _indices, size_t _size) override;
-			void Draw(IVertexArray* _vertexArray) override;
-			void Bind() override;
-			void Unbind() override;
-			void Delete() override;
+			ECLIPSE_ENGINE void Init(unsigned int* _indices, size_t _size) override;
+			ECLIPSE_ENGINE void Draw(IVertexArray* _vertexArray) override;
+			ECLIPSE_ENGINE void Bind() override;
+			ECLIPSE_ENGINE void Unbind() override;
+			ECLIPSE_ENGINE void Delete() override;
 
 		private:
 			GLuint ID = GL_NONE;
