@@ -6,6 +6,8 @@
 #include "imgui_impl_opengl3.h"
 #include <iostream>
 
+using namespace Windowing;
+
 int main()
 {
 	std::vector<RHI::Vertex> vertexBuffer
