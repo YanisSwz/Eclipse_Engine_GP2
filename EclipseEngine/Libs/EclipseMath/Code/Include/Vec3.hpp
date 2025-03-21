@@ -15,6 +15,7 @@ namespace Math
 		Vec3(float _x, float _y, float _z);
 		Vec3(Vec2 _vec2);
 		Vec3(Vec2 _vec2, float _z);
+		Vec3(Vec3 _vec1, Vec3 _vec2);
 		Vec3(Vec4 _vec4);
 		Vec3(const Vec3 & _copy);
 		~Vec3() = default;

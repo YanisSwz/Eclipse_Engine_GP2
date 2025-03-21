@@ -1,5 +1,4 @@
 #pragma once
-
 #include "IWindow.hpp"
 #include "ProjectExports.hpp"
 #include <GLFW/glfw3.h>
@@ -7,8 +6,10 @@
 class GLFWWindow : public IWindow
 {
 	GLFWwindow* m_window = nullptr;
-
 public:
+	static bool s_mouseScrollDeltaReset;
+	static float s_mouseScrollDelta;
+
 	ECLIPSE_ENGINE void CreateWindow(const char* _name, int _width, int _height) override;
 	ECLIPSE_ENGINE void SetFrameBufferSizeCallback() override;
 	ECLIPSE_ENGINE float GetTime() override;
@@ -24,6 +25,7 @@ public:
 	ECLIPSE_ENGINE void SetCursorPos(Math::Vec2 _pos) override;
 	ECLIPSE_ENGINE void SetCursorMode(CURSOR_MODE _mode) override;
 	ECLIPSE_ENGINE inline GLFWwindow* GetWindow() { return m_window; }
+	ECLIPSE_ENGINE float GetMouseScrollValue() override;
 
 	inline virtual GLFWWindow* CastGLFW() { return this; }
 };

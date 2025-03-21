@@ -35,6 +35,8 @@ namespace Math
 		void Scale(Vec4 _scale);
 		void TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
 		void TRS(Vec4 _translate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _rotate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _scale = { 1.f, 1.f, 1.f, 1.f });
+		void GetPerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far);
+		void GetViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up);
 		void Print() const;
 
 		// Static Functions
@@ -55,6 +57,8 @@ namespace Math
 		static Mat4 s_Scale(Vec4 _scale);
 		static Mat4 s_TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
 		static Mat4 s_TRS(Vec4 _translate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _rotate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _scale = { 1.f, 1.f, 1.f, 1.f });
+		static Mat4 s_GetPerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far);
+		static Mat4 s_GetViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up);
 		static void s_Print(Mat4 _mat);
 
 		// Operator *

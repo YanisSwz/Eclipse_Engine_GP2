@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "SceneCamera.hpp"
 #include <iostream>
 
 int main()
@@ -108,12 +109,14 @@ int main()
 	FB->Init(window->width, window->height);
 #pragma endregion
 
+	Core::SceneCamera sceneCamera{ 60.f, 0.1f, 100.f };
+
 	float deltaTime = 0.f;
 	float oldTime = 0.f;
 	float crtAngle = 0.f;
 	float speed = 1.f;
 	Math::Mat4 TRS;
-
+	
 	while (!window->WindowShouldClose())
 	{
 		window->UpdateInputs();
@@ -133,6 +136,10 @@ int main()
 
 		// SCENE WINDOW
 		ImGui::Begin("Scene", 0);
+		ImVec2 sceneWindowSize = ImGui::GetWindowSize();
+		ImVec2 sceneWindowPos = ImGui::GetWindowPos();
+		sceneCamera.Update(window, deltaTime, { sceneWindowPos.x, sceneWindowPos.y }, { sceneWindowSize.x, sceneWindowSize.y });
+
 		ImVec2 sceneSize = ImGui::GetContentRegionAvail();
 		FB->Rescale(static_cast<int>(sceneSize.x), static_cast<int>(sceneSize.y));
 		//glViewport(0, 0, static_cast<GLsizei>(sceneSize.x), static_cast<GLsizei>(sceneSize.y));
@@ -152,25 +159,26 @@ int main()
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
-		FB->Bind();
 #pragma region Draw
+		FB->Bind();
 		//Draw Background of OpenGL Window
 		rdrInter->ClearBackgroundColor({ 0.07f, 0.13f, 0.17f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
 		// Update TRS Rotation
-		TRS.TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
+		//TRS.TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
 
 		// Draw Model with the texture
 		shader->Bind();
+		sceneCamera.SetShaderData(shader);
 		shader->SetMat4("TRS", TRS);
 		texture->Bind();
 		objectIndexBuffer->Draw(objectVertexArray);
 		texture->Unbind();
 		shader->Unbind();
-#pragma endregion
 		FB->Unbind();
+#pragma endregion
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

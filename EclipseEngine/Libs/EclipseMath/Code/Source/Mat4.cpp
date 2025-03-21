@@ -304,6 +304,57 @@ void Mat4::TRS(Vec4 _translate, Vec4 _rotate, Vec4 _scale)
 	*this *= s_Scale(_scale);
 }
 
+void Mat4::GetPerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far)
+{
+	float fovRad = Tools::ToRad(_fov);
+	float aspect = static_cast<float>(_width) / static_cast<float>(_height);
+	value[0][0] = 1.f / (aspect * tanf(fovRad / 2.f));
+	value[0][1] = 0.f;
+	value[0][2] = 0.f;
+	value[0][3] = 0.f;
+	value[1][0] = 0.f;
+	value[1][1] = 1.f / (tanf(fovRad / 2.f));
+	value[1][2] = 0.f;
+	value[1][3] = 0.f;
+	value[2][0] = 0.f;
+	value[2][1] = 0.f;
+	value[2][2] = -1.f * (_far + _near) / (_far - _near);
+	value[2][3] = -1.f * (2.f * _far * _near) / (_far - _near);
+	value[3][0] = 0.f;
+	value[3][1] = 0.f;
+	value[3][2] = -1.f;
+	value[3][3] = 0.f;
+}
+
+void Mat4::GetViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up)
+{
+	Vec3 frwd = Vec3{ _at, _eye };
+	frwd.Normalize();
+	Vec3 right = Vec3::s_CrossProduct(frwd, _up);
+	right.Normalize();
+	_up.Normalize();
+
+	value[0][0] = right.x;
+	value[0][1] = right.y;
+	value[0][2] = right.z;
+	value[0][3] = -right.DotProduct(_at);
+
+	value[1][0] = _up.x;
+	value[1][1] = _up.y;
+	value[1][2] = _up.z;
+	value[1][3] = -_up.DotProduct(_at);
+
+	value[2][0] = -frwd.x;
+	value[2][1] = -frwd.y;
+	value[2][2] = -frwd.z;
+	value[2][3] = frwd.DotProduct(_at);
+
+	value[3][0] = 0.0f;
+	value[3][1] = 0.0f;
+	value[3][2] = 0.0f;
+	value[3][3] = 1.0f;
+}
+
 void Mat4::Print() const
 {
 	std::cout << "|" << value[0][0] << ", " << value[0][1] << ", " << value[0][2] << ", " << value[0][3] << "|" << std::endl
@@ -569,6 +620,33 @@ Mat4 Mat4::s_TRS(Vec4 _translate, Vec4 _rotate, Vec4 _scale)
 	TRS *= s_Rotate(_rotate);
 	TRS *= s_Scale(_scale);
 	return TRS;
+}
+
+Mat4 Mat4::s_GetPerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far)
+{
+	float aspectRatio = static_cast<float>(_width) / static_cast<float>(_height);
+	float fovRad = _fov * Tools::PI / 180.f;
+	return { 1.f / (aspectRatio * tanf(fovRad / 2.f)), 0.f, 0.f, 0.f,
+		0.f, 1.f / (tanf(fovRad / 2.f)), 0.f, 0.f,
+		0.f, 0.f, -1.f * (_far + _near) / (_far - _near), -1.f * (2.f * _far * _near) / (_far - _near),
+		0.f, 0.f, -1.f, 0.f };
+}
+
+Mat4 Mat4::s_GetViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up)
+{
+	Vec3 frwd = Vec3{ _at, _eye };
+	frwd.Normalize();
+	Vec3 right = Vec3::s_CrossProduct(frwd, _up);
+	right.Normalize();
+	Vec3 _newUp = Vec3::s_CrossProduct(right, frwd);
+	_newUp.Normalize();
+
+	return {
+	right.x, right.y, right.z, -right.DotProduct(_at),
+	_newUp.x, _newUp.y, _newUp.z, -_newUp.DotProduct(_at),
+	-frwd.x, -frwd.y, -frwd.z, frwd.DotProduct(_at),
+	0.0f, 0.0f, 0.0f, 1.0f
+	};
 }
 
 void Mat4::s_Print(Mat4 _mat)

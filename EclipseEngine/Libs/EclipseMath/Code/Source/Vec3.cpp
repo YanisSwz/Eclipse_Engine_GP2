@@ -38,6 +38,13 @@ Vec3::Vec3(Vec2 _vec2, float _z)
 	z = _z;
 }
 
+Vec3::Vec3(Vec3 _vec1, Vec3 _vec2)
+{
+	x = _vec2.x - _vec1.x;
+	y = _vec2.y - _vec1.y;
+	z = _vec2.z - _vec1.z;
+}
+
 Vec3::Vec3(Vec4 _vec4)
 {
 	x = _vec4.x;

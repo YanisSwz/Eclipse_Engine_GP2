@@ -54,7 +54,9 @@ ECLIPSE_ENGINE inline int CastGlfwKeyCode(KEY_CODE _code)
 		GLFW_KEY_UP,
 		GLFW_KEY_DOWN,
 		GLFW_KEY_LEFT,
-		GLFW_KEY_RIGHT
+		GLFW_KEY_RIGHT,
+		GLFW_KEY_LEFT_CONTROL,
+		GLFW_KEY_LEFT_SHIFT
 	};
 
 	return glfwKeyCode[index];
@@ -84,7 +86,8 @@ inline int CastGlfwCursorMode(CURSOR_MODE _mode)
 	{
 		GLFW_CURSOR_NORMAL,
 		GLFW_CURSOR_HIDDEN,
-		GLFW_CURSOR_DISABLED
+		GLFW_CURSOR_DISABLED,
+		GLFW_CURSOR_CAPTURED
 	};
 
 	return glfwCursorMode[index];

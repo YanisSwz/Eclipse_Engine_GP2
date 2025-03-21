@@ -1,6 +1,16 @@
 #include "GLFWWindow.hpp"
 #include "GLFWInputs.inl"
 
+float GLFWWindow::s_mouseScrollDelta = 0.f;
+bool GLFWWindow::s_mouseScrollDeltaReset = false;
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    window = window;
+    xoffset = xoffset;
+    GLFWWindow::s_mouseScrollDelta = static_cast<float>(yoffset);
+}
+
 void GLFWWindow::CreateWindow(const char* _name, int _width, int _height)
 {
     name = _name;
@@ -21,6 +31,9 @@ void GLFWWindow::CreateWindow(const char* _name, int _width, int _height)
     }
 
     glfwMakeContextCurrent(m_window);
+
+    // Set mouse scroll callback
+    glfwSetScrollCallback(m_window, scroll_callback);
 }
 
 void GLFWWindow::SetFrameBufferSizeCallback()
@@ -65,6 +78,16 @@ void GLFWWindow::DestroyWindow()
 
 void GLFWWindow::UpdateInputs()
 {
+    if (s_mouseScrollDelta != 0.f && !s_mouseScrollDeltaReset)
+    {
+        s_mouseScrollDeltaReset = true;
+    }
+    else if (s_mouseScrollDelta != 0.f && s_mouseScrollDeltaReset)
+    {
+        s_mouseScrollDeltaReset = false;
+        s_mouseScrollDelta = 0.f;
+    }
+
     std::map<KEY_CODE, INPUT_ACTION>::iterator it;
     for (it = m_keys.begin(); it != m_keys.end(); it++)
     {
@@ -142,4 +165,9 @@ void GLFWWindow::SetCursorMode(CURSOR_MODE _mode)
         return;
 
     glfwSetInputMode(m_window, GLFW_CURSOR, CastGlfwCursorMode(_mode));
+}
+
+float GLFWWindow::GetMouseScrollValue()
+{
+    return s_mouseScrollDelta;
 }

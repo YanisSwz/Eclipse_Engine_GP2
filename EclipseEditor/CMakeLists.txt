@@ -1,6 +1,6 @@
 ##### EclipseEditor #####
 
-add_executable(ECLIPSE_EDITOR "Editor/main.cpp")
+add_executable(ECLIPSE_EDITOR "Editor/main.cpp" "Editor/SceneCamera.cpp")
 
 target_link_libraries(ECLIPSE_EDITOR PRIVATE ECLIPSE_ENGINE)
 
