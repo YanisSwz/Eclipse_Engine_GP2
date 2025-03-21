@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "TestScript.hpp"
 #include <iostream>
 
 int main()
@@ -89,8 +90,12 @@ int main()
 	float speed = 1.f;
 	Math::Mat4 TRS;
 
+	Core::TestScript script;
+
 	while (!window->WindowShouldClose())
 	{
+		script.Update();
+
 		window->UpdateInputs();
 		if (window->GetKey(KEY_CODE::KEY_ESCAPE, INPUT_ACTION::INPUT_PRESS))
 		{
@@ -184,6 +189,7 @@ int main()
 #pragma endregion
 
 	window->DestroyWindow();
+
 	return 0;
 }
 
