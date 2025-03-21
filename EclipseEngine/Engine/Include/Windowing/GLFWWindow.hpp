@@ -3,29 +3,32 @@
 #include "ProjectExports.hpp"
 #include <GLFW/glfw3.h>
 
-class GLFWWindow : public IWindow
+namespace Windowing
 {
-	GLFWwindow* m_window = nullptr;
-public:
-	static bool s_mouseScrollDeltaReset;
-	static float s_mouseScrollDelta;
+	class GLFWWindow : public IWindow
+	{
+		GLFWwindow* m_window = nullptr;
+	public:
+		static bool s_mouseScrollDeltaReset;
+		static float s_mouseScrollDelta;
 
-	ECLIPSE_ENGINE void CreateWindow(const char* _name, int _width, int _height) override;
-	ECLIPSE_ENGINE void SetFrameBufferSizeCallback() override;
-	ECLIPSE_ENGINE float GetTime() override;
-	ECLIPSE_ENGINE bool WindowShouldClose() override;
-	ECLIPSE_ENGINE void SetWindowShouldClose(bool _bShouldClose) override;
-	ECLIPSE_ENGINE void SwapBuffers() override;
-	ECLIPSE_ENGINE void PollEvents() override;
-	ECLIPSE_ENGINE void DestroyWindow() override;
-	ECLIPSE_ENGINE void UpdateInputs() override;
-	ECLIPSE_ENGINE bool GetKey(KEY_CODE _code, INPUT_ACTION _action) override;
-	ECLIPSE_ENGINE bool GetMouseButton(MOUSE_CODE _code, INPUT_ACTION _action) override;
-	ECLIPSE_ENGINE Math::Vec2 GetCursorPos() override;
-	ECLIPSE_ENGINE void SetCursorPos(Math::Vec2 _pos) override;
-	ECLIPSE_ENGINE void SetCursorMode(CURSOR_MODE _mode) override;
-	ECLIPSE_ENGINE inline GLFWwindow* GetWindow() { return m_window; }
-	ECLIPSE_ENGINE float GetMouseScrollValue() override;
+		ECLIPSE_ENGINE void CreateWindow(const char* _name, int _width, int _height) override;
+		ECLIPSE_ENGINE void SetFrameBufferSizeCallback() override;
+		ECLIPSE_ENGINE float GetTime() override;
+		ECLIPSE_ENGINE bool WindowShouldClose() override;
+		ECLIPSE_ENGINE void SetWindowShouldClose(bool _bShouldClose) override;
+		ECLIPSE_ENGINE void SwapBuffers() override;
+		ECLIPSE_ENGINE void PollEvents() override;
+		ECLIPSE_ENGINE void DestroyWindow() override;
+		ECLIPSE_ENGINE void UpdateInputs() override;
+		ECLIPSE_ENGINE bool GetKey(KEY_CODE _code, INPUT_ACTION _action) override;
+		ECLIPSE_ENGINE bool GetMouseButton(MOUSE_CODE _code, INPUT_ACTION _action) override;
+		ECLIPSE_ENGINE Math::Vec2 GetCursorPos() override;
+		ECLIPSE_ENGINE void SetCursorPos(Math::Vec2 _pos) override;
+		ECLIPSE_ENGINE void SetCursorMode(CURSOR_MODE _mode) override;
+		ECLIPSE_ENGINE inline GLFWwindow* GetWindow() { return m_window; }
+		ECLIPSE_ENGINE float GetMouseScrollValue() override;
 
-	inline virtual GLFWWindow* CastGLFW() { return this; }
-};
+		inline virtual GLFWWindow* CastGLFW() { return this; }
+	};
+}

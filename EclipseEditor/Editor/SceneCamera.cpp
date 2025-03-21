@@ -9,45 +9,45 @@ SceneCamera::SceneCamera(float _fov, float _near, float _far)
 	m_far = _far;
 }
 
-void SceneCamera::Update(IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize)
+void SceneCamera::Update(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize)
 {
 	m_width = _window->width;
 	m_height = _window->height;
 	UpdateInput(_window, _deltaTime, _sceneWindowPos, _sceneWindowSize);
 }
 
-void Core::SceneCamera::UpdateInput(IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize)
+void SceneCamera::UpdateInput(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize)
 {
 	Math::Vec2 cursorPos = _window->GetCursorPos();
-	if (!_window->GetMouseButton(MOUSE_CODE::RIGHT_BUTTON, INPUT_ACTION::INPUT_DOWN) || cursorPos.x < _sceneWindowPos.x || cursorPos.x > _sceneWindowSize.x || cursorPos.y < _sceneWindowPos.y || cursorPos.y > _sceneWindowSize.y)
+	if (!_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN) || cursorPos.x < _sceneWindowPos.x || cursorPos.x > _sceneWindowSize.x || cursorPos.y < _sceneWindowPos.y || cursorPos.y > _sceneWindowSize.y)
 	{
-		_window->SetCursorMode(CURSOR_MODE::CURSOR_VISIBLE);
+		_window->SetCursorMode(Windowing::CURSOR_MODE::CURSOR_VISIBLE);
 		return;
 	}
 
 	InputChangeSpeed(_window);
 	InputMove(_window, _deltaTime);
 
-	if (_window->GetMouseButton(MOUSE_CODE::RIGHT_BUTTON, INPUT_ACTION::INPUT_PRESS))
+	if (_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_PRESS))
 	{
 		m_oldMouse = _window->GetCursorPos();
 	}
-	else if (_window->GetMouseButton(MOUSE_CODE::RIGHT_BUTTON, INPUT_ACTION::INPUT_DOWN))
+	else if (_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		_window->SetCursorMode(CURSOR_MODE::CURSOR_DISABLED);
+		_window->SetCursorMode(Windowing::CURSOR_MODE::CURSOR_DISABLED);
 		InputRotation(_window, _deltaTime);
 		_window->SetCursorPos(m_oldMouse);
 	}
-	else if (_window->GetMouseButton(MOUSE_CODE::RIGHT_BUTTON, INPUT_ACTION::INPUT_RELEASE))
+	else if (_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_RELEASE))
 	{
 		_window->SetCursorPos(m_oldMouse);
-		_window->SetCursorMode(CURSOR_MODE::CURSOR_VISIBLE);
+		_window->SetCursorMode(Windowing::CURSOR_MODE::CURSOR_VISIBLE);
 	}
 }
 
-void Core::SceneCamera::InputChangeSpeed(IWindow* _window)
+void Core::SceneCamera::InputChangeSpeed(Windowing::IWindow* _window)
 {
-	if (_window->GetMouseButton(MOUSE_CODE::RIGHT_BUTTON, INPUT_ACTION::INPUT_DOWN))
+	if (_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		m_speedMove += (0.1f * _window->GetMouseScrollValue());
 		if (m_speedMove > 10.f)
@@ -57,34 +57,34 @@ void Core::SceneCamera::InputChangeSpeed(IWindow* _window)
 	}
 }
 
-void SceneCamera::InputMove(IWindow* _window, float _deltaTime)
+void SceneCamera::InputMove(Windowing::IWindow* _window, float _deltaTime)
 {
 	Math::Vec3 move;
-	if (_window->GetKey(KEY_CODE::KEY_W, INPUT_ACTION::INPUT_DOWN))
+	if (_window->GetKey(Windowing::KEY_CODE::KEY_W, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 direction{ m_at, m_eye };
 		direction.Normalize();
 		move += direction * _deltaTime * m_speedMove;
 	}
-	if (_window->GetKey(KEY_CODE::KEY_S, INPUT_ACTION::INPUT_DOWN))
+	if (_window->GetKey(Windowing::KEY_CODE::KEY_S, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 direction{ m_eye, m_at };
 		direction.Normalize();
 		move += direction * _deltaTime * m_speedMove;
 	}
-	if (_window->GetKey(KEY_CODE::KEY_D, INPUT_ACTION::INPUT_DOWN))
+	if (_window->GetKey(Windowing::KEY_CODE::KEY_D, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 frwd = { m_at, m_eye };
 		Math::Vec3 direction = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
 		move += direction * _deltaTime * m_speedMove;
 	}
-	if (_window->GetKey(KEY_CODE::KEY_A, INPUT_ACTION::INPUT_DOWN))
+	if (_window->GetKey(Windowing::KEY_CODE::KEY_A, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 frwd = { m_at, m_eye };
 		Math::Vec3 direction = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
 		move -= direction * _deltaTime * m_speedMove;
 	}
-	if (_window->GetKey(KEY_CODE::KEY_E, INPUT_ACTION::INPUT_DOWN))
+	if (_window->GetKey(Windowing::KEY_CODE::KEY_E, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 frwd = Math::Vec3::s_Normalized({ m_at, m_eye });
 		Math::Vec3 right = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
@@ -93,7 +93,7 @@ void SceneCamera::InputMove(IWindow* _window, float _deltaTime)
 		Math::Vec3 direction = _up;
 		move += direction * _deltaTime * m_speedMove;
 	}
-	if (_window->GetKey(KEY_CODE::KEY_Q, INPUT_ACTION::INPUT_DOWN))
+	if (_window->GetKey(Windowing::KEY_CODE::KEY_Q, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 frwd = Math::Vec3::s_Normalized({ m_at, m_eye });
 		Math::Vec3 right = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
@@ -106,7 +106,7 @@ void SceneCamera::InputMove(IWindow* _window, float _deltaTime)
 	m_at += move;
 }
 
-void SceneCamera::InputRotation(IWindow* _window, float _deltaTime)
+void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 {
 	Math::Vec2 newMousePos = _window->GetCursorPos();
 	Math::Vec2 mouseDelta = (newMousePos - m_oldMouse) * m_mouseSensitivity * _deltaTime;

@@ -7,6 +7,8 @@
 #include "SceneCamera.hpp"
 #include <iostream>
 
+using namespace Windowing;
+
 int main()
 {
 	std::vector<RHI::Vertex> vertexBuffer

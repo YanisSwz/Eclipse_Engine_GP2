@@ -12,14 +12,14 @@ namespace Core
 		SceneCamera(float _fov, float _near, float _far);
 		~SceneCamera() = default;
 
-		void Update(IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
+		void Update(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
 		void SetShaderData(RHI::IShaderProgram* _shaderProgram);
 
 	private:
-		void UpdateInput(IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
-		void InputChangeSpeed(IWindow* _window);
-		void InputMove(IWindow* _window, float _deltaTime);
-		void InputRotation(IWindow* _window, float _deltaTime);
+		void UpdateInput(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
+		void InputChangeSpeed(Windowing::IWindow* _window);
+		void InputMove(Windowing::IWindow* _window, float _deltaTime);
+		void InputRotation(Windowing::IWindow* _window, float _deltaTime);
 
 		Math::Vec3 m_eye = { 0.f, 0.f, 1.f };
 		Math::Vec3 m_at = { 0.f, 0.f, 2.f };
