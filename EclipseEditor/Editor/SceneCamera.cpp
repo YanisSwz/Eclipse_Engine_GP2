@@ -122,8 +122,11 @@ void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 	m_eye.z = m_at.z - direction.z;
 }
 
-void SceneCamera::SetShaderData(RHI::IShaderProgram* _shaderProgram)
+void SceneCamera::SetShaderData(RHI::IShaderProgram* _shaderProgram, int viewportSizeX, int viewportSizeY)
 {
+	m_width = viewportSizeX;
+	m_height = viewportSizeY;
+
 	Math::Mat4 VP = Math::Mat4::s_GetPerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);
 	VP *= Math::Mat4::s_GetViewMatrix(m_eye, m_at, m_up);
 	_shaderProgram->SetMat4("VP", VP, true);

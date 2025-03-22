@@ -6,13 +6,6 @@ namespace Windowing
     float GLFWWindow::s_mouseScrollDelta = 0.f;
     bool GLFWWindow::s_mouseScrollDeltaReset = false;
 
-    void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-    {
-        window = window;
-        xoffset = xoffset;
-        GLFWWindow::s_mouseScrollDelta = static_cast<float>(yoffset);
-    }
-
     void GLFWWindow::CreateWindow(const char* _name, int _width, int _height)
     {
         name = _name;
@@ -36,12 +29,6 @@ namespace Windowing
 
         // Set mouse scroll callback
         glfwSetScrollCallback(m_window, scroll_callback);
-    }
-
-    void GLFWWindow::SetFrameBufferSizeCallback()
-    {
-        // TODO
-        return;
     }
 
     float GLFWWindow::GetTime()
@@ -172,5 +159,12 @@ namespace Windowing
     float GLFWWindow::GetMouseScrollValue()
     {
         return s_mouseScrollDelta;
+    }
+
+    void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+    {
+        window = window;
+        xoffset = xoffset;
+        GLFWWindow::s_mouseScrollDelta = static_cast<float>(yoffset);
     }
 }

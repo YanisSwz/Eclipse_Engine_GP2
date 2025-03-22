@@ -14,12 +14,11 @@ namespace Windowing
 		std::map<MOUSE_CODE, INPUT_ACTION> m_mouseButtons;
 
 	public:
-		const char* name;
-		int width;
-		int height;
+		const char* name = "";
+		int width = 0;
+		int height = 0;
 
 		virtual void CreateWindow(const char* _name, int _width, int _height) = 0;
-		virtual void SetFrameBufferSizeCallback() = 0;
 		virtual float GetTime() = 0;
 		virtual bool WindowShouldClose() = 0;
 		virtual void SetWindowShouldClose(bool _bShouldClose) = 0;

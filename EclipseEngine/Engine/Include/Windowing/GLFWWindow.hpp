@@ -13,7 +13,6 @@ namespace Windowing
 		static float s_mouseScrollDelta;
 
 		ECLIPSE_ENGINE void CreateWindow(const char* _name, int _width, int _height) override;
-		ECLIPSE_ENGINE void SetFrameBufferSizeCallback() override;
 		ECLIPSE_ENGINE float GetTime() override;
 		ECLIPSE_ENGINE bool WindowShouldClose() override;
 		ECLIPSE_ENGINE void SetWindowShouldClose(bool _bShouldClose) override;
@@ -31,4 +30,5 @@ namespace Windowing
 
 		inline virtual GLFWWindow* CastGLFW() { return this; }
 	};
+	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 }

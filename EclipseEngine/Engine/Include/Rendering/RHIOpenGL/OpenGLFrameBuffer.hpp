@@ -21,8 +21,6 @@ namespace RHI
 			ECLIPSE_ENGINE void Delete() override;
 
 		private:
-			int width = 0;
-			int height = 0;
 
 			GLuint textID = GL_NONE;
 			GLuint fboID = GL_NONE;

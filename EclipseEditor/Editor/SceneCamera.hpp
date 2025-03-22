@@ -13,7 +13,7 @@ namespace Core
 		~SceneCamera() = default;
 
 		void Update(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
-		void SetShaderData(RHI::IShaderProgram* _shaderProgram);
+		void SetShaderData(RHI::IShaderProgram* _shaderProgram, int viewportSizeX, int viewportSizeY);
 
 	private:
 		void UpdateInput(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);

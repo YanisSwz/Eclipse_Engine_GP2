@@ -7,7 +7,8 @@
 #include "SceneCamera.hpp"
 #include <iostream>
 
-using namespace Windowing;
+#define ImGuiImplementGLFW
+#define ImGuiImplementOpenGL
 
 int main()
 {
@@ -44,9 +45,8 @@ int main()
 		1, 2, 6, 6, 5, 1
 	};
 
-	IWindow* window = new GLFWWindow;
+	Windowing::IWindow* window = new Windowing::GLFWWindow;
 	window->CreateWindow("Eclipse Engine", 1280, 720);
-	//window->SetCursorMode(CURSOR_MODE::CURSOR_DISABLED);
 
 	RHI::IRenderInterface* rdrInter = new RHI::OpenGL::OpenGLRenderInterface;
 
@@ -62,8 +62,15 @@ int main()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
+
+#ifdef ImGuiImplementGLFW
 	ImGui_ImplGlfw_InitForOpenGL(window->CastGLFW()->GetWindow(), true);
+#endif // ImGuiImplementGLFW
+
+#ifdef ImGuiImplementOpenGL
 	ImGui_ImplOpenGL3_Init("#version 330");
+#endif // ImGuiImplementOpenGL
+
 
 #pragma region Generate Shader
 	RHI::IVertexShader* vert = rdrInter->InstantiateVertexShader();
@@ -122,42 +129,43 @@ int main()
 	while (!window->WindowShouldClose())
 	{
 		window->UpdateInputs();
-		if (window->GetKey(KEY_CODE::KEY_ESCAPE, INPUT_ACTION::INPUT_PRESS))
-		{
+		if (window->GetKey(Windowing::KEY_CODE::KEY_ESCAPE, Windowing::INPUT_ACTION::INPUT_PRESS))
 			window->SetWindowShouldClose(true);
-		}
 
 		// Update Delta Time and Model rotation
 		deltaTime = window->GetTime() - oldTime;
 		oldTime = window->GetTime();
 		crtAngle += (deltaTime * speed);
 
+#ifdef ImGuiImplementOpenGL
 		ImGui_ImplOpenGL3_NewFrame();
+#endif // ImGuiImplementOpenGL
+
+#ifdef ImGuiImplementGLFW
 		ImGui_ImplGlfw_NewFrame();
+#endif // ImGuiImplementGLFW
 		ImGui::NewFrame();
 
 		// SCENE WINDOW
 		ImGui::Begin("Scene", 0);
-		ImVec2 sceneWindowSize = ImGui::GetWindowSize();
-		ImVec2 sceneWindowPos = ImGui::GetWindowPos();
-		sceneCamera.Update(window, deltaTime, { sceneWindowPos.x, sceneWindowPos.y }, { sceneWindowSize.x, sceneWindowSize.y });
+		ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+		ImVec2 cursorPos = ImGui::GetCursorScreenPos();
 
-		ImVec2 sceneSize = ImGui::GetContentRegionAvail();
-		FB->Rescale(static_cast<int>(sceneSize.x), static_cast<int>(sceneSize.y));
-		//glViewport(0, 0, static_cast<GLsizei>(sceneSize.x), static_cast<GLsizei>(sceneSize.y));
-		ImVec2 windowPos = ImGui::GetCursorScreenPos();
+		FB->Rescale(static_cast<int>(contentRegionAvailable.x), static_cast<int>(contentRegionAvailable.y));
+		sceneCamera.Update(window, deltaTime, { cursorPos.x, cursorPos.y }, { contentRegionAvailable.x, contentRegionAvailable.y });
+		rdrInter->Viewport(0, 0, static_cast<int>(contentRegionAvailable.x), static_cast<int>(contentRegionAvailable.y));
 
 		ImGui::GetWindowDrawList()->AddImage(
 			(intptr_t)(FB->GetTextureID()),
-			ImVec2(windowPos.x, windowPos.y),
-			ImVec2(windowPos.x + sceneSize.x, windowPos.y + sceneSize.y),
+			ImVec2(cursorPos.x, cursorPos.y),
+			ImVec2(cursorPos.x + contentRegionAvailable.x, cursorPos.y + contentRegionAvailable.y),
 			ImVec2(0, 1),
 			ImVec2(1, 0));
 
 		ImGui::End();
 		ImGui::Render();
 
-		rdrInter->ClearBackgroundColor({ 0.f, 0.f, 0.f });
+		rdrInter->ClearBackgroundColor({ 1.f, 0.f, 0.f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
@@ -173,7 +181,7 @@ int main()
 
 		// Draw Model with the texture
 		shader->Bind();
-		sceneCamera.SetShaderData(shader);
+		sceneCamera.SetShaderData(shader, FB->width, FB->height);
 		shader->SetMat4("TRS", TRS);
 		texture->Bind();
 		objectIndexBuffer->Draw(objectVertexArray);
@@ -182,7 +190,9 @@ int main()
 		FB->Unbind();
 #pragma endregion
 
+#ifdef ImGuiImplementOpenGL
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif // ImGuiImplementOpenGL
 
 		window->SwapBuffers();
 		window->PollEvents();
@@ -213,8 +223,14 @@ int main()
 #pragma endregion
 
 #pragma region Destroy ImGUI
+#ifdef ImGuiImplementOpenGL
 	ImGui_ImplOpenGL3_Shutdown();
+#endif // ImGuiImplementOpenGL
+
+#ifdef ImGuiImplementGLFW
 	ImGui_ImplGlfw_Shutdown();
+#endif // ImGuiImplementGLFW
+
 	ImGui::DestroyContext();
 #pragma endregion
 
