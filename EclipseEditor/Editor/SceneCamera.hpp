@@ -25,6 +25,10 @@ namespace Core
 		Math::Vec3 m_at = { 0.f, 0.f, 2.f };
 		Math::Vec3 m_up = { 0.f, 1.f, 0.f };
 
+		float m_minSpeed = 0.1f;
+		float m_maxSpeed = 10.f;
+		float m_increaseSpeedValue = 0.1f;
+
 		int m_width = 0;
 		int m_height = 0;
 		float m_fov = 60.f;

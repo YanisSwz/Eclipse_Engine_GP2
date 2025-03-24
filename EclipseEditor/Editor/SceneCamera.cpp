@@ -49,11 +49,11 @@ void Core::SceneCamera::InputChangeSpeed(Windowing::IWindow* _window)
 {
 	if (_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		m_speedMove += (0.1f * _window->GetMouseScrollValue());
-		if (m_speedMove > 10.f)
-			m_speedMove = 10.f;
-		else if (m_speedMove < 0.1f)
-			m_speedMove = 0.1f;
+		m_speedMove += (m_increaseSpeedValue * _window->GetMouseScrollValue());
+		if (m_speedMove > m_maxSpeed)
+			m_speedMove = m_maxSpeed;
+		else if (m_speedMove < m_minSpeed)
+			m_speedMove = m_minSpeed;
 	}
 }
 
