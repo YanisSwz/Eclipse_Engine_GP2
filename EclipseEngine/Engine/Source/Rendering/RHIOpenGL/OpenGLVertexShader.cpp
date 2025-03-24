@@ -24,20 +24,20 @@ void OpenGLVertexShader::Init(std::string _path)
     std::string vertFileContent((std::istreambuf_iterator<char>(vertFile)), std::istreambuf_iterator<char>());
 
     // Generate Vertex Shader
-    vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+    m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 
     // Set Vertex Shader content
     const char* vertexContent = vertFileContent.c_str();
-    glShaderSource(vertexShaderID, 1, &vertexContent, NULL);
-    glCompileShader(vertexShaderID);
+    glShaderSource(m_vertexShaderID, 1, &vertexContent, NULL);
+    glCompileShader(m_vertexShaderID);
     
     // Verify if Vertex Shader compile
     int sucess;
     char infoLog[512];
-    glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &sucess);
+    glGetShaderiv(m_vertexShaderID, GL_COMPILE_STATUS, &sucess);
     if (!sucess)
     {
-        glGetShaderInfoLog(vertexShaderID, 512, NULL, infoLog);
+        glGetShaderInfoLog(m_vertexShaderID, 512, NULL, infoLog);
         std::cout << "Error : Vertex compilation failed\n" << infoLog << std::endl;
         return;
     }
@@ -45,10 +45,10 @@ void OpenGLVertexShader::Init(std::string _path)
 
 unsigned int OpenGLVertexShader::GetID() const
 {
-    return vertexShaderID;
+    return m_vertexShaderID;
 }
 
 void OpenGLVertexShader::Delete()
 {
-    glDeleteShader(vertexShaderID);
+    glDeleteShader(m_vertexShaderID);
 }

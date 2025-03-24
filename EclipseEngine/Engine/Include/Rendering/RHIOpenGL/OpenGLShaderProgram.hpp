@@ -28,7 +28,7 @@ namespace RHI
 			ECLIPSE_ENGINE void SetMat4(const char* _uniformName, Math::Mat4 _mat4, bool _transpose = false) override;
 
 		private:
-			GLuint shaderProgramID = GL_NONE;
+			GLuint m_shaderProgramID = GL_NONE;
 		};
 	}
 }

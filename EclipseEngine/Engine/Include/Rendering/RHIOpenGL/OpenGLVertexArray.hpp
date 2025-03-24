@@ -21,7 +21,7 @@ namespace RHI
 			ECLIPSE_ENGINE void Delete() override;
 
 		private:
-			GLuint ID = GL_NONE;
+			GLuint m_ID = GL_NONE;
 		};
 	}
 }

@@ -18,7 +18,7 @@ namespace RHI
 			ECLIPSE_ENGINE void Delete() override;
 
 		private:
-			GLuint fragmentShaderID = GL_NONE;
+			GLuint m_fragmentShaderID = GL_NONE;
 		};
 	}
 }

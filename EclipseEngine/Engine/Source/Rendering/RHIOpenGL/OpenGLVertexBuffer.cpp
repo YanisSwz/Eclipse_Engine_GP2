@@ -8,14 +8,14 @@ OpenGLVertexBuffer::~OpenGLVertexBuffer()
 
 void OpenGLVertexBuffer::Init(Vertex* _vertices, size_t _size)
 {
-	glGenBuffers(1, &ID);
-	glBindBuffer(GL_ARRAY_BUFFER, ID);
+	glGenBuffers(1, &m_ID);
+	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 	glBufferData(GL_ARRAY_BUFFER, _size, _vertices, GL_STATIC_DRAW);
 }
 
 void OpenGLVertexBuffer::Bind()
 {
-	glBindBuffer(GL_ARRAY_BUFFER, ID);
+	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 }
 
 void OpenGLVertexBuffer::Unbind()
@@ -25,5 +25,5 @@ void OpenGLVertexBuffer::Unbind()
 
 void OpenGLVertexBuffer::Delete()
 {
-	glDeleteBuffers(1, &ID);
+	glDeleteBuffers(1, &m_ID);
 }

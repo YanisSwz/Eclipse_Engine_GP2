@@ -16,7 +16,7 @@ namespace Core
 		void SetShaderData(RHI::IShaderProgram* _shaderProgram, int viewportSizeX, int viewportSizeY);
 
 	private:
-		void UpdateInput(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
+		void UpdateInputs(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
 		void InputChangeSpeed(Windowing::IWindow* _window);
 		void InputMove(Windowing::IWindow* _window, float _deltaTime);
 		void InputRotation(Windowing::IWindow* _window, float _deltaTime);
@@ -31,7 +31,7 @@ namespace Core
 		float m_near = 0.1f;
 		float m_far = 100.f;
 
-		float m_speedMove = 1.f;
+		float m_moveSpeed = 1.f;
 		float m_mouseSensitivity = 1.f;
 
 		Math::Vec2 m_rotation{ 0.f, 0.f };

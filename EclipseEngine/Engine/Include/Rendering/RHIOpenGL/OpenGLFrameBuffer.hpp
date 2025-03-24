@@ -22,9 +22,9 @@ namespace RHI
 
 		private:
 
-			GLuint textID = GL_NONE;
-			GLuint fboID = GL_NONE;
-			GLuint rboID = GL_NONE;
+			GLuint m_textID = GL_NONE;
+			GLuint m_fboID = GL_NONE;
+			GLuint m_rboID = GL_NONE;
 		};
 	}
 }
