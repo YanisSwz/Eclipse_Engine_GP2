@@ -18,7 +18,7 @@ namespace RHI
 			ECLIPSE_ENGINE void Delete() override;
 
 		private:
-			GLuint vertexShaderID = GL_NONE;
+			GLuint m_vertexShaderID = GL_NONE;
 		};
 	}
 }

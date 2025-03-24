@@ -35,7 +35,7 @@ namespace Core
 		float m_near = 0.1f;
 		float m_far = 100.f;
 
-		float m_speedMove = 1.f;
+		float m_moveSpeed = 1.f;
 		float m_mouseSensitivity = 1.f;
 
 		Math::Vec2 m_rotation{ 0.f, 0.f };
