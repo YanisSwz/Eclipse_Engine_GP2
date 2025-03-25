@@ -77,9 +77,34 @@ int main()
 #pragma endregion
 
 #pragma region	Generate Skybox
+	Resource::VertShader* vertShaderSkybox = new Resource::VertShader;
+	Resource::FragShader* fragShaderSkybox = new Resource::FragShader;
+	Resource::ShaderProgram* shaderProgramSkybox = new Resource::ShaderProgram;
+
+	vertShaderSkybox->GetContentFile("Assets/Shaders/Skybox/SkyboxShader.vert");
+	vertShaderSkybox->Generate(rdrInter);
+	fragShaderSkybox->GetContentFile("Assets/Shaders/Skybox/SkyboxShader.frag");
+	fragShaderSkybox->Generate(rdrInter);
+
+	if (shaderProgramSkybox->SetVertFragShader(vertShaderSkybox, fragShaderSkybox))
+	{
+		shaderProgramSkybox->Generate(rdrInter);
+	}
+	else
+	{
+		std::cout << "ERROR: Shader Program not Load" << std::endl;
+		return -1;
+	}
+
+	Resource::Model* modelSkybox = new Resource::Model;
+	modelSkybox->GetFileContent("Assets/Models/Cube.obj");
+	modelSkybox->Generate(rdrInter);
+
 	Resource::Skybox* skybox = new Resource::Skybox;
 	skybox->GetFileContent("Assets/Skybox/Default", Resource::TEXTURE_EXTENSION::JPG);
 	skybox->Generate(rdrInter);
+	skybox->SetModel(modelSkybox);
+	skybox->SetShader(shaderProgramSkybox);
 #pragma endregion
 
 #pragma region Generate FrameBuffer
@@ -145,17 +170,22 @@ int main()
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
+		sceneCamera.SetShaderData(shaderProgram, FB->width, FB->height);
+		sceneCamera.SetShaderData(shaderProgramSkybox, FB->width, FB->height);
+
 		// Update TRS Rotation
 		TRS.TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, Math::Tools::PI / 2.f + crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
 
 		// Draw Model with the texture
 		shaderProgram->Bind();
-		sceneCamera.SetShaderData(shaderProgram, FB->width, FB->height);
 		shaderProgram->SetMat4("TRS", TRS);
 		textureResource->Bind();
 		model->Draw();
 		textureResource->Unbind();
 		shaderProgram->Unbind();
+
+		// Draw Skybox
+		skybox->Draw();
 		FB->Unbind();
 #pragma endregion
 
@@ -172,6 +202,10 @@ int main()
 	delete vertShader;
 	delete fragShader;
 	delete shaderProgram;
+	delete modelSkybox;
+	delete vertShaderSkybox;
+	delete fragShaderSkybox;
+	delete shaderProgramSkybox;
 	delete skybox;
 #pragma region Destroy RHI Objects
 

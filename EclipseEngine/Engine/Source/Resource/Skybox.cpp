@@ -48,6 +48,27 @@ namespace Resource
 		bIsLoaded = true;
 	}
 
+	void Skybox::SetModel(Resource::Model* _model)
+	{
+		m_model = _model;
+	}
+
+	void Skybox::SetShader(Resource::ShaderProgram* _shader)
+	{
+		m_shaderProgram = _shader;
+	}
+
+	void Skybox::Draw() const
+	{
+		m_rdrInter->DepthFunc(RHI::IFLAGS::DEPTH_LEQUAL);
+		m_shaderProgram->Bind();
+		m_cubeMap->Bind();
+		m_model->Draw();
+		m_cubeMap->Unbind();
+		m_shaderProgram->Unbind();
+		m_rdrInter->DepthFunc(RHI::IFLAGS::DEPTH_LESS);
+	}
+
 	void Skybox::Delete()
 	{
 		m_data.clear();

@@ -129,5 +129,7 @@ void SceneCamera::SetShaderData(Resource::ShaderProgram* _shaderProgram, int vie
 
 	Math::Mat4 VP = Math::Mat4::s_GetPerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);
 	VP *= Math::Mat4::s_GetViewMatrix(m_eye, m_at, m_up);
+	_shaderProgram->Bind();
 	_shaderProgram->SetMat4("VP", VP, true);
+	_shaderProgram->Unbind();
 }
