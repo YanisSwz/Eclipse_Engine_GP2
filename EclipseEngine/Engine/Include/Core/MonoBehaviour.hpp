@@ -1,9 +1,10 @@
 #pragma once
 #include "ProjectExports.hpp"
+#include "Component.hpp"
 
 namespace Core 
 {
-	class MonoBehaviour
+	class MonoBehaviour : Component
 	{
 	public:
 		virtual void Awake() = 0;
