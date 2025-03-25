@@ -1,16 +1,18 @@
 #pragma once
-#include "GameObject.hpp"
+#include "ProjectExports.hpp"
 
 namespace Core
 {
+	class GameObject;
+
 	class Component
 	{
 	public:
-		Component() = default;
-		virtual ~Component() = 0;
+		ECLIPSE_ENGINE Component() = default;
+		ECLIPSE_ENGINE virtual ~Component();
 
 		virtual void Destroy() = 0;
-		virtual void SetGameObject(GameObject* _obj);
+		ECLIPSE_ENGINE virtual void SetGameObject(GameObject* _obj);
 
 	private:
 		GameObject* m_gameObject = nullptr;
