@@ -8,31 +8,25 @@ OpenGLCubeMap::~OpenGLCubeMap()
 	Delete();
 }
 
-void OpenGLCubeMap::Init(std::vector<std::string> _paths)
+void OpenGLCubeMap::Generate(std::vector<unsigned char*> _data, int _width, int _height, Resource::TEXTURE_EXTENSION _textureExtention)
 {
-	if (_paths.size() != 6)
+	if (_data.size() != 6)
 		return;
-
-	unsigned char* data;
-	int textWidth;
-	int textHeight;
-	int nrChannels;
-	stbi_set_flip_vertically_on_load(false);
 
 	glGenTextures(1, &textID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textID);
 
 	for (int i = 0; i < 6; ++i)
 	{
-		data = stbi_load(_paths[i].c_str(), &textWidth, &textHeight, &nrChannels, 0);
-		if (!data)
+		switch (_textureExtention)
 		{
-			std::cout << "Error during the load of the CubeMap Texture !" << std::endl;
-			stbi_image_free(data);
-			return;
+		case Resource::TEXTURE_EXTENSION::PNG:
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _data[i]);
+			break;
+		case Resource::TEXTURE_EXTENSION::JPG:
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _data[i]);
+			break;
 		}
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, textWidth, textHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		stbi_image_free(data);
 	}
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

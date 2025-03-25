@@ -9,7 +9,7 @@ namespace RHI
 		IFragmentShader() = default;
 		virtual ~IFragmentShader() = default;
 
-		virtual void Init(std::string _path) = 0;
+		virtual void Generate(std::string _data) = 0;
 		virtual unsigned int GetID() const = 0;
 		virtual void Delete() = 0;
 

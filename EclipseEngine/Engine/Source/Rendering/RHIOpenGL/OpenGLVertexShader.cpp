@@ -9,25 +9,13 @@ OpenGLVertexShader::~OpenGLVertexShader()
     Delete();
 }
 
-void OpenGLVertexShader::Init(std::string _path)
+void OpenGLVertexShader::Generate(std::string _data)
 {
-    // Verify if Vertex file path exists
-    std::filesystem::path filePath{ _path };
-    if (!std::filesystem::exists(filePath))
-    {
-        std::cout << "The file: " << filePath << " not found!" << std::endl;
-        return;
-    }
-    
-    // Get Vertex file content
-    std::ifstream vertFile(filePath);
-    std::string vertFileContent((std::istreambuf_iterator<char>(vertFile)), std::istreambuf_iterator<char>());
-
     // Generate Vertex Shader
     vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 
     // Set Vertex Shader content
-    const char* vertexContent = vertFileContent.c_str();
+    const char* vertexContent = _data.c_str();
     glShaderSource(vertexShaderID, 1, &vertexContent, NULL);
     glCompileShader(vertexShaderID);
     

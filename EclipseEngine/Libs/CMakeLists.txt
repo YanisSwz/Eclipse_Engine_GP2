@@ -22,4 +22,7 @@ add_subdirectory(Glad)
 target_link_libraries(ECLIPSE_ENGINE PUBLIC glad)
 
 # STB
-target_include_directories(ECLIPSE_ENGINE PUBLIC "Stb")
+target_include_directories(ECLIPSE_ENGINE PUBLIC Stb)
+
+# TinyOBJ
+target_include_directories(ECLIPSE_ENGINE PUBLIC TinyOBJ)

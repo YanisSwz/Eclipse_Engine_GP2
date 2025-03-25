@@ -122,7 +122,7 @@ void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 	m_eye.z = m_at.z - direction.z;
 }
 
-void SceneCamera::SetShaderData(RHI::IShaderProgram* _shaderProgram, int viewportSizeX, int viewportSizeY)
+void SceneCamera::SetShaderData(Resource::ShaderProgram* _shaderProgram, int viewportSizeX, int viewportSizeY)
 {
 	m_width = viewportSizeX;
 	m_height = viewportSizeY;

@@ -1,6 +1,7 @@
 #pragma once
 #include "Maths.hpp"
 #include "RHIInterfaces/IShaderProgram.hpp"
+#include "Resource/ShaderProgram.hpp"
 #include "IWindow.hpp"
 
 namespace Core
@@ -13,7 +14,7 @@ namespace Core
 		~SceneCamera() = default;
 
 		void Update(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
-		void SetShaderData(RHI::IShaderProgram* _shaderProgram, int viewportSizeX, int viewportSizeY);
+		void SetShaderData(Resource::ShaderProgram* _shaderProgram, int viewportSizeX, int viewportSizeY);
 
 	private:
 		void UpdateInput(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);

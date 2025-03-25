@@ -13,7 +13,7 @@ namespace RHI
 			ECLIPSE_ENGINE OpenGLFragmentShader() = default;
 			ECLIPSE_ENGINE ~OpenGLFragmentShader() override;
 
-			ECLIPSE_ENGINE void Init(std::string _path) override;
+			ECLIPSE_ENGINE void Generate(std::string _data) override;
 			ECLIPSE_ENGINE unsigned int GetID() const override;
 			ECLIPSE_ENGINE void Delete() override;
 

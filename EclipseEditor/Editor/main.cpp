@@ -5,6 +5,10 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "SceneCamera.hpp"
+#include "Resource/Texture.hpp"
+#include "Resource/Model.hpp"
+#include "Resource/ShaderProgram.hpp"
+#include "Resource/Skybox.hpp"
 #include <iostream>
 
 #define ImGuiImplementGLFW
@@ -12,39 +16,6 @@
 
 int main()
 {
-	std::vector<RHI::Vertex> vertexBuffer
-	{
-		// FRONT
-		{{ 0.5f, 0.5f, 0.5f },		{ 1.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top right
-		{{ 0.5f, -0.5f, 0.5f },		{ 1.0f, 0.0f },		{ 0.f, 0.f, 1.f }},  // bottom right
-		{{ -0.5f, -0.5f, 0.5f },	{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},  // bottom left
-		{{ -0.5f, 0.5f, 0.5f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top left 
-
-
-		// RIGHT
-		{{ 0.5f, 0.5f, -0.5f },		{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},
-		{{ 0.5f, -0.5f, -0.5f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},
-
-		// LEFT
-		{ { -0.5f, -0.5f, -0.5f },		{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f } },
-		{{ -0.5f, 0.5f, -0.5f },			{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},
-
-		// BACK
-		{{ 0.5f, 0.5f, -0.5f },		{ 1.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top right
-		{{ 0.5f, -0.5f, -0.5f },		{ 1.0f, 0.0f },		{ 0.f, 0.f, 1.f }},  // bottom right
-		{{ -0.5f, -0.5f, -0.5f },	{ 0.0f, 0.0 },		{ 0.f, 0.f, 1.f }},  // bottom left
-		{{ -0.5f, 0.5f, -0.5f },		{ 0.0f, 1.0f },		{ 0.f, 0.f, 1.f }},  // top left 
-	};
-
-	std::vector<uint32_t> indexBuffer{ 
-		0, 1, 2, 2, 3, 0,  
-		0, 1, 4, 4, 5, 1,
-		2, 3, 6, 6, 7, 3,
-		8, 9, 10, 10, 11, 8,
-		0, 3, 7, 7, 4, 0,
-		1, 2, 6, 6, 5, 1
-	};
-
 	Windowing::IWindow* window = new Windowing::GLFWWindow;
 	window->CreateWindow("Eclipse Engine", 1280, 720);
 
@@ -73,44 +44,42 @@ int main()
 
 
 #pragma region Generate Shader
-	RHI::IVertexShader* vert = rdrInter->InstantiateVertexShader();
-	RHI::IFragmentShader* frag = rdrInter->InstantiateFragmentShader();
-	RHI::IShaderProgram* shader = rdrInter->InstantiateShaderProgram();
+	Resource::VertShader* vertShader = new Resource::VertShader;
+	Resource::FragShader* fragShader = new Resource::FragShader;
+	Resource::ShaderProgram* shaderProgram = new Resource::ShaderProgram;
 
-	vert->Init("Assets/Shaders/Default/Default.vert");
-	frag->Init("Assets/Shaders/Default/Default.frag");
-	shader->CreateProgram();
-	shader->SetVertShader(*vert);
-	shader->SetFragShader(*frag);
-	shader->Link();
+	vertShader->GetContentFile("Assets/Shaders/Default/Default.vert");
+	vertShader->Generate(rdrInter);
+	fragShader->GetContentFile("Assets/Shaders/Default/Default.frag");
+	fragShader->Generate(rdrInter);
 
-	rdrInter->DestroyVertexShader(vert);
-	rdrInter->DestroyFragmentShader(frag);
+	if (shaderProgram->SetVertFragShader(vertShader, fragShader))
+	{
+		shaderProgram->Generate(rdrInter);
+	}
+	else
+	{
+		std::cout << "ERROR: Shader Program not Load" << std::endl;
+		return -1;
+	}
 #pragma endregion
 
 #pragma region Generate Model
-	RHI::IVertexArray* objectVertexArray = rdrInter->InstantiateVertexArray();
-	RHI::IVertexBuffer* objectVertexBuffer = rdrInter->InstantiateVertexBuffer();
-	RHI::IIndexBuffer* objectIndexBuffer = rdrInter->InstantiateIndexBuffer();
-
-	objectVertexArray->Init();
-	objectVertexArray->Bind();
-	objectVertexBuffer->Init(&vertexBuffer[0], vertexBuffer.size() * sizeof(RHI::Vertex));
-	objectIndexBuffer->Init(&indexBuffer[0], indexBuffer.size() * sizeof(uint32_t));
-
-	// Vertex position,		 /	    Texture position,		/		Normal
-	objectVertexArray->LinkVertexBuffer(*objectVertexBuffer, 0, 3, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, pos));
-	objectVertexArray->LinkVertexBuffer(*objectVertexBuffer, 1, 2, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, textUV));
-	objectVertexArray->LinkVertexBuffer(*objectVertexBuffer, 2, 3, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, normal));
-
-	objectVertexArray->Unbind();
-	objectVertexBuffer->Unbind();
-	objectIndexBuffer->Unbind();
+	Resource::Model* model = new Resource::Model;
+	model->GetFileContent("Assets/Models/VikingRoom.obj");
+	model->Generate(rdrInter);
 #pragma endregion
 
 #pragma region Generate Texture
-	RHI::ITexture2D* texture = rdrInter->InstantiateTexture2D();
-	texture->Init("Assets/Textures/Avion.jpg");
+	Resource::Texture* textureResource = new Resource::Texture;
+	textureResource->GetFileContent("Assets/Textures/VikingRoom.png");
+	textureResource->Generate(rdrInter);
+#pragma endregion
+
+#pragma region	Generate Skybox
+	Resource::Skybox* skybox = new Resource::Skybox;
+	skybox->GetFileContent("Assets/Skybox/Default", Resource::TEXTURE_EXTENSION::JPG);
+	skybox->Generate(rdrInter);
 #pragma endregion
 
 #pragma region Generate FrameBuffer
@@ -177,16 +146,16 @@ int main()
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
 		// Update TRS Rotation
-		//TRS.TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
+		TRS.TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, Math::Tools::PI / 2.f + crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
 
 		// Draw Model with the texture
-		shader->Bind();
-		sceneCamera.SetShaderData(shader, FB->width, FB->height);
-		shader->SetMat4("TRS", TRS);
-		texture->Bind();
-		objectIndexBuffer->Draw(objectVertexArray);
-		texture->Unbind();
-		shader->Unbind();
+		shaderProgram->Bind();
+		sceneCamera.SetShaderData(shaderProgram, FB->width, FB->height);
+		shaderProgram->SetMat4("TRS", TRS);
+		textureResource->Bind();
+		model->Draw();
+		textureResource->Unbind();
+		shaderProgram->Unbind();
 		FB->Unbind();
 #pragma endregion
 
@@ -198,24 +167,13 @@ int main()
 		window->PollEvents();
 	}
 
+	delete model;
+	delete textureResource;
+	delete vertShader;
+	delete fragShader;
+	delete shaderProgram;
+	delete skybox;
 #pragma region Destroy RHI Objects
-	// Delete Shader
-	shader->Delete();
-	rdrInter->DestroyShaderProgram(shader);
-
-	// Delete Model
-	vertexBuffer.clear();
-	indexBuffer.clear();
-	objectVertexArray->Delete();
-	objectVertexBuffer->Delete();
-	objectIndexBuffer->Delete();
-	rdrInter->DestroyVertexArray(objectVertexArray);
-	rdrInter->DestroyVertexBuffer(objectVertexBuffer);
-	rdrInter->DestroyIndexBuffer(objectIndexBuffer);
-
-	// Delete Texture
-	texture->Delete();
-	rdrInter->DestroyTexture2D(texture);
 
 	// Delete FrameBuffer
 	FB->Delete();

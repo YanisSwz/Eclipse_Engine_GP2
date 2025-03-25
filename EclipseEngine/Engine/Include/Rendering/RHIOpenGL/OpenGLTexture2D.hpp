@@ -13,7 +13,7 @@ namespace RHI
 			ECLIPSE_ENGINE OpenGLTexture2D() = default;
 			ECLIPSE_ENGINE ~OpenGLTexture2D() override;
 
-			ECLIPSE_ENGINE void Init(std::string _path) override;
+			ECLIPSE_ENGINE void Generate(unsigned char* _data, int _width, int _height) override;
 			ECLIPSE_ENGINE void Bind() override;
 			ECLIPSE_ENGINE void Unbind() override;
 			ECLIPSE_ENGINE unsigned int GetID() const override;

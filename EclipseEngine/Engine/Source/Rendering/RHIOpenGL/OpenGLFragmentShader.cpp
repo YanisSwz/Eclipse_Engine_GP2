@@ -9,22 +9,14 @@ OpenGLFragmentShader::~OpenGLFragmentShader()
     Delete();
 }
 
-void OpenGLFragmentShader::Init(std::string _path)
+void OpenGLFragmentShader::Generate(std::string _data)
 {    
-    // Verify if Fragment file path exists
-    std::filesystem::path filePath{ _path };
-    if (!std::filesystem::exists(filePath))
-        std::cout << "The file: " << filePath << " not found!" << std::endl;
 
-    // Get Fragment file content
-    std::ifstream fragFile(filePath);
-    std::string fragFileContent((std::istreambuf_iterator<char>(fragFile)), std::istreambuf_iterator<char>());
-    
     // Generate Fragment Shader
     fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Set Fragment Shader content
-    const char* fragmentContent = fragFileContent.c_str();
+    const char* fragmentContent = _data.c_str();
     glShaderSource(fragmentShaderID, 1, &fragmentContent, NULL);
     glCompileShader(fragmentShaderID);
 
