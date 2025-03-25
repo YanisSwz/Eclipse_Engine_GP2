@@ -8,4 +8,8 @@ namespace Core
 		rotation = Math::Quat::s_QuaternionEuler(_rotation.x, _rotation.y, _rotation.z);
 		scale = _scale;
 	}
+
+	void Transform::Destroy()
+	{
+	}
 }

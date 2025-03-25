@@ -90,6 +90,13 @@ int main()
 	float speed = 1.f;
 	Math::Mat4 TRS;
 
+	Core::GameObject testObj{ "Cube" };
+	Core::Transform t{ Math::Vec3{1.f, 0.f, -5.f}, Math::Vec3{0.f, 0.f, 0.f}, Math::Vec3{1.f, 2.f, 1.f} };
+	testObj.AddComponent(&t);
+
+	Core::Transform* t2 = testObj.GetComponent<Core::Transform>();
+	t2;
+
 	while (!window->WindowShouldClose())
 	{
 		window->UpdateInputs();

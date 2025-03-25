@@ -4,7 +4,7 @@
 
 namespace Core 
 {
-	class MonoBehaviour : Component
+	class MonoBehaviour : public Component
 	{
 	public:
 		virtual void Awake() = 0;

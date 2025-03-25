@@ -53,4 +53,14 @@ namespace Core
 	{
 		return _obj->m_id;
 	}
+
+	void GameObject::AddComponent(Component* _comp)
+	{
+		for(int i = 0; i < m_components.size(); ++i)
+		{
+			if (typeid(m_components[i]) == typeid(_comp))
+				return;
+		}
+		m_components.emplace_back(_comp);
+	}
 }

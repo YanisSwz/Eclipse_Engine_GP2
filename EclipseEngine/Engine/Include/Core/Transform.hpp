@@ -6,10 +6,11 @@
 
 namespace Core
 {
-	class Transform : Component
+	class Transform : public Component
 	{
 	public:
 		ECLIPSE_ENGINE Transform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f });
+		ECLIPSE_ENGINE void Destroy() override;
 
 		Math::Vec3 position{ 0.f, 0.f, 0.f };
 		Math::Vec3 scale{ 1.f, 1.f, 1.f };

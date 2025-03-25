@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <typeinfo>
 #include "Component.hpp"
+#include "Transform.hpp"
 #include "ProjectExports.hpp"
 
 namespace Core
@@ -26,12 +28,26 @@ namespace Core
 		ECLIPSE_ENGINE int GetID() const;
 		ECLIPSE_ENGINE static int GetID(GameObject* _obj);
 
+		ECLIPSE_ENGINE void AddComponent(Component* _comp);
+
+		template <typename T> 
+		T* GetComponent()
+		{
+			for(int i = 0; i < m_components.size(); ++i)
+			{
+				T* castedComponent = dynamic_cast<T*>(m_components[i]);
+				if (castedComponent != nullptr)
+					return castedComponent;
+			}
+			return nullptr;
+		}
+
 	private:
 		void Destroy();
 		std::string m_name = "";
 		int m_id = -1;
 		std::vector<Component*> m_components;
-		//TODO: transform
+		Transform transform{};
 		//TODO: scene
 	};
 }
