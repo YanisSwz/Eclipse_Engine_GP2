@@ -9,6 +9,8 @@ namespace Core
 		scale = _scale;
 	}
 
+	Transform::~Transform(){}
+
 	void Transform::Destroy()
 	{
 	}

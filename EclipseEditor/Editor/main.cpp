@@ -5,6 +5,8 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "GameObject.hpp"
+#include "MonoBehaviour.hpp"
+#include "Scene.hpp"
 #include <iostream>
 
 int main()
@@ -90,12 +92,22 @@ int main()
 	float speed = 1.f;
 	Math::Mat4 TRS;
 
+	// CORE TESTS
 	Core::GameObject testObj{ "Cube" };
+	Core::GameObject testObj2{ "Cube2" };
+	Core::GameObject testObj3{ "Cube3" };
 	Core::Transform t{ Math::Vec3{1.f, 0.f, -5.f}, Math::Vec3{0.f, 0.f, 0.f}, Math::Vec3{1.f, 2.f, 1.f} };
-	testObj.AddComponent(&t);
+	Core::Transform t2{ Math::Vec3{0.f, 0.f, 25.f}, Math::Vec3{0.f, 1.f, 0.f}, Math::Vec3{1.f, 0.f, 0.f} };
+	Core::Transform t3{ Math::Vec3{4.f, 3.f, 0.f}, Math::Vec3{0.f, 0.f, 2.f}, Math::Vec3{0.2f, 3.f, 1.f} };
+	Core::MonoBehaviour m1{};
+	testObj.AddComponent<Core::Transform>(&t);
+	testObj.AddComponent<Core::MonoBehaviour>(&m1);
+	testObj2.AddComponent<Core::Transform>(&t2);
+	testObj3.AddComponent<Core::Transform>(&t3);
+	
+	Core::Scene scene{};
 
-	Core::Transform* t2 = testObj.GetComponent<Core::Transform>();
-	t2;
+	scene.scriptsArray.Sort();
 
 	while (!window->WindowShouldClose())
 	{
@@ -192,6 +204,7 @@ int main()
 #pragma endregion
 
 	window->DestroyWindow();
+	Core::GameObject::Destroy(&testObj);
 
 	return 0;
 }

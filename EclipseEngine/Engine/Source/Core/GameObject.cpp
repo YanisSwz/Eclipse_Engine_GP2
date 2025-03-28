@@ -17,15 +17,12 @@ namespace Core
 		{
 			m_components[i]->Destroy();
 		}
+		destroyed = true;
 	}
 
 	void GameObject::Destroy(GameObject* _obj)
 	{
-		if(_obj != nullptr)
-		{
-			_obj->Destroy();
-			delete _obj;
-		}
+		_obj->Destroy();
 	}
 
 	GameObject* GameObject::Instantiate(GameObject _original)
@@ -42,25 +39,5 @@ namespace Core
 	std::string GameObject::GetName(GameObject* _obj) 
 	{
 		return _obj->m_name;
-	}
-
-	int GameObject::GetID() const
-	{
-		return m_id;
-	}
-
-	int GameObject::GetID(GameObject* _obj)
-	{
-		return _obj->m_id;
-	}
-
-	void GameObject::AddComponent(Component* _comp)
-	{
-		for(int i = 0; i < m_components.size(); ++i)
-		{
-			if (typeid(m_components[i]) == typeid(_comp))
-				return;
-		}
-		m_components.emplace_back(_comp);
 	}
 }
