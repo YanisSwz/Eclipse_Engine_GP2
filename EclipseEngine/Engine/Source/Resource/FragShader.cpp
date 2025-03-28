@@ -15,7 +15,7 @@ namespace Resource
 		Delete();
 	}
 	
-	void FragShader::GetContentFile(std::string _path)
+	void FragShader::GetFileContent(std::string _path)
 	{
 		// Verify if Fragment file path exists
 		if (!std::filesystem::exists(_path))

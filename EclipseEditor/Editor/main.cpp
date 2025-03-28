@@ -9,6 +9,7 @@
 #include "Resource/Model.hpp"
 #include "Resource/ShaderProgram.hpp"
 #include "Resource/Skybox.hpp"
+#include "Resource/ResourceManager.hpp"
 #include <iostream>
 
 #define ImGuiImplementGLFW
@@ -42,70 +43,23 @@ int main()
 	ImGui_ImplOpenGL3_Init("#version 330");
 #endif // ImGuiImplementOpenGL
 
+	Resource::Model* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Model>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
+	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
+	Resource::VertShader* vertShader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShader.vert", "Assets/Shaders/Default/Default.vert");
+	Resource::FragShader* fragShader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("FragShader.frag", "Assets/Shaders/Default/Default.frag");
+	Resource::ShaderProgram* shaderProgram = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("ShaderProgram.shd", "VertShader.vert", "FragShader.frag");
 
-#pragma region Generate Shader
-	Resource::VertShader* vertShader = new Resource::VertShader;
-	Resource::FragShader* fragShader = new Resource::FragShader;
-	Resource::ShaderProgram* shaderProgram = new Resource::ShaderProgram;
+	Resource::Skybox* skybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Skybox>("Skybox.skb", "Assets/Skybox/Default", "Cube.obj", "ShaderProgramSkybox.shd");
+	Resource::Model* modelSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Model>("Cube.obj", "Assets/Models/Cube.obj");
+	Resource::VertShader* vertShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShaderSkybox.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");
+	Resource::FragShader* fragShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("FragShaderSkybox.frag", "Assets/Shaders/Skybox/SkyboxShader.frag");
+	Resource::ShaderProgram* shaderProgramSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("ShaderProgramSkybox.shd", "VertShaderSkybox.vert", "FragShaderSkybox.frag");
+	
 
-	vertShader->GetContentFile("Assets/Shaders/Default/Default.vert");
-	vertShader->Generate(rdrInter);
-	fragShader->GetContentFile("Assets/Shaders/Default/Default.frag");
-	fragShader->Generate(rdrInter);
+	Resource::ResourceManager::GetInstance().LoadAllResources();
+	Resource::ResourceManager::GetInstance().GenerateAllResources(rdrInter);
+	Resource::ResourceManager::GetInstance().GenerateAllResources(rdrInter);
 
-	if (shaderProgram->SetVertFragShader(vertShader, fragShader))
-	{
-		shaderProgram->Generate(rdrInter);
-	}
-	else
-	{
-		std::cout << "ERROR: Shader Program not Load" << std::endl;
-		return -1;
-	}
-#pragma endregion
-
-#pragma region Generate Model
-	Resource::Model* model = new Resource::Model;
-	model->GetFileContent("Assets/Models/VikingRoom.obj");
-	model->Generate(rdrInter);
-#pragma endregion
-
-#pragma region Generate Texture
-	Resource::Texture* textureResource = new Resource::Texture;
-	textureResource->GetFileContent("Assets/Textures/VikingRoom.png");
-	textureResource->Generate(rdrInter);
-#pragma endregion
-
-#pragma region	Generate Skybox
-	Resource::VertShader* vertShaderSkybox = new Resource::VertShader;
-	Resource::FragShader* fragShaderSkybox = new Resource::FragShader;
-	Resource::ShaderProgram* shaderProgramSkybox = new Resource::ShaderProgram;
-
-	vertShaderSkybox->GetContentFile("Assets/Shaders/Skybox/SkyboxShader.vert");
-	vertShaderSkybox->Generate(rdrInter);
-	fragShaderSkybox->GetContentFile("Assets/Shaders/Skybox/SkyboxShader.frag");
-	fragShaderSkybox->Generate(rdrInter);
-
-	if (shaderProgramSkybox->SetVertFragShader(vertShaderSkybox, fragShaderSkybox))
-	{
-		shaderProgramSkybox->Generate(rdrInter);
-	}
-	else
-	{
-		std::cout << "ERROR: Shader Program not Load" << std::endl;
-		return -1;
-	}
-
-	Resource::Model* modelSkybox = new Resource::Model;
-	modelSkybox->GetFileContent("Assets/Models/Cube.obj");
-	modelSkybox->Generate(rdrInter);
-
-	Resource::Skybox* skybox = new Resource::Skybox;
-	skybox->GetFileContent("Assets/Skybox/Default", Resource::TEXTURE_EXTENSION::JPG);
-	skybox->Generate(rdrInter);
-	skybox->SetModel(modelSkybox);
-	skybox->SetShader(shaderProgramSkybox);
-#pragma endregion
 
 #pragma region Generate FrameBuffer
 	RHI::IFrameBuffer* FB = rdrInter->InstantiateFrameBuffer();
@@ -179,9 +133,9 @@ int main()
 		// Draw Model with the texture
 		shaderProgram->Bind();
 		shaderProgram->SetMat4("TRS", TRS);
-		textureResource->Bind();
+		texture->Bind();
 		model->Draw();
-		textureResource->Unbind();
+		texture->Unbind();
 		shaderProgram->Unbind();
 
 		// Draw Skybox
@@ -198,7 +152,7 @@ int main()
 	}
 
 	delete model;
-	delete textureResource;
+	delete texture;
 	delete vertShader;
 	delete fragShader;
 	delete shaderProgram;
@@ -207,8 +161,8 @@ int main()
 	delete fragShaderSkybox;
 	delete shaderProgramSkybox;
 	delete skybox;
-#pragma region Destroy RHI Objects
 
+#pragma region Destroy RHI Objects
 	// Delete FrameBuffer
 	FB->Delete();
 	rdrInter->DestroyFrameBuffer(FB);

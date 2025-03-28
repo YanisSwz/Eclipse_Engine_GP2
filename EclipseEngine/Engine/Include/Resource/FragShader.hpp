@@ -9,7 +9,7 @@ namespace Resource
 		ECLIPSE_ENGINE FragShader();
 		ECLIPSE_ENGINE ~FragShader() override;
 
-		ECLIPSE_ENGINE void GetContentFile(std::string _path);
+		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 
 		ECLIPSE_ENGINE unsigned int GetID() const;

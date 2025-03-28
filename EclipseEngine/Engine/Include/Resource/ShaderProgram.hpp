@@ -4,6 +4,7 @@
 #include "Resource/FragShader.hpp"
 #include "IResource.hpp"
 #include "Maths.hpp"
+#include <string>
 
 namespace Resource
 {
@@ -13,8 +14,8 @@ namespace Resource
 		ECLIPSE_ENGINE ShaderProgram();
 		ECLIPSE_ENGINE ~ShaderProgram() override;
 
-		ECLIPSE_ENGINE void GetContentFile();
-		ECLIPSE_ENGINE bool SetVertFragShader(Resource::VertShader* _vertShader, Resource::FragShader* _fragShader);
+		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
+		ECLIPSE_ENGINE void SetVertFragShader(std::string _vertShaderName, std::string _fragShaderName);
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 
 		ECLIPSE_ENGINE void Delete() override;
@@ -37,5 +38,7 @@ namespace Resource
 
 		Resource::VertShader* m_vertShader = nullptr;
 		Resource::FragShader* m_fragShader = nullptr;
+		std::string m_vertShaderName = "";
+		std::string m_fragShaderName = "";
 	};
 }

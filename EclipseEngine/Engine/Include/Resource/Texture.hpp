@@ -10,7 +10,7 @@ namespace Resource
 		ECLIPSE_ENGINE Texture();
 		ECLIPSE_ENGINE ~Texture() override;
 
-		ECLIPSE_ENGINE void GetFileContent(std::string _path);
+		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 		
 		ECLIPSE_ENGINE void Bind();

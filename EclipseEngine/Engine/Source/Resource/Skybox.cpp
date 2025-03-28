@@ -1,6 +1,8 @@
 #include "Resource/Skybox.hpp"
+#include "Resource/ResourceManager.hpp"
 #include <stb_image.h>
 #include <string>
+#include <filesystem>
 #include <iostream>
 
 namespace Resource
@@ -14,12 +16,28 @@ namespace Resource
 		Delete();
 	}
 
-	void Skybox::GetFileContent(const char* _skyboxFolderPath, TEXTURE_EXTENSION _textureExtention)
+	void Skybox::GetFileContent(std::string _path)
 	{
-		textureExtention = _textureExtention;
+
+		// FindSkybox extention
+		std::string findPathExtention = _path + m_faces[0];
+		if (std::filesystem::exists(findPathExtention + ".png"))
+		{
+			textureExtention = TEXTURE_EXTENSION::PNG;
+		}
+		else if (std::filesystem::exists(findPathExtention + ".jpg"))
+		{
+			textureExtention = TEXTURE_EXTENSION::JPG;
+		}
+		else
+		{
+			std::cout << "The file: " << _path << " not found!" << std::endl;
+			return;
+		}
+
 		std::vector<std::string> _paths(6);
 		for (int i = 0; i < 6; ++i)
-			_paths[i] = std::string{ _skyboxFolderPath }.append(m_faces[i]).append(TEXTURE_EXTENTION_TO_STR(_textureExtention));
+			_paths[i] = std::string{ _path }.append(m_faces[i]).append(TEXTURE_EXTENTION_TO_STR(textureExtention));
 
 		int nrChannels;
 		stbi_set_flip_vertically_on_load(false);
@@ -48,18 +66,26 @@ namespace Resource
 		bIsLoaded = true;
 	}
 
-	void Skybox::SetModel(Resource::Model* _model)
+	void Skybox::SetModelName(std::string _modelName)
 	{
-		m_model = _model;
+		m_modelName = _modelName;
 	}
 
-	void Skybox::SetShader(Resource::ShaderProgram* _shader)
+	void Skybox::SetShaderName(std::string _shaderName)
 	{
-		m_shaderProgram = _shader;
+		m_shaderProgramName = _shaderName;
 	}
 
-	void Skybox::Draw() const
+	void Skybox::Draw()
 	{
+		if (!m_model)
+			m_model = ResourceManager::GetInstance().GetResource<Resource::Model>(m_modelName);
+		else if (!m_shaderProgram)
+			m_shaderProgram = ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>(m_shaderProgramName);
+
+		if (!m_model || !m_shaderProgram)
+			return;
+
 		m_rdrInter->DepthFunc(RHI::IFLAGS::DEPTH_LEQUAL);
 		m_shaderProgram->Bind();
 		m_cubeMap->Bind();

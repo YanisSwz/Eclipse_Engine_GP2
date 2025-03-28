@@ -15,7 +15,7 @@ namespace Resource
 		Delete();
 	}
 
-	void VertShader::GetContentFile(std::string _path)
+	void VertShader::GetFileContent(std::string _path)
 	{
 		// Verify if Vertex file path exists
 		if (!std::filesystem::exists(_path))

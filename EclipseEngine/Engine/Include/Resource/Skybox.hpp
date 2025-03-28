@@ -5,7 +5,7 @@
 #include "Resource/Model.hpp"
 #include "Resource/ShaderProgram.hpp"
 #include <vector>
-
+#include <string>
 
 namespace Resource
 {
@@ -15,12 +15,12 @@ namespace Resource
 		ECLIPSE_ENGINE Skybox();
 		ECLIPSE_ENGINE ~Skybox() override;
 
-		ECLIPSE_ENGINE void GetFileContent(const char* _skyboxFolderPath, TEXTURE_EXTENSION _textureExtention);
+		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
-		ECLIPSE_ENGINE void SetModel(Resource::Model* _model);
-		ECLIPSE_ENGINE void SetShader(Resource::ShaderProgram* _shader);
+		ECLIPSE_ENGINE void SetModelName(std::string _model);
+		ECLIPSE_ENGINE void SetShaderName(std::string _shader);
 
-		ECLIPSE_ENGINE void Draw() const;
+		ECLIPSE_ENGINE void Draw();
 
 		ECLIPSE_ENGINE void Delete() override;
 
@@ -30,6 +30,8 @@ namespace Resource
 		RHI::ICubeMap* m_cubeMap = nullptr;
 		Resource::Model* m_model = nullptr;
 		Resource::ShaderProgram* m_shaderProgram = nullptr;
+		std::string m_modelName = "";
+		std::string m_shaderProgramName = "";
 
 		TEXTURE_EXTENSION textureExtention = TEXTURE_EXTENSION::JPG;
 		std::vector<unsigned char*> m_data;

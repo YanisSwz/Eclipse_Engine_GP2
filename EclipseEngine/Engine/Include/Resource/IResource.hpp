@@ -1,6 +1,7 @@
 #pragma once
 #include "RHIInterfaces/IRenderInterface.hpp"
 #include "ProjectExports.hpp"
+#include "string"
 
 namespace Resource
 {
@@ -12,6 +13,7 @@ namespace Resource
 
 		ECLIPSE_ENGINE bool IsLoaded() { return bIsLoaded; }
 
+		virtual void GetFileContent(std::string _path) = 0;
 		virtual void Generate(RHI::IRenderInterface* _rdrInterface) = 0;
 		virtual void Delete() = 0;
 
