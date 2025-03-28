@@ -14,7 +14,7 @@ namespace Resource
 
 		ECLIPSE_ENGINE unsigned int GetID() const;
 
-		ECLIPSE_ENGINE void Delete();
+		ECLIPSE_ENGINE void Delete() override;
 
 	private:
 		RHI::IRenderInterface* m_rdrInter = nullptr;

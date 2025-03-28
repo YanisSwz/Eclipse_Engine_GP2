@@ -16,7 +16,7 @@ namespace Resource
 		ECLIPSE_ENGINE void Bind();
 		ECLIPSE_ENGINE void Unbind();
 
-		ECLIPSE_ENGINE void Delete();
+		ECLIPSE_ENGINE void Delete() override;
 
 	private:
 		RHI::IRenderInterface* m_rdrInter = nullptr;

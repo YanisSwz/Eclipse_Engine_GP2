@@ -20,7 +20,7 @@ namespace Resource
 
 		ECLIPSE_ENGINE void Draw() const;
 
-		ECLIPSE_ENGINE void Delete();
+		ECLIPSE_ENGINE void Delete() override;
 
 	private:
 		RHI::IRenderInterface* m_rdrInter = nullptr;

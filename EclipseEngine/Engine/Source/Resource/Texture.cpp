@@ -11,11 +11,7 @@ namespace Resource
 
     Texture::~Texture()
     {
-        if (m_imgData)
-        {
-            stbi_image_free(m_imgData);
-            m_imgData = nullptr;
-        }
+        Delete();
     }
 
     void Texture::GetFileContent(std::string _path)
@@ -56,6 +52,11 @@ namespace Resource
 
     void Texture::Delete()
     {
+        if (m_imgData)
+        {
+            stbi_image_free(m_imgData);
+            m_imgData = nullptr;
+        }
         m_texture->Delete();
         m_rdrInter->DestroyTexture2D(m_texture);
     }

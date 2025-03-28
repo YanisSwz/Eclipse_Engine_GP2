@@ -13,7 +13,7 @@ namespace Resource
 		ECLIPSE_ENGINE bool IsLoaded() { return bIsLoaded; }
 
 		virtual void Generate(RHI::IRenderInterface* _rdrInterface) = 0;
-		// virtual void Delete() = 0; // TODO Add override
+		virtual void Delete() = 0;
 
 	protected:
 		bool bIsLoaded = false;

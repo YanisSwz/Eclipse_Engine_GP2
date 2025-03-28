@@ -17,7 +17,7 @@ namespace Resource
 		ECLIPSE_ENGINE bool SetVertFragShader(Resource::VertShader* _vertShader, Resource::FragShader* _fragShader);
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 
-		ECLIPSE_ENGINE void Delete();
+		ECLIPSE_ENGINE void Delete() override;
 
 		ECLIPSE_ENGINE void Bind();
 		ECLIPSE_ENGINE void Unbind();

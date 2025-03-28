@@ -22,7 +22,7 @@ namespace Resource
 
 		ECLIPSE_ENGINE void Draw() const;
 
-		ECLIPSE_ENGINE void Delete();
+		ECLIPSE_ENGINE void Delete() override;
 
 	private:
 		RHI::IRenderInterface* m_rdrInter = nullptr;
@@ -31,7 +31,7 @@ namespace Resource
 		Resource::Model* m_model = nullptr;
 		Resource::ShaderProgram* m_shaderProgram = nullptr;
 
-		TEXTURE_EXTENSION textureExtention;
+		TEXTURE_EXTENSION textureExtention = TEXTURE_EXTENSION::JPG;
 		std::vector<unsigned char*> m_data;
 		int m_width = 0;
 		int m_height = 0;
