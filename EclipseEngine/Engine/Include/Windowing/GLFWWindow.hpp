@@ -12,6 +12,9 @@ namespace Windowing
 		static bool s_mouseScrollDeltaReset;
 		static float s_mouseScrollDelta;
 
+		ECLIPSE_ENGINE GLFWWindow() = default;
+		ECLIPSE_ENGINE ~GLFWWindow() override = default;
+
 		ECLIPSE_ENGINE void CreateWindow(const char* _name, int _width, int _height) override;
 		ECLIPSE_ENGINE float GetTime() override;
 		ECLIPSE_ENGINE bool WindowShouldClose() override;

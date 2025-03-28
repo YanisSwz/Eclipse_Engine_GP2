@@ -1,11 +1,17 @@
 #include "Logger.hpp"
-#include <ctime>
+#include <string>
+
+#define NOGDI
+#include <windows.h>
 
 namespace Logging
 {
-    Logger::Logger(PRIORITY _priority)
+    const char* Logger::m_folderName = "Logs";
+    bool Logger::m_bIsFolderCreated = false;
+
+    Logger::Logger(const char* _fileName, PRIORITY _priority)
     {
-        Init(_priority);
+        Init(_fileName, _priority);
     }
 
     Logger::~Logger()
@@ -13,10 +19,23 @@ namespace Logging
         FreeFile();
     }
 
-    void Logger::Init(PRIORITY _priority)
+    void Logger::Init(const char* _fileName, PRIORITY _priority)
     {
         SetPriority(_priority);
-        m_file = std::fopen(m_filePath, "a");
+
+        if (!m_bIsFolderCreated)
+        {
+            CreateDirectory(m_folderName, NULL);
+            Logger::m_bIsFolderCreated = true;
+        }
+
+        std::string filePathStr = std::string(m_folderName) + "/" + _fileName;
+        const char* filePath = filePathStr.c_str();
+        HANDLE handle = CreateFile(filePath, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (handle != 0)
+            CloseHandle(handle);
+
+        fopen_s(&m_file, filePath, "a");
     }
 
     void Logger::FreeFile()
@@ -28,18 +47,20 @@ namespace Logging
         }
     }
 
-    Logger::COLOR Logger::PriorityToColor(PRIORITY _priority)
+    COLOR Logger::PriorityToColor(PRIORITY _priority)
     {
         switch (_priority)
         {
         case PRIORITY::DEBUG:
-            return COLOR::RESET;
+            return COLOR::WHITE;
         case PRIORITY::INFO:
             return COLOR::GREEN;
         case PRIORITY::WARNING:
             return COLOR::YELLOW;
         case PRIORITY::ERROR:
             return COLOR::RED;
+        default:
+            return COLOR::WHITE;
         }
     }
 
@@ -55,6 +76,8 @@ namespace Logging
             return "[WARNING]";
         case PRIORITY::ERROR:
             return "[ERROR]";
+        default:
+            return "[]";
         }
 	}
 
@@ -62,7 +85,7 @@ namespace Logging
 	{
         switch (_color)
         {
-        case COLOR::RESET:
+        case COLOR::WHITE:
             return "\033[0m";
         case COLOR::RED:
             return "\033[31m";
@@ -76,6 +99,8 @@ namespace Logging
             return "\033[1;35m";
         case COLOR::CYAN:
             return "\033[1;36m";
+        default:
+            return "\033[0m";
         }
 	}
 }

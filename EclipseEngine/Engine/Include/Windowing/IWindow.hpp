@@ -2,6 +2,7 @@
 #include <map>
 #include "Inputs.hpp"
 #include "Vec2.hpp"
+#include "ProjectExports.hpp"
 
 namespace Windowing
 {
@@ -17,6 +18,9 @@ namespace Windowing
 		const char* name = "";
 		int width = 0;
 		int height = 0;
+
+		IWindow() = default;
+		virtual ~IWindow() = default;
 
 		virtual void CreateWindow(const char* _name, int _width, int _height) = 0;
 		virtual float GetTime() = 0;
