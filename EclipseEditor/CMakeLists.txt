@@ -1,6 +1,8 @@
 ##### EclipseEditor #####
 
-add_executable(ECLIPSE_EDITOR "Editor/main.cpp" "Editor/SceneCamera.cpp")
+file(GLOB_RECURSE ECLIPSE_EDITOR_SOURCES "Editor/Source/*.cpp")
+
+add_executable(ECLIPSE_EDITOR ${ECLIPSE_EDITOR_SOURCES})
 
 target_link_libraries(ECLIPSE_EDITOR PRIVATE ECLIPSE_ENGINE)
 
@@ -14,6 +16,7 @@ else()
     target_compile_options(ECLIPSE_EDITOR PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
 
+add_subdirectory(Editor)
 add_subdirectory(Libs)
 
 add_custom_command(
