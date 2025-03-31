@@ -181,6 +181,9 @@ int main()
 #pragma endregion
 
 	window->DestroyWindow();
+
+	delete rdrInter;
+	delete window;
 	return 0;
 }
 

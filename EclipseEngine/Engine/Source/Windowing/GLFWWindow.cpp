@@ -1,5 +1,6 @@
 #include "GLFWWindow.hpp"
 #include "GLFWInputs.inl"
+#include "Logger.inl"
 
 namespace Windowing
 {
