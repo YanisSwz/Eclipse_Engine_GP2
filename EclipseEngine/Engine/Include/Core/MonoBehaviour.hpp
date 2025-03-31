@@ -7,7 +7,7 @@ namespace Core
 	class MonoBehaviour : public Component
 	{
 	public:
-		ECLIPSE_ENGINE MonoBehaviour() = default;
+		ECLIPSE_ENGINE MonoBehaviour();
 		ECLIPSE_ENGINE virtual ~MonoBehaviour() = default;
 
 		ECLIPSE_ENGINE virtual void Awake();
@@ -17,7 +17,7 @@ namespace Core
 		ECLIPSE_ENGINE virtual void OnDisable();
 		ECLIPSE_ENGINE virtual void OnDestroy();
 
-	private:
+	protected:
 		bool hasStarted = false;
 	};
 }

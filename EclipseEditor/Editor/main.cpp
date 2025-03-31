@@ -5,7 +5,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "GameObject.hpp"
-#include "MonoBehaviour.hpp"
+#include "TestScript.hpp"
 #include "Scene.hpp"
 #include <iostream>
 
@@ -100,17 +100,30 @@ int main()
 	Core::Transform t2{ Math::Vec3{0.f, 0.f, 25.f}, Math::Vec3{0.f, 1.f, 0.f}, Math::Vec3{1.f, 0.f, 0.f} };
 	Core::Transform t3{ Math::Vec3{4.f, 3.f, 0.f}, Math::Vec3{0.f, 0.f, 2.f}, Math::Vec3{0.2f, 3.f, 1.f} };
 	Core::MonoBehaviour m1{};
+	Core::MonoBehaviour m2{};
+	Core::MonoBehaviour m3{};
+	m1.SetActive(true);
+	m2.SetActive(true);
+	m3.SetActive(true);
 	testObj.AddComponent<Core::Transform>(&t);
 	testObj.AddComponent<Core::MonoBehaviour>(&m1);
-	testObj2.AddComponent<Core::Transform>(&t2);
-	testObj3.AddComponent<Core::Transform>(&t3);
+	testObj2.AddComponent<Core::MonoBehaviour>(&m2);
+	testObj3.AddComponent<Core::MonoBehaviour>(&m3);
 	
 	Core::Scene scene{};
+	scene.scriptsArray.Add(&m1);
+	scene.scriptsArray.Add(&m2);
+	scene.scriptsArray.Add(&m3);
 
-	scene.scriptsArray.Sort();
-
+	Core::MonoBehaviour* testM = testObj2.GetComponent<Core::MonoBehaviour>();
+	testM->SetActive(false);
+	
 	while (!window->WindowShouldClose())
 	{
+		scene.scriptsArray.Sync();
+		scene.scriptsArray.Sort();
+		scene.scriptsArray.Update();
+
 		window->UpdateInputs();
 		if (window->GetKey(KEY_CODE::KEY_ESCAPE, INPUT_ACTION::INPUT_PRESS))
 		{

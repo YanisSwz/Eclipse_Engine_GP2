@@ -16,7 +16,7 @@ namespace Core
 		ECLIPSE_ENGINE static void Destroy(Object* _obj);
 
 	protected:
-		bool active = true;
+		bool active = false;
 		bool destroyed = false;
 	};
 }

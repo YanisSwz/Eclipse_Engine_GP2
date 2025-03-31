@@ -13,11 +13,16 @@ namespace Core
 		ComponentArray() = default;
 		virtual ~ComponentArray() = default;
 
+		virtual void Sync() = 0;
 		virtual void Sort() = 0;
-		virtual void Swap(Component* _obj1, Component*) = 0;
+		virtual void Swap(Component* _obj1, Component* _obj2) = 0;
 
 	protected:
+		// First inactive index
 		int currentActiveCount = 0;
+		// Total components count
+		int currentCount = 0;
+		static const int MAX_SIZE = 100;
 	};
 
 	class MonoBehaviourArray : public ComponentArray
@@ -26,11 +31,22 @@ namespace Core
 		ECLIPSE_ENGINE MonoBehaviourArray() = default;
 		ECLIPSE_ENGINE ~MonoBehaviourArray() = default;
 
+		/// <summary>
+		/// Function that updates destroyed components pointers
+		/// </summary>
+		/// <returns></returns>
+		ECLIPSE_ENGINE void Sync() override;
+		/// <summary>
+		/// Function that sorts active and inactive components and updates components pointers
+		/// </summary>
+		/// <returns></returns>
 		ECLIPSE_ENGINE void Sort() override;
-		ECLIPSE_ENGINE void Swap(Component* _obj1, Component*) override;
+		ECLIPSE_ENGINE void Swap(Component* _obj1, Component* _obj2) override;
+		ECLIPSE_ENGINE void Add(Component* _comp);
+		ECLIPSE_ENGINE void Update();
 
 	private:
-		std::vector<MonoBehaviour> data;
+		MonoBehaviour data[MAX_SIZE];
 	};
 
 	class Scene
@@ -42,8 +58,8 @@ namespace Core
 		MonoBehaviourArray scriptsArray;
 
 	private:
-		GameObject* root = nullptr;
-		
+		GameObject* m_root = nullptr;
+		GameObject* m_currentGameObject = nullptr;
 
 	};
 }

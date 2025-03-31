@@ -7,7 +7,7 @@ namespace Core
 	class TestScript : public MonoBehaviour
 	{
 	public:
-		ECLIPSE_ENGINE TestScript() = default;
+		ECLIPSE_ENGINE TestScript();
 		ECLIPSE_ENGINE ~TestScript();
 
 		ECLIPSE_ENGINE void Awake() override;

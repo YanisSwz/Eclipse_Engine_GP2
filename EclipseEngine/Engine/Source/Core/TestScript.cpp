@@ -3,6 +3,7 @@
 
 namespace Core
 {
+	TestScript::TestScript(){}
 	TestScript::~TestScript() {};
 
 	void TestScript::Awake()

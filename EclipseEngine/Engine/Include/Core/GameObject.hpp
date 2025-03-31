@@ -62,10 +62,25 @@ namespace Core
 			}
 		}
 
+		template <typename T>
+		void RemoveComponent(T* _compAdress)
+		{
+			for (int i = 0; i < m_components.size(); ++i)
+			{
+				if (m_components[i] == _compAdress)
+				{
+					// Mark to be destroyed and remove it from components list
+					m_components[i]->Destroy();
+					m_components.erase(m_components.begin() + i);
+					return;
+				}
+			}
+		}
+
 	private:
 		std::string m_name = "";
 		Transform transform{};
 		std::vector<Component*> m_components;
-		Scene* scene{};
+		Scene* scene = nullptr;
 	};
 }
