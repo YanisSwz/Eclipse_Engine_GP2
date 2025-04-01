@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include "Component.hpp"
 #include "Transform.hpp"
+#include "MonoBehaviour.hpp"
 #include "ProjectExports.hpp"
 
 namespace Core
@@ -39,13 +40,26 @@ namespace Core
 		template <typename T>
 		void AddComponent(T* _comp)
 		{
-			for (int i = 0; i < m_components.size(); ++i)
+			MonoBehaviour* castedComponent = dynamic_cast<MonoBehaviour*>(_comp);
+			if(castedComponent != nullptr)
 			{
-				if (typeid(m_components[i]) == typeid(_comp))
-					return;
+				m_components.emplace_back(_comp);
+				_comp->SetGameObject(this);
+				return;
 			}
-			m_components.emplace_back(_comp);
-			_comp->SetGameObject(this);
+			else
+			{
+				for (int i = 0; i < m_components.size(); ++i)
+				{
+					if (_comp == m_components[i])
+						return;
+					T* component = dynamic_cast<T*>(m_components[i]);
+					if (component != nullptr)
+						return;
+				}
+				m_components.emplace_back(_comp);
+				_comp->SetGameObject(this);
+			}
 		}
 
 		template <typename T>
@@ -57,6 +71,18 @@ namespace Core
 				if (castedComponent != nullptr)
 				{
 					m_components[i] = _compAdress;
+					return;
+				}
+			}
+		}
+
+		void UpdateComponentLocation(Component* _compAdress, Component* _newAdress)
+		{
+			for (int i = 0; i < m_components.size(); ++i)
+			{
+				if (_compAdress == m_components[i])
+				{
+					m_components[i] = _newAdress;
 					return;
 				}
 			}

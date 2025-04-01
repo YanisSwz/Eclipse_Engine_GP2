@@ -44,15 +44,12 @@ namespace Core
 
 	void MonoBehaviourArray::Swap(Component* _obj1, Component* _obj2)
 	{
-		MonoBehaviour* obj1 = dynamic_cast<MonoBehaviour*>(_obj1);
-		MonoBehaviour* obj2 = dynamic_cast<MonoBehaviour*>(_obj2);
-
 		Component temp = *_obj1;
 		*_obj1 = *_obj2;
 		*_obj2 = temp;
 
-		_obj1->GetGameObject()->UpdateComponentLocation(obj1);
-		_obj1->GetGameObject()->UpdateComponentLocation(obj2);
+		_obj1->GetGameObject()->UpdateComponentLocation(_obj2, _obj1);
+		_obj2->GetGameObject()->UpdateComponentLocation(_obj1, _obj2);
 	}
 
 	void MonoBehaviourArray::Add(Component* _comp)
