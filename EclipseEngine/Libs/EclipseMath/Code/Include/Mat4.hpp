@@ -27,39 +27,39 @@ namespace Math
 		void Opposite();
 		float Det() const;
 		void Inverse();
-		void RotateX(float _theta);
-		void RotateY(float _theta);
-		void RotateZ(float _theta);
-		void Rotate(Vec4 _theta);
-		void Translate(Vec4 _translate);
-		void Scale(Vec4 _scale);
-		void TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
-		void TRS(Vec4 _translate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _rotate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _scale = { 1.f, 1.f, 1.f, 1.f });
-		void GetPerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far);
-		void GetViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up);
+		void SetRotationX(float _theta);
+		void SetRotationY(float _theta);
+		void SetRotationZ(float _theta);
+		void SetRotation(Vec4 _theta);
+		void SetTranslation(Vec4 _translate);
+		void SetScale(Vec4 _scale);
+		void SetTRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
+		void SetTRS(Vec4 _translate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _rotate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _scale = { 1.f, 1.f, 1.f, 1.f });
+		void SetPerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far);
+		void SetViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up);
 		void Print() const;
 
 		// Static Functions
-		static Vec4 s_Diagonal(Mat4 _mat);
-		static Mat4 s_Transpose(Mat4 _mat);
-		static float s_Trace(Mat4 _mat);
-		static Mat4 s_Opposite(Mat4 _mat);
-		static float s_Det(Mat4 _mat);
-		static Mat4 s_Inverse(Mat4 _mat);
-		static Mat4 s_RotateX(float _theta);
-		static Mat4 s_RotateY(float _theta);
-		static Mat4 s_RotateZ(float _theta);
-		static Mat4 s_Rotate(Vec3 _theta);
-		static Mat4 s_Rotate(Vec4 _theta);
-		static Mat4 s_Translate(Vec3 _translate);
-		static Mat4 s_Translate(Vec4 _translate);
-		static Mat4 s_Scale(Vec3 _scale);
-		static Mat4 s_Scale(Vec4 _scale);
-		static Mat4 s_TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
-		static Mat4 s_TRS(Vec4 _translate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _rotate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _scale = { 1.f, 1.f, 1.f, 1.f });
-		static Mat4 s_GetPerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far);
-		static Mat4 s_GetViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up);
-		static void s_Print(Mat4 _mat);
+		static Vec4 Diagonal(Mat4 _mat);
+		static Mat4 Transpose(Mat4 _mat);
+		static float Trace(Mat4 _mat);
+		static Mat4 Opposite(Mat4 _mat);
+		static float Det(Mat4 _mat);
+		static Mat4 Inverse(Mat4 _mat);
+		static Mat4 RotationX(float _theta);
+		static Mat4 RotationY(float _theta);
+		static Mat4 RotationZ(float _theta);
+		static Mat4 Rotation(Vec3 _theta);
+		static Mat4 Rotation(Vec4 _theta);
+		static Mat4 Translation(Vec3 _translate);
+		static Mat4 Translation(Vec4 _translate);
+		static Mat4 Scale(Vec3 _scale);
+		static Mat4 Scale(Vec4 _scale);
+		static Mat4 TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
+		static Mat4 TRS(Vec4 _translate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _rotate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _scale = { 1.f, 1.f, 1.f, 1.f });
+		static Mat4 PerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far);
+		static Mat4 ViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up);
+		static void Print(Mat4 _mat);
 
 		// Operator *
 		Mat4 operator+(float _scalar) const;
@@ -91,6 +91,6 @@ namespace Math
 		bool operator!=(Mat4 _mat) const;
 
 	private:
-		float value[4][4] = { {1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f} };
+		float m_value[4][4] = { {1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f} };
 	};
 }

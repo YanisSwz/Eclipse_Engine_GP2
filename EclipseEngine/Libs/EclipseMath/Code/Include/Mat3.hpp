@@ -23,9 +23,9 @@ namespace Math
 		void Opposite();
 		float Det() const;
 		void Inverse();
-		void RotateX(float _theta);
-		void RotateY(float _theta);
-		void RotateZ(float _theta);
+		void SetRotationX(float _theta);
+		void SetRotationY(float _theta);
+		void SetRotationZ(float _theta);
 		void Rotate(Vec3 _theta);
 		void Translate(Vec3 _translate);
 		void Scale(Vec3 _scale);
@@ -33,20 +33,20 @@ namespace Math
 		void Print() const;
 
 		// Static Functions
-		static Vec3 s_Diagonal(Mat3 _mat);
-		static Mat3 s_Transpose(Mat3 _mat);
-		static float s_Trace(Mat3 _mat);
-		static Mat3 s_Opposite(Mat3 _mat);
-		static float s_Det(Mat3 _mat);
-		static Mat3 s_Inverse(Mat3 _mat);
-		static Mat3 s_RotateX(float _theta);
-		static Mat3 s_RotateY(float _theta);
-		static Mat3 s_RotateZ(float _theta);
-		static Mat3 s_Rotate(Vec3 _theta);
-		static Mat3 s_Translate(Vec3 _translate);
-		static Mat3 s_Scale(Vec3 _scale);
-		static Mat3 s_TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
-		static void s_Print(Mat3 _mat);
+		static Vec3 Diagonal(Mat3 _mat);
+		static Mat3 Transpose(Mat3 _mat);
+		static float Trace(Mat3 _mat);
+		static Mat3 Opposite(Mat3 _mat);
+		static float Det(Mat3 _mat);
+		static Mat3 Inverse(Mat3 _mat);
+		static Mat3 RotationX(float _theta);
+		static Mat3 RotationY(float _theta);
+		static Mat3 RotationZ(float _theta);
+		static Mat3 Rotation(Vec3 _theta);
+		static Mat3 Translation(Vec3 _translate);
+		static Mat3 Scaling(Vec3 _scale);
+		static Mat3 GetTRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
+		static void Print(Mat3 _mat);
 		
 		// Operator *
 		Mat3 operator+(float _scalar) const;
@@ -77,6 +77,6 @@ namespace Math
 		bool operator!=(Mat3 _mat) const;
 
 	private:
-		float value[3][3] = { {1.f, 0.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 0.f, 1.f} };
+		float m_value[3][3] = { {1.f, 0.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 0.f, 1.f} };
 	};
 }

@@ -128,7 +128,7 @@ int main()
 		sceneCamera.SetShaderData(shaderProgramSkybox, FB->width, FB->height);
 
 		// Update TRS Rotation
-		TRS.TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, Math::Tools::PI / 2.f + crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
+		TRS.SetTRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, Math::Tools::PI / 2.f + crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
 
 		// Draw Model with the texture
 		shaderProgram->Bind();

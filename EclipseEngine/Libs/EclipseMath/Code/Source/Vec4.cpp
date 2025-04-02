@@ -115,35 +115,35 @@ float Vec4::DotProduct(Vec4 _vec) const
 
 void Vec4::RotateX(float _theta, Vec4 _anchor)
 {
-	*this = Mat4::s_RotateX(_theta) * (*this - _anchor);
+	*this = Mat4::RotationX(_theta) * (*this - _anchor);
 	*this += _anchor;
 }
 
 void Vec4::RotateY(float _theta, Vec4 _anchor)
 {
-	*this = Mat4::s_RotateY(_theta) * (*this - _anchor);
+	*this = Mat4::RotationY(_theta) * (*this - _anchor);
 	*this += _anchor;
 }
 
 void Vec4::RotateZ(float _theta, Vec4 _anchor)
 {
-	*this = Mat4::s_RotateZ(_theta) * (*this - _anchor);
+	*this = Mat4::RotationZ(_theta) * (*this - _anchor);
 	*this += _anchor;
 }
 
 void Vec4::Rotate(float _theta, Vec4 _anchor)
 {
-	*this = Mat4::s_RotateX(_theta) * (*this - _anchor);
-	*this = Mat4::s_RotateY(_theta) * (*this);
-	*this = Mat4::s_RotateZ(_theta) * (*this);
+	*this = Mat4::RotationX(_theta) * (*this - _anchor);
+	*this = Mat4::RotationY(_theta) * (*this);
+	*this = Mat4::RotationZ(_theta) * (*this);
 	*this += _anchor;
 }
 
 void Vec4::Rotate(Vec4 _theta, Vec4 _anchor)
 {
-	*this = Mat4::s_RotateX(_theta.x) * (*this - _anchor);
-	*this = Mat4::s_RotateY(_theta.y) * (*this);
-	*this = Mat4::s_RotateZ(_theta.z) * (*this);
+	*this = Mat4::RotationX(_theta.x) * (*this - _anchor);
+	*this = Mat4::RotationY(_theta.y) * (*this);
+	*this = Mat4::RotationZ(_theta.z) * (*this);
 	*this += _anchor;
 }
 
@@ -197,35 +197,35 @@ float Vec4::s_DotProduct(Vec4 _vec1, Vec4 _vec2)
 
 Vec4 Vec4::s_RotateX(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 {
-	_vecToRotate = Mat4::s_RotateX(_theta) * (_vecToRotate - _anchor);
+	_vecToRotate = Mat4::RotationX(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
 Vec4 Vec4::s_RotateY(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 {
-	_vecToRotate = Mat4::s_RotateY(_theta) * (_vecToRotate - _anchor);
+	_vecToRotate = Mat4::RotationY(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
 Vec4 Vec4::s_RotateZ(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 {
-	_vecToRotate = Mat4::s_RotateZ(_theta) * (_vecToRotate - _anchor);
+	_vecToRotate = Mat4::RotationZ(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
 Vec4 Vec4::s_Rotate(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 {
-	_vecToRotate = Mat4::s_RotateX(_theta) * (_vecToRotate - _anchor);
-	_vecToRotate = Mat4::s_RotateY(_theta) * (_vecToRotate);
-	_vecToRotate = Mat4::s_RotateZ(_theta) * (_vecToRotate);
+	_vecToRotate = Mat4::RotationX(_theta) * (_vecToRotate - _anchor);
+	_vecToRotate = Mat4::RotationY(_theta) * (_vecToRotate);
+	_vecToRotate = Mat4::RotationZ(_theta) * (_vecToRotate);
 	return { _vecToRotate + _anchor };
 }
 
 Vec4 Vec4::s_Rotate(Vec4 _vecToRotate, Vec4 _theta, Vec4 _anchor)
 {
-	_vecToRotate = Mat4::s_RotateX(_theta.x) * (_vecToRotate - _anchor);
-	_vecToRotate = Mat4::s_RotateY(_theta.y) * (_vecToRotate);
-	_vecToRotate = Mat4::s_RotateZ(_theta.z) * (_vecToRotate);
+	_vecToRotate = Mat4::RotationX(_theta.x) * (_vecToRotate - _anchor);
+	_vecToRotate = Mat4::RotationY(_theta.y) * (_vecToRotate);
+	_vecToRotate = Mat4::RotationZ(_theta.z) * (_vecToRotate);
 	return { _vecToRotate + _anchor };
 }
 

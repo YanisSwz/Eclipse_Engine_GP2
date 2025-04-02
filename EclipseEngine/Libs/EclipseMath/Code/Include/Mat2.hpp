@@ -31,14 +31,14 @@ namespace Math
 		void Print() const;
 
 		// Static Functions
-		static Vec2 s_Diagonal(Mat2 _mat);
-		static Mat2 s_Transpose(Mat2 _mat);
-		static float s_Trace(Mat2 _mat);
-		static Mat2 s_Opposite(Mat2 _mat);
-		static float s_Det(Mat2 _mat);
-		static Mat2 s_Inverse(Mat2 _mat);
-		static Mat2 s_Rotate(float _theta);
-		static void s_Print(Mat2 _mat);
+		static Vec2 Diagonal(Mat2 _mat);
+		static Mat2 Transpose(Mat2 _mat);
+		static float Trace(Mat2 _mat);
+		static Mat2 Opposite(Mat2 _mat);
+		static float Det(Mat2 _mat);
+		static Mat2 Inverse(Mat2 _mat);
+		static Mat2 Rotation(float _theta);
+		static void Print(Mat2 _mat);
 
 		// Operator *
 		Mat2 operator+(float _scalar) const;
@@ -69,6 +69,6 @@ namespace Math
 		bool operator!=(Mat2 _mat) const;
 
 	private:
-		float value[2][2] = { { 1.f, 0.f }, { 0.f, 1.f } };
+		float m_value[2][2] = { { 1.f, 0.f }, { 0.f, 1.f } };
 	};
 }

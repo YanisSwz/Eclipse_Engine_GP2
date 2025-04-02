@@ -115,7 +115,7 @@ void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 	if (m_rotation.y - mouseDelta.y < Math::Tools::PI / 2.f && m_rotation.y - mouseDelta.y > - Math::Tools::PI / 2.f)
 		m_rotation.y -= mouseDelta.y;
 
-	Math::Mat4 finalMatrix = Math::Mat4::s_RotateY(m_rotation.x) * Math::Mat4::s_RotateX(m_rotation.y);
+	Math::Mat4 finalMatrix = Math::Mat4::RotationY(m_rotation.x) * Math::Mat4::RotationX(m_rotation.y);
 	Math::Vec4 direction = finalMatrix * Math::Vec4{ 0.f, 0.f, 1.f, 0.f };
 	m_eye.x = m_at.x - direction.x;
 	m_eye.y = m_at.y - direction.y;
@@ -127,8 +127,8 @@ void SceneCamera::SetShaderData(Resource::ShaderProgram* _shaderProgram, int vie
 	m_width = viewportSizeX;
 	m_height = viewportSizeY;
 
-	Math::Mat4 VP = Math::Mat4::s_GetPerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);
-	VP *= Math::Mat4::s_GetViewMatrix(m_eye, m_at, m_up);
+	Math::Mat4 VP = Math::Mat4::SetPerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);
+	VP *= Math::Mat4::ViewMatrix(m_eye, m_at, m_up);
 	_shaderProgram->Bind();
 	_shaderProgram->SetMat4("VP", VP, true);
 	_shaderProgram->Unbind();

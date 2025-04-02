@@ -133,35 +133,35 @@ void Vec3::CrossProduct(Vec3 _vec)
 
 void Vec3::RotateX(float _theta, Vec3 _anchor)
 {
-	*this = Mat3::s_RotateX(_theta) * (*this - _anchor);
+	*this = Mat3::RotationX(_theta) * (*this - _anchor);
 	*this += _anchor;
 }
 
 void Vec3::RotateY(float _theta, Vec3 _anchor)
 {
-	*this = Mat3::s_RotateY(_theta) * (*this - _anchor);
+	*this = Mat3::RotationY(_theta) * (*this - _anchor);
 	*this += _anchor;
 }
 
 void Vec3::RotateZ(float _theta, Vec3 _anchor)
 {
-	*this = Mat3::s_RotateZ(_theta) * (*this - _anchor);
+	*this = Mat3::RotationZ(_theta) * (*this - _anchor);
 	*this += _anchor;
 }
 
 void Vec3::Rotate(float _theta, Vec3 _anchor)
 {
-	*this = Mat3::s_RotateX(_theta) * (*this - _anchor);
-	*this = Mat3::s_RotateY(_theta) * (*this);
-	*this = Mat3::s_RotateZ(_theta) * (*this);
+	*this = Mat3::RotationX(_theta) * (*this - _anchor);
+	*this = Mat3::RotationY(_theta) * (*this);
+	*this = Mat3::RotationZ(_theta) * (*this);
 	*this += _anchor;
 }
 
 void Vec3::Rotate(Vec3 _theta, Vec3 _anchor)
 {
-	*this = Mat3::s_RotateX(_theta.x) * (*this - _anchor);
-	*this = Mat3::s_RotateY(_theta.y) * (*this);
-	*this = Mat3::s_RotateZ(_theta.z) * (*this);
+	*this = Mat3::RotationX(_theta.x) * (*this - _anchor);
+	*this = Mat3::RotationY(_theta.y) * (*this);
+	*this = Mat3::RotationZ(_theta.z) * (*this);
 	*this += _anchor;
 }
 
@@ -228,37 +228,37 @@ Vec3 Vec3::s_CrossProduct(Vec3 _vec1, Vec3 _vec2)
 
 Vec3 Vec3::s_RotateX(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 {
-	_vecToRotate = Mat3::s_RotateX(_theta) * (_vecToRotate - _anchor);
+	_vecToRotate = Mat3::RotationX(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor};
 }
 
 Vec3 Vec3::s_RotateY(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 {
-	_vecToRotate = Mat3::s_RotateY(_theta) * (_vecToRotate - _anchor);
+	_vecToRotate = Mat3::RotationY(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
 Vec3 Vec3::s_RotateZ(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 {
-	_vecToRotate = Mat3::s_RotateZ(_theta) * (_vecToRotate - _anchor);
+	_vecToRotate = Mat3::RotationZ(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
 Vec3 Vec3::s_Rotate(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 {
 	_vecToRotate -= _anchor;
-	_vecToRotate = Mat3::s_RotateX(_theta) * _vecToRotate;
-	_vecToRotate = Mat3::s_RotateY(_theta) * _vecToRotate;
-	_vecToRotate = Mat3::s_RotateZ(_theta) * _vecToRotate;
+	_vecToRotate = Mat3::RotationX(_theta) * _vecToRotate;
+	_vecToRotate = Mat3::RotationY(_theta) * _vecToRotate;
+	_vecToRotate = Mat3::RotationZ(_theta) * _vecToRotate;
 	return { _vecToRotate + _anchor };
 }
 
 Vec3 Vec3::s_Rotate(Vec3 _vecToRotate, Vec3 _theta, Vec3 _anchor)
 {
 	_vecToRotate -= _anchor;
-	_vecToRotate = Mat3::s_RotateX(_theta.x) * _vecToRotate;
-	_vecToRotate = Mat3::s_RotateY(_theta.y) * _vecToRotate;
-	_vecToRotate = Mat3::s_RotateZ(_theta.z) * _vecToRotate;
+	_vecToRotate = Mat3::RotationX(_theta.x) * _vecToRotate;
+	_vecToRotate = Mat3::RotationY(_theta.y) * _vecToRotate;
+	_vecToRotate = Mat3::RotationZ(_theta.z) * _vecToRotate;
 	return { _vecToRotate + _anchor };
 }
 
