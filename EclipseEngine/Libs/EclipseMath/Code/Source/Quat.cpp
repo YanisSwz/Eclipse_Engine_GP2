@@ -35,7 +35,7 @@ Quat::Quat(float _w, Vec3 _v)
 		z = static_cast<float>(_v.z);
 }
 
-Quat Quat::s_QuaternionEuler(float yaw, float pitch, float roll)
+Quat Quat::QuaternionEuler(float yaw, float pitch, float roll)
 {
 	if (fabsf(yaw) > Tools::epsilon)
 		yaw = Tools::ToRad(static_cast<float>(yaw));
@@ -53,7 +53,7 @@ Quat Quat::s_QuaternionEuler(float yaw, float pitch, float roll)
 	float cy = cos(yaw * 0.5f);
 	float sy = sin(yaw * 0.5f);
 
-	Quat q = Quat::s_Identity();
+	Quat q = Quat::Identity();
 	q.w = cr * cp * cy - sr * sp * sy;
 	q.x = cr * cp * sy + sr * sp * cy;
 	q.y = cr * sp * cy - sr * cp * sy;
@@ -68,7 +68,7 @@ void Quat::Print() const
 	std::cout << "Quaternion(" << w << ", " << x << ", " << y << ", " << z << ")" << std::endl;
 }
 
-void Quat::Identity()
+void Quat::SetIdentity()
 {
 	w = 1.f;
 	x = y = z = 0.f;
@@ -76,7 +76,7 @@ void Quat::Identity()
 
 Vec3 Quat::GetEulerAnglesDegXYZ() const
 {
-	Quat q = Quat::s_Normalized(*this);
+	Quat q = Quat::Normalized(*this);
 
 	float aa = q.w * q.w, bb = q.x * q.x, cc = q.y * q.y, dd = q.z * q.z;
 
@@ -108,7 +108,7 @@ Vec3 Quat::GetEulerAnglesDegXYZ() const
 
 Vec3 Quat::GetEulerAnglesRadXYZ() const
 {
-	Quat q = Quat::s_Normalized(*this);
+	Quat q = Quat::Normalized(*this);
 
 	float aa = q.w * q.w, bb = q.x * q.x, cc = q.y * q.y, dd = q.z * q.z;
 
@@ -140,7 +140,7 @@ Vec3 Quat::GetEulerAnglesRadXYZ() const
 
 Vec3 Quat::GetEulerAnglesRadZYX() const
 {
-	Quat q = Quat::s_Normalized(*this);
+	Quat q = Quat::Normalized(*this);
 
 	Vec3 angles{ 0.f, 0.f, 0.f };
 
@@ -164,7 +164,7 @@ Vec3 Quat::GetEulerAnglesRadZYX() const
 
 Vec3 Quat::GetEulerAnglesDegZYX() const
 {
-	Quat q = Quat::s_Normalized(*this);
+	Quat q = Quat::Normalized(*this);
 
 	Vec3 angles{ 0.f, 0.f, 0.f };
 
@@ -229,8 +229,8 @@ void Quat::HamiltonProduct(Quat _q1)
 	Vec3 v1(x, y, z);
 	Vec3 v2(_q1.x, _q1.y, _q1.z);
 
-	w = a1 * a2 - Vec3::s_DotProduct(v1, v2);
-	Vec3 v = v2 * a1 + v1 * a2 + Vec3::s_CrossProduct(v1, v2);
+	w = a1 * a2 - Vec3::DotProduct(v1, v2);
+	Vec3 v = v2 * a1 + v1 * a2 + Vec3::CrossProduct(v1, v2);
 	x = v.x;
 	y = v.y;
 	z = v.z;
@@ -238,13 +238,13 @@ void Quat::HamiltonProduct(Quat _q1)
 
 void Quat::Rotate(Quat _q1)
 {
-	Quat q = s_Normalized(_q1);
-	*this = q * *this * s_Conjugate(q);
+	Quat q = Normalized(_q1);
+	*this = q * *this * Conjugate(q);
 }
 
 Vec3 Quat::Rotate(Vec3 _v) const
 {
-	Quat r = Quat::s_Rotate(Quat(0.f, _v), Quat::s_Normalized(*this));
+	Quat r = Quat::Rotate(Quat(0.f, _v), Quat::Normalized(*this));
 	return Vec3(r.x, r.y, r.z);
 }
 
@@ -260,7 +260,7 @@ Mat3 Quat::QuatToMatrix() const
 
 Mat4 Quat::GetTransformMatrix(Vec3 _translation) const
 {
-	Mat3 rot = Quat::s_QuatToMatrix(*this);
+	Mat3 rot = Quat::QuatToMatrix(*this);
 	return Mat4
 	(
 		rot[0][0], rot[0][1], rot[0][2], _translation.x,
@@ -272,7 +272,7 @@ Mat4 Quat::GetTransformMatrix(Vec3 _translation) const
 
 void Quat::Slerp(Quat _q2, float _t)
 {
-	float dot = Quat::s_DotProduct(*this, _q2);
+	float dot = Quat::DotProduct(*this, _q2);
 	Quat q2Copy = _q2;
 
 	if (dot < 0.0f)
@@ -319,7 +319,7 @@ Quat Quat::operator*(float _f) const
 Quat Quat::operator/(float _f) const
 {
 	if (_f <= Tools::epsilon)
-		return Quat::s_Identity();
+		return Quat::Identity();
 	return Quat(w / _f, x / _f, y / _f, z / _f);
 }
 void Quat::operator/=(float _f)
@@ -335,14 +335,14 @@ void Quat::operator/=(float _f)
 
 //####################### STATIC FUNCTIONS #######################
 
-void Quat::s_Print(Quat _q)
+void Quat::Print(Quat _q)
 {
 	std::cout << "Quaternion(" << _q.w << ", " << _q.x << ", " << _q.y << ", " << _q.z << ")" << std::endl;
 }
 
-Vec3 Quat::s_GetEulerAngles(Quat _q)
+Vec3 Quat::GetEulerAngles(Quat _q)
 {
-	Quat q = Quat::s_Normalized(_q);
+	Quat q = Quat::Normalized(_q);
 
 	float aa = q.w * q.w, bb = q.x * q.x, cc = q.y * q.y, dd = q.z * q.z;
 
@@ -373,12 +373,12 @@ Vec3 Quat::s_GetEulerAngles(Quat _q)
 		);
 }
 
-float Quat::s_Norm(Quat _q)
+float Quat::Norm(Quat _q)
 {
 	return sqrt(_q.w * _q.w + _q.x * _q.x + _q.y * _q.y + _q.z * _q.z);
 }
 
-Quat Quat::s_Normalized(Quat _q)
+Quat Quat::Normalized(Quat _q)
 {
 	float d = _q.Norm();
 	if (d >= Tools::epsilon)
@@ -392,52 +392,52 @@ Quat Quat::s_Normalized(Quat _q)
 	return _q;
 }
 
-float Quat::s_DotProduct(Quat _q1, Quat _q2)
+float Quat::DotProduct(Quat _q1, Quat _q2)
 {
 	return _q1.w * _q2.w + _q1.x * _q2.x + _q1.y * _q2.y + _q1.z * _q2.z;
 }
 
-Quat Quat::s_Inverse(Quat _q)
+Quat Quat::Inverse(Quat _q)
 {
 	if (_q.Norm() <= Tools::epsilon)
 	{
 		printf("Can't be inverted");
-		return Quat::s_Identity();
+		return Quat::Identity();
 	}
 	float n = _q.Norm() * _q.Norm();
 
 	return Quat(_q.w / n, -_q.x / n, -_q.y / n, -_q.z / n);
 }
 
-Quat Quat::s_HamiltonProduct(Quat _q1, Quat _q2)
+Quat Quat::HamiltonProduct(Quat _q1, Quat _q2)
 {
 	float a1 = _q1.w;
 	float a2 = _q2.w;
 	Vec3 v1(_q1.x, _q1.y, _q1.z);
 	Vec3 v2(_q2.x, _q2.y, _q2.z);
 
-	float a = a1 * a2 - Vec3::s_DotProduct(v1, v2);
-	Vec3 v = v2 * a1 + v1 * a2 + Vec3::s_CrossProduct(v1, v2);
+	float a = a1 * a2 - Vec3::DotProduct(v1, v2);
+	Vec3 v = v2 * a1 + v1 * a2 + Vec3::CrossProduct(v1, v2);
 
 	return Quat(a, v);
 }
 
-Quat Quat::s_Rotate(Quat _q1, Quat _q2)
+Quat Quat::Rotate(Quat _q1, Quat _q2)
 {
-	Quat nQ = s_Normalized(_q2);
-	Quat q = nQ * _q1 * Quat::s_Conjugate(nQ);
+	Quat nQ = Normalized(_q2);
+	Quat q = nQ * _q1 * Quat::Conjugate(nQ);
 	return q;
 }
 
-Vec3 Quat::s_Rotate(Vec3 _v, Quat _q)
+Vec3 Quat::Rotate(Vec3 _v, Quat _q)
 {
-	Quat r = Quat::s_Rotate(Quat(0.f, _v), Quat::s_Normalized(_q));
+	Quat r = Quat::Rotate(Quat(0.f, _v), Quat::Normalized(_q));
 	return Vec3(r.x, r.y, r.z);
 }
 
-Mat3 Quat::s_QuatToMatrix(Quat _q)
+Mat3 Quat::QuatToMatrix(Quat _q)
 {
-	Quat q = s_Normalized(_q);
+	Quat q = Normalized(_q);
 	return Mat3
 	(
 		2.f * (q.w * q.w + q.x * q.x) - 1.f, 2.f * (q.x * q.y - q.z * q.w), 2.f * (q.x * q.z + q.y * q.w),
@@ -446,9 +446,9 @@ Mat3 Quat::s_QuatToMatrix(Quat _q)
 	);
 }
 
-Mat4 Quat::s_GetTransformMatrix(Vec3 _translation, Quat _rotation)
+Mat4 Quat::GetTransformMatrix(Vec3 _translation, Quat _rotation)
 {
-	Mat3 rot = Quat::s_QuatToMatrix(_rotation);
+	Mat3 rot = Quat::QuatToMatrix(_rotation);
 	return Mat4
 	(
 		rot[0][0], rot[0][1], rot[0][2], _translation.x,
@@ -458,9 +458,9 @@ Mat4 Quat::s_GetTransformMatrix(Vec3 _translation, Quat _rotation)
 	);
 }
 
-Quat Quat::s_Slerp(Quat _q1, Quat _q2, float _t)
+Quat Quat::Slerp(Quat _q1, Quat _q2, float _t)
 {
-	float dot = Quat::s_DotProduct(_q1, _q2);
+	float dot = Quat::DotProduct(_q1, _q2);
 	Quat q2Copy = _q2;
 
 	if (dot < 0.0f)

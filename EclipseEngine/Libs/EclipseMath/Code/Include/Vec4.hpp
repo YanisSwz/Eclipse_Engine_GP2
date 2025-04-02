@@ -26,8 +26,8 @@ namespace Math
 		float w = 0.f;
 
 		// Functions
-		void Zero();
-		void One();
+		void SetZero();
+		void SetOne();
 		void Opposite();
 		void MidPoint(Vec4 _vec);
 		float Distance(Vec4 _vec) const;
@@ -42,20 +42,20 @@ namespace Math
 		void Print() const;
 
 		// Static Functions
-		static Vec4 s_Zero();
-		static Vec4 s_One();
-		static Vec4 s_Opposite(Vec4 _vec);
-		static Vec4 s_MidPoint(Vec4 _vec1, Vec4 _vec2);
-		static float s_Distance(Vec4 _vec1, Vec4 _vec2);
-		static float s_SquareNorm(Vec4 _vec);
-		static float s_Norm(Vec4 _vec);
-		static float s_DotProduct(Vec4 _vec1, Vec4 _vec2);
-		static Vec4 s_RotateX(Vec4 _vecToRotate, float _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
-		static Vec4 s_RotateY(Vec4 _vecToRotate, float _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
-		static Vec4 s_RotateZ(Vec4 _vecToRotate, float _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
-		static Vec4 s_Rotate(Vec4 _vecToRotate, float _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
-		static Vec4 s_Rotate(Vec4 _vecToRotate, Vec4 _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
-		static void s_Print(Vec4 _vec);
+		static Vec4 Zero();
+		static Vec4 One();
+		static Vec4 Opposite(Vec4 _vec);
+		static Vec4 MidPoint(Vec4 _vec1, Vec4 _vec2);
+		static float Distance(Vec4 _vec1, Vec4 _vec2);
+		static float SquareNorm(Vec4 _vec);
+		static float Norm(Vec4 _vec);
+		static float DotProduct(Vec4 _vec1, Vec4 _vec2);
+		static Vec4 RotateX(Vec4 _vecToRotate, float _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
+		static Vec4 RotateY(Vec4 _vecToRotate, float _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
+		static Vec4 RotateZ(Vec4 _vecToRotate, float _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
+		static Vec4 Rotate(Vec4 _vecToRotate, float _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
+		static Vec4 Rotate(Vec4 _vecToRotate, Vec4 _theta, Vec4 _anchor = { 0.f, 0.f, 0.f, 0.f });
+		static void Print(Vec4 _vec);
 
 		// Operator +, -, *, /
 		Vec4 operator+(float _scalar) const;

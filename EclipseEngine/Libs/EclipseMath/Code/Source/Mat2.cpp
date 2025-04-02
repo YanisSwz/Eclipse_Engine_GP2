@@ -93,7 +93,7 @@ void Mat2::Inverse()
 	m_value[1][0] = oneDividedByDet * -temp10;	m_value[1][1] = oneDividedByDet * temp00;
 }
 
-void Mat2::Rotate(float _theta)
+void Mat2::SetRotation(float _theta)
 {
 	m_value[0][0] = cosf(_theta);		m_value[0][1] = -sinf(_theta);
 	m_value[1][0] = sinf(_theta);		m_value[1][1] = cosf(_theta);

@@ -26,10 +26,10 @@ namespace Math
 		void SetRotationX(float _theta);
 		void SetRotationY(float _theta);
 		void SetRotationZ(float _theta);
-		void Rotate(Vec3 _theta);
-		void Translate(Vec3 _translate);
-		void Scale(Vec3 _scale);
-		void TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
+		void SetRotation(Vec3 _theta);
+		void SetTranslation(Vec3 _translate);
+		void SetScale(Vec3 _scale);
+		void SetTRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
 		void Print() const;
 
 		// Static Functions
@@ -44,8 +44,8 @@ namespace Math
 		static Mat3 RotationZ(float _theta);
 		static Mat3 Rotation(Vec3 _theta);
 		static Mat3 Translation(Vec3 _translate);
-		static Mat3 Scaling(Vec3 _scale);
-		static Mat3 GetTRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
+		static Mat3 Scale(Vec3 _scale);
+		static Mat3 TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
 		static void Print(Mat3 _mat);
 		
 		// Operator *

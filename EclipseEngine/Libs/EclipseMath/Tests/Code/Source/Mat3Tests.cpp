@@ -81,7 +81,7 @@ TEST(Mat3, Opposite)
 {
 	Mat3 mat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f };
 	glm::mat3x3 glmMat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f };
-	EXPECT_TRUE(IsEqual(Mat3::s_Opposite(mat), -glmMat));
+	EXPECT_TRUE(IsEqual(Mat3::Opposite(mat), -glmMat));
 }
 
 TEST(Mat3, Determinant)
@@ -95,12 +95,12 @@ TEST(Mat3, Inverse)
 {
 	Mat3 mat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f };
 	glm::mat3x3 glmMat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f };
-	EXPECT_TRUE(IsEqual(Mat3::s_Inverse(mat), glm::inverse(glmMat)));
+	EXPECT_TRUE(IsEqual(Mat3::Inverse(mat), glm::inverse(glmMat)));
 }
 
 TEST(Mat3, RotateX)
 {
-	Mat3 mat = Mat3::s_RotateX(Tools::PI / 2.f);
+	Mat3 mat = Mat3::RotationX(Tools::PI / 2.f);
 	Vec3 vecY{ 0.f, 1.f, 0.f };
 	Vec3 vecZ{ 0.f, 0.f, 1.f };
 	EXPECT_TRUE(mat * vecY == vecZ);
@@ -108,7 +108,7 @@ TEST(Mat3, RotateX)
 
 TEST(Mat3, RotateY)
 {
-	Mat3 mat = Mat3::s_RotateY(Tools::PI / 2.f);
+	Mat3 mat = Mat3::RotationY(Tools::PI / 2.f);
 	Vec3 vecX{ 1.f, 0.f, 0.f };
 	Vec3 vecZ{ 0.f, 0.f, 1.f };
 	EXPECT_TRUE(mat * vecZ == vecX);
@@ -116,7 +116,7 @@ TEST(Mat3, RotateY)
 
 TEST(Mat3, RotateZ)
 {
-	Mat3 mat = Mat3::s_RotateZ(Tools::PI / 2.f);
+	Mat3 mat = Mat3::RotationZ(Tools::PI / 2.f);
 	Vec3 vecX{ 1.f, 0.f, 0.f };
 	Vec3 vecY{ 0.f, 1.f, 0.f };
 	EXPECT_TRUE(mat * vecY == vecX);
@@ -125,14 +125,14 @@ TEST(Mat3, RotateZ)
 TEST(Mat3, Translate)
 {
 	Mat3 mat1;
-	Mat3 mat2 = Mat3::s_Translate(Vec3{ 1.f });
+	Mat3 mat2 = Mat3::Translation(Vec3{ 1.f });
 	Mat3 mat3 = Mat3{ 1.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f };
 	EXPECT_TRUE(mat1 * mat2 == mat3);
 }
 
 TEST(Mat3, Scale)
 {
-	Mat3 mat = Mat3::s_Scale(Vec3{ 2.f });
+	Mat3 mat = Mat3::Scale(Vec3{ 2.f });
 	Vec3 vec1{ 1.f, 1.f, 1.f };
 	Vec3 vec2{ 2.f, 2.f, 2.f };
 	EXPECT_TRUE(mat * vec1 == vec2);

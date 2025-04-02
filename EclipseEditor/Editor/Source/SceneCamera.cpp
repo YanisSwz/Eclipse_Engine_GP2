@@ -75,29 +75,29 @@ void SceneCamera::InputMove(Windowing::IWindow* _window, float _deltaTime)
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_D, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 frwd = { m_at, m_eye };
-		Math::Vec3 direction = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
+		Math::Vec3 direction = Math::Vec3::Normalized(Math::Vec3::CrossProduct(frwd, m_up));
 		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_A, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 frwd = { m_at, m_eye };
-		Math::Vec3 direction = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
+		Math::Vec3 direction = Math::Vec3::Normalized(Math::Vec3::CrossProduct(frwd, m_up));
 		move -= direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_E, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		Math::Vec3 frwd = Math::Vec3::s_Normalized({ m_at, m_eye });
-		Math::Vec3 right = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
-		Math::Vec3 _up = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(right, frwd));
+		Math::Vec3 frwd = Math::Vec3::Normalized({ m_at, m_eye });
+		Math::Vec3 right = Math::Vec3::Normalized(Math::Vec3::CrossProduct(frwd, m_up));
+		Math::Vec3 _up = Math::Vec3::Normalized(Math::Vec3::CrossProduct(right, frwd));
 
 		Math::Vec3 direction = _up;
 		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_Q, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		Math::Vec3 frwd = Math::Vec3::s_Normalized({ m_at, m_eye });
-		Math::Vec3 right = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
-		Math::Vec3 _up = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(right, frwd));
+		Math::Vec3 frwd = Math::Vec3::Normalized({ m_at, m_eye });
+		Math::Vec3 right = Math::Vec3::Normalized(Math::Vec3::CrossProduct(frwd, m_up));
+		Math::Vec3 _up = Math::Vec3::Normalized(Math::Vec3::CrossProduct(right, frwd));
 
 		Math::Vec3 direction = _up;
 		move -= direction * _deltaTime * m_moveSpeed;
@@ -127,7 +127,7 @@ void SceneCamera::SetShaderData(Resource::ShaderProgram* _shaderProgram, int vie
 	m_width = viewportSizeX;
 	m_height = viewportSizeY;
 
-	Math::Mat4 VP = Math::Mat4::SetPerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);
+	Math::Mat4 VP = Math::Mat4::PerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);
 	VP *= Math::Mat4::ViewMatrix(m_eye, m_at, m_up);
 	_shaderProgram->Bind();
 	_shaderProgram->SetMat4("VP", VP, true);

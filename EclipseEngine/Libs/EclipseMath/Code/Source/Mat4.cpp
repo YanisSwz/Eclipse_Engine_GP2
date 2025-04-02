@@ -330,7 +330,7 @@ void Mat4::SetViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up)
 {
 	Vec3 frwd = Vec3{ _at, _eye };
 	frwd.Normalize();
-	Vec3 right = Vec3::s_CrossProduct(frwd, _up);
+	Vec3 right = Vec3::CrossProduct(frwd, _up);
 	right.Normalize();
 	_up.Normalize();
 
@@ -636,9 +636,9 @@ Mat4 Mat4::ViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up)
 {
 	Vec3 frwd = Vec3{ _at, _eye };
 	frwd.Normalize();
-	Vec3 right = Vec3::s_CrossProduct(frwd, _up);
+	Vec3 right = Vec3::CrossProduct(frwd, _up);
 	right.Normalize();
-	Vec3 _newUp = Vec3::s_CrossProduct(right, frwd);
+	Vec3 _newUp = Vec3::CrossProduct(right, frwd);
 	_newUp.Normalize();
 
 	return {

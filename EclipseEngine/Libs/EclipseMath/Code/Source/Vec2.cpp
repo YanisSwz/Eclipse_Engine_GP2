@@ -42,13 +42,13 @@ Vec2::Vec2(const Vec2& _copy)
 
 //####################### FUNCTIONS #######################
 
-void Vec2::Zero()
+void Vec2::SetZero()
 {
 	x = 0.f;
 	y = 0.f;
 }
 
-void Vec2::One()
+void Vec2::SetOne()
 {
 	x = 1.f;
 	y = 1.f;
@@ -99,7 +99,7 @@ float Vec2::CrossProduct(Vec2 _vec) const
 void Vec2::Rotate(float _theta, Vec2 _anchor)
 {
 	if (_anchor.x != 0.f || _anchor.y != 0.f)
-		*this += s_Opposite(_anchor);
+		*this += Opposite(_anchor);
 
 	Vec2 tempVector = *this;
 	x = tempVector.x * cosf(_theta) - tempVector.y * sinf(_theta);
@@ -117,55 +117,55 @@ void Vec2::Print() const
 
 //####################### STATIC FUNCTIONS #######################
 
-Vec2 Vec2::s_Zero()
+Vec2 Vec2::Zero()
 {
 	return { 0.f, 0.f };
 }
 
-Vec2 Vec2::s_One()
+Vec2 Vec2::One()
 {
 	return { 1.f, 1.f };
 }
 
-Vec2 Vec2::s_Opposite(Vec2 _vec)
+Vec2 Vec2::Opposite(Vec2 _vec)
 {
 	return { -_vec.x, -_vec.y };
 }
 
-Vec2 Vec2::s_MidPoint(Vec2 _vec1, Vec2 _vec2) 
+Vec2 Vec2::MidPoint(Vec2 _vec1, Vec2 _vec2) 
 {
 	return { (_vec1.x + _vec2.x) / 2.f, (_vec1.y + _vec2.y) / 2.f };
 }
 
-float Vec2::s_Distance(Vec2 _vec1, Vec2 _vec2)
+float Vec2::Distance(Vec2 _vec1, Vec2 _vec2)
 {
 	return sqrtf(powf(_vec1.x - _vec2.x, 2.f) + powf(_vec1.y - _vec2.y, 2.f));
 }
 
-float Vec2::s_SquareNorm(Vec2 _vec)
+float Vec2::SquareNorm(Vec2 _vec)
 {
 	return powf(_vec.x, 2.f) + powf(_vec.y, 2.f);
 }
 
-float Vec2::s_Norm(Vec2 _vec)
+float Vec2::Norm(Vec2 _vec)
 {
 	return sqrtf(powf(_vec.x, 2.f) + powf(_vec.y, 2.f));
 }
 
-float Vec2::s_DotProduct(Vec2 _vec1, Vec2 _vec2)
+float Vec2::DotProduct(Vec2 _vec1, Vec2 _vec2)
 {
 	return (_vec1.x * _vec2.x) + (_vec1.y * _vec2.y);
 }
 
-float Vec2::s_CrossProduct(Vec2 _vec1, Vec2 _vec2)
+float Vec2::CrossProduct(Vec2 _vec1, Vec2 _vec2)
 {
 	return (_vec1.x * _vec2.y) - (_vec1.y * _vec2.x);
 }
 
-Vec2 Vec2::s_Rotate(Vec2 _vec, float _theta, Vec2 _anchor)
+Vec2 Vec2::Rotate(Vec2 _vec, float _theta, Vec2 _anchor)
 {
 	if (_anchor.x != 0.f || _anchor.y != 0.f)
-		_vec += s_Opposite(_anchor);
+		_vec += Opposite(_anchor);
 
 	Vec2 vecRotate{ _vec.x * cosf(_theta) - _vec.y * sinf(_theta),_vec.x * sinf(_theta) + _vec.y * cosf(_theta) };
 
@@ -174,7 +174,7 @@ Vec2 Vec2::s_Rotate(Vec2 _vec, float _theta, Vec2 _anchor)
 	return vecRotate;
 }
 
-void Vec2::s_Print(Vec2 _vec)
+void Vec2::Print(Vec2 _vec)
 {
 	std::cout << "X: " << _vec.x << ", Y: " << _vec.y << std::endl;
 }

@@ -35,7 +35,7 @@ namespace Math
 
 		// Functions
 		void Print() const;
-		void Identity();
+		void SetIdentity();
 		Vec3 GetEulerAnglesDegXYZ() const;
 		Vec3 GetEulerAnglesRadXYZ() const;
 		Vec3 GetEulerAnglesDegZYX() const;
@@ -57,21 +57,21 @@ namespace Math
 		/// <param name="_yaw">: X-axis rotation</param>
 		/// <param name="_pitch">: Y-axis rotation</param>
 		/// <param name="_roll">: Z-axis rotation</param>
-		static Quat s_QuaternionEuler(float _yaw = 0.f, float _pitch = 0.f, float _roll = 0.f);
-		static void s_Print(Quat _q);
-		inline static Quat s_Identity() { return { 1.f, 0.f, 0.f, 0.f }; };
-		static Vec3 s_GetEulerAngles(Quat _q);
-		static float s_Norm(Quat _q);
-		static Quat s_Normalized(Quat _q);
-		static float s_DotProduct(Quat _q1, Quat _q2);
-		static Quat s_Inverse(Quat _q);
-		static inline Quat s_Conjugate(Quat _q) { return Quat(_q.w, -_q.x, -_q.y, -_q.z); }
-		static Quat s_HamiltonProduct(Quat _q1, Quat _q2);
-		static Quat s_Rotate(Quat _q1, Quat _q2);
-		static Vec3 s_Rotate(Vec3 _v, Quat _q);
-		static Mat3 s_QuatToMatrix(Quat _q);
-		static Mat4 s_GetTransformMatrix(Vec3 _translation, Quat _rotation);
-		static Quat s_Slerp(Quat _q1, Quat _q2, float _t);
+		static Quat QuaternionEuler(float _yaw = 0.f, float _pitch = 0.f, float _roll = 0.f);
+		static void Print(Quat _q);
+		inline static Quat Identity() { return { 1.f, 0.f, 0.f, 0.f }; };
+		static Vec3 GetEulerAngles(Quat _q);
+		static float Norm(Quat _q);
+		static Quat Normalized(Quat _q);
+		static float DotProduct(Quat _q1, Quat _q2);
+		static Quat Inverse(Quat _q);
+		static inline Quat Conjugate(Quat _q) { return Quat(_q.w, -_q.x, -_q.y, -_q.z); }
+		static Quat HamiltonProduct(Quat _q1, Quat _q2);
+		static Quat Rotate(Quat _q1, Quat _q2);
+		static Vec3 Rotate(Vec3 _v, Quat _q);
+		static Mat3 QuatToMatrix(Quat _q);
+		static Mat4 GetTransformMatrix(Vec3 _translation, Quat _rotation);
+		static Quat Slerp(Quat _q1, Quat _q2, float _t);
 	};
 
 }

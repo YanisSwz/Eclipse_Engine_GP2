@@ -62,7 +62,7 @@ TEST(Mat2, Transpose)
 {
 	Mat2 mat{ 1.f, 2.f, 3.f, 4.f };
 	glm::mat2x2 glmMat{ 1.f, 2.f, 3.f, 4.f };
-	EXPECT_TRUE(IsEqual(Mat2::s_Transpose(mat), glm::transpose(glmMat)));
+	EXPECT_TRUE(IsEqual(Mat2::Transpose(mat), glm::transpose(glmMat)));
 }
 
 TEST(Mat2, Trace)
@@ -75,7 +75,7 @@ TEST(Mat2, Opposite)
 {
 	Mat2 mat{ 1.f, 2.f, 3.f, 4.f };
 	glm::mat2x2 glmMat{ 1.f, 2.f, 3.f, 4.f };
-	EXPECT_TRUE(IsEqual(Mat2::s_Opposite(mat), -glmMat));
+	EXPECT_TRUE(IsEqual(Mat2::Opposite(mat), -glmMat));
 }
 
 TEST(Mat2, Determinant)

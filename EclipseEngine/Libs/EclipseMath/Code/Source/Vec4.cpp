@@ -61,7 +61,7 @@ Vec4::Vec4(const Vec4& _copy)
 
 //####################### FUNCTIONS #######################
 
-void Vec4::Zero()
+void Vec4::SetZero()
 {
 	x = 0.f;
 	y = 0.f;
@@ -69,7 +69,7 @@ void Vec4::Zero()
 	w = 0.f;
 }
 
-void Vec4::One()
+void Vec4::SetOne()
 {
 	x = 1.f;
 	y = 1.f;
@@ -155,65 +155,65 @@ void Vec4::Print() const
 
 //####################### STATIC FUNCTIONS #######################
 
-Vec4 Vec4::s_Zero()
+Vec4 Vec4::Zero()
 {
 	return { 0.f, 0.f, 0.f, 0.f };
 }
 
-Vec4 Vec4::s_One()
+Vec4 Vec4::One()
 {
 	return { 1.f, 1.f, 1.f, 1.f };
 }
 
-Vec4 Vec4::s_Opposite(Vec4 _vec)
+Vec4 Vec4::Opposite(Vec4 _vec)
 {
 	return { -_vec.x, -_vec.y, -_vec.z, -_vec.w };
 }
 
-Vec4 Vec4::s_MidPoint(Vec4 _vec1, Vec4 _vec2)
+Vec4 Vec4::MidPoint(Vec4 _vec1, Vec4 _vec2)
 {
 	return { (_vec1.x + _vec2.x) / 2.f, (_vec1.y + _vec2.y) / 2.f , (_vec1.z + _vec2.z) / 2.f, (_vec1.w + _vec2.w) / 2.f };
 }
 
-float Vec4::s_Distance(Vec4 _vec1, Vec4 _vec2)
+float Vec4::Distance(Vec4 _vec1, Vec4 _vec2)
 {
 	return sqrtf(powf(_vec1.x - _vec2.x, 2.f) + powf(_vec1.y - _vec2.y, 2.f) + powf(_vec1.z - _vec2.z, 2.f) + powf(_vec1.w - _vec2.w, 2.f));
 }
 
-float Vec4::s_SquareNorm(Vec4 _vec)
+float Vec4::SquareNorm(Vec4 _vec)
 {
 	return powf(_vec.x, 2.f) + powf(_vec.y, 2.0) + powf(_vec.z, 2.0) + powf(_vec.w, 2.0);
 }
 
-float Vec4::s_Norm(Vec4 _vec)
+float Vec4::Norm(Vec4 _vec)
 {
 	return sqrtf(powf(_vec.x, 2.f) + powf(_vec.y, 2.0) + powf(_vec.z, 2.0) + powf(_vec.w, 2.0));
 }
 
-float Vec4::s_DotProduct(Vec4 _vec1, Vec4 _vec2)
+float Vec4::DotProduct(Vec4 _vec1, Vec4 _vec2)
 {
 	return (_vec1.x * _vec2.x) + (_vec1.y * _vec2.y) + (_vec1.z * _vec2.z) + (_vec1.w * _vec2.w);
 }
 
-Vec4 Vec4::s_RotateX(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
+Vec4 Vec4::RotateX(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 {
 	_vecToRotate = Mat4::RotationX(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
-Vec4 Vec4::s_RotateY(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
+Vec4 Vec4::RotateY(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 {
 	_vecToRotate = Mat4::RotationY(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
-Vec4 Vec4::s_RotateZ(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
+Vec4 Vec4::RotateZ(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 {
 	_vecToRotate = Mat4::RotationZ(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
-Vec4 Vec4::s_Rotate(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
+Vec4 Vec4::Rotate(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 {
 	_vecToRotate = Mat4::RotationX(_theta) * (_vecToRotate - _anchor);
 	_vecToRotate = Mat4::RotationY(_theta) * (_vecToRotate);
@@ -221,7 +221,7 @@ Vec4 Vec4::s_Rotate(Vec4 _vecToRotate, float _theta, Vec4 _anchor)
 	return { _vecToRotate + _anchor };
 }
 
-Vec4 Vec4::s_Rotate(Vec4 _vecToRotate, Vec4 _theta, Vec4 _anchor)
+Vec4 Vec4::Rotate(Vec4 _vecToRotate, Vec4 _theta, Vec4 _anchor)
 {
 	_vecToRotate = Mat4::RotationX(_theta.x) * (_vecToRotate - _anchor);
 	_vecToRotate = Mat4::RotationY(_theta.y) * (_vecToRotate);
@@ -229,7 +229,7 @@ Vec4 Vec4::s_Rotate(Vec4 _vecToRotate, Vec4 _theta, Vec4 _anchor)
 	return { _vecToRotate + _anchor };
 }
 
-void Vec4::s_Print(Vec4 _vec)
+void Vec4::Print(Vec4 _vec)
 {
 	std::cout << "X: " << _vec.x << ", Y: " << _vec.y << ", Z: " << _vec.z << ", W: " << _vec.w << std::endl;
 }

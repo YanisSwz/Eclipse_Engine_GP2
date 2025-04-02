@@ -122,7 +122,7 @@ void Mat3::SetRotationZ(float _theta)
 	m_value[2][0] = 0.f;				m_value[2][1] = 0.f;			m_value[2][2] = 1.f;
 }
 
-void Mat3::Rotate(Vec3 _theta)
+void Mat3::SetRotation(Vec3 _theta)
 {
 	*this = Mat3();
 	*this *= RotationX(_theta[0]);
@@ -130,26 +130,26 @@ void Mat3::Rotate(Vec3 _theta)
 	*this *= RotationZ(_theta[2]);
 }
 
-void Mat3::Translate(Vec3 _translate)
+void Mat3::SetTranslation(Vec3 _translate)
 {
 	m_value[0][0] = 1.f;	m_value[0][1] = 0.f;	m_value[0][2] = _translate[0];
 	m_value[1][0] = 0.f;	m_value[1][1] = 1.f;	m_value[1][2] = _translate[1];
 	m_value[2][0] = 0.f;	m_value[2][1] = 0.f;	m_value[2][2] = _translate[2];
 }
 
-void Mat3::Scale(Vec3 _scale)
+void Mat3::SetScale(Vec3 _scale)
 {
 	m_value[0][0] = _scale[0];	m_value[0][1] = 0.f;			m_value[0][2] = 0.f;
 	m_value[1][0] = 0.f;			m_value[1][1] = _scale[1];	m_value[1][2] = 0.f;
 	m_value[2][0] = 0.f;			m_value[2][1] = 0.f;			m_value[2][2] = _scale[2];
 }
 
-void Mat3::TRS(Vec3 _translate, Vec3 _rotate, Vec3 _scale)
+void Mat3::SetTRS(Vec3 _translate, Vec3 _rotate, Vec3 _scale)
 {
 	*this = Mat3();
 	*this *= Translation(_translate);
 	*this *= Rotation(_rotate);
-	*this *= Scaling(_scale);
+	*this *= Scale(_scale);
 }
 
 void Mat3::Print() const
@@ -245,19 +245,19 @@ Mat3 Mat3::Translation(Vec3 _translate)
 			 0.f, 0.f, _translate[2] };
 }
 
-Mat3 Mat3::Scaling(Vec3 _scale)
+Mat3 Mat3::Scale(Vec3 _scale)
 {
 	return { _scale[0],	0.f,		0.f,
 			 0.f,		_scale[1],	0.f,
 			 0.f,		0.f,		_scale[2] };
 }
 
-Mat3 Mat3::GetTRS(Vec3 _translate, Vec3 _rotate, Vec3 _scale)
+Mat3 Mat3::TRS(Vec3 _translate, Vec3 _rotate, Vec3 _scale)
 {
 	Mat3 TRS;
 	TRS *= Translation(_translate);
 	TRS *= Rotation(_rotate);
-	TRS *= Scaling(_scale);
+	TRS *= Scale(_scale);
 	return TRS;
 }
 

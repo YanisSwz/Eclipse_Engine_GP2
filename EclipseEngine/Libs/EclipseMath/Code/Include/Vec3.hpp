@@ -26,8 +26,8 @@ namespace Math
 		float z = 0.f;
 
 		// Functions
-		void Zero();
-		void One();
+		void SetZero();
+		void SetOne();
 		void Opposite();
 		void MidPoint(Vec3 _vec);
 		float Distance(Vec3 _vec) const;
@@ -44,22 +44,22 @@ namespace Math
 		void Print() const;
 
 		// Static Functions
-		static Vec3 s_Zero();
-		static Vec3 s_One();
-		static Vec3 s_Opposite(Vec3 _vec);
-		static Vec3 s_MidPoint(Vec3 _vec1, Vec3 _vec2);
-		static float s_Distance(Vec3 _vec1, Vec3 _vec2);
-		static float s_SquareNorm(Vec3 _vec);
-		static float s_Norm(Vec3 _vec);
-		static Vec3 s_Normalized(Vec3 _vec);
-		static float s_DotProduct(Vec3 _vec1, Vec3 _vec2);
-		static Vec3 s_CrossProduct(Vec3 _vec1, Vec3 _vec2);
-		static Vec3 s_RotateX(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
-		static Vec3 s_RotateY(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
-		static Vec3 s_RotateZ(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
-		static Vec3 s_Rotate(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
-		static Vec3 s_Rotate(Vec3 _vecToRotate, Vec3 _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
-		static void s_Print(Vec3 _vec);
+		static Vec3 Zero();
+		static Vec3 One();
+		static Vec3 Opposite(Vec3 _vec);
+		static Vec3 MidPoint(Vec3 _vec1, Vec3 _vec2);
+		static float Distance(Vec3 _vec1, Vec3 _vec2);
+		static float SquareNorm(Vec3 _vec);
+		static float Norm(Vec3 _vec);
+		static Vec3 Normalized(Vec3 _vec);
+		static float DotProduct(Vec3 _vec1, Vec3 _vec2);
+		static Vec3 CrossProduct(Vec3 _vec1, Vec3 _vec2);
+		static Vec3 RotateX(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
+		static Vec3 RotateY(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
+		static Vec3 RotateZ(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
+		static Vec3 Rotate(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
+		static Vec3 Rotate(Vec3 _vecToRotate, Vec3 _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
+		static void Print(Vec3 _vec);
 
 		// Operator +, -, *, /
 		Vec3 operator+(float _scalar) const;

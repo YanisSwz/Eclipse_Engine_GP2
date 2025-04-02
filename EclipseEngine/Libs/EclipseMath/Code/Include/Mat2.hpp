@@ -27,7 +27,7 @@ namespace Math
 		void Opposite();
 		float Det() const;
 		void Inverse();
-		void Rotate(float _theta);
+		void SetRotation(float _theta);
 		void Print() const;
 
 		// Static Functions

@@ -75,7 +75,7 @@ TEST(Mat4, Transpose)
 {
 	Mat4 mat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f, 12.f, 13.f, 14.f, 15.f, 16.f };
 	glm::mat4x4 glmMat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f, 12.f, 13.f, 14.f, 15.f, 16.f };
-	EXPECT_TRUE(IsEqual(Mat4::s_Transpose(mat), glm::transpose(glmMat)));
+	EXPECT_TRUE(IsEqual(Mat4::Transpose(mat), glm::transpose(glmMat)));
 }
 
 TEST(Mat4, Trace)
@@ -88,7 +88,7 @@ TEST(Mat4, Opposite)
 {
 	Mat4 mat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f, 12.f, 13.f, 14.f, 15.f, 16.f };
 	glm::mat4x4 glmMat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f, 12.f, 13.f, 14.f, 15.f, 16.f };
-	EXPECT_TRUE(IsEqual(Mat4::s_Opposite(mat), -glmMat));
+	EXPECT_TRUE(IsEqual(Mat4::Opposite(mat), -glmMat));
 }
 
 TEST(Mat4, Determinant)
@@ -102,12 +102,12 @@ TEST(Mat4, Inverse)
 {
 	Mat4 mat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f, 12.f, 13.f, 14.f, 15.f, 16.f };
 	glm::mat4x4 glmMat{ 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f, 12.f, 13.f, 14.f, 15.f, 16.f };
-	EXPECT_TRUE(IsEqual(Mat4::s_Inverse(mat), glm::inverse(glmMat)));
+	EXPECT_TRUE(IsEqual(Mat4::Inverse(mat), glm::inverse(glmMat)));
 }
 
 TEST(Mat4, RotateX)
 {
-	Mat4 mat = Mat4::s_RotateX(Tools::PI / 2.f);
+	Mat4 mat = Mat4::RotationX(Tools::PI / 2.f);
 	Vec4 vecY{ 0.f, 1.f, 0.f, 1.f };
 	Vec4 vecZ{ 0.f, 0.f, 1.f, 1.f };
 	EXPECT_TRUE(mat * vecY == vecZ);
@@ -115,7 +115,7 @@ TEST(Mat4, RotateX)
 
 TEST(Mat4, RotateY)
 {
-	Mat4 mat = Mat4::s_RotateY(Tools::PI / 2.f);
+	Mat4 mat = Mat4::RotationY(Tools::PI / 2.f);
 	Vec4 vecX{ 1.f, 0.f, 0.f, 1.f };
 	Vec4 vecZ{ 0.f, 0.f, 1.f, 1.f };
 	EXPECT_TRUE(mat * vecZ == vecX);
@@ -123,7 +123,7 @@ TEST(Mat4, RotateY)
 
 TEST(Mat4, RotateZ)
 {
-	Mat4 mat = Mat4::s_RotateZ(Tools::PI / 2.f);
+	Mat4 mat = Mat4::RotationZ(Tools::PI / 2.f);
 	Vec4 vecX{ 1.f, 0.f, 0.f, 1.f };
 	Vec4 vecY{ 0.f, 1.f, 0.f, 1.f };
 	EXPECT_TRUE(mat * vecY == vecX);
@@ -131,7 +131,7 @@ TEST(Mat4, RotateZ)
 
 TEST(Mat4, Rotate)
 {
-	Mat4 mat = Mat4::s_Rotate(Vec3{ Tools::PI / 2.f });
+	Mat4 mat = Mat4::Rotation(Vec3{ Tools::PI / 2.f });
 	Vec3 vec1{ 1.f, 0.f, 0.f };
 	Vec3 vec2{ 0.f, 0.f, -1.f };
 	EXPECT_TRUE(mat * vec1 == vec2);
@@ -140,14 +140,14 @@ TEST(Mat4, Rotate)
 TEST(Mat4, Translate)
 {
 	Mat4 mat1;
-	Mat4 mat2 = Mat4::s_Translate(Vec3{ 1.f });
+	Mat4 mat2 = Mat4::Translation(Vec3{ 1.f });
 	Mat4 mat3 = Mat4{ 1.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 0.f, 1.f };
 	EXPECT_TRUE(mat1 * mat2 == mat3);
 }
 
 TEST(Mat4, Scale)
 {
-	Mat4 mat = Mat4::s_Scale(Vec3{ 2.f });
+	Mat4 mat = Mat4::Scale(Vec3{ 2.f });
 	Vec3 vec1{ 1.f, 1.f, 1.f };
 	Vec3 vec2{ 2.f, 2.f, 2.f };
 	EXPECT_TRUE(mat * vec1 == vec2);

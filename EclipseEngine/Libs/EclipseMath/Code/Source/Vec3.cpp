@@ -62,14 +62,14 @@ Vec3::Vec3(const Vec3& _copy)
 
 //####################### FUNCTIONS #######################
 
-void Vec3::Zero()
+void Vec3::SetZero()
 {
 	x = 0.f;
 	y = 0.f;
 	z = 0.f;
 }
 
-void Vec3::One()
+void Vec3::SetOne()
 {
 	x = 1.f;
 	y = 1.f;
@@ -173,42 +173,42 @@ void Vec3::Print() const
 
 //####################### STATIC FUNCTIONS #######################
 
-Vec3 Vec3::s_Zero()
+Vec3 Vec3::Zero()
 {
 	return { 0.f, 0.f, 0.f };
 }
 
-Vec3 Vec3::s_One()
+Vec3 Vec3::One()
 {
 	return { 1.f, 1.f, 1.f };
 }
 
-Vec3 Vec3::s_Opposite(Vec3 _vec)
+Vec3 Vec3::Opposite(Vec3 _vec)
 {
 	return { -_vec.x, -_vec.y, -_vec.z };
 }
 
-Vec3 Vec3::s_MidPoint(Vec3 _vec1, Vec3 _vec2)
+Vec3 Vec3::MidPoint(Vec3 _vec1, Vec3 _vec2)
 {
 	return { (_vec1.x + _vec2.x) / 2.f, (_vec1.y + _vec2.y) / 2.f , (_vec1.z + _vec2.z) / 2.f };
 }
 
-float Vec3::s_Distance(Vec3 _vec1, Vec3 _vec2)
+float Vec3::Distance(Vec3 _vec1, Vec3 _vec2)
 {
 	return sqrtf(powf(_vec1.x - _vec2.x, 2.f) + powf(_vec1.y - _vec2.y, 2.f) + powf(_vec1.z - _vec2.z, 2.f));
 }
 
-float Vec3::s_SquareNorm(Vec3 _vec)
+float Vec3::SquareNorm(Vec3 _vec)
 {
 	return powf(_vec.x, 2.f) + powf(_vec.y, 2.0) + powf(_vec.z, 2.0);
 }
 
-float Vec3::s_Norm(Vec3 _vec)
+float Vec3::Norm(Vec3 _vec)
 {
 	return sqrtf(powf(_vec.x, 2.f) + powf(_vec.y, 2.0) + powf(_vec.z, 2.0));
 }
 
-Vec3 Vec3::s_Normalized(Vec3 _vec)
+Vec3 Vec3::Normalized(Vec3 _vec)
 {
 	float norm = _vec.Norm();
 	if(norm >= Tools::epsilon)
@@ -216,35 +216,35 @@ Vec3 Vec3::s_Normalized(Vec3 _vec)
 	return _vec;
 }
 
-float Vec3::s_DotProduct(Vec3 _vec1, Vec3 _vec2)
+float Vec3::DotProduct(Vec3 _vec1, Vec3 _vec2)
 {
 	return (_vec1.x * _vec2.x) + (_vec1.y * _vec2.y) + (_vec1.z * _vec2.z);
 }
 
-Vec3 Vec3::s_CrossProduct(Vec3 _vec1, Vec3 _vec2)
+Vec3 Vec3::CrossProduct(Vec3 _vec1, Vec3 _vec2)
 {
 	return { _vec1.y * _vec2.z - _vec1.z * _vec2.y, _vec1.z * _vec2.x - _vec1.x * _vec2.z, _vec1.x * _vec2.y - _vec1.y * _vec2.x };
 }
 
-Vec3 Vec3::s_RotateX(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
+Vec3 Vec3::RotateX(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 {
 	_vecToRotate = Mat3::RotationX(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor};
 }
 
-Vec3 Vec3::s_RotateY(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
+Vec3 Vec3::RotateY(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 {
 	_vecToRotate = Mat3::RotationY(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
-Vec3 Vec3::s_RotateZ(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
+Vec3 Vec3::RotateZ(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 {
 	_vecToRotate = Mat3::RotationZ(_theta) * (_vecToRotate - _anchor);
 	return { _vecToRotate + _anchor };
 }
 
-Vec3 Vec3::s_Rotate(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
+Vec3 Vec3::Rotate(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 {
 	_vecToRotate -= _anchor;
 	_vecToRotate = Mat3::RotationX(_theta) * _vecToRotate;
@@ -253,7 +253,7 @@ Vec3 Vec3::s_Rotate(Vec3 _vecToRotate, float _theta, Vec3 _anchor)
 	return { _vecToRotate + _anchor };
 }
 
-Vec3 Vec3::s_Rotate(Vec3 _vecToRotate, Vec3 _theta, Vec3 _anchor)
+Vec3 Vec3::Rotate(Vec3 _vecToRotate, Vec3 _theta, Vec3 _anchor)
 {
 	_vecToRotate -= _anchor;
 	_vecToRotate = Mat3::RotationX(_theta.x) * _vecToRotate;
@@ -262,7 +262,7 @@ Vec3 Vec3::s_Rotate(Vec3 _vecToRotate, Vec3 _theta, Vec3 _anchor)
 	return { _vecToRotate + _anchor };
 }
 
-void Vec3::s_Print(Vec3 _vec)
+void Vec3::Print(Vec3 _vec)
 {
 	std::cout << "X: " << _vec.x << ", Y: " << _vec.y << ", Z: " << _vec.z << std::endl;
 }

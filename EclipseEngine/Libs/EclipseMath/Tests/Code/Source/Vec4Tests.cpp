@@ -68,7 +68,7 @@ TEST(Vector4, Constructor_Copy)
 TEST(Vector4, Zero)
 {
 	Math::Vec4 TBVec;
-	TBVec.Zero();
+	TBVec.SetZero();
 	glm::vec4 glmVec{ 0.f, 0.f, 0.f, 0.f };
 	EXPECT_TRUE(Vec4Test::IsEqual(TBVec, glmVec));
 }
@@ -76,7 +76,7 @@ TEST(Vector4, Zero)
 TEST(Vector4, One)
 {
 	Math::Vec4 TBVec;
-	TBVec.One();
+	TBVec.SetOne();
 	glm::vec4 glmVec{ 1.f, 1.f, 1.f, 1.f };
 	EXPECT_TRUE(Vec4Test::IsEqual(TBVec, glmVec));
 }

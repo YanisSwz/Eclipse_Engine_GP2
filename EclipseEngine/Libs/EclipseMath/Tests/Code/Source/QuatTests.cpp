@@ -4,8 +4,6 @@
 #include "Quat.hpp"
 #include "Tools.hpp"
 
-
-
 using namespace Math;
 
 bool IsEqual(Quat _quat, glm::quat _glmQuat)
