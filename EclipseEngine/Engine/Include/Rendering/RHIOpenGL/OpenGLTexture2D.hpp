@@ -20,7 +20,7 @@ namespace RHI
 			ECLIPSE_ENGINE void Delete() override;
 
 		private:
-			GLuint textureID = GL_NONE;
+			GLuint m_textureID = GL_NONE;
 		};
 	}
 }

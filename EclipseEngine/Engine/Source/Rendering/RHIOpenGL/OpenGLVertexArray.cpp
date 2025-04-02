@@ -9,7 +9,7 @@ OpenGLVertexArray::~OpenGLVertexArray()
 
 void OpenGLVertexArray::Init()
 {
-	glGenVertexArrays(1, &ID);
+	glGenVertexArrays(1, &m_ID);
 }
 
 void RHI::OpenGL::OpenGLVertexArray::LinkVertexBuffer(IVertexBuffer& _vertexBuffer, int _layout, int _numComponents, IFLAGS _type, size_t _stride, void* _offset)
@@ -22,7 +22,7 @@ void RHI::OpenGL::OpenGLVertexArray::LinkVertexBuffer(IVertexBuffer& _vertexBuff
 
 void OpenGLVertexArray::Bind()
 {
-	glBindVertexArray(ID);
+	glBindVertexArray(m_ID);
 }
 
 void OpenGLVertexArray::Unbind()
@@ -32,5 +32,5 @@ void OpenGLVertexArray::Unbind()
 
 void OpenGLVertexArray::Delete()
 {
-	glDeleteVertexArrays(1, &ID);
+	glDeleteVertexArrays(1, &m_ID);
 }

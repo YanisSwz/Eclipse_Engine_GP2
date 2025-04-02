@@ -12,8 +12,8 @@ void OpenGLIndexBuffer::Init(unsigned int* _indices, size_t _size)
 	for (int i = 0; i < _size / sizeof(uint32_t); ++i)
 		indexBuffer.push_back(_indices[i]);
 
-	glGenBuffers(1, &ID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
+	glGenBuffers(1, &m_ID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _size, _indices, GL_STATIC_DRAW);
 }
 
@@ -25,7 +25,7 @@ void OpenGLIndexBuffer::Draw(IVertexArray* _vertexArray)
 
 void OpenGLIndexBuffer::Bind()
 {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
 }
 
 void OpenGLIndexBuffer::Unbind()
@@ -35,5 +35,5 @@ void OpenGLIndexBuffer::Unbind()
 
 void OpenGLIndexBuffer::Delete()
 {
-	glDeleteBuffers(1, &ID);
+	glDeleteBuffers(1, &m_ID);
 }

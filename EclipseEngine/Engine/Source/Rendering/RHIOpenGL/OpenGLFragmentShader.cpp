@@ -13,20 +13,20 @@ void OpenGLFragmentShader::Generate(std::string _data)
 {    
 
     // Generate Fragment Shader
-    fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+    m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Set Fragment Shader content
     const char* fragmentContent = _data.c_str();
-    glShaderSource(fragmentShaderID, 1, &fragmentContent, NULL);
-    glCompileShader(fragmentShaderID);
+    glShaderSource(m_fragmentShaderID, 1, &fragmentContent, NULL);
+    glCompileShader(m_fragmentShaderID);
 
     // Verify if Fragment Shader compile
     int sucess;
     char infoLog[512];
-    glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &sucess);
+    glGetShaderiv(m_fragmentShaderID, GL_COMPILE_STATUS, &sucess);
     if (!sucess)
     {
-        glGetShaderInfoLog(fragmentShaderID, 512, NULL, infoLog);
+        glGetShaderInfoLog(m_fragmentShaderID, 512, NULL, infoLog);
         std::cout << "Error : Fragment compilation failed\n" << infoLog << std::endl;
         return;
     }
@@ -34,10 +34,10 @@ void OpenGLFragmentShader::Generate(std::string _data)
 
 unsigned int RHI::OpenGL::OpenGLFragmentShader::GetID() const
 {
-    return fragmentShaderID;
+    return m_fragmentShaderID;
 }
 
 void OpenGLFragmentShader::Delete()
 {
-    glDeleteShader(fragmentShaderID);
+    glDeleteShader(m_fragmentShaderID);
 }

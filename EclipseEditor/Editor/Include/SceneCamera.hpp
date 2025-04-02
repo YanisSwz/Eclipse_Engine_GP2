@@ -26,13 +26,17 @@ namespace Core
 		Math::Vec3 m_at = { 0.f, 0.f, 2.f };
 		Math::Vec3 m_up = { 0.f, 1.f, 0.f };
 
+		float m_minSpeed = 0.1f;
+		float m_maxSpeed = 10.f;
+		float m_increaseSpeedValue = 0.1f;
+
 		int m_width = 0;
 		int m_height = 0;
 		float m_fov = 60.f;
 		float m_near = 0.1f;
 		float m_far = 100.f;
 
-		float m_speedMove = 1.f;
+		float m_moveSpeed = 1.f;
 		float m_mouseSensitivity = 1.f;
 
 		Math::Vec2 m_rotation{ 0.f, 0.f };

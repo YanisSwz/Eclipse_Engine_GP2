@@ -13,9 +13,9 @@ OpenGLTexture2D::~OpenGLTexture2D()
 void OpenGLTexture2D::Generate(unsigned char* _data, int _width, int _height)
 {
 	// Generate Texture
-	glGenTextures(1, &textureID);
+	glGenTextures(1, &m_textureID);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -32,7 +32,7 @@ void OpenGLTexture2D::Generate(unsigned char* _data, int _width, int _height)
 void OpenGLTexture2D::Bind()
 {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
 void OpenGLTexture2D::Unbind()
@@ -42,10 +42,10 @@ void OpenGLTexture2D::Unbind()
 
 unsigned int OpenGLTexture2D::GetID() const
 {
-	return textureID;
+	return m_textureID;
 }
 
 void OpenGLTexture2D::Delete()
 {
-	glDeleteTextures(1, &textureID);
+	glDeleteTextures(1, &m_textureID);
 }

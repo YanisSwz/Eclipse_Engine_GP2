@@ -32,7 +32,7 @@ namespace RHI
 			ECLIPSE_ENGINE void SetTexture2D(const char* _uniformName, int _textureID) override;
 
 		private:
-			GLuint shaderProgramID = GL_NONE;
+			GLuint m_shaderProgramID = GL_NONE;
 		};
 	}
 }

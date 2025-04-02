@@ -47,9 +47,6 @@ namespace RHI
 			ECLIPSE_ENGINE void ClearBuffer(IFLAGS _buffers) const override;
 			ECLIPSE_ENGINE void Viewport(int _x, int _y, int _width, int _height) const override;
 			ECLIPSE_ENGINE void DepthFunc(IFLAGS _depthComparison) const override;
-
-		private:
-
 		};
 	}
 }

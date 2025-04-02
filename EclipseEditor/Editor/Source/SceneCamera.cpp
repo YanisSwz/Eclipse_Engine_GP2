@@ -49,11 +49,11 @@ void Core::SceneCamera::InputChangeSpeed(Windowing::IWindow* _window)
 {
 	if (_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		m_speedMove += (0.1f * _window->GetMouseScrollValue());
-		if (m_speedMove > 10.f)
-			m_speedMove = 10.f;
-		else if (m_speedMove < 0.1f)
-			m_speedMove = 0.1f;
+		m_moveSpeed += (m_increaseSpeedValue * _window->GetMouseScrollValue());
+		if (m_moveSpeed > m_maxSpeed)
+			m_moveSpeed = m_maxSpeed;
+		else if (m_moveSpeed < m_minSpeed)
+			m_moveSpeed = m_minSpeed;
 	}
 }
 
@@ -64,25 +64,25 @@ void SceneCamera::InputMove(Windowing::IWindow* _window, float _deltaTime)
 	{
 		Math::Vec3 direction{ m_at, m_eye };
 		direction.Normalize();
-		move += direction * _deltaTime * m_speedMove;
+		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_S, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 direction{ m_eye, m_at };
 		direction.Normalize();
-		move += direction * _deltaTime * m_speedMove;
+		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_D, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 frwd = { m_at, m_eye };
 		Math::Vec3 direction = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
-		move += direction * _deltaTime * m_speedMove;
+		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_A, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
 		Math::Vec3 frwd = { m_at, m_eye };
 		Math::Vec3 direction = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(frwd, m_up));
-		move -= direction * _deltaTime * m_speedMove;
+		move -= direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_E, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
@@ -91,7 +91,7 @@ void SceneCamera::InputMove(Windowing::IWindow* _window, float _deltaTime)
 		Math::Vec3 _up = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(right, frwd));
 
 		Math::Vec3 direction = _up;
-		move += direction * _deltaTime * m_speedMove;
+		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_Q, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
@@ -100,7 +100,7 @@ void SceneCamera::InputMove(Windowing::IWindow* _window, float _deltaTime)
 		Math::Vec3 _up = Math::Vec3::s_Normalized(Math::Vec3::s_CrossProduct(right, frwd));
 
 		Math::Vec3 direction = _up;
-		move -= direction * _deltaTime * m_speedMove;
+		move -= direction * _deltaTime * m_moveSpeed;
 	}
 	m_eye += move;
 	m_at += move;

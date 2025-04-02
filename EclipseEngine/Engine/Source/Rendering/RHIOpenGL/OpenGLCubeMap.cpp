@@ -13,8 +13,8 @@ void OpenGLCubeMap::Generate(std::vector<unsigned char*> _data, int _width, int 
 	if (_data.size() != 6)
 		return;
 
-	glGenTextures(1, &textID);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textID);
+	glGenTextures(1, &m_textID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_textID);
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -40,7 +40,7 @@ void OpenGLCubeMap::Bind()
 {
 	glDepthFunc(GL_LEQUAL);
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_textID);
 }
 
 void OpenGLCubeMap::Unbind()
@@ -51,5 +51,5 @@ void OpenGLCubeMap::Unbind()
 
 void OpenGLCubeMap::Delete()
 {
-	glDeleteTextures(1, &textID);
+	glDeleteTextures(1, &m_textID);
 }
