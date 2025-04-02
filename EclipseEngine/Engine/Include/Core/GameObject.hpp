@@ -25,9 +25,15 @@ namespace Core
 		ECLIPSE_ENGINE std::string GetName() const;
 		ECLIPSE_ENGINE static std::string GetName(GameObject* _obj);
 
+		/// <summary>
+		/// Returns pointer to first component of specified type, nullptr otherwise
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
 		template <typename T> 
 		T* GetComponent()
 		{
+			//TODO OPTIMIZATION: check if T is a component
 			for(int i = 0; i < m_components.size(); ++i)
 			{
 				T* castedComponent = dynamic_cast<T*>(m_components[i]);
@@ -40,47 +46,56 @@ namespace Core
 		template <typename T>
 		void AddComponent(T* _comp)
 		{
-			MonoBehaviour* castedComponent = dynamic_cast<MonoBehaviour*>(_comp);
+			// If argument is not a component, return
+			Component* component = dynamic_cast<Component*>(_comp);
+			if (component == nullptr)
+				return;
+			
+			// Check if component inherits from monobehaviour, if so we only check if it's not already in the components list
+			MonoBehaviour* castedComponent = dynamic_cast<MonoBehaviour*>(component);
 			if(castedComponent != nullptr)
 			{
-				m_components.emplace_back(_comp);
-				_comp->SetGameObject(this);
-				return;
+				for (int i = 0; i < m_components.size(); ++i)
+				{
+					if (component->GetID() == m_components[i]->GetID())
+						return;
+				}
 			}
+			// Else, we also check if a component of the same type is already in the list
 			else
 			{
 				for (int i = 0; i < m_components.size(); ++i)
 				{
-					if (_comp == m_components[i])
+					if (component->GetID() == m_components[i]->GetID())
 						return;
-					T* component = dynamic_cast<T*>(m_components[i]);
-					if (component != nullptr)
+
+					T* testComponent = dynamic_cast<T*>(m_components[i]);
+					if (testComponent != nullptr)
 						return;
 				}
-				m_components.emplace_back(_comp);
-				_comp->SetGameObject(this);
 			}
+			m_components.emplace_back(_comp);
+			_comp->SetGameObject(this);
+			return;
 		}
 
-		template <typename T>
-		void UpdateComponentLocation(T* _compAdress)
+		void UpdateComponentLocation(Component* _oldAdress, Component* _newAdress)
 		{
 			for (int i = 0; i < m_components.size(); ++i)
 			{
-				T* castedComponent = dynamic_cast<T*>(m_components[i]);
-				if (castedComponent != nullptr)
+				if (_oldAdress == m_components[i])
 				{
-					m_components[i] = _compAdress;
+					m_components[i] = _newAdress;
 					return;
 				}
 			}
 		}
 
-		void UpdateComponentLocation(Component* _compAdress, Component* _newAdress)
+		void UpdateComponentLocation(int _id, Component* _newAdress)
 		{
 			for (int i = 0; i < m_components.size(); ++i)
 			{
-				if (_compAdress == m_components[i])
+				if (_id == m_components[i]->GetID())
 				{
 					m_components[i] = _newAdress;
 					return;
@@ -91,6 +106,11 @@ namespace Core
 		template <typename T>
 		void RemoveComponent(T* _compAdress)
 		{
+			// If argument is not a component, return
+			Component* component = dynamic_cast<Component*>(_compAdress);
+			if (component == nullptr)
+				return;
+
 			for (int i = 0; i < m_components.size(); ++i)
 			{
 				if (m_components[i] == _compAdress)

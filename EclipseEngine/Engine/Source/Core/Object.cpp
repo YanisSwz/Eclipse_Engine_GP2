@@ -2,6 +2,19 @@
 
 namespace Core
 {
+	int Object::idCount = 0;
+
+	Object::Object()
+	{
+		m_id = idCount;
+		++idCount;
+	}
+
+	int Object::GetID() const
+	{
+		return m_id;
+	}
+
 	void Object::Destroy()
 	{
 		destroyed = true;

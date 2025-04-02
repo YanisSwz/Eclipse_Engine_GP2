@@ -17,18 +17,18 @@ namespace Core
 	void MonoBehaviourArray::Sort()
 	{
 		int activeCount = 0;
-		for (int i = 0; i < currentActiveCount; ++i)
+		for (int i = 0; i < currentCount; ++i)
 		{
 			if (data[i].IsActive())
 				++activeCount;
 		}
 
 		int left = 0;
-		int right = currentActiveCount - 1;
+		int right = currentCount - 1;
 		while (left < right)
 		{
 
-			while (data[left].IsActive() && left < currentActiveCount - 1)
+			while (data[left].IsActive() && left < currentCount - 1)
 				++left;
 
 			while (!data[right].IsActive() && right > 0)
@@ -57,9 +57,11 @@ namespace Core
 		MonoBehaviour* obj1 = dynamic_cast<MonoBehaviour*>(_comp);
 		if(obj1 != nullptr)
 		{
-			// Check if we can overwrite a destroyed component
+			// Check if we can overwrite a destroyed component or if component is already in array
 			for (int i = 0; i < currentCount; ++i)
 			{
+				if (data[i].GetID() == obj1->GetID())
+					return;
 				if (data[i].IsDestroyed())
 				{
 					// If component hasn't been synchronyzed
@@ -69,7 +71,7 @@ namespace Core
 						data[i].SetGameObject(nullptr);
 					}
 					data[i] = *obj1;
-					data[i].GetGameObject()->UpdateComponentLocation(&data[i]);
+					data[i].GetGameObject()->UpdateComponentLocation(obj1, &data[i]);
 					++currentActiveCount;
 					return;
 				}
@@ -78,7 +80,7 @@ namespace Core
 			// Insert as last active component and update game object pointer
 			data[currentCount] = *obj1;
 			Swap(&data[currentCount], &data[currentActiveCount]);
-			data[currentActiveCount].GetGameObject()->UpdateComponentLocation(&data[currentActiveCount]);
+			data[currentActiveCount].GetGameObject()->UpdateComponentLocation(obj1, &data[currentActiveCount]);
 			++currentCount;
 			++currentActiveCount;
 		}

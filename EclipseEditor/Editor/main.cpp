@@ -106,17 +106,18 @@ int main()
 	m2.SetActive(true);
 	m3.SetActive(true);
 	testObj.AddComponent<Core::Transform>(&t);
-	testObj.AddComponent<Core::Transform>(&t2);
 	testObj.AddComponent<Core::MonoBehaviour>(&m1);
-	testObj.AddComponent<Core::MonoBehaviour>(&m2);
+	testObj.AddComponent<Core::Transform>(&t2);
+	testObj2.AddComponent<Core::MonoBehaviour>(&m2);
 	testObj3.AddComponent<Core::MonoBehaviour>(&m3);
 	
 	Core::Scene scene{};
 	scene.scriptsArray.Add(&m1);
 	scene.scriptsArray.Add(&m2);
 	scene.scriptsArray.Add(&m3);
+	scene.scriptsArray.Add(&m2);
 
-	Core::MonoBehaviour* testM = testObj3.GetComponent<Core::MonoBehaviour>();
+	Core::MonoBehaviour* testM = testObj2.GetComponent<Core::MonoBehaviour>();
 	testM->SetActive(false);
 	
 	while (!window->WindowShouldClose())
