@@ -11,7 +11,27 @@ namespace Core
 
 	Transform::~Transform(){}
 
-	void Transform::Destroy()
+	void Transform::SetParent(Transform* _parent)
 	{
+		m_parent = _parent;
 	}
+
+	void Transform::AddChild(Transform* _child)
+	{
+		for (int i = 0; i < m_children.size(); ++i)
+		{
+			if (_child == m_children[i])
+				return;
+		}
+		m_children.push_back(_child);
+	}
+
+	void Transform::Update()
+	{
+		if(m_parent != nullptr)
+		{
+		}
+	}
+
+	
 }
