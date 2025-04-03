@@ -14,8 +14,9 @@ namespace Core
 
 	private:
 		static const int MAX_SIZE = 100;
-		int currentCount = 0;
-		Transform data[MAX_SIZE];
+		int m_currentCount = 0;
+		Transform* m_root = nullptr;
+		Transform m_data[MAX_SIZE];
 
 	};
 }

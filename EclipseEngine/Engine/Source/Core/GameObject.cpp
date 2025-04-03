@@ -1,10 +1,21 @@
 #include "GameObject.hpp"
+#include "Scene.hpp"
 
 namespace Core
 {
-	GameObject::GameObject(std::string _name)
+	GameObject::GameObject()
 	{
+		transform = scene->AddTransform();
+	}
+
+	GameObject::GameObject(Scene* _scene, std::string _name, Transform* _t)
+	{
+		scene = _scene;
 		m_name = _name;
+		if(_t != nullptr)
+			transform = _t;
+		else 
+			transform = scene->AddTransform();
 	}
 
 	GameObject::~GameObject()

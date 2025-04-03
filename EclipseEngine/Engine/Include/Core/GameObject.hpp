@@ -14,8 +14,8 @@ namespace Core
 	class GameObject : public Object
 	{
 	public:
-		ECLIPSE_ENGINE GameObject() = default;
-		ECLIPSE_ENGINE GameObject(std::string _name);
+		ECLIPSE_ENGINE GameObject();
+		ECLIPSE_ENGINE GameObject(Scene* _scene, std::string _name, Transform* _t = nullptr);
 		ECLIPSE_ENGINE ~GameObject();
 
 		ECLIPSE_ENGINE static void Destroy(GameObject* _obj);
@@ -79,30 +79,6 @@ namespace Core
 			return;
 		}
 
-		void UpdateComponentLocation(Component* _oldAdress, Component* _newAdress)
-		{
-			for (int i = 0; i < m_components.size(); ++i)
-			{
-				if (_oldAdress == m_components[i])
-				{
-					m_components[i] = _newAdress;
-					return;
-				}
-			}
-		}
-
-		void UpdateComponentLocation(int _id, Component* _newAdress)
-		{
-			for (int i = 0; i < m_components.size(); ++i)
-			{
-				if (_id == m_components[i]->GetID())
-				{
-					m_components[i] = _newAdress;
-					return;
-				}
-			}
-		}
-
 		template <typename T>
 		void RemoveComponent(T* _compAdress)
 		{
@@ -125,8 +101,8 @@ namespace Core
 
 	private:
 		std::string m_name = "";
-		Transform transform{};
-		std::vector<Component*> m_components;
+		Transform* transform = nullptr;
+		std::vector<Component*> m_components{};
 		Scene* scene = nullptr;
 	};
 }

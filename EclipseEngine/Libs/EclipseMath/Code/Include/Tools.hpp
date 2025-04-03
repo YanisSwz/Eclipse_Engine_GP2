@@ -10,5 +10,14 @@ namespace Math
 		inline float ToDeg(float f) { return f * (180.f / PI); }
 		inline float ToRad(float f) { return f * (PI / 180.f); }
 		inline float Lerp(float a, float b, float f) { return a + (b - a) * f; }
+		inline float Sign(float f) 
+		{
+			if (f < epsilon)
+				return -1.f;
+			else if (f > epsilon)
+				return 1.f;
+			else
+				return 0.f;
+		}
 	}
 }

@@ -10,6 +10,7 @@
 #include "Resource/ShaderProgram.hpp"
 #include "Resource/Skybox.hpp"
 #include "Resource/ResourceManager.hpp"
+#include "Scene.hpp"
 #include <iostream>
 
 #define ImGuiImplementGLFW
@@ -74,6 +75,11 @@ int main()
 	float speed = 1.f;
 	Math::Mat4 TRS;
 	
+	// CORE TESTS
+	Core::Scene scene{};
+	Core::Transform t{ {-1.f, 0.f, 8.f}, {0.f, 90.f, 0.f}, {1.f, 3.f, 0.5f} };
+	Core::GameObject obj1{ &scene, "Cube", &t};
+
 	while (!window->WindowShouldClose())
 	{
 		window->UpdateInputs();
