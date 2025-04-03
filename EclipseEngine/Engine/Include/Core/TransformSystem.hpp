@@ -7,9 +7,9 @@ namespace Core
 	class TransformSystem
 	{
 	public:
-		ECLIPSE_ENGINE TransformSystem();
-		ECLIPSE_ENGINE ~TransformSystem();
-		ECLIPSE_ENGINE void Add(Transform* _transform);
+		ECLIPSE_ENGINE TransformSystem() = default;
+		ECLIPSE_ENGINE ~TransformSystem() = default;
+		ECLIPSE_ENGINE Transform* Add(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f });
 		ECLIPSE_ENGINE void Update();
 
 	private:
