@@ -14,8 +14,8 @@ namespace Core
 	class GameObject : public Object
 	{
 	public:
-		ECLIPSE_ENGINE GameObject();
-		ECLIPSE_ENGINE GameObject(Scene* _scene, std::string _name, Transform* _t = nullptr);
+		ECLIPSE_ENGINE GameObject() = default;
+		ECLIPSE_ENGINE GameObject(Scene* _scene, Transform* _t = nullptr, std::string _name = "default");
 		ECLIPSE_ENGINE ~GameObject();
 
 		ECLIPSE_ENGINE static void Destroy(GameObject* _obj);

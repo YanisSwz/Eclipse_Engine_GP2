@@ -3,19 +3,27 @@
 
 namespace Core
 {
-	GameObject::GameObject()
-	{
-		transform = scene->AddTransform();
-	}
-
-	GameObject::GameObject(Scene* _scene, std::string _name, Transform* _t)
+	GameObject::GameObject(Scene* _scene, Transform* _t, std::string _name)
 	{
 		scene = _scene;
-		m_name = _name;
-		if(_t != nullptr)
+
+		if (_name == "default")
+			m_name = "GameObject" + std::to_string(m_id);
+		else
+			m_name = _name;
+
+		if (_t != nullptr)
+		{
 			transform = _t;
-		else 
+			transform->SetGameObject(this);
+		}
+		else
+		{
 			transform = scene->AddTransform();
+			transform->SetGameObject(this);
+		}
+
+		active = true;
 	}
 
 	GameObject::~GameObject()

@@ -77,8 +77,7 @@ int main()
 	
 	// CORE TESTS
 	Core::Scene scene{};
-	Core::Transform t{ {-1.f, 0.f, 8.f}, {0.f, 90.f, 0.f}, {1.f, 3.f, 0.5f} };
-	Core::GameObject obj1{ &scene, "Cube", &t};
+	scene.CreateGameObject();
 
 	while (!window->WindowShouldClose())
 	{
