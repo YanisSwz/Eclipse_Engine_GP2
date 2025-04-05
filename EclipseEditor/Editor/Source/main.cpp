@@ -103,7 +103,7 @@ int main()
 		ImGui::Begin("Scene");
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
-		sceneCamera.Update(window, deltaTime, { 0.f, 0.f }, { windowSize.x, windowSize.y });
+		sceneCamera.Update(window, deltaTime, { windowPos.x, windowPos.y }, { windowSize.x, windowSize.y });
 
 		defaultPipeline->Rescale(static_cast<int>(windowSize.x), static_cast<int>(windowSize.y));
 		rdrInter->Viewport(0, 0, static_cast<int>(windowSize.x), static_cast<int>(windowSize.y));

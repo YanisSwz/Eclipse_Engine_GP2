@@ -19,7 +19,7 @@ void SceneCamera::Update(Windowing::IWindow* _window, float _deltaTime, Math::Ve
 void SceneCamera::UpdateInput(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize)
 {
 	Math::Vec2 cursorPos = _window->GetCursorPos();
-	if (!_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN) || cursorPos.x < _sceneWindowPos.x || cursorPos.x > _sceneWindowSize.x || cursorPos.y < _sceneWindowPos.y || cursorPos.y > _sceneWindowSize.y)
+	if (!_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN) || cursorPos.x < _sceneWindowPos.x || cursorPos.y < _sceneWindowPos.y || cursorPos.x > _sceneWindowSize.x + _sceneWindowPos.x || cursorPos.y > _sceneWindowSize.y + _sceneWindowPos.y)
 	{
 		_window->SetCursorMode(Windowing::CURSOR_MODE::CURSOR_VISIBLE);
 		return;
