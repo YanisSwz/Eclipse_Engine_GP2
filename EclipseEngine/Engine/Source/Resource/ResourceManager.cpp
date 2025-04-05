@@ -41,16 +41,19 @@ namespace Resource
 
 	void ResourceManager::GenerateAllResources(RHI::IRenderInterface* _rendererInterface)
 	{
-		std::vector<std::string> resourcesGenerated;
-		for (std::map<std::string, IResource*>::iterator it = m_resourcesToGenerate.begin(); it != m_resourcesToGenerate.end(); ++it)
+		while (!m_resourcesToGenerate.empty())
 		{
-			it->second->Generate(_rendererInterface);
-			AddResourceToReady(it->second, it->first);
-			if (it->second->IsLoaded())
-				resourcesGenerated.push_back(it->first);
+			std::vector<std::string> resourcesGenerated;
+			for (std::map<std::string, IResource*>::iterator it = m_resourcesToGenerate.begin(); it != m_resourcesToGenerate.end(); ++it)
+			{
+				it->second->Generate(_rendererInterface);
+				AddResourceToReady(it->second, it->first);
+				if (it->second->IsLoaded())
+					resourcesGenerated.push_back(it->first);
+			}
+			for (std::string resourceName : resourcesGenerated)
+				DeleteResourceToGenerate(resourceName);
 		}
-		for (std::string resourceName : resourcesGenerated)
-			DeleteResourceToGenerate(resourceName);
 	}
 
 	void ResourceManager::AddResourceToGenerate(IResource* _resource, std::string _resourceName)

@@ -76,10 +76,10 @@ namespace Resource
 		m_vertexBufferObject->Init(&m_vertexBuffer[0], m_vertexBuffer.size() * sizeof(RHI::Vertex));
 		m_indexBufferObject->Init(&m_indexBuffer[0], m_indexBuffer.size() * sizeof(uint32_t));
 
-		// Vertex position,		 /	    Texture position,		/		Normal
+		// Vertex position,		/		Normal,		 /	    Texture position
 		m_vertexArrayObject->LinkVertexBuffer(*m_vertexBufferObject, 0, 3, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, pos));
-		m_vertexArrayObject->LinkVertexBuffer(*m_vertexBufferObject, 1, 2, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, textUV));
-		m_vertexArrayObject->LinkVertexBuffer(*m_vertexBufferObject, 2, 3, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, normal));
+		m_vertexArrayObject->LinkVertexBuffer(*m_vertexBufferObject, 1, 3, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, normal));
+		m_vertexArrayObject->LinkVertexBuffer(*m_vertexBufferObject, 2, 2, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, textUV));
 
 		m_vertexArrayObject->Unbind();
 		m_vertexBufferObject->Unbind();

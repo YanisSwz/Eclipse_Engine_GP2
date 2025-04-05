@@ -1,14 +1,5 @@
 #pragma once
 #include "RHIInterfaces/IRenderInterface.hpp"
-#include "RHIOpenGL/OpenGLVertexArray.hpp"
-#include "RHIOpenGL/OpenGLVertexBuffer.hpp"
-#include "RHIOpenGL/OpenGLIndexBuffer.hpp"
-#include "RHIOpenGL/OpenGLShaderProgram.hpp"
-#include "RHIOpenGL/OpenGLVertexShader.hpp"
-#include "RHIOpenGL/OpenGLFragmentShader.hpp"
-#include "RHIOpenGL/OpenGLTexture2D.hpp"
-#include "RHIOpenGL/OpenGLCubeMap.hpp"
-#include "RHIOpenGL/OpenGLFrameBuffer.hpp"
 #include "ProjectExports.hpp"
 
 namespace RHI
@@ -30,6 +21,8 @@ namespace RHI
 			ECLIPSE_ENGINE ITexture2D* InstantiateTexture2D() const override;
 			ECLIPSE_ENGINE ICubeMap* InstantiateCubeMap() const override;
 			ECLIPSE_ENGINE IFrameBuffer* InstantiateFrameBuffer() const override;
+			ECLIPSE_ENGINE IGraphicPipeline* InstantiateDefaultGraphicPipeline() const override;
+			ECLIPSE_ENGINE IRenderPass* InstantiateDeferredRenderPass() const override;
 
 			ECLIPSE_ENGINE void DestroyVertexArray(IVertexArray* _vertexArray) const override;
 			ECLIPSE_ENGINE void DestroyVertexBuffer(IVertexBuffer* _vertexBuffer) const override;
@@ -40,6 +33,8 @@ namespace RHI
 			ECLIPSE_ENGINE void DestroyTexture2D(ITexture2D* _texture2D) const override;
 			ECLIPSE_ENGINE void DestroyCubeMap(ICubeMap* _cubeMap) const override;
 			ECLIPSE_ENGINE void DestroyFrameBuffer(IFrameBuffer* _frameBuffer) const override;
+			ECLIPSE_ENGINE void DestroyDefaultGraphicPipeline(IGraphicPipeline* _graphicPipeline) const override;
+			ECLIPSE_ENGINE void DestroyDeferredRenderPass(IRenderPass* _renderPass) const override;
 
 			ECLIPSE_ENGINE bool InitGraphicsAPI() const override;
 			ECLIPSE_ENGINE void EnableContextCapability(IFLAGS _capability) const override;

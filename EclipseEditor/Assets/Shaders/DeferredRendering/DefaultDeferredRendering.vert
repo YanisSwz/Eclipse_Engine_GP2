@@ -5,9 +5,9 @@ layout (location = 1) in vec3 aNorm;
 layout (location = 2) in vec2 aTex;
 
 out VS_OUT {
-    vec3 FragPos;
-    vec3 Normal;
-    vec2 TexCoords;
+    out vec3 FragPos;
+    out vec3 Normal;
+    out vec2 TexCoords;
 } vs_out;
 
 uniform mat4 TRS;
@@ -16,7 +16,7 @@ uniform mat4 VP;
 void main()
 {
     vs_out.FragPos = vec3(TRS * vec4(aPos, 1.0));
-    vs_out.Normal = mat3(transpose(inverse(TRS))) * aNorm;
     vs_out.TexCoords = aTex;
+    vs_out.Normal = mat3(transpose(inverse(TRS))) * aNorm;
     gl_Position = VP * TRS * vec4(aPos, 1.0);
 }

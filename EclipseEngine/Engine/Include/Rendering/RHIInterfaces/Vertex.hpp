@@ -6,7 +6,7 @@ namespace RHI
 	struct Vertex
 	{
 		Math::Vec3 pos;
-		Math::Vec2 textUV;
 		Math::Vec3 normal;
+		Math::Vec2 textUV;
 	};
 }

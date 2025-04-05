@@ -11,7 +11,6 @@
 #include "Resource/Skybox.hpp"
 #include "Resource/ResourceManager.hpp"
 #include <iostream>
-
 #define ImGuiImplementGLFW
 #define ImGuiImplementOpenGL
 
@@ -27,7 +26,7 @@ int main()
 		window->DestroyWindow();
 		return -1;
 	}
-
+	
 	rdrInter->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
 
 	IMGUI_CHECKVERSION();
@@ -55,18 +54,24 @@ int main()
 	Resource::FragShader* fragShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("FragShaderSkybox.frag", "Assets/Shaders/Skybox/SkyboxShader.frag");
 	Resource::ShaderProgram* shaderProgramSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("ShaderProgramSkybox.shd", "VertShaderSkybox.vert", "FragShaderSkybox.frag");
 	
+	// Load Shader for default graphic pipeline
+	Resource::VertShader* vertShaderDeferredRendering = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultDeferredRendering.vert", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.vert");
+	Resource::FragShader* fragShaderDeferredRendering = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultDeferredRendering.frag", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.frag");
+	Resource::ShaderProgram* shaderProgramDeferredRendering = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DefaultDeferredRendering.shd", "DefaultDeferredRendering.vert", "DefaultDeferredRendering.frag");
+
+	Resource::VertShader* vertShaderDeferredLighting = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DeferredLighting.vert", "Assets/Shaders/DeferredRendering/DeferredLighting.vert");
+	Resource::FragShader* fragShaderDeferredLighting = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DeferredLighting.frag", "Assets/Shaders/DeferredRendering/DeferredLighting.frag");
+	Resource::ShaderProgram* shaderProgramDeferredLighting = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DeferredLighting.shd", "DeferredLighting.vert", "DeferredLighting.frag");
 
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(rdrInter);
-	Resource::ResourceManager::GetInstance().GenerateAllResources(rdrInter);
 
 
-#pragma region Generate FrameBuffer
-	RHI::IFrameBuffer* FB = rdrInter->InstantiateFrameBuffer();
-	FB->Init(window->width, window->height);
-#pragma endregion
 
 	Core::SceneCamera sceneCamera{ 60.f, 0.1f, 100.f };
+	RHI::IGraphicPipeline* defaultPipeline = rdrInter->InstantiateDefaultGraphicPipeline();
+	
+	defaultPipeline->Init(window->width, window->height);
 
 	float deltaTime = 0.f;
 	float oldTime = 0.f;
@@ -95,53 +100,29 @@ int main()
 		ImGui::NewFrame();
 
 		// SCENE WINDOW
-		ImGui::Begin("Scene", 0);
-		ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
-		ImVec2 cursorPos = ImGui::GetCursorScreenPos();
+		ImGui::Begin("Scene");
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 windowPos = ImGui::GetWindowPos();
+		sceneCamera.Update(window, deltaTime, { 0.f, 0.f }, { windowSize.x, windowSize.y });
 
-		FB->Rescale(static_cast<int>(contentRegionAvailable.x), static_cast<int>(contentRegionAvailable.y));
-		sceneCamera.Update(window, deltaTime, { cursorPos.x, cursorPos.y }, { contentRegionAvailable.x, contentRegionAvailable.y });
-		rdrInter->Viewport(0, 0, static_cast<int>(contentRegionAvailable.x), static_cast<int>(contentRegionAvailable.y));
+		defaultPipeline->Rescale(static_cast<int>(windowSize.x), static_cast<int>(windowSize.y));
+		rdrInter->Viewport(0, 0, static_cast<int>(windowSize.x), static_cast<int>(windowSize.y));
 
 		ImGui::GetWindowDrawList()->AddImage(
-			(intptr_t)(FB->GetTextureID()),
-			ImVec2(cursorPos.x, cursorPos.y),
-			ImVec2(cursorPos.x + contentRegionAvailable.x, cursorPos.y + contentRegionAvailable.y),
+			(intptr_t)(defaultPipeline->GetFinalTexture()),
+			ImVec2(windowPos.x, windowPos.y),
+			ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
 			ImVec2(0, 1),
 			ImVec2(1, 0));
 
 		ImGui::End();
 		ImGui::Render();
 
-		rdrInter->ClearBackgroundColor({ 1.f, 0.f, 0.f });
+		rdrInter->ClearBackgroundColor({ 1, 0.064f, 0.941f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
-#pragma region Draw
-		FB->Bind();
-		//Draw Background of OpenGL Window
-		rdrInter->ClearBackgroundColor({ 0.07f, 0.13f, 0.17f });
-		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
-		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
-
-		sceneCamera.SetShaderData(shaderProgram, FB->width, FB->height);
-		sceneCamera.SetShaderData(shaderProgramSkybox, FB->width, FB->height);
-
-		// Update TRS Rotation
-		TRS.SetTRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ crtAngle, Math::Tools::PI / 2.f + crtAngle, 0.f }, Math::Vec3{1.f, 1.f, 1.f});
-
-		// Draw Model with the texture
-		shaderProgram->Bind();
-		shaderProgram->SetMat4("TRS", TRS);
-		texture->Bind();
-		model->Draw();
-		texture->Unbind();
-		shaderProgram->Unbind();
-
-		// Draw Skybox
-		skybox->Draw();
-		FB->Unbind();
-#pragma endregion
+		defaultPipeline->Draw(sceneCamera.GetVP(), sceneCamera.GetViewPos());
 
 #ifdef ImGuiImplementOpenGL
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -151,22 +132,25 @@ int main()
 		window->PollEvents();
 	}
 
-	delete model;
-	delete texture;
-	delete vertShader;
-	delete fragShader;
-	delete shaderProgram;
-	delete modelSkybox;
-	delete vertShaderSkybox;
-	delete fragShaderSkybox;
-	delete shaderProgramSkybox;
-	delete skybox;
+	rdrInter->DestroyDefaultGraphicPipeline(defaultPipeline);
 
-#pragma region Destroy RHI Objects
-	// Delete FrameBuffer
-	FB->Delete();
-	rdrInter->DestroyFrameBuffer(FB);
-#pragma endregion
+	delete model; // TODO Remove rdrInter->Destroy from Delete
+	delete texture; // TODO Remove rdrInter->Destroy from Delete
+	delete vertShader; // TODO Remove rdrInter->Destroy from Delete
+	delete fragShader; // TODO Remove rdrInter->Destroy from Delete
+	delete shaderProgram; // TODO Remove rdrInter->Destroy from Delete
+	delete modelSkybox; // TODO Remove rdrInter->Destroy from Delete
+	delete vertShaderSkybox; // TODO Remove rdrInter->Destroy from Delete
+	delete fragShaderSkybox; // TODO Remove rdrInter->Destroy from Delete
+	delete shaderProgramSkybox; // TODO Remove rdrInter->Destroy from Delete
+	delete skybox; // TODO Remove rdrInter->Destroy from Delete
+	delete vertShaderDeferredRendering; // TODO Remove rdrInter->Destroy from Delete
+	delete fragShaderDeferredRendering; // TODO Remove rdrInter->Destroy from Delete
+	delete shaderProgramDeferredRendering; // TODO Remove rdrInter->Destroy from Delete
+	delete vertShaderDeferredLighting; // TODO Remove rdrInter->Destroy from Delete
+	delete fragShaderDeferredLighting; // TODO Remove rdrInter->Destroy from Delete
+	delete shaderProgramDeferredLighting; // TODO Remove rdrInter->Destroy from Delete
+	Resource::ResourceManager::GetInstance().DestroyInstance();
 
 #pragma region Destroy ImGUI
 #ifdef ImGuiImplementOpenGL

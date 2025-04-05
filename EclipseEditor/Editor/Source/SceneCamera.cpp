@@ -11,8 +11,8 @@ SceneCamera::SceneCamera(float _fov, float _near, float _far)
 
 void SceneCamera::Update(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize)
 {
-	m_width = _window->width;
-	m_height = _window->height;
+	m_width = static_cast<int>(_sceneWindowSize.x);
+	m_height = static_cast<int>(_sceneWindowSize.y);
 	UpdateInput(_window, _deltaTime, _sceneWindowPos, _sceneWindowSize);
 }
 
@@ -122,14 +122,14 @@ void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 	m_eye.z = m_at.z - direction.z;
 }
 
-void SceneCamera::SetShaderData(Resource::ShaderProgram* _shaderProgram, int viewportSizeX, int viewportSizeY)
+Math::Mat4 SceneCamera::GetVP() const
 {
-	m_width = viewportSizeX;
-	m_height = viewportSizeY;
-
 	Math::Mat4 VP = Math::Mat4::PerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);
 	VP *= Math::Mat4::ViewMatrix(m_eye, m_at, m_up);
-	_shaderProgram->Bind();
-	_shaderProgram->SetMat4("VP", VP, true);
-	_shaderProgram->Unbind();
+	return VP;
+}
+
+Math::Vec3 SceneCamera::GetViewPos() const
+{
+	return m_eye;
 }

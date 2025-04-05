@@ -10,6 +10,8 @@
 #include "RHIInterfaces/ITexture2D.hpp"
 #include "RHIInterfaces/ICubeMap.hpp"
 #include "RHIInterfaces/IFrameBuffer.hpp"
+#include "RHIInterfaces/IPipeline/IGraphicPipeline.hpp"
+#include "RHIInterfaces/IRenderPass/IRenderPass.hpp"
 
 namespace RHI
 {
@@ -28,6 +30,8 @@ namespace RHI
 		virtual ITexture2D* InstantiateTexture2D() const = 0;
 		virtual ICubeMap* InstantiateCubeMap() const = 0;
 		virtual IFrameBuffer* InstantiateFrameBuffer() const = 0;
+		virtual IGraphicPipeline* InstantiateDefaultGraphicPipeline() const = 0;
+		virtual IRenderPass* InstantiateDeferredRenderPass() const = 0;
 
 		virtual void DestroyVertexArray(IVertexArray* _vertexArray) const = 0;
 		virtual void DestroyVertexBuffer(IVertexBuffer* _vertexBuffer) const = 0;
@@ -38,6 +42,8 @@ namespace RHI
 		virtual void DestroyTexture2D(ITexture2D* _texture2D) const = 0;
 		virtual void DestroyCubeMap(ICubeMap* _cubeMap) const = 0;
 		virtual void DestroyFrameBuffer(IFrameBuffer* _frameBuffer) const = 0;
+		virtual void DestroyDefaultGraphicPipeline(IGraphicPipeline* _graphicPipeline) const = 0;
+		virtual void DestroyDeferredRenderPass(IRenderPass* _renderPass) const = 0;
 
 		virtual bool InitGraphicsAPI() const = 0;
 		virtual void EnableContextCapability(IFLAGS _capability) const = 0;

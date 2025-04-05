@@ -1,4 +1,15 @@
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
+#include "RHIOpenGL/OpenGLVertexArray.hpp"
+#include "RHIOpenGL/OpenGLVertexBuffer.hpp"
+#include "RHIOpenGL/OpenGLIndexBuffer.hpp"
+#include "RHIOpenGL/OpenGLShaderProgram.hpp"
+#include "RHIOpenGL/OpenGLVertexShader.hpp"
+#include "RHIOpenGL/OpenGLFragmentShader.hpp"
+#include "RHIOpenGL/OpenGLTexture2D.hpp"
+#include "RHIOpenGL/OpenGLCubeMap.hpp"
+#include "RHIOpenGL/OpenGLFrameBuffer.hpp"
+#include "RHIOpenGL/OpenGLPipeline/OpenGLDefaultGraphicPipeline.hpp"
+#include "RHIOpenGL/OpenGLRenderPass/OpenGLDeferredRenderPass.hpp"
 #include <Glad/glad.h>
 #include <iostream>
 using namespace RHI::OpenGL;
@@ -46,6 +57,16 @@ RHI::ICubeMap* OpenGLRenderInterface::InstantiateCubeMap() const
 RHI::IFrameBuffer* OpenGLRenderInterface::InstantiateFrameBuffer() const
 {
 	return new OpenGLFrameBuffer;
+}
+
+RHI::IGraphicPipeline* OpenGLRenderInterface::InstantiateDefaultGraphicPipeline() const
+{
+	return new OpenGLDefaultGraphicPipeline;
+}
+
+RHI::IRenderPass* OpenGLRenderInterface::InstantiateDeferredRenderPass() const
+{
+	return new OpenGLDeferredRenderPass;
 }
 
 void OpenGLRenderInterface::DestroyVertexArray(IVertexArray* _vertexArray) const
@@ -109,6 +130,20 @@ void OpenGLRenderInterface::DestroyFrameBuffer(IFrameBuffer* _frameBuffer) const
 	if (!_frameBuffer)
 		return;
 	delete _frameBuffer;
+}
+
+void OpenGLRenderInterface::DestroyDefaultGraphicPipeline(IGraphicPipeline* _graphicPipeline) const
+{
+	if (!_graphicPipeline)
+		return;
+	delete _graphicPipeline;
+}
+
+void OpenGLRenderInterface::DestroyDeferredRenderPass(IRenderPass* _renderPass) const
+{
+	if (!_renderPass)
+		return;
+	delete _renderPass;
 }
 
 bool OpenGLRenderInterface::InitGraphicsAPI() const
