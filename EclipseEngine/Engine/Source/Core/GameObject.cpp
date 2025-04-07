@@ -32,6 +32,8 @@ namespace Core
 
 	void GameObject::Destroy()
 	{
+		active = false;
+		transform->Destroy();
 		for (int i = 0; i < m_components.size(); ++i)
 		{
 			m_components[i]->Destroy();
@@ -46,8 +48,8 @@ namespace Core
 
 	GameObject* GameObject::Instantiate(GameObject _original)
 	{
-		GameObject* obj = new GameObject(_original);
-		return obj;
+		//TODO: Replace with arguments
+		return _original.scene->CreateGameObject();
 	}
 
 	std::string GameObject::GetName() const 

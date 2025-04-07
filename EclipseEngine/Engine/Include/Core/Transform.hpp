@@ -9,7 +9,7 @@ namespace Core
 	class Transform : public Component
 	{
 	public:
-		ECLIPSE_ENGINE Transform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f });
+		ECLIPSE_ENGINE Transform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE ~Transform();
 		ECLIPSE_ENGINE void SetParent(Transform* _parent);
 		ECLIPSE_ENGINE inline Transform* GetParent() const { return m_parent; };

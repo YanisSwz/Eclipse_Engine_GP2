@@ -78,6 +78,11 @@ int main()
 	// CORE TESTS
 	Core::Scene scene{};
 	scene.CreateGameObject();
+	scene.CreateGameObject();
+	scene.CreateGameObject();
+
+	scene.DestroyGameObject();
+	scene.CreateGameObject();
 
 	while (!window->WindowShouldClose())
 	{
@@ -89,6 +94,11 @@ int main()
 		deltaTime = window->GetTime() - oldTime;
 		oldTime = window->GetTime();
 		crtAngle += (deltaTime * speed);
+
+#pragma region Scene
+		scene.Update();
+#pragma endregion
+
 
 #ifdef ImGuiImplementOpenGL
 		ImGui_ImplOpenGL3_NewFrame();

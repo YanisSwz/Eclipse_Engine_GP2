@@ -2,11 +2,16 @@
 
 namespace Core
 {
-	Transform::Transform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale)
+	Transform::Transform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)
 	{
-		position = _translation;
-		rotation = Math::Quat::QuaternionEuler(_rotation.x, _rotation.y, _rotation.z);
-		scale = _scale;
+		localPosition, position = _translation;
+		localRotation, rotation = Math::Quat::QuaternionEuler(_rotation.x, _rotation.y, _rotation.z);
+		localScale, scale = _scale;
+		if (_parent != nullptr)
+		{
+			m_parent = _parent;
+			m_parent->AddChild(this);
+		}
 	}
 
 	Transform::~Transform(){}

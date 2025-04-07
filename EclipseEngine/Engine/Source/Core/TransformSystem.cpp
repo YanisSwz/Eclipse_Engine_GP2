@@ -2,7 +2,15 @@
 
 namespace Core 
 {
-	Transform* TransformSystem::Add(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale)
+	TransformSystem::TransformSystem()
+	{
+		m_data[m_currentCount] = Transform({2.f, 0.f, 3.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f});
+		m_data[m_currentCount].SetActive(true);
+		m_root = &m_data[m_currentCount];
+		++m_currentCount;
+	}
+
+	Transform* TransformSystem::Add(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)
 	{
 		if (m_currentCount >= MAX_SIZE)
 			return nullptr;
@@ -12,14 +20,26 @@ namespace Core
 			if (m_data[i].IsDestroyed())
 			{
 				m_data[i].Remove();
-				m_data[i] = Transform(_translation, _rotation, _scale);
+				m_data[i] = Transform(_translation, _rotation, _scale, _parent);
+				m_data[i].SetActive(true);
 				return &m_data[i];
 			}
 		}
 
-		m_data[m_currentCount] = Transform(_translation, _rotation, _scale);
+		m_data[m_currentCount] = Transform(_translation, _rotation, _scale, _parent);
+		m_data[m_currentCount].SetActive(true);
+		if(_parent == nullptr)
+		{
+			m_data[m_currentCount].SetParent(m_root);
+			m_root->AddChild(&m_data[m_currentCount]);
+		}
+		else
+		{
+			m_data[m_currentCount].SetParent(_parent);
+			_parent->AddChild(&m_data[m_currentCount]);
+		}
 		++m_currentCount;
-		return &m_data[m_currentCount];
+		return &m_data[m_currentCount-1];
 	}
 
 	void TransformSystem::Update()
