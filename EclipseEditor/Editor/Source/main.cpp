@@ -10,6 +10,7 @@
 #include "Resource/ShaderProgram.hpp"
 #include "Resource/Skybox.hpp"
 #include "Resource/ResourceManager.hpp"
+#include "Scene.hpp"
 #include <iostream>
 #define ImGuiImplementGLFW
 #define ImGuiImplementOpenGL
@@ -81,6 +82,15 @@ int main()
 	float crtAngle = 0.f;
 	float speed = 1.f;
 	Math::Mat4 TRS;
+	
+	// CORE TESTS
+	Core::Scene scene{};
+	scene.CreateGameObject();
+	scene.CreateGameObject();
+	scene.CreateGameObject();
+
+	scene.DestroyGameObject();
+	scene.CreateGameObject();
 
 	while (!window->WindowShouldClose())
 	{
@@ -92,6 +102,11 @@ int main()
 		deltaTime = window->GetTime() - oldTime;
 		oldTime = window->GetTime();
 		crtAngle += (deltaTime * speed);
+
+#pragma region Scene
+		scene.Update();
+#pragma endregion
+
 
 #ifdef ImGuiImplementOpenGL
 		ImGui_ImplOpenGL3_NewFrame();

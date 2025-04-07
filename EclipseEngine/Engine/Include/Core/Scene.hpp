@@ -12,11 +12,19 @@ namespace Core
 		ECLIPSE_ENGINE Scene() = default;
 		ECLIPSE_ENGINE ~Scene() = default;
 
-		TransformSystem transformSystem;
+		ECLIPSE_ENGINE void Update();
+		ECLIPSE_ENGINE Transform* AddTransform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
+		//TODO: Add arguments
+		ECLIPSE_ENGINE GameObject* CreateGameObject();
+		ECLIPSE_ENGINE void DestroyGameObject();
+		//TODO: need editor
+		ECLIPSE_ENGINE void AddComponent();
 
 	private:
-		GameObject* m_root = nullptr;
+		static const int MAX_SIZE = 100;
+		int m_currentGameObjectCount = 0;
+		GameObject m_gameObjects[MAX_SIZE];
+		TransformSystem transformSystem{};
 		GameObject* m_currentGameObject = nullptr;
-
 	};
 }

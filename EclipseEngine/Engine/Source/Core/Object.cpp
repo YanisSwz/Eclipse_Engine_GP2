@@ -17,6 +17,7 @@ namespace Core
 
 	void Object::Destroy()
 	{
+		active = false;
 		destroyed = true;
 	}
 
