@@ -26,13 +26,16 @@ int main()
 		window->DestroyWindow();
 		return -1;
 	}
-	
+
 	rdrInter->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGui::StyleColorsDark();
+
 
 #ifdef ImGuiImplementGLFW
 	ImGui_ImplGlfw_InitForOpenGL(window->CastGLFW()->GetWindow(), true);
@@ -42,6 +45,7 @@ int main()
 	ImGui_ImplOpenGL3_Init("#version 330");
 #endif // ImGuiImplementOpenGL
 
+#pragma region Load Resources
 	Resource::Model* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Model>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
 	Resource::VertShader* vertShader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShader.vert", "Assets/Shaders/Default/Default.vert");
@@ -53,7 +57,7 @@ int main()
 	Resource::VertShader* vertShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShaderSkybox.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");
 	Resource::FragShader* fragShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("FragShaderSkybox.frag", "Assets/Shaders/Skybox/SkyboxShader.frag");
 	Resource::ShaderProgram* shaderProgramSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("ShaderProgramSkybox.shd", "VertShaderSkybox.vert", "FragShaderSkybox.frag");
-	
+
 	// Load Shader for default graphic pipeline
 	Resource::VertShader* vertShaderDeferredRendering = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultDeferredRendering.vert", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.vert");
 	Resource::FragShader* fragShaderDeferredRendering = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultDeferredRendering.frag", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.frag");
@@ -66,11 +70,10 @@ int main()
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(rdrInter);
 
-
-
 	Core::SceneCamera sceneCamera{ 60.f, 0.1f, 100.f };
 	RHI::IGraphicPipeline* defaultPipeline = rdrInter->InstantiateDefaultGraphicPipeline();
-	
+#pragma endregion
+
 	defaultPipeline->Init(window->width, window->height);
 
 	float deltaTime = 0.f;
@@ -78,7 +81,7 @@ int main()
 	float crtAngle = 0.f;
 	float speed = 1.f;
 	Math::Mat4 TRS;
-	
+
 	while (!window->WindowShouldClose())
 	{
 		window->UpdateInputs();
@@ -98,9 +101,41 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 #endif // ImGuiImplementGLFW
 		ImGui::NewFrame();
+#pragma region Dockspace
+		//##################################################################################
+		//################################### DOCK SPACE ###################################
+		//##################################################################################
+		
+		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		
+		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+			window_flags |= ImGuiWindowFlags_NoBackground;
+
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(viewport->WorkSize);
+		ImGui::SetNextWindowViewport(viewport->ID);
+		
+		ImGui::Begin("DockSpace Demo", 0, window_flags);
+		
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		{
+			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		}
+		ImGui::End();
+#pragma endregion
+
+		ImGuiWindowFlags defaultWindowFlags = ImGuiWindowFlags_None;
+		ImGuiWindowFlags inspectorWindowFlags = defaultWindowFlags;
+		ImGuiWindowFlags sceneWindowFlags = defaultWindowFlags;
+		ImGuiWindowFlags hierarchyWindowFlags = defaultWindowFlags;
 
 		// SCENE WINDOW
-		ImGui::Begin("Scene");
+		ImGui::Begin("Scene", 0, sceneWindowFlags);
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
 		sceneCamera.Update(window, deltaTime, { windowPos.x, windowPos.y }, { windowSize.x, windowSize.y });
@@ -116,6 +151,15 @@ int main()
 			ImVec2(1, 0));
 
 		ImGui::End();
+
+		ImGui::Begin("Inspector", 0, inspectorWindowFlags);
+		ImGui::End();
+
+
+		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
+		ImGui::End();
+
+
 		ImGui::Render();
 
 		rdrInter->ClearBackgroundColor({ 1, 0.064f, 0.941f });
@@ -134,22 +178,22 @@ int main()
 
 	rdrInter->DestroyDefaultGraphicPipeline(defaultPipeline);
 
-	delete model; // TODO Remove rdrInter->Destroy from Delete
-	delete texture; // TODO Remove rdrInter->Destroy from Delete
-	delete vertShader; // TODO Remove rdrInter->Destroy from Delete
-	delete fragShader; // TODO Remove rdrInter->Destroy from Delete
-	delete shaderProgram; // TODO Remove rdrInter->Destroy from Delete
-	delete modelSkybox; // TODO Remove rdrInter->Destroy from Delete
-	delete vertShaderSkybox; // TODO Remove rdrInter->Destroy from Delete
-	delete fragShaderSkybox; // TODO Remove rdrInter->Destroy from Delete
-	delete shaderProgramSkybox; // TODO Remove rdrInter->Destroy from Delete
-	delete skybox; // TODO Remove rdrInter->Destroy from Delete
-	delete vertShaderDeferredRendering; // TODO Remove rdrInter->Destroy from Delete
-	delete fragShaderDeferredRendering; // TODO Remove rdrInter->Destroy from Delete
-	delete shaderProgramDeferredRendering; // TODO Remove rdrInter->Destroy from Delete
-	delete vertShaderDeferredLighting; // TODO Remove rdrInter->Destroy from Delete
-	delete fragShaderDeferredLighting; // TODO Remove rdrInter->Destroy from Delete
-	delete shaderProgramDeferredLighting; // TODO Remove rdrInter->Destroy from Delete
+	delete model;
+	delete texture;
+	delete vertShader;
+	delete fragShader;
+	delete shaderProgram;
+	delete modelSkybox;
+	delete vertShaderSkybox;
+	delete fragShaderSkybox;
+	delete shaderProgramSkybox;
+	delete skybox;
+	delete vertShaderDeferredRendering;
+	delete fragShaderDeferredRendering;
+	delete shaderProgramDeferredRendering;
+	delete vertShaderDeferredLighting;
+	delete fragShaderDeferredLighting;
+	delete shaderProgramDeferredLighting;
 	Resource::ResourceManager::GetInstance().DestroyInstance();
 
 #pragma region Destroy ImGUI
