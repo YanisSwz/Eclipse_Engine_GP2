@@ -92,7 +92,8 @@ namespace Core
 				if (m_components[i] == _compAdress)
 				{
 					// Mark to be destroyed and remove it from components list
-					m_components[i]->Destroy();
+					if(!m_components[i]->IsDestroyed())
+						m_components[i]->Destroy();
 					m_components.erase(m_components.begin() + i);
 					return;
 				}

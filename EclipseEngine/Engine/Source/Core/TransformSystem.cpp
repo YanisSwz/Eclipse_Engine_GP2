@@ -4,7 +4,7 @@ namespace Core
 {
 	TransformSystem::TransformSystem()
 	{
-		m_data[m_currentCount] = Transform({2.f, 0.f, 3.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f});
+		new (&m_data[m_currentCount]) Transform({2.f, 0.f, 3.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f});
 		m_data[m_currentCount].SetActive(true);
 		m_root = &m_data[m_currentCount];
 		++m_currentCount;
@@ -21,23 +21,22 @@ namespace Core
 			{
 				m_data[i].Remove();
 				new (&m_data[i]) Transform(_translation, _rotation, _scale, _parent);
+				if (_parent == nullptr)
+				{
+					m_data[i].SetParent(m_root);
+				}
 				m_data[i].SetActive(true);
 				return &m_data[i];
 			}
 		}
 
 		new (&m_data[m_currentCount]) Transform(_translation, _rotation, _scale, _parent);
-		m_data[m_currentCount].SetActive(true);
 		if(_parent == nullptr)
 		{
 			m_data[m_currentCount].SetParent(m_root);
 			m_root->AddChild(&m_data[m_currentCount]);
 		}
-		else
-		{
-			m_data[m_currentCount].SetParent(_parent);
-			_parent->AddChild(&m_data[m_currentCount]);
-		}
+		m_data[m_currentCount].SetActive(true);
 		++m_currentCount;
 		return &m_data[m_currentCount-1];
 	}

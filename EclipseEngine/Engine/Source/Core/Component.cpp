@@ -10,7 +10,10 @@ namespace Core
 
 	void Component::Remove()
 	{
-		m_gameObject->RemoveComponent(this);
-		m_gameObject = nullptr;
+		if (m_gameObject != nullptr)
+		{
+			m_gameObject->RemoveComponent(this);
+			m_gameObject = nullptr;
+		}
 	}
 }
