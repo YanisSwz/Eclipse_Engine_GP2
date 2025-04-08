@@ -11,6 +11,7 @@
 #include "Resource/Skybox.hpp"
 #include "Resource/ResourceManager.hpp"
 #include "Scene.hpp"
+#include "GuiWidget/ImGuiWidget.hpp"
 #include <iostream>
 #define ImGuiImplementGLFW
 #define ImGuiImplementOpenGL
@@ -190,6 +191,14 @@ int main()
 		//##################################################################################
 #pragma region ImGui Inspector
 		ImGui::Begin("Inspector", 0, inspectorWindowFlags);
+		
+		static Math::Vec3 Position{ 0.f, 0.f, 0.f };
+		GUI::DragVec3XYZ("Position", Position);
+		static Math::Vec3 Rotation{ 0.f, 0.f, 0.f };
+		GUI::DragVec3XYZ("Rotation", Rotation);
+		static Math::Vec3 Scale{ 0.f, 0.f, 0.f };
+		GUI::DragVec3XYZ("Scale", Scale);
+
 		ImGui::End();
 #pragma endregion
 
@@ -200,12 +209,20 @@ int main()
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
 		ImGui::End();
 #pragma endregion
+		
+		//##################################################################################
+		//##################################### CONSOLE ####################################
+		//##################################################################################
+#pragma region ImGui Console
+		ImGui::Begin("Console", 0, hierarchyWindowFlags);
+		ImGui::End();
+#pragma endregion
 
 		ImGui::EndFrame();
 #pragma endregion
 
 #pragma region Draw Scene
-		rdrInter->ClearBackgroundColor({ 1, 0.064f, 0.941f });
+		rdrInter->ClearBackgroundColor({ 0.f, 0.f, 0.f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 		
@@ -269,4 +286,3 @@ int main()
 	delete window;
 	return 0;
 }
-
