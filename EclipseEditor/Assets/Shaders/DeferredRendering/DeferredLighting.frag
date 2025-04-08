@@ -15,10 +15,7 @@ struct Light {
     float Linear;
     float Quadratic;
 };
-Light light = {vec3(0.5, 0.0, 0.0),
-                vec3(1.0, 1.0, 1.0),
-                0.7,
-                1.8};
+Light light = Light(vec3(0.5, 0.0, 0.0), vec3(1.0, 1.0, 1.0), 0.7, 1.8);
 
 void main()
 {             
