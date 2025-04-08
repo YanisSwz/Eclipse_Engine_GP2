@@ -27,26 +27,19 @@ int main()
 //	_CrtSetBreakAlloc(28633);
 //#endif
 
+#pragma region Init Window
 	Windowing::IWindow* window = new Windowing::GLFWWindow;
 	window->CreateWindow("Eclipse Engine", 1280, 720);
+#pragma endregion
 
-	RHI::IRenderInterface* rdrInter = new RHI::OpenGL::OpenGLRenderInterface;
-
-	if (!rdrInter->InitGraphicsAPI())
-	{
-		window->DestroyWindow();
-		return -1;
-	}
-
-	rdrInter->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
-
+#pragma region Init ImGui
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+	io.ConfigWindowsMoveFromTitleBarOnly = true;
 	ImGui::StyleColorsDark();
-
 
 #ifdef ImGuiImplementGLFW
 	ImGui_ImplGlfw_InitForOpenGL(window->CastGLFW()->GetWindow(), true);
@@ -55,8 +48,19 @@ int main()
 #ifdef ImGuiImplementOpenGL
 	ImGui_ImplOpenGL3_Init("#version 330");
 #endif // ImGuiImplementOpenGL
+#pragma endregion
 
-#pragma region Load Resources
+#pragma region Init Render Interface
+	RHI::IRenderInterface* rdrInter = new RHI::OpenGL::OpenGLRenderInterface;
+	if (!rdrInter->InitGraphicsAPI())
+	{
+		window->DestroyWindow();
+		return -1;
+	}
+	rdrInter->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
+#pragma endregion
+
+#pragma region Load Resources and Scene
 	Resource::Model* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Model>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
 	Resource::VertShader* vertShader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShader.vert", "Assets/Shaders/Default/Default.vert");
@@ -83,16 +87,8 @@ int main()
 
 	Core::SceneCamera sceneCamera{ 60.f, 0.1f, 100.f };
 	RHI::IGraphicPipeline* defaultPipeline = rdrInter->InstantiateDefaultGraphicPipeline();
-#pragma endregion
-
 	defaultPipeline->Init(window->width, window->height);
 
-	float deltaTime = 0.f;
-	float oldTime = 0.f;
-	float crtAngle = 0.f;
-	float speed = 1.f;
-	Math::Mat4 TRS;
-	
 	// CORE TESTS
 	Core::Scene scene{};
 	scene.CreateGameObject();
@@ -101,36 +97,42 @@ int main()
 
 	scene.DestroyGameObject();
 	scene.CreateGameObject();
+#pragma endregion
+
+	float deltaTime = 0.f;
+	float oldTime = 0.f;
 
 	while (!window->WindowShouldClose())
 	{
+#pragma region Update
 		window->UpdateInputs();
 		if (window->GetKey(Windowing::KEY_CODE::KEY_ESCAPE, Windowing::INPUT_ACTION::INPUT_PRESS))
 			window->SetWindowShouldClose(true);
 
-		// Update Delta Time and Model rotation
 		deltaTime = window->GetTime() - oldTime;
 		oldTime = window->GetTime();
-		crtAngle += (deltaTime * speed);
 
-#pragma region Scene
 		scene.Update();
+
+		window->PollEvents();
 #pragma endregion
 
+#pragma region Draw ImGui
 
+#pragma region Implement GLFW AND OpenGL
 #ifdef ImGuiImplementOpenGL
 		ImGui_ImplOpenGL3_NewFrame();
 #endif // ImGuiImplementOpenGL
-
 #ifdef ImGuiImplementGLFW
 		ImGui_ImplGlfw_NewFrame();
 #endif // ImGuiImplementGLFW
 		ImGui::NewFrame();
-#pragma region Dockspace
+#pragma endregion
+
 		//##################################################################################
 		//################################### DOCK SPACE ###################################
 		//##################################################################################
-		
+#pragma region ImGui Dockspace
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
@@ -159,7 +161,10 @@ int main()
 		ImGuiWindowFlags sceneWindowFlags = defaultWindowFlags;
 		ImGuiWindowFlags hierarchyWindowFlags = defaultWindowFlags;
 
-		// SCENE WINDOW
+		//##################################################################################
+		//################################## SCENE WINDOW ##################################
+		//##################################################################################
+#pragma region ImGui Scene
 		ImGui::Begin("Scene", 0, sceneWindowFlags);
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
@@ -176,31 +181,54 @@ int main()
 			ImVec2(1, 0));
 
 		ImGui::End();
+#pragma endregion
 
+		//##################################################################################
+		//#################################### INSPECTOR ###################################
+		//##################################################################################
+#pragma region ImGui Inspector
 		ImGui::Begin("Inspector", 0, inspectorWindowFlags);
 		ImGui::End();
+#pragma endregion
 
-
+		//##################################################################################
+		//#################################### HIERARCHY ###################################
+		//##################################################################################
+#pragma region ImGui Hierarchy
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
 		ImGui::End();
+#pragma endregion
 
+		ImGui::EndFrame();
+#pragma endregion
 
-		ImGui::Render();
-
+#pragma region Draw Scene
 		rdrInter->ClearBackgroundColor({ 1, 0.064f, 0.941f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
-
+		
 		defaultPipeline->Draw(sceneCamera.GetVP(), sceneCamera.GetViewPos());
+#pragma endregion
+
+#pragma region Render ImGui
+		ImGui::Render();
 
 #ifdef ImGuiImplementOpenGL
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif // ImGuiImplementOpenGL
-
+		
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
 		window->SwapBuffers();
-		window->PollEvents();
+#pragma endregion
 	}
 
+#pragma region Destroy Resource
 	rdrInter->DestroyDefaultGraphicPipeline(defaultPipeline);
 
 	delete model;
@@ -220,6 +248,8 @@ int main()
 	delete fragShaderDeferredLighting;
 	delete shaderProgramDeferredLighting;
 	Resource::ResourceManager::GetInstance().DestroyInstance();
+	delete rdrInter;
+#pragma endregion
 
 #pragma region Destroy ImGUI
 #ifdef ImGuiImplementOpenGL
@@ -234,8 +264,6 @@ int main()
 #pragma endregion
 
 	window->DestroyWindow();
-
-	delete rdrInter;
 	delete window;
 	return 0;
 }
