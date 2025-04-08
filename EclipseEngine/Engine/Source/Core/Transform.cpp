@@ -14,7 +14,10 @@ namespace Core
 		}
 	}
 
-	Transform::~Transform(){}
+	Transform::~Transform()
+	{
+		m_children.clear();
+	}
 
 	void Transform::SetParent(Transform* _parent)
 	{

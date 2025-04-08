@@ -21,13 +21,13 @@ namespace Core
 		{
 			if (m_gameObjects[i].IsDestroyed())
 			{
-				m_gameObjects[i] = GameObject(this);
+				new (&m_gameObjects[i]) GameObject(this);
 				m_currentGameObject = &m_gameObjects[i];
 				return m_currentGameObject;
 			}
 		}
 
-		m_gameObjects[m_currentGameObjectCount] = GameObject(this);
+		new (&m_gameObjects[m_currentGameObjectCount]) GameObject(this);
 		m_currentGameObject = &m_gameObjects[m_currentGameObjectCount];
 		++m_currentGameObjectCount;
 		return m_currentGameObject;
