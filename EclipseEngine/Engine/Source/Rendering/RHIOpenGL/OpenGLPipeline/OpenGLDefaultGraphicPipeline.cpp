@@ -48,37 +48,12 @@ namespace RHI::OpenGL
 		delete m_FB;
 	}
 
-	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _VP, Math::Vec3 _viewPos)
+	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels)
 	{
 		// Deferred Render Pass
 		m_deferredRenderPass->Bind();
 
-		// Static / Dynamic Mesh Render Pass
-		m_deferredShaderProgram = Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>(m_DeferredShaderProgramName);
-		if (!m_deferredShaderProgram)
-		{
-			m_deferredShaderProgram = Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>(m_DeferredShaderProgramName);
-			if (!m_deferredShaderProgram)
-				return;
-		}
-
-		Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
-		Resource::Texture* texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
-		if (!mesh || !texture)
-			return;
-
-		Math::Mat4 TRS = Math::Mat4::TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ 1.f, 1.f, 1.f });
-
-		glClearColor(0.0, 0.0, 0.0, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		m_deferredShaderProgram->Bind();
-		m_deferredShaderProgram->SetMat4("TRS", TRS, false);
-		m_deferredShaderProgram->SetMat4("VP", _VP, true);
-		texture->Bind();
-		mesh->Draw();
-		texture->Unbind();
-		m_deferredShaderProgram->Unbind();
+		m_staticModelRenderPass->Draw(_VP, _staticModels);
 
 		m_deferredRenderPass->Unbind();
 

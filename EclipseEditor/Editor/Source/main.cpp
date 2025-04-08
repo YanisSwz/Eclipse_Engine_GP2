@@ -5,11 +5,9 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "SceneCamera.hpp"
-#include "Resource/Texture.hpp"
-#include "Resource/Mesh.hpp"
-#include "Resource/ShaderProgram.hpp"
-#include "Resource/Skybox.hpp"
 #include "Resource/ResourceManager.hpp"
+#include "Resource/ModelData.hpp"
+#include "Resource/Skybox.hpp"
 #include "Scene.hpp"
 #include "GuiWidget/ImGuiWidget.hpp"
 #include <iostream>
@@ -226,7 +224,8 @@ int main()
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 		
-		defaultPipeline->Draw(sceneCamera.GetVP(), sceneCamera.GetViewPos());
+		std::vector<Resource::ModelData> staticModels;
+		defaultPipeline->Draw(sceneCamera.GetVP(), sceneCamera.GetViewPos(), staticModels);
 #pragma endregion
 
 #pragma region Render ImGui
