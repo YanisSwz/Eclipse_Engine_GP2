@@ -68,7 +68,7 @@ namespace Resource
 
 	void Skybox::SetModelName(std::string _modelName)
 	{
-		m_modelName = _modelName;
+		m_meshName = _modelName;
 	}
 
 	void Skybox::SetShaderName(std::string _shaderName)
@@ -78,18 +78,18 @@ namespace Resource
 
 	void Skybox::Draw()
 	{
-		if (!m_model)
-			m_model = ResourceManager::GetInstance().GetResource<Resource::Model>(m_modelName);
+		if (!m_mesh)
+			m_mesh = ResourceManager::GetInstance().GetResource<Resource::Mesh>(m_meshName);
 		else if (!m_shaderProgram)
 			m_shaderProgram = ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>(m_shaderProgramName);
 
-		if (!m_model || !m_shaderProgram)
+		if (!m_mesh || !m_shaderProgram)
 			return;
 
 		m_rdrInter->DepthFunc(RHI::IFLAGS::DEPTH_LEQUAL);
 		m_shaderProgram->Bind();
 		m_cubeMap->Bind();
-		m_model->Draw();
+		m_mesh->Draw();
 		m_cubeMap->Unbind();
 		m_shaderProgram->Unbind();
 		m_rdrInter->DepthFunc(RHI::IFLAGS::DEPTH_LESS);

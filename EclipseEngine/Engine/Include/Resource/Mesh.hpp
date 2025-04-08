@@ -9,11 +9,11 @@
 
 namespace Resource
 {
-	class Model : public IResource
+	class Mesh : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE Model();
-		ECLIPSE_ENGINE ~Model() override;
+		ECLIPSE_ENGINE Mesh();
+		ECLIPSE_ENGINE ~Mesh() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;

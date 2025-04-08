@@ -1,4 +1,4 @@
-#include "Resource/Model.hpp"
+#include "Resource/Mesh.hpp"
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 #include <filesystem>
@@ -6,16 +6,16 @@
 
 namespace Resource
 {
-	Model::Model()
+	Mesh::Mesh()
 	{
 	}
 
-	Model::~Model()
+	Mesh::~Mesh()
 	{
 		Delete();
 	}
 
-	void Model::GetFileContent(std::string _path)
+	void Mesh::GetFileContent(std::string _path)
 	{
 		// Verify if Texture file path exists
 		if (!std::filesystem::exists(_path))
@@ -24,7 +24,7 @@ namespace Resource
 			return;
 		}
 
-		// TODO Load the model
+		// TODO Load the mesh
 		tinyobj::attrib_t attributes;
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
@@ -63,7 +63,7 @@ namespace Resource
 		}
 	}
 
-	void Model::Generate(RHI::IRenderInterface* _rdrInterface)
+	void Mesh::Generate(RHI::IRenderInterface* _rdrInterface)
 	{
 		m_rdrInter = _rdrInterface;
 
@@ -91,12 +91,12 @@ namespace Resource
 		bIsLoaded = true;
 	}
 
-	void Model::Draw() const
+	void Mesh::Draw() const
 	{
 		m_indexBufferObject->Draw(m_vertexArrayObject);
 	}
 
-	void Model::Delete()
+	void Mesh::Delete()
 	{
 		if (!m_vertexBuffer.empty())
 			m_vertexBuffer.clear();

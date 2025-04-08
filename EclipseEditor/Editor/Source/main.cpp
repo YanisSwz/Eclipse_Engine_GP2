@@ -6,7 +6,7 @@
 #include "imgui_impl_opengl3.h"
 #include "SceneCamera.hpp"
 #include "Resource/Texture.hpp"
-#include "Resource/Model.hpp"
+#include "Resource/Mesh.hpp"
 #include "Resource/ShaderProgram.hpp"
 #include "Resource/Skybox.hpp"
 #include "Resource/ResourceManager.hpp"
@@ -51,14 +51,14 @@ int main()
 #pragma endregion
 
 #pragma region Load Resources and Scene
-	Resource::Model* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Model>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
+	Resource::Mesh* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
 	Resource::VertShader* vertShader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShader.vert", "Assets/Shaders/Default/Default.vert");
 	Resource::FragShader* fragShader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("FragShader.frag", "Assets/Shaders/Default/Default.frag");
 	Resource::ShaderProgram* shaderProgram = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("ShaderProgram.shd", "VertShader.vert", "FragShader.frag");
 
 	Resource::Skybox* skybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Skybox>("Skybox.skb", "Assets/Skybox/Default", "Cube.obj", "ShaderProgramSkybox.shd");
-	Resource::Model* modelSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Model>("Cube.obj", "Assets/Models/Cube.obj");
+	Resource::Mesh* modelSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Cube.obj", "Assets/Models/Cube.obj");
 	Resource::VertShader* vertShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShaderSkybox.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");
 	Resource::FragShader* fragShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("FragShaderSkybox.frag", "Assets/Shaders/Skybox/SkyboxShader.frag");
 	Resource::ShaderProgram* shaderProgramSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("ShaderProgramSkybox.shd", "VertShaderSkybox.vert", "FragShaderSkybox.frag");

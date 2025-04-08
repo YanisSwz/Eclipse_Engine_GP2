@@ -2,7 +2,7 @@
 #include "RHIInterfaces/ICubeMap.hpp"
 #include "Resource/IResource.hpp"
 #include "Resource/TextureExtention.hpp"
-#include "Resource/Model.hpp"
+#include "Resource/Mesh.hpp"
 #include "Resource/ShaderProgram.hpp"
 #include <vector>
 #include <string>
@@ -28,9 +28,9 @@ namespace Resource
 		RHI::IRenderInterface* m_rdrInter = nullptr;
 
 		RHI::ICubeMap* m_cubeMap = nullptr;
-		Resource::Model* m_model = nullptr;
+		Resource::Mesh* m_mesh = nullptr;
 		Resource::ShaderProgram* m_shaderProgram = nullptr;
-		std::string m_modelName = "";
+		std::string m_meshName = "";
 		std::string m_shaderProgramName = "";
 
 		TEXTURE_EXTENSION textureExtention = TEXTURE_EXTENSION::JPG;
