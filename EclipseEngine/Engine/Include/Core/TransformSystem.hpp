@@ -17,6 +17,5 @@ namespace Core
 		int m_currentCount = 0;
 		Transform* m_root = nullptr;
 		Transform m_data[MAX_SIZE];
-
 	};
 }

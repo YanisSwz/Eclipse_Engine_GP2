@@ -6,11 +6,12 @@
 #include "imgui_impl_opengl3.h"
 #include "SceneCamera.hpp"
 #include "Resource/Texture.hpp"
-#include "Resource/Model.hpp"
+#include "Resource/Mesh.hpp"
 #include "Resource/ShaderProgram.hpp"
 #include "Resource/Skybox.hpp"
 #include "Resource/ResourceManager.hpp"
 #include "Scene.hpp"
+#include "GuiWidget/ImGuiWidget.hpp"
 #include <iostream>
 #define ImGuiImplementGLFW
 #define ImGuiImplementOpenGL
@@ -61,14 +62,14 @@ int main()
 #pragma endregion
 
 #pragma region Load Resources and Scene
-	Resource::Model* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Model>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
+	Resource::Mesh* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
 	Resource::VertShader* vertShader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShader.vert", "Assets/Shaders/Default/Default.vert");
 	Resource::FragShader* fragShader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("FragShader.frag", "Assets/Shaders/Default/Default.frag");
 	Resource::ShaderProgram* shaderProgram = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("ShaderProgram.shd", "VertShader.vert", "FragShader.frag");
 
 	Resource::Skybox* skybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Skybox>("Skybox.skb", "Assets/Skybox/Default", "Cube.obj", "ShaderProgramSkybox.shd");
-	Resource::Model* modelSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Model>("Cube.obj", "Assets/Models/Cube.obj");
+	Resource::Mesh* modelSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Cube.obj", "Assets/Models/Cube.obj");
 	Resource::VertShader* vertShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("VertShaderSkybox.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");
 	Resource::FragShader* fragShaderSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("FragShaderSkybox.frag", "Assets/Shaders/Skybox/SkyboxShader.frag");
 	Resource::ShaderProgram* shaderProgramSkybox = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("ShaderProgramSkybox.shd", "VertShaderSkybox.vert", "FragShaderSkybox.frag");
@@ -134,26 +135,28 @@ int main()
 		//##################################################################################
 #pragma region ImGui Dockspace
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
 		
-		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-			window_flags |= ImGuiWindowFlags_NoBackground;
 
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(viewport->WorkPos);
 		ImGui::SetNextWindowSize(viewport->WorkSize);
 		ImGui::SetNextWindowViewport(viewport->ID);
-		
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
 		ImGui::Begin("DockSpace Demo", 0, window_flags);
-		
+
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
 		ImGui::End();
+		ImGui::PopStyleVar(3);
 #pragma endregion
 
 		ImGuiWindowFlags defaultWindowFlags = ImGuiWindowFlags_None;
@@ -188,6 +191,14 @@ int main()
 		//##################################################################################
 #pragma region ImGui Inspector
 		ImGui::Begin("Inspector", 0, inspectorWindowFlags);
+		
+		static Math::Vec3 Position{ 0.f, 0.f, 0.f };
+		GUI::DragVec3XYZ("Position", Position);
+		static Math::Vec3 Rotation{ 0.f, 0.f, 0.f };
+		GUI::DragVec3XYZ("Rotation", Rotation);
+		static Math::Vec3 Scale{ 0.f, 0.f, 0.f };
+		GUI::DragVec3XYZ("Scale", Scale);
+
 		ImGui::End();
 #pragma endregion
 
@@ -198,12 +209,20 @@ int main()
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
 		ImGui::End();
 #pragma endregion
+		
+		//##################################################################################
+		//##################################### CONSOLE ####################################
+		//##################################################################################
+#pragma region ImGui Console
+		ImGui::Begin("Console", 0, hierarchyWindowFlags);
+		ImGui::End();
+#pragma endregion
 
 		ImGui::EndFrame();
 #pragma endregion
 
 #pragma region Draw Scene
-		rdrInter->ClearBackgroundColor({ 1, 0.064f, 0.941f });
+		rdrInter->ClearBackgroundColor({ 0.f, 0.f, 0.f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 		
@@ -267,4 +286,3 @@ int main()
 	delete window;
 	return 0;
 }
-

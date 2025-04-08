@@ -4,7 +4,7 @@
 
 #include "Resource/ResourceManager.hpp"
 #include "Resource/ShaderProgram.hpp"
-#include "Resource/Model.hpp"
+#include "Resource/Mesh.hpp"
 #include "Resource/Texture.hpp"
 
 namespace RHI::OpenGL
@@ -62,9 +62,9 @@ namespace RHI::OpenGL
 				return;
 		}
 
-		Resource::Model* model = Resource::ResourceManager::GetInstance().GetResource<Resource::Model>("VikingRoom.obj");
+		Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
 		Resource::Texture* texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
-		if (!model || !texture)
+		if (!mesh || !texture)
 			return;
 
 		Math::Mat4 TRS = Math::Mat4::TRS(Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ 1.f, 1.f, 1.f });
@@ -76,7 +76,7 @@ namespace RHI::OpenGL
 		m_deferredShaderProgram->SetMat4("TRS", TRS, false);
 		m_deferredShaderProgram->SetMat4("VP", _VP, true);
 		texture->Bind();
-		model->Draw();
+		mesh->Draw();
 		texture->Unbind();
 		m_deferredShaderProgram->Unbind();
 
