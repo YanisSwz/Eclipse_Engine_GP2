@@ -35,8 +35,11 @@ namespace Core
 
 	void Scene::DestroyGameObject()
 	{
-		m_currentGameObject->Destroy();
-		m_currentGameObject = nullptr;
+		if (m_currentGameObject != nullptr)
+		{
+			m_currentGameObject->Destroy();
+			m_currentGameObject = nullptr;
+		}
 	}
 
 }
