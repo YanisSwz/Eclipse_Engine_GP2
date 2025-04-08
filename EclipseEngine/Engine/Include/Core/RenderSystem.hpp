@@ -1,4 +1,5 @@
 #pragma once
+#include "Model.hpp"
 #include "ProjectExports.hpp"
 
 namespace Core
@@ -8,12 +9,12 @@ namespace Core
 	public:
 		ECLIPSE_ENGINE RenderSystem() = default;
 		ECLIPSE_ENGINE ~RenderSystem() = default;
-		// ECLIPSE_ENGINE Model* AddModel(Mesh* _mesh, Texture* _texture, ShaderProgram* _shader, bool _bIsDynamic);
+		ECLIPSE_ENGINE Model* AddModel(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader, bool _bIsDynamic);
 
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentCount = 0;
-		// Model m_staticModels[MAX_SIZE];
-		// Model m_dynamicModels[MAX_SIZE];
+		Model m_staticModels[MAX_SIZE];
+		Model m_dynamicModels[MAX_SIZE];
 	};
 }
