@@ -1,11 +1,4 @@
 #include "RHIOpenGL/OpenGLPipeline/OpenGLDefaultGraphicPipeline.hpp"
-#include "Maths.hpp"
-#include <iostream>
-
-#include "Resource/ResourceManager.hpp"
-#include "Resource/ShaderProgram.hpp"
-#include "Resource/Mesh.hpp"
-#include "Resource/Texture.hpp"
 
 namespace RHI::OpenGL
 {
@@ -13,6 +6,7 @@ namespace RHI::OpenGL
 	{
 		m_FB = new OpenGLFrameBuffer;
 		m_deferredRenderPass = new OpenGLDeferredRenderPass;
+		m_staticModelRenderPass = new OpenGLStaticModelRenderPass;
 		m_lightingRenderPass = new OpenGLLightingRenderPass;
 	}
 
@@ -28,6 +22,7 @@ namespace RHI::OpenGL
 
 		m_FB->Init(_width, _height);
 		m_deferredRenderPass->Init(m_width, m_height);
+		m_staticModelRenderPass->Init(m_width, m_height);
 		m_lightingRenderPass->Init(m_width, m_height);
 	}
 
@@ -38,6 +33,7 @@ namespace RHI::OpenGL
 
 		m_FB->Rescale(m_width, m_height);
 		m_deferredRenderPass->Rescale(m_width, m_height);
+		m_staticModelRenderPass->Rescale(m_width, m_height);
 		m_lightingRenderPass->Rescale(m_width, m_height);
 	}
 
@@ -53,11 +49,11 @@ namespace RHI::OpenGL
 		// Deferred Render Pass
 		m_deferredRenderPass->Bind();
 
+		// Static Mesh Render Pass
 		m_staticModelRenderPass->Draw(_VP, _staticModels);
 
-		m_deferredRenderPass->Unbind();
-
 		// Lighting Render Pass
+		m_deferredRenderPass->Unbind();
 		m_lightingRenderPass->Draw(_viewPos, m_FB, m_deferredRenderPass->gPosition, m_deferredRenderPass->gNormal, m_deferredRenderPass->gAlbedoSpec);
 	}
 

@@ -194,7 +194,7 @@ int main()
 		GUI::DragVec3XYZ("Position", Position);
 		static Math::Vec3 Rotation{ 0.f, 0.f, 0.f };
 		GUI::DragVec3XYZ("Rotation", Rotation);
-		static Math::Vec3 Scale{ 0.f, 0.f, 0.f };
+		static Math::Vec3 Scale{ 1.f, 1.f, 1.f };
 		GUI::DragVec3XYZ("Scale", Scale);
 
 		ImGui::End();
@@ -223,8 +223,15 @@ int main()
 		rdrInter->ClearBackgroundColor({ 0.f, 0.f, 0.f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
-		
+
 		std::vector<Resource::ModelData> staticModels;
+		Resource::ModelData vikingRoomModelData;
+		vikingRoomModelData.mesh = model;
+		vikingRoomModelData.texture = texture;
+		vikingRoomModelData.shaderProgram = shaderProgramDeferredRendering;
+		vikingRoomModelData.TRS = Math::Mat4::TRS(Position, Rotation, Scale);
+		staticModels.push_back(vikingRoomModelData);
+
 		defaultPipeline->Draw(sceneCamera.GetVP(), sceneCamera.GetViewPos(), staticModels);
 #pragma endregion
 

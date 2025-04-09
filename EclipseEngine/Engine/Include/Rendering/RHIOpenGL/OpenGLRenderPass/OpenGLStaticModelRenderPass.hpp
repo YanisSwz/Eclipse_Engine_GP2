@@ -9,14 +9,15 @@ namespace RHI::OpenGL
 	{
 	public:
 		OpenGLStaticModelRenderPass();
-		~OpenGLStaticModelRenderPass() override;
+		~OpenGLStaticModelRenderPass();
 
-		void Init(int _width, int _height) override = 0;
-		void Rescale(int _width, int _height) override = 0;
-		void Delete() override = 0;
+		void Init(int _width, int _height) override;
+		void Rescale(int _width, int _height) override;
+		void Delete() override;
 
 		void Draw(Math::Mat4 _VP, std::vector<Resource::ModelData> _models) const;
 
 	private:
+
 	};
 }

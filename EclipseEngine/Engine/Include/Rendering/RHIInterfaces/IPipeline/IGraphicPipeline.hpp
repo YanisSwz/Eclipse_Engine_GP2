@@ -1,11 +1,10 @@
 #pragma once
-#include "Resource/ModelData.hpp"
+#include "Maths.hpp"
 #include <vector>
 
-namespace Math
+namespace Resource
 {
-	class Mat4;
-	class Vec3;
+	struct ModelData;
 }
 
 namespace RHI
