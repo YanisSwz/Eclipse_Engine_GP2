@@ -13,6 +13,7 @@ namespace Core
 		ECLIPSE_ENGINE ~Transform();
 		ECLIPSE_ENGINE void SetParent(Transform* _parent);
 		ECLIPSE_ENGINE inline Transform* GetParent() const { return m_parent; };
+		ECLIPSE_ENGINE inline std::vector<Transform*> GetChildren() const { return m_children; };
 		ECLIPSE_ENGINE void AddChild(Transform* _child);
 		ECLIPSE_ENGINE void RemoveChild(Transform* _child);
 		//ECLIPSE_ENGINE inline std::vector<Transform*> GetChildren() const { return m_children; };

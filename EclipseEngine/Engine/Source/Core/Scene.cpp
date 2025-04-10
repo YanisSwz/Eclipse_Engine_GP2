@@ -4,12 +4,12 @@ namespace Core
 {
 	void Scene::Update()
 	{
-		transformSystem.Update();
+		m_transformSystem.Update();
 	}
 
 	Transform* Scene::AddTransform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)
 	{
-		return transformSystem.Add(_translation, _rotation, _scale, _parent);
+		return m_transformSystem.Add(_translation, _rotation, _scale, _parent);
 	}
 
 	GameObject* Scene::CreateGameObject()
@@ -42,6 +42,11 @@ namespace Core
 			m_currentGameObject->Destroy();
 			m_currentGameObject = nullptr;
 		}
+	}
+
+	Transform* Scene::GetTransforms() const
+	{
+		return m_transformSystem.GetRoot();
 	}
 
 }

@@ -207,6 +207,20 @@ int main()
 		//##################################################################################
 #pragma region ImGui Hierarchy
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
+		ImGuiTreeNodeFlags flag = ImGuiTreeNodeFlags_DefaultOpen;
+
+		//Dirty ImGui test for scene graph hierarchy
+		Core::Transform* root = scene.GetTransforms();
+		if (ImGui::TreeNodeEx("root", flag))
+		{
+			flag = ImGuiTreeNodeFlags_Leaf;
+			for (int i = 0; i < root->GetChildren().size(); ++i) 
+			{
+				if (ImGui::TreeNodeEx(root->GetChildren()[i]->GetGameObject()->GetName().c_str(), flag)) { ImGui::TreePop(); }
+			}
+			ImGui::TreePop();  
+		}
+
 		ImGui::End();
 #pragma endregion
 		

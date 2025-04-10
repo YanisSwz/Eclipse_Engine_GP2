@@ -48,4 +48,9 @@ namespace Core
 	{
 		m_root->Update();
 	}
+
+	Transform* TransformSystem::GetRoot() const
+	{
+		return m_root;
+	}
 }
