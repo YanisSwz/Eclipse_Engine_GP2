@@ -17,6 +17,7 @@ namespace Core
 		//TODO: Add arguments
 		ECLIPSE_ENGINE GameObject* CreateGameObject();
 		ECLIPSE_ENGINE void DestroyGameObject();
+		ECLIPSE_ENGINE Transform* GetTransforms() const;
 		//TODO: need editor
 		ECLIPSE_ENGINE void AddComponent();
 
@@ -24,7 +25,7 @@ namespace Core
 		static const int MAX_SIZE = 100;
 		int m_currentGameObjectCount = 0;
 		GameObject m_gameObjects[MAX_SIZE];
-		TransformSystem transformSystem{};
+		TransformSystem m_transformSystem{};
 		GameObject* m_currentGameObject = nullptr;
 	};
 }

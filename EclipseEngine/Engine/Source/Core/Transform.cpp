@@ -1,12 +1,13 @@
 #include "Transform.hpp"
+#include <utility>
 
 namespace Core
 {
 	Transform::Transform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)
 	{
-		localPosition, position = _translation;
-		localRotation, rotation = Math::Quat::QuaternionEuler(_rotation.x, _rotation.y, _rotation.z);
-		localScale, scale = _scale;
+		localPosition = _translation, position = _translation;
+		rotation = Math::Quat::QuaternionEuler(_rotation.x, _rotation.y, _rotation.z), localRotation = rotation;
+		localScale = _scale, scale = _scale;
 		if (_parent != nullptr)
 		{
 			m_parent = _parent;
@@ -32,6 +33,19 @@ namespace Core
 				return;
 		}
 		m_children.push_back(_child);
+	}
+
+	void Transform::RemoveChild(Transform* _child)
+	{
+		for (int i = 0; i < m_children.size(); ++i)
+		{
+			if (_child == m_children[i])
+			{
+				m_children.erase(m_children.begin() + i);
+				return;
+			}
+		}
+		
 	}
 
 	void Transform::Update()

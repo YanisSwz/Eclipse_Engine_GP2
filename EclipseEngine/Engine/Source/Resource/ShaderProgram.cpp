@@ -48,6 +48,7 @@ namespace Resource
 			return;
 
 		m_shaderProgram->Delete();
+		m_rdrInter->DestroyShaderProgram(m_shaderProgram);
 		m_vertShader = nullptr;
 		m_fragShader = nullptr;
 	}

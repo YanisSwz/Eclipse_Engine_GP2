@@ -28,6 +28,8 @@ namespace Core
 
 	GameObject::~GameObject()
 	{
+		m_name.clear();
+		m_components.clear();
 	}
 
 	void GameObject::Destroy()
