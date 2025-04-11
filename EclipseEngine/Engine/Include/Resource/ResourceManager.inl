@@ -65,4 +65,18 @@ namespace Resource
 		else
 			return static_cast<T*>(it->second);
 	}
+
+	template <typename T>
+	std::vector<std::string> ResourceManager::GetAllResourceWithType()
+	{
+		std::vector<std::string> resourcesName;
+		const std::type_info& typeT = typeid(T);
+		for (std::map<std::string, IResource*>::iterator it = m_resourcesReady.begin(); it != m_resourcesReady.end(); ++it)
+		{
+			const std::type_info& typeIt = typeid(*it->second);
+			if (typeT == typeIt)
+				resourcesName.push_back(it->first);
+		}
+		return resourcesName;
+	}
 }

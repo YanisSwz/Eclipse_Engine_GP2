@@ -3,6 +3,7 @@
 #include "ProjectExports.hpp"
 #include <map>
 #include <string>
+#include <vector>
 
 namespace Resource
 {
@@ -30,6 +31,9 @@ namespace Resource
 
 		template <typename T>
 		T* GetResource(std::string _resourceName);
+
+		template <typename T>
+		std::vector<std::string> GetAllResourceWithType();
 
 	private:
 		static ResourceManager* m_instance;
