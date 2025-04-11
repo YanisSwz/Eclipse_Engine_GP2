@@ -19,9 +19,9 @@ namespace Core
 
 		ECLIPSE_ENGINE Resource::ModelData GetModelData() const;
 
-	private:
-		Resource::Mesh* m_mesh = nullptr;
-		Resource::Texture* m_texture = nullptr;
-		Resource::ShaderProgram* m_shader = nullptr;
+		Resource::Mesh* mesh = nullptr;
+		Resource::Texture* texture = nullptr;
+		Resource::ShaderProgram* shader = nullptr;
+	
 	};
 }

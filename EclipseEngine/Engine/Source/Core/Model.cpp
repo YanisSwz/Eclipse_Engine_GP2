@@ -8,7 +8,7 @@ namespace Core
 	}
 
 	Model::Model(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader)
-		:m_mesh(_mesh), m_texture(_texture), m_shader(_shader)
+		:mesh(_mesh), texture(_texture), shader(_shader)
 	{
 
 	}
@@ -20,9 +20,9 @@ namespace Core
 	Resource::ModelData Model::GetModelData() const
 	{
 		Resource::ModelData modelData;
-		modelData.mesh = m_mesh;
-		modelData.texture = m_texture;
-		modelData.shaderProgram = m_shader;
+		modelData.mesh = mesh;
+		modelData.texture = texture;
+		modelData.shaderProgram = shader;
 		modelData.TRS = GetGameObject()->transform->GetTransformMatrix();
 		return modelData;
 	}

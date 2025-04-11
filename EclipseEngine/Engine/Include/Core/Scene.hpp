@@ -20,16 +20,6 @@ namespace Core
 		ECLIPSE_ENGINE void DestroyGameObject();
 		ECLIPSE_ENGINE Transform* GetTransforms() const;
 		
-		template <typename T>
-		T* AddComponent()
-		{
-			switch(T)
-			{
-			case std::is_same<T, Model>:
-				return m_renderSystem.AddModel();
-			}
-		}
-
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentGameObjectCount = 0;
