@@ -17,6 +17,7 @@ namespace Resource
 
 		ECLIPSE_ENGINE void LoadAllResources();
 		ECLIPSE_ENGINE void GenerateAllResources(RHI::IRenderInterface* _rendererInterface);
+		ECLIPSE_ENGINE void DestroyAllResources();
 
 		template <typename T>
 		T* AddResourceToLoad(std::string _resourceName, std::string _resourcePath);

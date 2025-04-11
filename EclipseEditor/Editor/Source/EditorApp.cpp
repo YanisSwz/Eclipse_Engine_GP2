@@ -176,17 +176,6 @@ void EditorApp::DrawScene()
 
 void EditorApp::DestroyScene()
 {
-	delete Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
-	delete Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
-
-	delete Resource::ResourceManager::GetInstance().GetResource<Resource::VertShader>("DefaultDeferredRendering.vert");
-	delete Resource::ResourceManager::GetInstance().GetResource<Resource::FragShader>("DefaultDeferredRendering.frag");
-	delete Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("DefaultDeferredRendering.shd");
-
-	delete Resource::ResourceManager::GetInstance().GetResource<Resource::VertShader>("DeferredLighting.vert");
-	delete Resource::ResourceManager::GetInstance().GetResource<Resource::FragShader>("DeferredLighting.frag");
-	delete Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("DeferredLighting.shd");
-	
 	Resource::ResourceManager::GetInstance().DestroyInstance();
 }
 

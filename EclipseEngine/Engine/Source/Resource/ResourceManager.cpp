@@ -56,6 +56,16 @@ namespace Resource
 		}
 	}
 
+	void ResourceManager::DestroyAllResources()
+	{
+		if (!m_resourcesReady.empty())
+		{
+			for (std::map<std::string, IResource*>::iterator it = m_resourcesReady.begin(); it != m_resourcesReady.end(); ++it)
+				delete it->second;
+			m_resourcesReady.clear();
+		}
+	}
+
 	void ResourceManager::AddResourceToGenerate(IResource* _resource, std::string _resourceName)
 	{
 		m_resourcesToGenerate[_resourceName] = _resource;
@@ -83,6 +93,6 @@ namespace Resource
 
 	void ResourceManager::Destroy()
 	{
-		// TODO Delete All Resources
+		DestroyAllResources();
 	}
 }
