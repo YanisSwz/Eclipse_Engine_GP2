@@ -1,4 +1,5 @@
 #include "Model.hpp"
+#include "GameObject.hpp"
 
 namespace Core
 {
@@ -14,5 +15,15 @@ namespace Core
 
 	Model::~Model()
 	{
+	}
+
+	Resource::ModelData Model::GetModelData() const
+	{
+		Resource::ModelData modelData;
+		modelData.mesh = m_mesh;
+		modelData.texture = m_texture;
+		modelData.shaderProgram = m_shader;
+		modelData.TRS = GetGameObject()->GetComponent<Core::Transform>()->GetTransformMatrix();
+		return modelData;
 	}
 }

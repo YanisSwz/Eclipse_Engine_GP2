@@ -5,7 +5,7 @@ namespace Core
 {
 	GameObject::GameObject(Scene* _scene, Transform* _t, std::string _name)
 	{
-		scene = _scene;
+		m_scene = _scene;
 
 		if (_name == "default")
 			m_name = "GameObject" + std::to_string(m_id);
@@ -19,7 +19,7 @@ namespace Core
 		}
 		else
 		{
-			transform = scene->AddTransform();
+			transform = m_scene->AddTransform();
 			transform->SetGameObject(this);
 		}
 
@@ -51,7 +51,7 @@ namespace Core
 	GameObject* GameObject::Instantiate(GameObject _original)
 	{
 		//TODO: Replace with arguments
-		return _original.scene->CreateGameObject();
+		return _original.m_scene->CreateGameObject();
 	}
 
 	std::string GameObject::GetName() const 

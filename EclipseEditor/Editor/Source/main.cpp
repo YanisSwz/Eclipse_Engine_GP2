@@ -90,16 +90,30 @@ int main()
 
 	// CORE TESTS
 	Core::Scene scene{};
-	scene.CreateGameObject();
-	scene.CreateGameObject();
-	scene.CreateGameObject();
+	Core::GameObject* obj1 = scene.CreateGameObject();
+	Core::GameObject* obj2 = scene.CreateGameObject();
+	Core::GameObject* obj3 = scene.CreateGameObject();
 
-	scene.DestroyGameObject();
-	scene.CreateGameObject();
+	Core::Transform* transform1 = new Core::Transform{ {-1.f, 0.f, 0.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f} };
+	transform1->SetParent(scene.GetTransforms());
+	Core::Transform* transform2 = new Core::Transform{ {0.f, 0.f, 0.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f} };
+	transform2->SetParent(scene.GetTransforms());
+	Core::Transform* transform3 = new Core::Transform{ {1.f, 0.f, 0.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f} };
+	transform3->SetParent(scene.GetTransforms());
+
+	obj1->AddComponent<Core::Transform>(transform1);
+	obj2->AddComponent<Core::Transform>(transform2);
+	obj3->AddComponent<Core::Transform>(transform3);
+
+	obj1->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+	obj2->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+	obj3->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+
 #pragma endregion
 
 	float deltaTime = 0.f;
 	float oldTime = 0.f;
+	Core::GameObject* crtGameObjectSelected = nullptr;
 
 	while (!window->WindowShouldClose())
 	{
@@ -136,7 +150,7 @@ int main()
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
-		
+
 
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -189,13 +203,14 @@ int main()
 		//##################################################################################
 #pragma region ImGui Inspector
 		ImGui::Begin("Inspector", 0, inspectorWindowFlags);
-		
-		static Math::Vec3 Position{ 0.f, 0.f, 0.f };
-		GUI::DragVec3XYZ("Position", Position);
-		static Math::Vec3 Rotation{ 0.f, 0.f, 0.f };
-		GUI::DragVec3XYZ("Rotation", Rotation);
-		static Math::Vec3 Scale{ 1.f, 1.f, 1.f };
-		GUI::DragVec3XYZ("Scale", Scale);
+
+		if (crtGameObjectSelected)
+		{
+			Core::Transform* transform = crtGameObjectSelected->GetComponent<Core::Transform>();
+			GUI::DragVec3XYZ("Position", transform->position);
+			GUI::DragQuatXYZ("Rotation", transform->rotation);
+			GUI::DragVec3XYZ("Scale", transform->scale);
+		}
 
 		ImGui::End();
 #pragma endregion
@@ -212,16 +227,18 @@ int main()
 		if (ImGui::TreeNodeEx("root", flag))
 		{
 			flag = ImGuiTreeNodeFlags_Leaf;
-			for (int i = 0; i < root->GetChildren().size(); ++i) 
+			for (int i = 0; i < root->GetChildren().size(); ++i)
 			{
+				if (ImGui::IsItemClicked())
+					crtGameObjectSelected = root->GetChildren()[i]->GetGameObject();
 				if (ImGui::TreeNodeEx(root->GetChildren()[i]->GetGameObject()->GetName().c_str(), flag)) { ImGui::TreePop(); }
 			}
-			ImGui::TreePop();  
+			ImGui::TreePop();
 		}
 
 		ImGui::End();
 #pragma endregion
-		
+
 		//##################################################################################
 		//##################################### CONSOLE ####################################
 		//##################################################################################
@@ -234,17 +251,23 @@ int main()
 #pragma endregion
 
 #pragma region Draw Scene
+		scene.Update();
+
 		rdrInter->ClearBackgroundColor({ 0.f, 0.f, 0.f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
 		std::vector<Resource::ModelData> staticModels;
-		Resource::ModelData vikingRoomModelData;
-		vikingRoomModelData.mesh = model;
-		vikingRoomModelData.texture = texture;
-		vikingRoomModelData.shaderProgram = shaderProgramDeferredRendering;
-		vikingRoomModelData.TRS = Math::Mat4::TRS(Position, Rotation, Scale);
-		staticModels.push_back(vikingRoomModelData);
+		Core::GameObject* obj;
+		Core::Model* addModel;
+		Resource::ModelData modelData;
+		for (int i = 0; i < root->GetChildren().size(); ++i)
+		{
+			obj = root->GetChildren()[i]->GetGameObject();
+			addModel = obj->GetComponent<Core::Model>();
+			modelData = addModel->GetModelData();
+			staticModels.push_back(modelData);
+		}
 
 		defaultPipeline->Draw(sceneCamera.GetVP(), sceneCamera.GetViewPos(), staticModels);
 #pragma endregion
@@ -255,7 +278,7 @@ int main()
 #ifdef ImGuiImplementOpenGL
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif // ImGuiImplementOpenGL
-		
+
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();

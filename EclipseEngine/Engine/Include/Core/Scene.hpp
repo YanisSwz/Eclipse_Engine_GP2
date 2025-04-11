@@ -2,6 +2,7 @@
 #include <vector>
 #include "GameObject.hpp"
 #include "TransformSystem.hpp"
+#include "RenderSystem.hpp"
 #include "ProjectExports.hpp"
 
 namespace Core
@@ -26,6 +27,7 @@ namespace Core
 		int m_currentGameObjectCount = 0;
 		GameObject m_gameObjects[MAX_SIZE];
 		TransformSystem m_transformSystem{};
+		RenderSystem m_renderSystem{};
 		GameObject* m_currentGameObject = nullptr;
 	};
 }
