@@ -1,6 +1,11 @@
 #pragma once
 #include "Scene.hpp"
 #include "SceneCamera.hpp"
+#include "GUI/DockingGUI.hpp"
+#include "GUI/InspectorGUI.hpp"
+#include "GUI/HierarchyGUI.hpp"
+#include "GUI/SceneGUI.hpp"
+#include "GUI/ConsoleGUI.hpp"
 
 namespace Windowing
 {
@@ -44,17 +49,17 @@ private:
 
 	Core::GameObject* m_crtGOSelected = nullptr;
 
+	// GUI
+	GUI::DockingGUI m_dockingGUI;
+	GUI::HierarchyGUI m_hierarchyGUI;
+	GUI::InspectorGUI m_inspectorGUI;
+	GUI::SceneGUI m_sceneGUI;
+	GUI::ConsoleGUI m_consoleGUI;
+
 	void InitWindowing(const char* _windowName);
 	void InitRHI();
 	void InitGUI();
 	void LoadScene();
-
-	void StartDockSpaceGUI();
-	void EndDockSpaceGUI();
-	void DrawHierarchyGUI();
-	void DrawInspectorGUI();
-	void DrawSceneGUI();
-	void DrawConsoleGUI();
 
 	void DrawScene();
 

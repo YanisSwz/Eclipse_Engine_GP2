@@ -6,7 +6,7 @@
 #include "Resource/ResourceManager.hpp"
 #include "Resource/ModelData.hpp"
 
-#include "GuiWidget/ImGuiWidget.hpp"
+#include "GUI/Widget/ImGuiWidget.hpp"
 
 #include "iostream"
 
@@ -53,16 +53,17 @@ void EditorApp::Update()
 void EditorApp::Render()
 {
 	GUI::BeginNewFrame();
-	StartDockSpaceGUI();
-	DrawHierarchyGUI();
-	DrawInspectorGUI();
-	DrawSceneGUI();
-	DrawConsoleGUI();
+	m_dockingGUI.Start();
+	m_crtGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
+	m_inspectorGUI.Draw(m_crtGOSelected);
+	m_sceneGUI.Draw(m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
+	m_consoleGUI.Draw();
 	GUI::EndFrame();
 
 	DrawScene();
+
 	GUI::RenderGUI();
-	EndDockSpaceGUI();
+	m_dockingGUI.End();
 	m_window->SwapBuffers();
 }
 
@@ -148,120 +149,6 @@ void EditorApp::LoadScene()
 	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 0.f);
 	obj3->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj3->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
-}
-
-void EditorApp::StartDockSpaceGUI()
-{
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoMove;
-	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
-	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
-
-	const ImGuiViewport* viewport = ImGui::GetMainViewport();
-	ImGui::SetNextWindowPos(viewport->WorkPos);
-	ImGui::SetNextWindowSize(viewport->WorkSize);
-	ImGui::SetNextWindowViewport(viewport->ID);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-
-	ImGui::Begin("DockSpace Demo", 0, window_flags);
-
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DockingEnable)
-	{
-		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-	}
-
-	ImGui::End();
-	ImGui::PopStyleVar(3);
-}
-
-void EditorApp::EndDockSpaceGUI()
-{
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		GLFWwindow* backup_current_context = glfwGetCurrentContext(); // TODO Replace with window wrapper
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-		glfwMakeContextCurrent(backup_current_context); // TODO Replace with window wrapper
-	}
-}
-
-void EditorApp::DrawHierarchyGUI()
-{
-	ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
-
-	ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
-	ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-
-	//Dirty ImGui test for scene graph hierarchy
-	std::vector<Core::Transform*> transforms = m_scene.GetTransforms()->GetChildren();
-	if (ImGui::TreeNodeEx("root", treeNodeFlags))
-	{
-		treeNodeFlags |= ImGuiTreeNodeFlags_Leaf;
-		for (Core::Transform* transform : transforms)
-		{
-			if (transform->GetGameObject() == m_crtGOSelected)
-				treeNodeFlags |= ImGuiTreeNodeFlags_Selected;
-
-			if (ImGui::TreeNodeEx(transform->GetGameObject()->GetName().c_str(), treeNodeFlags))
-				ImGui::TreePop();
-
-			if (ImGui::IsItemClicked())
-				m_crtGOSelected = transform->GetGameObject();
-			treeNodeFlags &= ~ImGuiTreeNodeFlags_Selected;
-		}
-		ImGui::TreePop();
-	}
-
-	ImGui::End();
-}
-
-void EditorApp::DrawInspectorGUI()
-{
-	ImGuiWindowFlags inspectorWindowFlags = ImGuiWindowFlags_None;
-
-	ImGui::Begin("Inspector", 0, inspectorWindowFlags);
-
-	if (m_crtGOSelected)
-	{
-		GUI::DragVec3XYZ("Position", m_crtGOSelected->transform->localPosition);
-		GUI::DragQuatXYZ("Rotation", m_crtGOSelected->transform->localRotation);
-		GUI::DragVec3XYZ("Scale", m_crtGOSelected->transform->localScale, 1.f);
-	}
-
-	ImGui::End();
-}
-
-void EditorApp::DrawSceneGUI()
-{
-	ImGuiWindowFlags sceneWindowFlags = ImGuiWindowFlags_None;
-
-	ImGui::Begin("Scene", 0, sceneWindowFlags);
-	ImVec2 windowSize = ImGui::GetWindowSize();
-	ImVec2 windowPos = ImGui::GetWindowPos();
-	m_sceneWidth = static_cast<int>(windowSize.x);
-	m_sceneHeight = static_cast<int>(windowSize.y);
-	m_scenePosX = static_cast<int>(windowPos.x);
-	m_scenePosY = static_cast<int>(windowPos.y);
-
-	ImGui::GetWindowDrawList()->AddImage(
-		(intptr_t)(m_defaultPipeline->GetFinalTexture()),
-		ImVec2(windowPos.x, windowPos.y),
-		ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
-		ImVec2(0, 1),
-		ImVec2(1, 0));
-
-	ImGui::End();
-}
-
-void EditorApp::DrawConsoleGUI()
-{
-	ImGuiWindowFlags consoleWindowFlags = ImGuiWindowFlags_None;
-
-	ImGui::Begin("Console", 0, consoleWindowFlags);
-	ImGui::End();
 }
 
 void EditorApp::DrawScene()

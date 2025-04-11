@@ -1,6 +1,4 @@
-#include "GuiWidget/ImGuiWidget.hpp"
-
-
+#include "GUI/Widget/ImGuiWidget.hpp"
 
 namespace GUI
 {

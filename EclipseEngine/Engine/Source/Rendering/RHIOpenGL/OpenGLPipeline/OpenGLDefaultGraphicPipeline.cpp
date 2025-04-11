@@ -40,6 +40,7 @@ namespace RHI::OpenGL
 	void OpenGLDefaultGraphicPipeline::Delete()
 	{
 		delete m_deferredRenderPass;
+		delete m_staticModelRenderPass;
 		delete m_lightingRenderPass;
 		delete m_FB;
 	}
