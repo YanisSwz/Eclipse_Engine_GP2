@@ -92,17 +92,17 @@ int main()
 	Core::Scene scene{};
 
 	Core::GameObject* obj1 = scene.CreateGameObject();
-	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 1.f);
+	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
 	obj1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj1->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
 	
 	Core::GameObject* obj2 = scene.CreateGameObject();
-	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 1.f);
+	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
 	obj2->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj2->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
 	
 	Core::GameObject* obj3 = scene.CreateGameObject();
-	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 1.f);
+	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 0.f);
 	obj3->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj3->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
 
@@ -216,18 +216,28 @@ int main()
 		//##################################################################################
 #pragma region ImGui Hierarchy
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
-		ImGuiTreeNodeFlags flag = ImGuiTreeNodeFlags_DefaultOpen;
+		ImGuiTreeNodeFlags flag = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
 		//Dirty ImGui test for scene graph hierarchy
 		Core::Transform* root = scene.GetTransforms();
+		std::vector<Core::Transform*> transforms = root->GetChildren();
+		Core::GameObject* crtGameObject = nullptr;
 		if (ImGui::TreeNodeEx("root", flag))
 		{
-			flag = ImGuiTreeNodeFlags_Leaf;
-			for (int i = 0; i < root->GetChildren().size(); ++i)
+			flag |= ImGuiTreeNodeFlags_Leaf;
+			for (Core::Transform* transform : transforms)
 			{
+				crtGameObject = transform->GetGameObject();
+
+				if (crtGameObject == crtGameObjectSelected)
+					flag |= ImGuiTreeNodeFlags_Selected;
+
+				if (ImGui::TreeNodeEx(crtGameObject->GetName().c_str(), flag))
+					ImGui::TreePop();
+
 				if (ImGui::IsItemClicked())
-					crtGameObjectSelected = root->GetChildren()[i]->GetGameObject();
-				if (ImGui::TreeNodeEx(root->GetChildren()[i]->GetGameObject()->GetName().c_str(), flag)) { ImGui::TreePop(); }
+					crtGameObjectSelected = crtGameObject;
+				flag &= ~ImGuiTreeNodeFlags_Selected;
 			}
 			ImGui::TreePop();
 		}
