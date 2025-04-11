@@ -13,6 +13,7 @@ namespace Resource
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 		
+		ECLIPSE_ENGINE unsigned int GetID() const;
 		ECLIPSE_ENGINE void Bind();
 		ECLIPSE_ENGINE void Unbind();
 
