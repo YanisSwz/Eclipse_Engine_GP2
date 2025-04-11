@@ -90,23 +90,20 @@ int main()
 
 	// CORE TESTS
 	Core::Scene scene{};
+
 	Core::GameObject* obj1 = scene.CreateGameObject();
-	Core::GameObject* obj2 = scene.CreateGameObject();
-	Core::GameObject* obj3 = scene.CreateGameObject();
-
-	Core::Transform* transform1 = new Core::Transform{ {-1.f, 0.f, 0.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f} };
-	transform1->SetParent(scene.GetTransforms());
-	Core::Transform* transform2 = new Core::Transform{ {0.f, 0.f, 0.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f} };
-	transform2->SetParent(scene.GetTransforms());
-	Core::Transform* transform3 = new Core::Transform{ {1.f, 0.f, 0.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f} };
-	transform3->SetParent(scene.GetTransforms());
-
-	obj1->AddComponent<Core::Transform>(transform1);
-	obj2->AddComponent<Core::Transform>(transform2);
-	obj3->AddComponent<Core::Transform>(transform3);
-
+	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 1.f);
+	obj1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj1->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+	
+	Core::GameObject* obj2 = scene.CreateGameObject();
+	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 1.f);
+	obj2->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj2->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+	
+	Core::GameObject* obj3 = scene.CreateGameObject();
+	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 1.f);
+	obj3->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj3->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
 
 #pragma endregion
@@ -206,10 +203,9 @@ int main()
 
 		if (crtGameObjectSelected)
 		{
-			Core::Transform* transform = crtGameObjectSelected->GetComponent<Core::Transform>();
-			GUI::DragVec3XYZ("Position", transform->position);
-			GUI::DragQuatXYZ("Rotation", transform->rotation);
-			GUI::DragVec3XYZ("Scale", transform->scale);
+			GUI::DragVec3XYZ("Position", crtGameObjectSelected->transform->localPosition);
+			GUI::DragQuatXYZ("Rotation", crtGameObjectSelected->transform->localRotation);
+			GUI::DragVec3XYZ("Scale", crtGameObjectSelected->transform->localScale, 1.f);
 		}
 
 		ImGui::End();
@@ -251,8 +247,6 @@ int main()
 #pragma endregion
 
 #pragma region Draw Scene
-		scene.Update();
-
 		rdrInter->ClearBackgroundColor({ 0.f, 0.f, 0.f });
 		rdrInter->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 		rdrInter->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);

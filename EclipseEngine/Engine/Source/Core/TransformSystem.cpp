@@ -5,7 +5,7 @@ namespace Core
 	TransformSystem::TransformSystem()
 	{
 		m_data[m_currentCount].~Transform();
-		new (&m_data[m_currentCount]) Transform({2.f, 0.f, 3.f}, {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f});
+		new (&m_data[m_currentCount]) Transform();
 		m_data[m_currentCount].SetActive(true);
 		m_root = &m_data[m_currentCount];
 		++m_currentCount;
