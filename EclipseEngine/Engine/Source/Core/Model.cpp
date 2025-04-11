@@ -23,7 +23,7 @@ namespace Core
 		modelData.mesh = m_mesh;
 		modelData.texture = m_texture;
 		modelData.shaderProgram = m_shader;
-		modelData.TRS = GetGameObject()->GetComponent<Core::Transform>()->GetTransformMatrix();
+		modelData.TRS = GetGameObject()->transform->GetTransformMatrix();
 		return modelData;
 	}
 }
