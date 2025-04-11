@@ -13,7 +13,8 @@ namespace Core
 
 	private:
 		static const int MAX_SIZE = 100;
-		int m_currentCount = 0;
+		int m_currentStaticCount = 0;
+		int m_currentDynamicCount = 0;
 		Model m_staticModels[MAX_SIZE];
 		Model m_dynamicModels[MAX_SIZE];
 	};
