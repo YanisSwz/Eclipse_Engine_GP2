@@ -6,6 +6,7 @@
 #include "GUI/HierarchyGUI.hpp"
 #include "GUI/SceneGUI.hpp"
 #include "GUI/ConsoleGUI.hpp"
+#include "GUI/ContentBrowserGUI.hpp"
 
 namespace Windowing
 {
@@ -55,6 +56,7 @@ private:
 	GUI::InspectorGUI m_inspectorGUI;
 	GUI::SceneGUI m_sceneGUI;
 	GUI::ConsoleGUI m_consoleGUI;
+	GUI::ContentBrowseGUI m_contentBrowserGUI;
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();
