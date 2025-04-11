@@ -15,7 +15,7 @@ struct Light {
     float Linear;
     float Quadratic;
 };
-Light light = Light(vec3(0.5, 0.0, 0.0), vec3(1.0, 1.0, 1.0), 0.7, 1.8);
+Light light = Light(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), 0.0, 0.0);
 
 void main()
 {             
@@ -41,7 +41,7 @@ void main()
         float attenuation = 1.0 / (1.0 + light.Linear * distance + light.Quadratic * distance * distance);
         diffuse *= attenuation;
         specular *= attenuation;
-        lighting += Diffuse;        
+        lighting += diffuse + specular;        
     }
     FragColor = vec4(lighting, 1.0);
 }

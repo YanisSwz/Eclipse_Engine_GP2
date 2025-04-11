@@ -26,25 +26,7 @@ namespace Core
 
 		ECLIPSE_ENGINE std::string GetName() const;
 		ECLIPSE_ENGINE static std::string GetName(GameObject* _obj);
-
-		/// <summary>
-		/// Returns pointer to first component of specified type, nullptr otherwise
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		template <typename T> 
-		T* GetComponent()
-		{
-			//TODO OPTIMIZATION: check if T is a component
-			for(int i = 0; i < m_components.size(); ++i)
-			{
-				T* castedComponent = dynamic_cast<T*>(m_components[i]);
-				if (castedComponent != nullptr)
-					return castedComponent;
-			}
-			return nullptr;
-		}
-
+		
 		template <typename T>
 		void AddComponent(T* _comp)
 		{
@@ -52,10 +34,10 @@ namespace Core
 			Component* component = dynamic_cast<Component*>(_comp);
 			if (component == nullptr)
 				return;
-			
+
 			// Check if component inherits from monobehaviour, if so we only check if it's not already in the components list
 			MonoBehaviour* castedComponent = dynamic_cast<MonoBehaviour*>(component);
-			if(castedComponent != nullptr)
+			if (castedComponent != nullptr)
 			{
 				for (int i = 0; i < m_components.size(); ++i)
 				{
@@ -79,6 +61,24 @@ namespace Core
 			m_components.emplace_back(_comp);
 			_comp->SetGameObject(this);
 			return;
+		}
+
+		/// <summary>
+		/// Returns pointer to first component of specified type, nullptr otherwise
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		template <typename T> 
+		T* GetComponent()
+		{
+			//TODO OPTIMIZATION: check if T is a component
+			for(int i = 0; i < m_components.size(); ++i)
+			{
+				T* castedComponent = dynamic_cast<T*>(m_components[i]);
+				if (castedComponent != nullptr)
+					return castedComponent;
+			}
+			return nullptr;
 		}
 
 		template <typename T>
