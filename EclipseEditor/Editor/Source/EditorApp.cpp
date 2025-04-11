@@ -1,0 +1,316 @@
+#include "EditorApp.hpp"
+#include "Windowing/GLFWWindow.hpp"
+#include "RHIOpenGL/OpenGLRenderInterface.hpp"
+
+
+#include "Resource/ResourceManager.hpp"
+#include "Resource/ModelData.hpp"
+
+#include "GuiWidget/ImGuiWidget.hpp"
+
+#include "iostream"
+
+EditorApp::EditorApp(const char* _windowName, int _width, int _height)
+	: m_width(_width),
+	m_height(_height)
+{
+	InitWindowing(_windowName);
+	InitGUI();
+	InitRHI();
+	LoadScene();
+}
+
+EditorApp::~EditorApp()
+{
+}
+
+bool EditorApp::ShouldClose()
+{
+	return m_window->WindowShouldClose();
+}
+
+void EditorApp::Update()
+{
+	m_window->UpdateInputs();
+
+	if (m_window->GetKey(Windowing::KEY_CODE::KEY_ESCAPE, Windowing::INPUT_ACTION::INPUT_PRESS))
+		m_window->SetWindowShouldClose(true);
+
+	deltaTime = m_window->GetTime() - oldTime;
+	oldTime = m_window->GetTime();
+
+
+	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_scenePosX), static_cast<float>(m_scenePosY)}, { static_cast<float>(m_sceneWidth), static_cast<float>(m_sceneHeight)});
+	m_defaultPipeline->Rescale(m_sceneWidth, m_sceneHeight);
+	m_renderInterface->Viewport(0, 0, m_sceneWidth, m_sceneHeight);
+
+
+	m_scene.Update();
+
+	m_window->PollEvents();
+}
+
+void EditorApp::Render()
+{
+	GUI::BeginNewFrame();
+	StartDockSpaceGUI();
+	DrawHierarchyGUI();
+	DrawInspectorGUI();
+	DrawSceneGUI();
+	DrawConsoleGUI();
+	GUI::EndFrame();
+
+	DrawScene();
+	GUI::RenderGUI();
+	EndDockSpaceGUI();
+	m_window->SwapBuffers();
+}
+
+void EditorApp::Destroy()
+{
+	DestroyScene();
+	DestroyGUI();
+
+	m_renderInterface->DestroyDefaultGraphicPipeline(m_defaultPipeline);
+	delete m_renderInterface;
+	m_window->DestroyWindow();
+	delete m_window;
+}
+
+void EditorApp::InitWindowing(const char* _windowName)
+{
+	m_window = new Windowing::GLFWWindow;
+	m_window->CreateWindow(_windowName, m_width, m_height);
+}
+
+void EditorApp::InitRHI()
+{
+	m_renderInterface = new RHI::OpenGL::OpenGLRenderInterface;
+	if (!m_renderInterface->InitGraphicsAPI())
+	{
+		m_window->DestroyWindow();
+		std::cout << "Failed to init graphics API!" << std::endl;
+		return;
+	}
+	m_renderInterface->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
+}
+
+void EditorApp::InitGUI()
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+	io.ConfigWindowsMoveFromTitleBarOnly = true;
+	ImGui::StyleColorsDark();
+
+#ifdef ImGuiImplementGLFW
+	ImGui_ImplGlfw_InitForOpenGL(m_window->CastGLFW()->GetWindow(), true);
+#endif // ImGuiImplementGLFW
+
+#ifdef ImGuiImplementOpenGL
+	ImGui_ImplOpenGL3_Init("#version 330");
+#endif // ImGuiImplementOpenGL
+}
+
+void EditorApp::LoadScene()
+{
+	Resource::Mesh* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
+	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
+
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultDeferredRendering.vert", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.vert");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultDeferredRendering.frag", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.frag");
+	Resource::ShaderProgram* shaderProgramDeferredRendering = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DefaultDeferredRendering.shd", "DefaultDeferredRendering.vert", "DefaultDeferredRendering.frag");
+
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DeferredLighting.vert", "Assets/Shaders/DeferredRendering/DeferredLighting.vert");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DeferredLighting.frag", "Assets/Shaders/DeferredRendering/DeferredLighting.frag");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DeferredLighting.shd", "DeferredLighting.vert", "DeferredLighting.frag");
+
+	Resource::ResourceManager::GetInstance().LoadAllResources();
+	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
+
+	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
+	m_defaultPipeline->Init(m_window->width, m_window->height);
+
+	// CORE TESTS
+	Core::GameObject* obj1 = m_scene.CreateGameObject();
+	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
+	obj1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
+	obj1->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+
+	Core::GameObject* obj2 = m_scene.CreateGameObject();
+	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
+	obj2->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
+	obj2->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+
+	Core::GameObject* obj3 = m_scene.CreateGameObject();
+	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 0.f);
+	obj3->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
+	obj3->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+}
+
+void EditorApp::StartDockSpaceGUI()
+{
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
+	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+
+	const ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->WorkPos);
+	ImGui::SetNextWindowSize(viewport->WorkSize);
+	ImGui::SetNextWindowViewport(viewport->ID);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+	ImGui::Begin("DockSpace Demo", 0, window_flags);
+
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+
+	ImGui::End();
+	ImGui::PopStyleVar(3);
+}
+
+void EditorApp::EndDockSpaceGUI()
+{
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		GLFWwindow* backup_current_context = glfwGetCurrentContext(); // TODO Replace with window wrapper
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		glfwMakeContextCurrent(backup_current_context); // TODO Replace with window wrapper
+	}
+}
+
+void EditorApp::DrawHierarchyGUI()
+{
+	ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
+
+	ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
+	ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+	//Dirty ImGui test for scene graph hierarchy
+	std::vector<Core::Transform*> transforms = m_scene.GetTransforms()->GetChildren();
+	if (ImGui::TreeNodeEx("root", treeNodeFlags))
+	{
+		treeNodeFlags |= ImGuiTreeNodeFlags_Leaf;
+		for (Core::Transform* transform : transforms)
+		{
+			if (transform->GetGameObject() == m_crtGOSelected)
+				treeNodeFlags |= ImGuiTreeNodeFlags_Selected;
+
+			if (ImGui::TreeNodeEx(transform->GetGameObject()->GetName().c_str(), treeNodeFlags))
+				ImGui::TreePop();
+
+			if (ImGui::IsItemClicked())
+				m_crtGOSelected = transform->GetGameObject();
+			treeNodeFlags &= ~ImGuiTreeNodeFlags_Selected;
+		}
+		ImGui::TreePop();
+	}
+
+	ImGui::End();
+}
+
+void EditorApp::DrawInspectorGUI()
+{
+	ImGuiWindowFlags inspectorWindowFlags = ImGuiWindowFlags_None;
+
+	ImGui::Begin("Inspector", 0, inspectorWindowFlags);
+
+	if (m_crtGOSelected)
+	{
+		GUI::DragVec3XYZ("Position", m_crtGOSelected->transform->localPosition);
+		GUI::DragQuatXYZ("Rotation", m_crtGOSelected->transform->localRotation);
+		GUI::DragVec3XYZ("Scale", m_crtGOSelected->transform->localScale, 1.f);
+	}
+
+	ImGui::End();
+}
+
+void EditorApp::DrawSceneGUI()
+{
+	ImGuiWindowFlags sceneWindowFlags = ImGuiWindowFlags_None;
+
+	ImGui::Begin("Scene", 0, sceneWindowFlags);
+	ImVec2 windowSize = ImGui::GetWindowSize();
+	ImVec2 windowPos = ImGui::GetWindowPos();
+	m_sceneWidth = static_cast<int>(windowSize.x);
+	m_sceneHeight = static_cast<int>(windowSize.y);
+	m_scenePosX = static_cast<int>(windowPos.x);
+	m_scenePosY = static_cast<int>(windowPos.y);
+
+	ImGui::GetWindowDrawList()->AddImage(
+		(intptr_t)(m_defaultPipeline->GetFinalTexture()),
+		ImVec2(windowPos.x, windowPos.y),
+		ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
+		ImVec2(0, 1),
+		ImVec2(1, 0));
+
+	ImGui::End();
+}
+
+void EditorApp::DrawConsoleGUI()
+{
+	ImGuiWindowFlags consoleWindowFlags = ImGuiWindowFlags_None;
+
+	ImGui::Begin("Console", 0, consoleWindowFlags);
+	ImGui::End();
+}
+
+void EditorApp::DrawScene()
+{
+	m_renderInterface->ClearBackgroundColor({ 0.f, 0.f, 0.f });
+	m_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
+	m_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
+
+	std::vector<Resource::ModelData> staticModels;
+	Core::GameObject* obj;
+	Core::Model* addModel;
+	Resource::ModelData modelData;
+	Core::Transform* root = m_scene.GetTransforms();
+	for (int i = 0; i < root->GetChildren().size(); ++i)
+	{
+		obj = root->GetChildren()[i]->GetGameObject();
+		addModel = obj->GetComponent<Core::Model>();
+		modelData = addModel->GetModelData();
+		staticModels.push_back(modelData);
+	}
+
+	m_defaultPipeline->Draw(m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos(), staticModels);
+}
+
+void EditorApp::DestroyScene()
+{
+	delete Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
+	delete Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
+
+	delete Resource::ResourceManager::GetInstance().GetResource<Resource::VertShader>("DefaultDeferredRendering.vert");
+	delete Resource::ResourceManager::GetInstance().GetResource<Resource::FragShader>("DefaultDeferredRendering.frag");
+	delete Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("DefaultDeferredRendering.shd");
+
+	delete Resource::ResourceManager::GetInstance().GetResource<Resource::VertShader>("DeferredLighting.vert");
+	delete Resource::ResourceManager::GetInstance().GetResource<Resource::FragShader>("DeferredLighting.frag");
+	delete Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("DeferredLighting.shd");
+	
+	Resource::ResourceManager::GetInstance().DestroyInstance();
+}
+
+void EditorApp::DestroyGUI()
+{
+#ifdef ImGuiImplementOpenGL
+	ImGui_ImplOpenGL3_Shutdown();
+#endif // ImGuiImplementOpenGL
+
+#ifdef ImGuiImplementGLFW
+	ImGui_ImplGlfw_Shutdown();
+#endif // ImGuiImplementGLFW
+
+	ImGui::DestroyContext();
+}

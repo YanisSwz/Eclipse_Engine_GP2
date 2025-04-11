@@ -1,8 +1,34 @@
 #include "GuiWidget/ImGuiWidget.hpp"
-#include "../ImGUI/imgui.h"
+
+
 
 namespace GUI
 {
+	void BeginNewFrame()
+	{
+#ifdef ImGuiImplementOpenGL
+		ImGui_ImplOpenGL3_NewFrame();
+#endif // ImGuiImplementOpenGL
+#ifdef ImGuiImplementGLFW
+		ImGui_ImplGlfw_NewFrame();
+#endif // ImGuiImplementGLFW
+		ImGui::NewFrame();
+	}
+
+	void EndFrame()
+	{
+		ImGui::EndFrame();
+	}
+
+	void RenderGUI()
+	{
+		ImGui::Render();
+
+#ifdef ImGuiImplementOpenGL
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif // ImGuiImplementOpenGL
+	}
+
 	void DragVec3XYZ(const char* _label, Math::Vec3& _vec3, float _resetValue, float _columnWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
