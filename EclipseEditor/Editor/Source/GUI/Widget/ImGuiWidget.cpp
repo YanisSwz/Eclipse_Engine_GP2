@@ -174,7 +174,8 @@ namespace GUI
 	{
 		ImVec2 uv_min = ImVec2(0.0f, 0.0f);
 		ImVec2 uv_max = ImVec2(1.0f, 1.0f);
-		ImGui::ImageWithBg(_imageID, ImVec2(_size, _size), uv_min, uv_max, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
-		ImGui::Text(_imageName);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
+		ImGui::ImageButton(_imageName, _imageID, ImVec2(_size, _size), uv_min, uv_max, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+		ImGui::PopStyleVar();
 	}
 }
