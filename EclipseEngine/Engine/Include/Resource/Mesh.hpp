@@ -12,7 +12,7 @@ namespace Resource
 	class Mesh : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE Mesh();
+		ECLIPSE_ENGINE Mesh(const char* _name = "");
 		ECLIPSE_ENGINE ~Mesh() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;

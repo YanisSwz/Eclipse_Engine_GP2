@@ -10,6 +10,8 @@ namespace Resource
 	public:
 		IResource() = default;
 		virtual ~IResource() = default;
+		
+		const char* name = "";
 
 		ECLIPSE_ENGINE bool IsLoaded() { return bIsLoaded; }
 

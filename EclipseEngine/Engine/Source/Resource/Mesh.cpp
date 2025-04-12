@@ -6,8 +6,9 @@
 
 namespace Resource
 {
-	Mesh::Mesh()
+	Mesh::Mesh(const char* _name)
 	{
+		name = _name;
 	}
 
 	Mesh::~Mesh()
@@ -102,11 +103,20 @@ namespace Resource
 			m_vertexBuffer.clear();
 		if (!m_indexBuffer.empty())
 			m_indexBuffer.clear();
-		m_vertexArrayObject->Delete();
-		m_vertexBufferObject->Delete();
-		m_indexBufferObject->Delete();
-		m_rdrInter->DestroyVertexArray(m_vertexArrayObject);
-		m_rdrInter->DestroyVertexBuffer(m_vertexBufferObject);
-		m_rdrInter->DestroyIndexBuffer(m_indexBufferObject);
+		if (m_vertexArrayObject)
+		{
+			m_vertexArrayObject->Delete();
+			m_rdrInter->DestroyVertexArray(m_vertexArrayObject);
+		}
+		if (m_vertexBufferObject)
+		{
+			m_vertexBufferObject->Delete();
+			m_rdrInter->DestroyVertexBuffer(m_vertexBufferObject);
+		}
+		if (m_indexBufferObject)
+		{
+			m_indexBufferObject->Delete();
+			m_rdrInter->DestroyIndexBuffer(m_indexBufferObject);
+		}
 	}
 }

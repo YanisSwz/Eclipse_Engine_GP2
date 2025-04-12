@@ -7,7 +7,7 @@ namespace Resource
 	class Texture : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE Texture();
+		ECLIPSE_ENGINE Texture(const char* _name = "");
 		ECLIPSE_ENGINE ~Texture() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;

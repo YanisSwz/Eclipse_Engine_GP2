@@ -6,15 +6,16 @@
 
 namespace Resource
 {
-	FragShader::FragShader()
+	FragShader::FragShader(const char* _name)
 	{
+		name = _name;
 	}
-	
+
 	FragShader::~FragShader()
 	{
 		Delete();
 	}
-	
+
 	void FragShader::GetFileContent(std::string _path)
 	{
 		// Verify if Fragment file path exists
@@ -27,7 +28,7 @@ namespace Resource
 		m_fragmentFileContent = fileContent;
 
 	}
-	
+
 	void FragShader::Generate(RHI::IRenderInterface* _rdrInterface)
 	{
 		m_rdrInter = _rdrInterface;
@@ -45,7 +46,10 @@ namespace Resource
 	void FragShader::Delete()
 	{
 		m_fragmentFileContent.clear();
-		m_fragmentShader->Delete();
-		m_rdrInter->DestroyFragmentShader(m_fragmentShader);
+		if (m_fragmentShader)
+		{
+			m_fragmentShader->Delete();
+			m_rdrInter->DestroyFragmentShader(m_fragmentShader);
+		}
 	}
 }

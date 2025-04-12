@@ -6,7 +6,7 @@ namespace Resource
 	class VertShader : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE VertShader();
+		ECLIPSE_ENGINE VertShader(const char* _name = "");
 		ECLIPSE_ENGINE ~VertShader() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;

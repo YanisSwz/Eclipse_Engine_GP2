@@ -11,7 +11,7 @@ namespace Resource
 	class ShaderProgram : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE ShaderProgram();
+		ECLIPSE_ENGINE ShaderProgram(const char* _name = "");
 		ECLIPSE_ENGINE ~ShaderProgram() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;

@@ -7,8 +7,9 @@
 
 namespace Resource
 {
-	Skybox::Skybox()
+	Skybox::Skybox(const char* _name)
 	{
+		name = _name;
 	}
 
 	Skybox::~Skybox()
@@ -98,7 +99,10 @@ namespace Resource
 	void Skybox::Delete()
 	{
 		m_data.clear();
-		m_cubeMap->Delete();
-		m_rdrInter->DestroyCubeMap(m_cubeMap);
+		if (m_cubeMap)
+		{
+			m_cubeMap->Delete();
+			m_rdrInter->DestroyCubeMap(m_cubeMap);
+		}
 	}
 }

@@ -6,8 +6,9 @@
 
 namespace Resource
 {
-	VertShader::VertShader()
+	VertShader::VertShader(const char* _name)
 	{
+		name = _name;
 	}
 
 	VertShader::~VertShader()
@@ -47,7 +48,10 @@ namespace Resource
 	void VertShader::Delete()
 	{
 		m_vertexFileContent.clear();
-		m_vertexShader->Delete();
-		m_rdrInter->DestroyVertexShader(m_vertexShader);
+		if (m_vertexShader)
+		{
+			m_vertexShader->Delete();
+			m_rdrInter->DestroyVertexShader(m_vertexShader);
+		}
 	}
 }
