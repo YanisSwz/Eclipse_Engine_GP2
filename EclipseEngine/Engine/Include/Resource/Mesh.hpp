@@ -5,14 +5,13 @@
 #include "RHIInterfaces/IIndexBuffer.hpp"
 #include "RHIInterfaces/Vertex.hpp"
 #include <vector>
-#include <string>
 
 namespace Resource
 {
 	class Mesh : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE Mesh(const char* _name = "");
+		ECLIPSE_ENGINE Mesh(std::string _name = "");
 		ECLIPSE_ENGINE ~Mesh() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;

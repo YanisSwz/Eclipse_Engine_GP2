@@ -3,6 +3,8 @@
 namespace Core
 {
 	class GameObject;
+	class Transform;
+	class Model;
 }
 
 namespace GUI
@@ -16,6 +18,8 @@ namespace GUI
 		void Draw(Core::GameObject* _crtGOselected);
 
 	private:
+		void DrawTransformComponent(Core::Transform* _transform);
+		void DrawModelComponent(Core::Model* _model);
 
 	};
 }

@@ -6,7 +6,7 @@ namespace Resource
 	class FragShader : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE FragShader(const char* _name = "");
+		ECLIPSE_ENGINE FragShader(std::string _name = "");
 		ECLIPSE_ENGINE ~FragShader() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;

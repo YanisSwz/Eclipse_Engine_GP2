@@ -6,7 +6,7 @@
 
 namespace Resource
 {
-	Mesh::Mesh(const char* _name)
+	Mesh::Mesh(std::string _name)
 	{
 		name = _name;
 	}

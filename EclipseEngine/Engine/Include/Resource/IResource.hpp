@@ -11,7 +11,7 @@ namespace Resource
 		IResource() = default;
 		virtual ~IResource() = default;
 		
-		const char* name = "";
+		std::string name = "";
 
 		ECLIPSE_ENGINE bool IsLoaded() { return bIsLoaded; }
 

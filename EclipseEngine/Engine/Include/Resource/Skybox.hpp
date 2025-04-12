@@ -12,7 +12,7 @@ namespace Resource
 	class Skybox : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE Skybox(const char* _name = "");
+		ECLIPSE_ENGINE Skybox(std::string _name = "");
 		ECLIPSE_ENGINE ~Skybox() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;

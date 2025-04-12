@@ -6,7 +6,7 @@
 
 namespace Resource
 {
-	VertShader::VertShader(const char* _name)
+	VertShader::VertShader(std::string _name)
 	{
 		name = _name;
 	}

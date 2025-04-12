@@ -7,7 +7,7 @@
 
 namespace Resource
 {
-	Skybox::Skybox(const char* _name)
+	Skybox::Skybox(std::string _name)
 	{
 		name = _name;
 	}

@@ -4,14 +4,13 @@
 #include "Resource/FragShader.hpp"
 #include "IResource.hpp"
 #include "Maths.hpp"
-#include <string>
 
 namespace Resource
 {
 	class ShaderProgram : public IResource
 	{
 	public:
-		ECLIPSE_ENGINE ShaderProgram(const char* _name = "");
+		ECLIPSE_ENGINE ShaderProgram(std::string _name = "");
 		ECLIPSE_ENGINE ~ShaderProgram() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;

@@ -178,4 +178,40 @@ namespace GUI
 		ImGui::ImageButton(_imageName, _imageID, ImVec2(_size, _size), uv_min, uv_max, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 		ImGui::PopStyleVar();
 	}
+
+	bool ComboFilter(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values)
+	{
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, 100.f);
+		ImGui::Text(_comboName);
+		ImGui::NextColumn();
+		std::string invisibleComboName = "##";
+		invisibleComboName.append(_comboName).append("(w/ filter");
+		if (ImGui::BeginCombo(invisibleComboName.c_str(), _crtValue->c_str()))
+		{
+			ImGuiTextFilter filter;
+			if (ImGui::IsWindowAppearing())
+			{
+				ImGui::SetKeyboardFocusHere();
+				filter.Clear();
+			}
+			filter.Draw("##Filter", -FLT_MIN);
+
+			for (int i = 0; i < _values.size(); ++i)
+			{
+				const bool is_selected = (*_crtValue == _values[i]);
+				if (filter.PassFilter(_values[i].c_str()))
+				{
+					if (ImGui::Selectable(_values[i].c_str(), is_selected))
+					{
+						*_crtValue = _values[i];
+						ImGui::EndCombo();
+						return true;
+					}
+				}
+			}
+			ImGui::EndCombo();
+		}
+		return false;
+	}
 }

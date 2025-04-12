@@ -6,7 +6,7 @@
 
 namespace Resource
 {
-	FragShader::FragShader(const char* _name)
+	FragShader::FragShader(std::string _name)
 	{
 		name = _name;
 	}

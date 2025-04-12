@@ -5,7 +5,7 @@
 
 namespace Resource
 {
-	Texture::Texture(const char* _name)
+	Texture::Texture(std::string _name)
 	{
 		name = _name;
 	}

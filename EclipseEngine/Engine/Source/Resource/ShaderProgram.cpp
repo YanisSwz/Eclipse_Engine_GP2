@@ -4,7 +4,7 @@
 namespace Resource
 {
 
-	ShaderProgram::ShaderProgram(const char* _name)
+	ShaderProgram::ShaderProgram(std::string _name)
 	{
 		name = _name;
 	}
