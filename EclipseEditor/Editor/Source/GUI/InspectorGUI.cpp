@@ -50,11 +50,28 @@ namespace GUI
 
 		ImGui::SeparatorText("Model");
 
+		std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
+		std::string meshName = _model->mesh->name;
+		if (GUI::ComboFilter("Mesh: ", &meshName, meshNames))
+			_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(meshName);
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MeshName"))
+			{
+				IM_ASSERT(payload->DataSize == sizeof(std::string));
+				std::string payload_n;
+				payload_n = *static_cast<std::string*>(payload->Data);
+				_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(payload_n);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		ImGui::Columns(1);
+
 		std::vector<std::string> textureNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Texture>();
 		std::string textureName = _model->texture->name;
 		if (GUI::ComboFilter("Texture: ", &textureName, textureNames))
 			_model->texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(textureName);
-
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureName"))
