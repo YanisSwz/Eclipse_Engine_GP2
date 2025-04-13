@@ -19,6 +19,7 @@ namespace GUI
 		std::string name;
 
 		void Init();
+		void SetParent(FolderGUI* _parent);
 		FolderGUI* Draw();
 		FolderGUI* DrawFolderGUI(int _index);
 		void DrawTextureGUI(int _index);
@@ -26,6 +27,7 @@ namespace GUI
 		void Delete();
 
 	private:
+		FolderGUI* m_parent = nullptr;
 		std::vector<FolderGUI*> m_folderChildren;
 		std::vector<Resource::Texture*> m_textureFiles;
 		std::vector<Resource::Mesh*> m_meshFiles;

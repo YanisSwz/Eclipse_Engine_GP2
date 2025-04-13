@@ -28,25 +28,44 @@ namespace GUI
 			for (std::string textureName : textureNames)
 				m_textureFiles.push_back(Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(textureName));
 
+			return;
+		}	
+		if (name == "Mesh")
+		{
 			std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
 			for (std::string meshName : meshNames)
 				m_meshFiles.push_back(Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(meshName));
-
-			FolderGUI* textureFolder = new FolderGUI("Editor");
-			m_folderChildren.push_back(textureFolder);
 
 			return;
 		}
 
 		m_folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("FolderIcon.img");
 		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("MeshIcon.img");
+
 		FolderGUI* textureFolder = new FolderGUI("Texture");
 		m_folderChildren.push_back(textureFolder);
 		textureFolder->Init();
+		textureFolder->SetParent(this);
+
+		FolderGUI* meshFolder = new FolderGUI("Mesh");
+		m_folderChildren.push_back(meshFolder);
+		meshFolder->Init();
+		meshFolder->SetParent(this);
+	}
+
+	void FolderGUI::SetParent(FolderGUI* _parent)
+	{
+		m_parent = _parent;
 	}
 
 	FolderGUI* FolderGUI::Draw()
 	{
+		if (m_parent)
+		{
+			if (ImGui::Button("Return"))
+				return m_parent;
+		}
+
 		int folderChildrenSize = static_cast<int>(m_folderChildren.size());
 		int texturesFilesSize = static_cast<int>(m_textureFiles.size());
 		int meshFilesSize = static_cast<int>(m_meshFiles.size());
@@ -88,7 +107,7 @@ namespace GUI
 	{
 		std::string invisibleFolderName = "##";
 
-		invisibleFolderName.append(name).append(" Folder Button");
+		invisibleFolderName.append(m_folderChildren[_index]->name).append(" Folder Button");
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
 		if (ImGui::ImageButton(invisibleFolderName.c_str(), m_folderIcon->GetID(), { 100.f, 100.f }, { 0.f, 1.f }, {1.f, 0.f}))
 		{
