@@ -24,10 +24,14 @@ namespace GUI
 			ImGui::End();
 			return;
 		}
-
+		if (ImGui::InputText("Name: ", _crtGOselected->name.data(), 255))
+		{
+			_crtGOselected->name = _crtGOselected->name.c_str();
+			if (_crtGOselected->name.size() == 0)
+				_crtGOselected->name = " ";
+		}
 		DrawTransformComponent(_crtGOselected->transform);
 		DrawModelComponent(_crtGOselected->GetComponent<Core::Model>());
-
 
 		ImGui::End();
 	}

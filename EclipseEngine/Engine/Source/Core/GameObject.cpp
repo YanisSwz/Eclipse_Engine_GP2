@@ -8,9 +8,9 @@ namespace Core
 		m_scene = _scene;
 
 		if (_name == "default")
-			m_name = "GameObject" + std::to_string(m_id);
+			name = "GameObject" + std::to_string(m_id);
 		else
-			m_name = _name;
+			name = _name;
 
 		if (_t != nullptr)
 		{
@@ -28,7 +28,7 @@ namespace Core
 
 	GameObject::~GameObject()
 	{
-		m_name.clear();
+		name.clear();
 		m_components.clear();
 	}
 
@@ -56,11 +56,11 @@ namespace Core
 
 	std::string GameObject::GetName() const 
 	{
-		return m_name;
+		return name;
 	}
 
 	std::string GameObject::GetName(GameObject* _obj) 
 	{
-		return _obj->m_name;
+		return _obj->name;
 	}
 }

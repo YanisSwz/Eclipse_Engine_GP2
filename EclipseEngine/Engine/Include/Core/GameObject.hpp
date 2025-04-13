@@ -18,6 +18,7 @@ namespace Core
 		ECLIPSE_ENGINE GameObject(Scene* _scene, Transform* _t = nullptr, std::string _name = "default");
 		ECLIPSE_ENGINE ~GameObject();
 
+		std::string name = "";
 		Transform* transform = nullptr;
 
 		ECLIPSE_ENGINE static void Destroy(GameObject* _obj);
@@ -103,7 +104,6 @@ namespace Core
 		}
 
 	private:
-		std::string m_name = "";
 		std::vector<Component*> m_components{};
 		Scene* m_scene = nullptr;
 	};
