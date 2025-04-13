@@ -53,7 +53,9 @@ void EditorApp::Render()
 {
 	GUI::BeginNewFrame();
 	m_dockingGUI.Start();
-	m_crtGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
+	Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
+	if (newGOSelected)
+		m_crtGOSelected = newGOSelected;
 	m_inspectorGUI.Draw(m_crtGOSelected);
 	m_sceneGUI.Draw(m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
 	m_consoleGUI.Draw();
@@ -144,10 +146,20 @@ void EditorApp::LoadScene()
 	m_defaultPipeline->Init(m_window->width, m_window->height);
 
 	// CORE TESTS
+	Core::GameObject* obj1_1 = m_scene.CreateGameObject();
+	obj1_1->transform->localPosition = Math::Vec3(1.f, 1.f, 0.f);
+	obj1_1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
+	obj1_1->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
 	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
 	obj1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj1->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+	
+	// TODO Simplifier AddChild et SetParent (les combiner et retirer le transform de la root)
+	obj1->transform->AddChild(obj1_1->transform);
+	obj1_1->transform->SetParent(obj1->transform);
+	m_scene.m_transformSystem.m_root->RemoveChild(obj1_1->transform);
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
 	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);

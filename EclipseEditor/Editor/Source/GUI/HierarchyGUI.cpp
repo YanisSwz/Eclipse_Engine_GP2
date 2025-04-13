@@ -15,33 +15,54 @@ namespace GUI
 
 	Core::GameObject* HierarchyGUI::Draw(Core::Scene* _scene, Core::GameObject* _crtGOSelected)
 	{
-
 		ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
-
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
-		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-		//Dirty ImGui test for scene graph hierarchy
 		std::vector<Core::Transform*> transforms = _scene->GetTransforms()->GetChildren();
-		if (ImGui::TreeNodeEx("root", treeNodeFlags))
+		for (Core::Transform* transform : transforms)
 		{
-			treeNodeFlags |= ImGuiTreeNodeFlags_Leaf;
-			for (Core::Transform* transform : transforms)
+			Core::GameObject* newGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
+			if (newGOSelected)
 			{
-				if (transform->GetGameObject() == _crtGOSelected)
-					treeNodeFlags |= ImGuiTreeNodeFlags_Selected;
-
-				if (ImGui::TreeNodeEx(transform->GetGameObject()->GetName().c_str(), treeNodeFlags))
-					ImGui::TreePop();
-
-				if (ImGui::IsItemClicked())
-					_crtGOSelected = transform->GetGameObject();
-				treeNodeFlags &= ~ImGuiTreeNodeFlags_Selected;
+				ImGui::End();
+				return newGOSelected;
 			}
-			ImGui::TreePop();
 		}
 
 		ImGui::End();
-		return _crtGOSelected;
+		return nullptr;
+	}
+
+	Core::GameObject* HierarchyGUI::RecursiveDraw(Core::Transform* _crtTransform, Core::Scene* _scene, Core::GameObject* _crtGOSelected)
+	{
+		//Dirty ImGui test for scene graph hierarchy
+		std::vector<Core::Transform*> transforms = _crtTransform->GetChildren();
+		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+		if (transforms.size() == 0)
+			treeNodeFlags |= ImGuiTreeNodeFlags_Leaf;
+
+		if (_crtTransform->GetGameObject() == _crtGOSelected)
+			treeNodeFlags |= ImGuiTreeNodeFlags_Selected;
+		if (ImGui::TreeNodeEx(_crtTransform->GetGameObject()->GetName().c_str(), treeNodeFlags))
+		{
+			if (ImGui::IsItemClicked())
+			{
+				ImGui::TreePop();
+				return _crtTransform->GetGameObject();
+			}
+
+			for (Core::Transform* transform : transforms)
+			{
+				Core::GameObject* newGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
+				if (newGOSelected)
+				{
+					ImGui::TreePop();
+					return newGOSelected;
+				}
+			}
+			
+			ImGui::TreePop();
+		}
+		return nullptr;
 	}
 }
