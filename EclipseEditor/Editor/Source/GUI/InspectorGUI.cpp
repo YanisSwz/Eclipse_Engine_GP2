@@ -51,8 +51,9 @@ namespace GUI
 		ImGui::SeparatorText("Model");
 
 		std::vector<std::string> textureNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Texture>();
-		if (GUI::ComboFilter("Texture: ", &_model->texture->name, textureNames))
-			_model->texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(_model->texture->name);
+		std::string textureName = _model->texture->name;
+		if (GUI::ComboFilter("Texture: ", &textureName, textureNames))
+			_model->texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(textureName);
 
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -61,7 +62,6 @@ namespace GUI
 				IM_ASSERT(payload->DataSize == sizeof(std::string));
 				std::string payload_n;
 				payload_n = *static_cast<std::string*>(payload->Data);
-				_model->texture->name = payload_n.c_str();
 				_model->texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(payload_n);
 			}
 			ImGui::EndDragDropTarget();

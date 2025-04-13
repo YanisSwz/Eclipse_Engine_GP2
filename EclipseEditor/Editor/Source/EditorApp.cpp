@@ -132,10 +132,12 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DeferredLighting.vert", "Assets/Shaders/DeferredRendering/DeferredLighting.vert");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DeferredLighting.frag", "Assets/Shaders/DeferredRendering/DeferredLighting.frag");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DeferredLighting.shd", "DeferredLighting.vert", "DeferredLighting.frag");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("FolderIcon.img", "Assets/Icons/FolderIcon.png");
 
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
 
+	m_contentBrowserGUI.Init();
 	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_defaultPipeline->Init(m_window->width, m_window->height);
 
@@ -180,6 +182,7 @@ void EditorApp::DrawScene()
 
 void EditorApp::DestroyScene()
 {
+	m_contentBrowserGUI.Delete();
 	Resource::ResourceManager::GetInstance().DestroyInstance();
 }
 
