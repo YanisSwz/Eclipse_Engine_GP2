@@ -39,7 +39,7 @@ namespace GUI
 		}
 
 		m_folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("FolderIcon.img");
-		m_meshIcon = m_folderIcon;
+		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("MeshIcon.img");
 		FolderGUI* textureFolder = new FolderGUI("Texture");
 		m_folderChildren.push_back(textureFolder);
 		textureFolder->Init();
@@ -47,7 +47,6 @@ namespace GUI
 
 	FolderGUI* FolderGUI::Draw()
 	{
-
 		int folderChildrenSize = static_cast<int>(m_folderChildren.size());
 		int texturesFilesSize = static_cast<int>(m_textureFiles.size());
 		int meshFilesSize = static_cast<int>(m_meshFiles.size());
@@ -91,7 +90,7 @@ namespace GUI
 
 		invisibleFolderName.append(name).append(" Folder Button");
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
-		if (ImGui::ImageButton(invisibleFolderName.c_str(), m_folderIcon->GetID(), { 100.f, 100.f }))
+		if (ImGui::ImageButton(invisibleFolderName.c_str(), m_folderIcon->GetID(), { 100.f, 100.f }, { 0.f, 1.f }, {1.f, 0.f}))
 		{
 			ImGui::PopStyleVar();
 			ImGui::EndTable();

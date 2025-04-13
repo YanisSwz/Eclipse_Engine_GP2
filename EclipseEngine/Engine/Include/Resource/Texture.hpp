@@ -26,6 +26,7 @@ namespace Resource
 
 		int m_width = 0;
 		int m_height = 0;
+		int m_numColCh = 0;
 		unsigned char* m_imgData = nullptr;
 	};
 }

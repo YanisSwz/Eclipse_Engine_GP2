@@ -2,7 +2,6 @@
 #include "Windowing/GLFWWindow.hpp"
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
 
-
 #include "Resource/ResourceManager.hpp"
 #include "Resource/ModelData.hpp"
 
@@ -118,6 +117,9 @@ void EditorApp::InitGUI()
 
 void EditorApp::LoadScene()
 {
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("MeshIcon.img", "Assets/Icons/MeshIcon.jpg");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("FolderIcon.img", "Assets/Icons/FolderIcon.png");
+	
 	Resource::Mesh* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Avion.obj", "Assets/Models/Avion.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
@@ -133,7 +135,6 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DeferredLighting.vert", "Assets/Shaders/DeferredRendering/DeferredLighting.vert");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DeferredLighting.frag", "Assets/Shaders/DeferredRendering/DeferredLighting.frag");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DeferredLighting.shd", "DeferredLighting.vert", "DeferredLighting.frag");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("FolderIcon.img", "Assets/Icons/FolderIcon.png");
 
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);

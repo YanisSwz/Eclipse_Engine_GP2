@@ -25,16 +25,15 @@ namespace Resource
 		}
 
 		// Get Texture file content
-		int numColCh = 0;
 		stbi_set_flip_vertically_on_load(true);
-		m_imgData = stbi_load(_path.c_str(), &m_width, &m_height, &numColCh, 0);
+		m_imgData = stbi_load(_path.c_str(), &m_width, &m_height, &m_numColCh, 0);
 	}
 
 	void Texture::Generate(RHI::IRenderInterface* _rdrInterface)
 	{
 		m_rdrInter = _rdrInterface;
 		m_texture = _rdrInterface->InstantiateTexture2D();;
-		m_texture->Generate(m_imgData, m_width, m_height);
+		m_texture->Generate(m_imgData, m_width, m_height, m_numColCh);
 		stbi_image_free(m_imgData);
 		m_imgData = nullptr;
 

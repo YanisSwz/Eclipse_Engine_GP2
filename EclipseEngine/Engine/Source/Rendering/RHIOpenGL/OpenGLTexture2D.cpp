@@ -10,7 +10,7 @@ OpenGLTexture2D::~OpenGLTexture2D()
 	Delete();
 }
 
-void OpenGLTexture2D::Generate(unsigned char* _data, int _width, int _height)
+void OpenGLTexture2D::Generate(unsigned char* _data, int _width, int _height, int _numColCh)
 {
 	// Generate Texture
 	glGenTextures(1, &m_textureID);
@@ -23,7 +23,21 @@ void OpenGLTexture2D::Generate(unsigned char* _data, int _width, int _height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _data);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _data);
+	
+	if (_numColCh == 3)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _data);
+	}
+	else if (_numColCh == 4)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _data);
+	}
+	else
+	{
+		std::cout << "Texture: Invalid Format!" << std::endl;
+		return;
+	}
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);

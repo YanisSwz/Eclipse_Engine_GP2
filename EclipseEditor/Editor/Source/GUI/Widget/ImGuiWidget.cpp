@@ -172,8 +172,8 @@ namespace GUI
 
 	void DrawImage(const char* _imageName, unsigned int _imageID, float _size)
 	{
-		ImVec2 uv_min = ImVec2(0.0f, 0.0f);
-		ImVec2 uv_max = ImVec2(1.0f, 1.0f);
+		ImVec2 uv_min = ImVec2(0.0f, 1.0f);
+		ImVec2 uv_max = ImVec2(1.0f, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
 		ImGui::ImageButton(_imageName, _imageID, ImVec2(_size, _size), uv_min, uv_max, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 		ImGui::PopStyleVar();
