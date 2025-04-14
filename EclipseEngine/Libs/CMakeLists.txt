@@ -1,5 +1,7 @@
 ##### Engine Libs #####
 
+include(FetchContent)
+
 # GLFW
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -26,3 +28,18 @@ target_include_directories(ECLIPSE_ENGINE PUBLIC Stb)
 
 # TinyOBJ
 target_include_directories(ECLIPSE_ENGINE PUBLIC TinyOBJ)
+
+# Jolt
+if (NOT TARGET JoltPhysics)
+    FetchContent_Declare(
+            JoltPhysics
+            GIT_REPOSITORY "https://github.com/jrouwe/JoltPhysics"
+            GIT_TAG "v5.3.0"
+		    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics"
+    )
+    FetchContent_MakeAvailable(JoltPhysics)
+endif()
+
+set(PHYSICS_REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics")
+include("${PHYSICS_REPO_ROOT}/Jolt/Jolt.cmake")
+target_link_libraries(ECLIPSE_ENGINE PUBLIC Jolt)
