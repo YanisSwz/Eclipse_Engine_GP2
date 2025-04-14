@@ -4,12 +4,7 @@ namespace Core
 {
 	void Scene::Update()
 	{
-		m_transformSystem.Update();
-	}
-
-	Transform* Scene::AddTransform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)
-	{
-		return m_transformSystem.Add(_translation, _rotation, _scale, _parent);
+		m_systemManager.Update();
 	}
 
 	GameObject* Scene::CreateGameObject()
@@ -22,31 +17,20 @@ namespace Core
 			if (m_gameObjects[i].IsDestroyed())
 			{
 				m_gameObjects[i].~GameObject();
-				new (&m_gameObjects[i]) GameObject(this);
-				m_currentGameObject = &m_gameObjects[i];
-				return m_currentGameObject;
+				new (&m_gameObjects[i]) GameObject(&m_systemManager);
+				return &m_gameObjects[i];
 			}
 		}
 
 		m_gameObjects[m_currentGameObjectCount].~GameObject();
-		new (&m_gameObjects[m_currentGameObjectCount]) GameObject(this);
-		m_currentGameObject = &m_gameObjects[m_currentGameObjectCount];
+		new (&m_gameObjects[m_currentGameObjectCount]) GameObject(&m_systemManager);
 		++m_currentGameObjectCount;
-		return m_currentGameObject;
+		return &m_gameObjects[m_currentGameObjectCount - 1];
 	}
 
-	void Scene::DestroyGameObject()
+	SystemManager* Scene::GetSystemManager() 
 	{
-		if (m_currentGameObject != nullptr)
-		{
-			m_currentGameObject->Destroy();
-			m_currentGameObject = nullptr;
-		}
-	}
-
-	Transform* Scene::GetTransforms() const
-	{
-		return m_transformSystem.GetRoot();
+		return &m_systemManager;
 	}
 
 }

@@ -157,9 +157,9 @@ void EditorApp::LoadScene()
 	obj1->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
 	
 	// TODO Simplifier AddChild et SetParent (les combiner et retirer le transform de la root)
-	obj1->transform->AddChild(obj1_1->transform);
+	/*obj1->transform->AddChild(obj1_1->transform);
 	obj1_1->transform->SetParent(obj1->transform);
-	m_scene.m_transformSystem.m_root->RemoveChild(obj1_1->transform);
+	m_scene.m_transformSystem.m_root->RemoveChild(obj1_1->transform);*/
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
 	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
@@ -182,7 +182,7 @@ void EditorApp::DrawScene()
 	Core::GameObject* obj;
 	Core::Model* addModel;
 	Resource::ModelData modelData;
-	Core::Transform* root = m_scene.GetTransforms();
+	Core::Transform* root = m_scene.GetSystemManager()->GetTransforms();
 	for (int i = 0; i < root->GetChildren().size(); ++i)
 	{
 		obj = root->GetChildren()[i]->GetGameObject();

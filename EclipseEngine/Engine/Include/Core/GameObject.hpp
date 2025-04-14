@@ -5,17 +5,16 @@
 #include "Component.hpp"
 #include "Transform.hpp"
 #include "MonoBehaviour.hpp"
+#include "SystemManager.hpp"
 #include "ProjectExports.hpp"
 
 namespace Core
 {
-	class Scene;
-
 	class GameObject : public Object
 	{
 	public:
 		ECLIPSE_ENGINE GameObject() = default;
-		ECLIPSE_ENGINE GameObject(Scene* _scene, Transform* _t = nullptr, std::string _name = "default");
+		ECLIPSE_ENGINE GameObject(SystemManager* _manager, Transform* _t = nullptr, std::string _name = "default");
 		ECLIPSE_ENGINE ~GameObject();
 
 		std::string name = "";
@@ -23,7 +22,6 @@ namespace Core
 
 		ECLIPSE_ENGINE static void Destroy(GameObject* _obj);
 		ECLIPSE_ENGINE void Destroy() override;
-		ECLIPSE_ENGINE static GameObject* Instantiate(GameObject _original);
 
 		ECLIPSE_ENGINE std::string GetName() const;
 		ECLIPSE_ENGINE static std::string GetName(GameObject* _obj);
@@ -105,6 +103,6 @@ namespace Core
 
 	private:
 		std::vector<Component*> m_components{};
-		Scene* m_scene = nullptr;
+		SystemManager* m_systemManager = nullptr;
 	};
 }
