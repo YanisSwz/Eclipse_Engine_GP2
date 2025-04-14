@@ -15,6 +15,21 @@ namespace Core
 		ECLIPSE_ENGINE Transform* AddTransform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE Transform* GetTransforms() const;
 
+		template <typename T>
+		T* AddComponent()
+		{
+			T* basePtr = new T();
+
+			if (Model* d_ptr = dynamic_cast<Model*>(basePtr))
+			{
+				delete basePtr;
+				return m_renderSystem.AddModel();
+			}
+
+			delete basePtr;
+			return nullptr;
+		}
+
 	private:
 		TransformSystem m_transformSystem{};
 		RenderSystem m_renderSystem{};
