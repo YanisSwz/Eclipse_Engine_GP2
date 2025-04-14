@@ -97,12 +97,12 @@ float Vec3::Distance(Vec3 _vec) const
 
 float Vec3::SquareNorm() const
 {
-	return powf(x, 2.f) + powf(y, 2.0) + powf(z, 2.0);
+	return powf(x, 2.f) + powf(y, 2.f) + powf(z, 2.f);
 }
 
 float Vec3::Norm() const
 {
-	return sqrtf(powf(x, 2.f) + powf(y, 2.0) + powf(z, 2.0));
+	return sqrtf(powf(x, 2.f) + powf(y, 2.f) + powf(z, 2.f));
 }
 
 void Vec3::Normalize()

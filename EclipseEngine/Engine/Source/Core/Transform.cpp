@@ -87,9 +87,9 @@ namespace Core
 	{
 		return Math::Vec3
 		(
-			Math::Vec3(_mat[0][0], _mat[0][1], _mat[0][2]).Norm(),
-			Math::Vec3(_mat[1][0], _mat[1][1], _mat[1][2]).Norm(),
-			Math::Vec3(_mat[2][0], _mat[2][1], _mat[2][2]).Norm()
+			Math::Vec3(_mat[0][0], _mat[1][0], _mat[2][0]).Norm(),
+			Math::Vec3(_mat[0][1], _mat[1][1], _mat[2][1]).Norm(),
+			Math::Vec3(_mat[0][2], _mat[1][2], _mat[2][2]).Norm()
 		);
 	}
 
@@ -107,13 +107,21 @@ namespace Core
 		float m22 = _mat[2][2] / scale.z;
 
 		Math::Quat q = Math::Quat::Identity();
-		q.w = sqrtf(std::max(0.f, 1.f + m00 + m11 + m22)) / 2.f;
+
+		//FIRST METHOD
+		/*q.w = sqrtf(std::max(0.f, 1.f + m00 + m11 + m22)) / 2.f;
 		q.x = sqrtf(std::max(0.f, 1.f + m00 - m11 - m22)) / 2.f;
 		q.y = sqrtf(std::max(0.f, 1.f - m00 + m11 - m22)) / 2.f;
 		q.z = sqrtf(std::max(0.f, 1.f - m00 - m11 + m22)) / 2.f;
 		q.x *= Math::Tools::Sign(q.x * (m21 - m12));
 		q.y *= Math::Tools::Sign(q.y * (m02 - m20));
-		q.z *= Math::Tools::Sign(q.z * (m10 - m01));
+		q.z *= Math::Tools::Sign(q.z * (m10 - m01));*/
+
+		//SECOND METHOD
+		q.w = sqrtf(1.f + m00 + m11 + m22)/2.f;
+		q.x = (m21 - m12) / (4.f * q.w);
+		q.y = (m02 - m20) / (4.f * q.w);
+		q.z = (m10 - m01) / (4.f * q.w);;
 
 		return Math::Quat::Normalized(q);
 	}
