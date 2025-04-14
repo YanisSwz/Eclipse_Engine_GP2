@@ -22,7 +22,12 @@ namespace Core
 
 	void Transform::SetParent(Transform* _parent)
 	{
-		m_parent = _parent;
+		if (m_parent == _parent)
+			return;
+		if (m_parent != nullptr)
+			m_parent->RemoveChild(this);
+		m_parent = _parent; 
+		m_parent->AddChild(this);
 	}
 
 	void Transform::AddChild(Transform* _child)
@@ -33,6 +38,7 @@ namespace Core
 				return;
 		}
 		m_children.push_back(_child);
+		_child->SetParent(this);
 	}
 
 	void Transform::RemoveChild(Transform* _child)

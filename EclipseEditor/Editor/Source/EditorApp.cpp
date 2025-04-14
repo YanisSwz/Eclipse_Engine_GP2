@@ -150,38 +150,29 @@ void EditorApp::LoadScene()
 	obj1_1->transform->localPosition = Math::Vec3(1.f, 1.f, 0.f);
 	obj1_1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* model1 = obj1_1->AddComponent<Core::Model>();
-	model1->mesh = model;
-	model1->texture = texture;
-	model1->shader = shaderProgramDeferredRendering;
+	model1->SetData(model, texture, shaderProgramDeferredRendering);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
 	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
 	obj1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
-	model2->mesh = model;
-	model2->texture = texture;
-	model2->shader = shaderProgramDeferredRendering;
+	model2->SetData(model, texture, shaderProgramDeferredRendering);
 	
 	// TODO Simplifier AddChild et SetParent (les combiner et retirer le transform de la root)
-	/*obj1->transform->AddChild(obj1_1->transform);
+	//obj1->transform->AddChild(obj1_1->transform);
 	obj1_1->transform->SetParent(obj1->transform);
-	m_scene.m_transformSystem.m_root->RemoveChild(obj1_1->transform);*/
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
 	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
 	obj2->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* model3 = obj2->AddComponent<Core::Model>();
-	model3->mesh = model;
-	model3->texture = texture;
-	model3->shader = shaderProgramDeferredRendering;
+	model3->SetData(model, texture, shaderProgramDeferredRendering);
 
 	Core::GameObject* obj3 = m_scene.CreateGameObject();
 	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 0.f);
 	obj3->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
-	model4->mesh = model;
-	model4->texture = texture;
-	model4->shader = shaderProgramDeferredRendering;
+	model4->SetData(model, texture, shaderProgramDeferredRendering);
 }
 
 void EditorApp::DrawScene()
@@ -194,7 +185,7 @@ void EditorApp::DrawScene()
 	Core::GameObject* obj;
 	Core::Model* addModel;
 	Resource::ModelData modelData;
-	Core::Transform* root = m_scene.GetSystemManager()->GetTransforms();
+	Core::Transform* root = m_scene.GetSystemManager()->GetTransformsRoot();
 	for (int i = 0; i < root->GetChildren().size(); ++i)
 	{
 		obj = root->GetChildren()[i]->GetGameObject();

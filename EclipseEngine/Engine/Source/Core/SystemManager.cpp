@@ -12,7 +12,7 @@ namespace Core
 		return m_transformSystem.Add(_translation, _rotation, _scale, _parent);
 	}
 
-	Transform* SystemManager::GetTransforms() const
+	Transform* SystemManager::GetTransformsRoot() const
 	{
 		return m_transformSystem.GetRoot();
 	}
