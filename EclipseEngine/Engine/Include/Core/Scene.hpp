@@ -16,7 +16,7 @@ namespace Core
 		ECLIPSE_ENGINE void Update();
 		ECLIPSE_ENGINE GameObject* CreateGameObject();
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
-		
+
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentGameObjectCount = 0;

@@ -16,4 +16,9 @@ namespace Core
 	{
 		return m_transformSystem.GetRoot();
 	}
+
+	std::vector<Resource::ModelData> SystemManager::GetStaticModels() const
+	{
+		return m_renderSystem.GetStaticModels();
+	}
 }

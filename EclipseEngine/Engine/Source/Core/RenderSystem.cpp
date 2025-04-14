@@ -51,4 +51,13 @@ namespace Core
 			return &m_staticModels[m_currentStaticCount - 1];
 		}
 	}
+
+	std::vector<Resource::ModelData> RenderSystem::GetStaticModels() const
+	{
+		std::vector<Resource::ModelData> data;
+		for (int i = 0; i < m_currentStaticCount; ++i)
+			data.push_back(m_staticModels[i].GetModelData());
+		
+		return data;
+	}
 }

@@ -158,9 +158,7 @@ void EditorApp::LoadScene()
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
 	model2->SetData(model, texture, shaderProgramDeferredRendering);
 	
-	// TODO Simplifier AddChild et SetParent (les combiner et retirer le transform de la root)
-	//obj1->transform->AddChild(obj1_1->transform);
-	obj1_1->transform->SetParent(obj1->transform);
+	obj1->transform->AddChild(obj1_1->transform);
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
 	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
@@ -181,20 +179,7 @@ void EditorApp::DrawScene()
 	m_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 	m_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
-	std::vector<Resource::ModelData> staticModels;
-	Core::GameObject* obj;
-	Core::Model* addModel;
-	Resource::ModelData modelData;
-	Core::Transform* root = m_scene.GetSystemManager()->GetTransformsRoot();
-	for (int i = 0; i < root->GetChildren().size(); ++i)
-	{
-		obj = root->GetChildren()[i]->GetGameObject();
-		addModel = obj->GetComponent<Core::Model>();
-		modelData = addModel->GetModelData();
-		staticModels.push_back(modelData);
-	}
-
-	m_defaultPipeline->Draw(m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos(), staticModels);
+	m_defaultPipeline->Draw(m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos(), m_scene.GetSystemManager()->GetStaticModels());
 }
 
 void EditorApp::DestroyScene()

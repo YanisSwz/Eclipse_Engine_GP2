@@ -2,6 +2,7 @@
 #include "ProjectExports.hpp"
 #include "TransformSystem.hpp"
 #include "RenderSystem.hpp"
+#include <vector>
 
 namespace Core
 {
@@ -14,6 +15,7 @@ namespace Core
 		ECLIPSE_ENGINE void Update();
 		ECLIPSE_ENGINE Transform* AddTransform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE Transform* GetTransformsRoot() const;
+		ECLIPSE_ENGINE std::vector<Resource::ModelData> GetStaticModels() const;
 
 		template <typename T>
 		T* AddComponent()
