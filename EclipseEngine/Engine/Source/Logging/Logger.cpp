@@ -46,6 +46,35 @@ namespace Logging
             delete m_instance;
     }
 
+    void Logger::LogToConsole(PRIORITY _priority, const char* _message, va_list _list)
+    {
+        printf(ColorToStr(PriorityToColor(_priority)));
+        printf(GetTime().c_str());
+        printf(" ");
+        printf(PriorityToStr(_priority));
+        printf(" ");
+        vprintf(_message, _list);
+        printf("\n");
+    }
+
+    void Logger::LogToFile(PRIORITY _priority, const char* _message, va_list _list)
+    {
+        FILE* file;
+        fopen_s(&file, GetFilePath().c_str(), "w");
+
+        if (m_isStandardConsoleEnabled)
+            fprintf(file, ColorToStr(PriorityToColor(_priority)));
+
+        fprintf(file, GetTime().c_str());
+        fprintf(file, " ");
+        fprintf(file, PriorityToStr(_priority));
+        fprintf(file, " ");
+        vfprintf(file, _message, _list);
+        fprintf(file, "\n");
+
+        std::fclose(file);
+    }
+
     COLOR Logger::PriorityToColor(PRIORITY _priority)
     {
         switch (_priority)

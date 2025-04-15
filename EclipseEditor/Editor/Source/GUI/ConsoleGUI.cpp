@@ -30,7 +30,14 @@ namespace GUI
 			{
 				std::string str;
 				getline(file, str);
-				ImGui::Text(str.c_str());
+				Logging::COLOR color = Logging::COLOR::WHITE;
+				if (str.find("[INFO]") != std::string::npos)
+					color = Logging::COLOR::GREEN;
+				else if (str.find("[WARNING]") != std::string::npos)
+					color = Logging::COLOR::YELLOW;
+				else if (str.find("[ERROR]") != std::string::npos)
+					color = Logging::COLOR::RED;
+				ColoredText(str.c_str(), color);
 			}
 			file.close();
 		}

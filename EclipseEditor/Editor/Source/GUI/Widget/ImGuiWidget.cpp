@@ -214,4 +214,32 @@ namespace GUI
 		}
 		return false;
 	}
+
+	ImVec4 ColorToVec4(Logging::COLOR _color)
+	{
+		switch (_color)
+		{
+		case Logging::COLOR::WHITE:
+			return ImVec4(1.f, 1.f, 1.f, 1.f);
+		case Logging::COLOR::RED:
+			return ImVec4(1.f, 0.f, 0.f, 1.f);
+		case Logging::COLOR::GREEN:
+			return ImVec4(0.f, 1.f, 0.f, 1.f);
+		case Logging::COLOR::YELLOW:
+			return ImVec4(1.f, 1.f, 0.f, 1.f);
+		case Logging::COLOR::BLUE:
+			return ImVec4(0.f, 0.f, 1.f, 1.f);
+		case Logging::COLOR::PURPLE:
+			return ImVec4(0.5f, 0.f, 0.5f, 1.f);
+		case Logging::COLOR::CYAN:
+			return ImVec4(0.f, 1.f, 1.f, 1.f);
+		default:
+			return ImVec4(1.f, 1.f, 1.f, 1.f);
+		}
+	}
+
+	void ColoredText(const char* _message, Logging::COLOR _color)
+	{
+		ImGui::TextColored(ColorToVec4(_color), _message);
+	}
 }
