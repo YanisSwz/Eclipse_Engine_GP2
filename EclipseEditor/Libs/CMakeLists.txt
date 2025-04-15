@@ -10,3 +10,15 @@ target_include_directories(imgui PUBLIC ${IMGUI_DIR}/backends)
 
 target_link_libraries(imgui PUBLIC glfw)
 target_link_libraries(ECLIPSE_EDITOR PUBLIC imgui)
+
+# ImGuizmo
+set(IMGUIZMO_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo")
+file(GLOB IMGUIZMO_SOURCES ${IMGUIZMO_DIR}/ImGuizmo.cpp) 
+add_library(imguizmo STATIC ${IMGUIZMO_SOURCES})
+target_include_directories(imguizmo PUBLIC ${IMGUIZMO_DIR})
+
+target_link_libraries(ECLIPSE_EDITOR PUBLIC imguizmo)
+
+#add_subdirectory(${IMGUIZMO_DIR})
+#include_directories(IMGUIZMO_DIR)
+#target_link_libraries(ECLIPSE_EDITOR PUBLIC ImGuizmo)

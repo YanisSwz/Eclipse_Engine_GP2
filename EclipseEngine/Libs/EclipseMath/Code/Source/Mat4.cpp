@@ -72,6 +72,11 @@ float& Mat4::GetValues()
 	return *m_value[0];
 }
 
+const float* Mat4::GetValuesPointer()
+{
+	return &m_value[0][0];
+}
+
 Vec4 Mat4::Diagonal() const
 {
 	return { m_value[0][0], m_value[1][1], m_value[2][2], m_value[3][3] };
