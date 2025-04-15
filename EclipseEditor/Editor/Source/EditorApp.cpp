@@ -1,10 +1,8 @@
 #include "EditorApp.hpp"
 #include "Windowing/GLFWWindow.hpp"
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
-
 #include "Resource/ResourceManager.hpp"
 #include "Resource/ModelData.hpp"
-
 #include "GUI/Widget/ImGuiWidget.hpp"
 
 #include "iostream"
@@ -39,11 +37,11 @@ void EditorApp::Update()
 	oldTime = m_window->GetTime();
 
 
-	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_scenePosX), static_cast<float>(m_scenePosY)}, { static_cast<float>(m_sceneWidth), static_cast<float>(m_sceneHeight)});
+	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_scenePosX), static_cast<float>(m_scenePosY) }, { static_cast<float>(m_sceneWidth), static_cast<float>(m_sceneHeight) });
 	m_defaultPipeline->Rescale(m_sceneWidth, m_sceneHeight);
 	m_renderInterface->Viewport(0, 0, m_sceneWidth, m_sceneHeight);
 
-
+	m_sceneGUI.UpdateGuizmoMode(m_window);
 	m_scene.Update();
 
 	m_window->PollEvents();
@@ -52,17 +50,19 @@ void EditorApp::Update()
 void EditorApp::Render()
 {
 	GUI::BeginNewFrame();
+	m_sceneGUI.StartGuizmo();
 	m_dockingGUI.Start();
 	Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
 	if (newGOSelected)
 		m_crtGOSelected = newGOSelected;
 	m_inspectorGUI.Draw(m_crtGOSelected);
-	m_sceneGUI.Draw(m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
+	m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
 	m_consoleGUI.Draw();
 	m_contentBrowserGUI.Draw();
 	GUI::EndFrame();
 
 	DrawScene();
+
 
 	GUI::RenderGUI();
 	m_dockingGUI.End();
@@ -121,7 +121,7 @@ void EditorApp::LoadScene()
 {
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("MeshIcon.img", "Assets/Icons/MeshIcon.jpg");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("FolderIcon.img", "Assets/Icons/FolderIcon.png");
-	
+
 	Resource::Mesh* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Avion.obj", "Assets/Models/Avion.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
@@ -155,7 +155,7 @@ void EditorApp::LoadScene()
 	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
 	obj1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj1->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
-	
+
 	// TODO Simplifier AddChild et SetParent (les combiner et retirer le transform de la root)
 	obj1->transform->AddChild(obj1_1->transform);
 	obj1_1->transform->SetParent(obj1->transform);
@@ -170,6 +170,7 @@ void EditorApp::LoadScene()
 	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 0.f);
 	obj3->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	obj3->AddComponent(new Core::Model(model, texture, shaderProgramDeferredRendering));
+	m_crtGOSelected = obj3;
 }
 
 void EditorApp::DrawScene()

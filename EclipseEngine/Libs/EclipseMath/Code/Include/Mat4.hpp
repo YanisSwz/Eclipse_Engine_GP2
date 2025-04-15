@@ -21,6 +21,7 @@ namespace Math
 
 		// Functions
 		float& GetValues();
+		const float* GetValuesPointer();
 		Vec4 Diagonal() const;
 		void Transpose();
 		float Trace() const;

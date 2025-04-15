@@ -47,6 +47,7 @@ namespace Windowing
 		KEY_ARROW_DOWN,
 		KEY_ARROW_LEFT,
 		KEY_ARROW_RIGHT,
+		KEY_CTRL_LEFT,
 		COUNT
 	};
 

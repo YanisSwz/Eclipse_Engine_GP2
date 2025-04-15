@@ -14,6 +14,8 @@ namespace Core
 		~SceneCamera() = default;
 
 		void Update(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
+		Math::Mat4 GetView() const;
+		Math::Mat4 GetProjection() const;
 		Math::Mat4 GetVP() const;
 		Math::Vec3 GetViewPos() const;
 
