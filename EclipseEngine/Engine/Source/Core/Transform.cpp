@@ -103,6 +103,8 @@ namespace Core
 		tempPos = tempQ * Math::Quat::Conjugate(inverseQ);
 		localPosition = Math::Vec3{tempPos.x, tempPos.y, tempPos.z};
 
+		localScale = scale / m_parent->scale;
+
 		for (int i = 0; i < m_children.size(); ++i)
 		{
 			m_children[i]->Update();

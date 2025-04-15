@@ -101,6 +101,10 @@ namespace GUI
 			_crtGOSelected->transform->position.x = position[0];
 			_crtGOSelected->transform->position.y = position[1];
 			_crtGOSelected->transform->position.z = position[2];
+
+			_crtGOSelected->transform->scale.x = scale[0] * Math::Tools::Sign(_crtGOSelected->transform->scale.x);
+			_crtGOSelected->transform->scale.y = scale[1] * Math::Tools::Sign(_crtGOSelected->transform->scale.y);
+			_crtGOSelected->transform->scale.z = scale[2] * Math::Tools::Sign(_crtGOSelected->transform->scale.z);
 		}
 
 		ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
