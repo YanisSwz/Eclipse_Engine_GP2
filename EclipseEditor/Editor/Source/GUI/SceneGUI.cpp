@@ -96,9 +96,9 @@ namespace GUI
 			_crtGOSelected->transform->localPosition.y = position[1];
 			_crtGOSelected->transform->localPosition.z = position[2];
 
-			_crtGOSelected->transform->localRotation.x = rotation[0];
-			_crtGOSelected->transform->localRotation.y = rotation[1];
-			_crtGOSelected->transform->localRotation.z = rotation[2];
+			_crtGOSelected->transform->localEulerAngles.x = rotation[0];
+			_crtGOSelected->transform->localEulerAngles.y = rotation[1];
+			_crtGOSelected->transform->localEulerAngles.z = rotation[2];
 
 			_crtGOSelected->transform->localScale.x = scale[0];
 			_crtGOSelected->transform->localScale.y = scale[1];

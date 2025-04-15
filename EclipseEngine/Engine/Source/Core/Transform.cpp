@@ -57,15 +57,18 @@ namespace Core
 
 	void Transform::Update()
 	{
+		localRotation = Math::Quat::QuaternionEuler(localEulerAngles.x, localEulerAngles.y, localEulerAngles.z);
 		if (m_parent != nullptr)
 		{
-			localRotation = Math::Quat::QuaternionEuler(localEulerAngles.x, localEulerAngles.y, localEulerAngles.z);
-			Math::Mat4 transform = m_parent->GetTransformMatrix() * GetLocalTransformMatrix();
-
 			// Extract new position, scale and rotation
-			position = GetTranslation(transform);
-			scale = GetScale(transform);
-			rotation = GetRotation(transform);
+			Math::Quat tempPos{ 0.f, localPosition.x, localPosition.y, localPosition.z };
+			Math::Quat tempQ = m_parent->rotation * tempPos;
+			tempPos = tempQ * Math::Quat::Conjugate(m_parent->rotation);
+			position = m_parent->position + Math::Vec3{tempPos.x, tempPos.y, tempPos.z};
+
+			scale = m_parent->scale * localScale;
+
+			rotation = m_parent->rotation * localRotation;
 		}
 		else
 		{
@@ -79,54 +82,4 @@ namespace Core
 			m_children[i]->Update();
 		}
 	}
-
-	Math::Vec3 Transform::GetTranslation(Math::Mat4& _mat) const
-	{
-		return Math::Vec3(_mat[0][3], _mat[1][3], _mat[2][3]);
-	}
-
-	Math::Vec3 Transform::GetScale(Math::Mat4& _mat) const
-	{
-		return Math::Vec3
-		(
-			Math::Vec3(_mat[0][0], _mat[1][0], _mat[2][0]).Norm(),
-			Math::Vec3(_mat[0][1], _mat[1][1], _mat[2][1]).Norm(),
-			Math::Vec3(_mat[0][2], _mat[1][2], _mat[2][2]).Norm()
-		);
-	}
-
-	Math::Quat Transform::GetRotation(Math::Mat4& _mat) const
-	{
-		// Normalize Scale from Matrix4x4
-		float m00 = _mat[0][0] / scale.x;
-		float m01 = _mat[0][1] / scale.y;
-		float m02 = _mat[0][2] / scale.z;
-		float m10 = _mat[1][0] / scale.x;
-		float m11 = _mat[1][1] / scale.y;
-		float m12 = _mat[1][2] / scale.z;
-		float m20 = _mat[2][0] / scale.x;
-		float m21 = _mat[2][1] / scale.y;
-		float m22 = _mat[2][2] / scale.z;
-
-		Math::Quat q = Math::Quat::Identity();
-
-		//FIRST METHOD
-		/*q.w = sqrtf(std::max(0.f, 1.f + m00 + m11 + m22)) / 2.f;
-		q.x = sqrtf(std::max(0.f, 1.f + m00 - m11 - m22)) / 2.f;
-		q.y = sqrtf(std::max(0.f, 1.f - m00 + m11 - m22)) / 2.f;
-		q.z = sqrtf(std::max(0.f, 1.f - m00 - m11 + m22)) / 2.f;
-		q.x *= Math::Tools::Sign(q.x * (m21 - m12));
-		q.y *= Math::Tools::Sign(q.y * (m02 - m20));
-		q.z *= Math::Tools::Sign(q.z * (m10 - m01));*/
-
-		//SECOND METHOD
-		q.w = sqrtf(1.f + m00 + m11 + m22)/2.f;
-		q.x = (m21 - m12) / (4.f * q.w);
-		q.y = (m02 - m20) / (4.f * q.w);
-		q.z = (m10 - m01) / (4.f * q.w);
-		q.Normalize();
-
-		return q;
-	}
-	
 }

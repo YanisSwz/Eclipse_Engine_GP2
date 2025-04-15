@@ -34,9 +34,6 @@ namespace Core
 
 	private:
 		inline Math::Mat4 GetLocalTransformMatrix() const { return Math::Mat4::TRS(localPosition, localRotation, localScale); };
-		Math::Vec3 GetTranslation(Math::Mat4& _mat) const;
-		Math::Vec3 GetScale(Math::Mat4& _mat) const;
-		Math::Quat GetRotation(Math::Mat4& _mat) const;
 		Transform* m_parent = nullptr;
 		std::vector<Transform*> m_children{};
 	};
