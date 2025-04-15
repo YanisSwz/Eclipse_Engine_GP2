@@ -28,6 +28,8 @@ namespace Logging
     {
     public:
         ECLIPSE_ENGINE static Logger* Get();
+        ECLIPSE_ENGINE static void Destroy();
+
         ECLIPSE_ENGINE static std::string GetFilePath();
 
         ECLIPSE_ENGINE void SetPriority(PRIORITY _priority);
@@ -42,6 +44,7 @@ namespace Logging
         PRIORITY m_priority;
         bool m_isStandardConsoleEnabled;
 
+        Logger();
         Logger(std::string _fileName, PRIORITY _priority = PRIORITY::DEBUG, bool _isStandardConsoleEnabled = false);
         ~Logger();
 
