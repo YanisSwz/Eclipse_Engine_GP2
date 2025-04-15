@@ -1,4 +1,7 @@
 #include "EditorApp.hpp"
+
+#include "Logger.hpp"
+
 #include "Windowing/GLFWWindow.hpp"
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
 #include "Resource/ResourceManager.hpp"
@@ -11,6 +14,7 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
 	m_height(_height)
 {
+	Logging::Logger::Get()->Log(Logging::PRIORITY::INFO, "EditorApp initialization!");
 	InitWindowing(_windowName);
 	InitGUI();
 	InitRHI();

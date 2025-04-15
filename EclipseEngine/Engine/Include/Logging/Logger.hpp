@@ -1,5 +1,6 @@
 #pragma once
-#include <stdio.h>
+#include <string>
+#include <stdarg.h>
 #include "ProjectExports.hpp"
 
 namespace Logging
@@ -26,25 +27,32 @@ namespace Logging
     class Logger
     {
     public:
-        ECLIPSE_ENGINE Logger(const char* _fileName, PRIORITY _priority = PRIORITY::DEBUG);
-        ECLIPSE_ENGINE ~Logger();
+        ECLIPSE_ENGINE static Logger* Get();
+        ECLIPSE_ENGINE static std::string GetFilePath();
 
         ECLIPSE_ENGINE void SetPriority(PRIORITY _priority);
+        ECLIPSE_ENGINE void EnableStandardConsoleOutput(bool _isStandardConsoleEnabled);
 
-        void Log(PRIORITY _priority, const char* _message, ...);
+        ECLIPSE_ENGINE void Log(PRIORITY _priority, const char* _message, ...);
 
     private:
-        static const char* m_folderName;
-        static bool m_bIsFolderCreated;
-
+        static Logger* m_instance;
+        static std::string m_folderName;
+        static std::string m_fileName;
         PRIORITY m_priority;
-        FILE* m_file = nullptr;        
+        bool m_isStandardConsoleEnabled;
 
-        void Init(const char* _fileName, PRIORITY _priority);
-        void FreeFile();
+        Logger(std::string _fileName, PRIORITY _priority = PRIORITY::DEBUG, bool _isStandardConsoleEnabled = false);
+        ~Logger();
+
+        void LogToConsole(PRIORITY _priority, const char* _message, va_list _list);
+        void LogToFile(PRIORITY _priority, const char* _message, va_list _list);
 
         COLOR PriorityToColor(PRIORITY _priority);
         const char* PriorityToStr(PRIORITY _priority);
         const char* ColorToStr(COLOR _color);
+
+        static std::string GetDateTime();
+        std::string GetTime();
     };
 }

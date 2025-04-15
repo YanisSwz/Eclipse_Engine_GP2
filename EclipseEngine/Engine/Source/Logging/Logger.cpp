@@ -1,50 +1,78 @@
 #include "Logger.hpp"
-#include <string>
+#include <ctime>
 
 #define NOGDI
 #include <windows.h>
 
 namespace Logging
 {
-    const char* Logger::m_folderName = "Logs";
-    bool Logger::m_bIsFolderCreated = false;
+    Logger* Logger::m_instance = nullptr;
+    std::string Logger::m_folderName = "Logs";
+    std::string Logger::m_fileName = "";
 
-    Logger::Logger(const char* _fileName, PRIORITY _priority)
+    Logger* Logger::Get()
     {
-        Init(_fileName, _priority);
+        if (!m_instance)
+        {
+            std::string fileName = "Log_" + GetDateTime() + ".txt";
+            m_instance = new Logger(fileName);
+        }
+        return m_instance;
+    }
+
+    std::string Logger::GetFilePath()
+    {
+        std::string filePath = m_folderName + "/" + m_fileName;
+        return filePath;
+    }
+
+    Logger::Logger(std::string _fileName, PRIORITY _priority, bool _isStandardConsoleEnabled)
+    {
+        SetPriority(_priority);
+        EnableStandardConsoleOutput(_isStandardConsoleEnabled);
+
+        m_fileName = _fileName;
+
+        CreateDirectory(m_folderName.c_str(), NULL);
+
+        HANDLE handle = CreateFile(GetFilePath().c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (handle != 0)
+            CloseHandle(handle);
     }
 
     Logger::~Logger()
     {
-        FreeFile();
+        if (m_instance)
+            delete m_instance;
     }
 
-    void Logger::Init(const char* _fileName, PRIORITY _priority)
+    void Logger::LogToConsole(PRIORITY _priority, const char* _message, va_list _list)
     {
-        SetPriority(_priority);
-
-        if (!m_bIsFolderCreated)
-        {
-            CreateDirectory(m_folderName, NULL);
-            Logger::m_bIsFolderCreated = true;
-        }
-
-        std::string filePathStr = std::string(m_folderName) + "/" + _fileName;
-        const char* filePath = filePathStr.c_str();
-        HANDLE handle = CreateFile(filePath, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
-        if (handle != 0)
-            CloseHandle(handle);
-
-        fopen_s(&m_file, filePath, "a");
+        printf(ColorToStr(PriorityToColor(_priority)));
+        printf(GetTime().c_str());
+        printf(" ");
+        printf(PriorityToStr(_priority));
+        printf(" ");
+        vprintf(_message, _list);
+        printf("\n");
     }
 
-    void Logger::FreeFile()
+    void Logger::LogToFile(PRIORITY _priority, const char* _message, va_list _list)
     {
-        if (m_file)
-        {
-            std::fclose(m_file);
-            m_file = nullptr;
-        }
+        FILE* file;
+        fopen_s(&file, GetFilePath().c_str(), "w");
+
+        if (m_isStandardConsoleEnabled)
+            fprintf(file, ColorToStr(PriorityToColor(_priority)));
+
+        fprintf(file, GetTime().c_str());
+        fprintf(file, " ");
+        fprintf(file, PriorityToStr(_priority));
+        fprintf(file, " ");
+        vfprintf(file, _message, _list);
+        fprintf(file, "\n");
+
+        std::fclose(file);
     }
 
     COLOR Logger::PriorityToColor(PRIORITY _priority)
@@ -103,4 +131,24 @@ namespace Logging
             return "\033[0m";
         }
 	}
+
+    std::string Logger::GetDateTime()
+    {
+        std::time_t currTime = std::time(0);
+        std::tm timestamp;
+        localtime_s(&timestamp, &currTime);
+        char timeBuffer[128];
+        strftime(timeBuffer, 80, "%d-%m-%y_%H-%M", &timestamp);
+        return std::string(timeBuffer);
+    }
+
+    std::string Logger::GetTime()
+    {
+        std::time_t currTime = std::time(0);
+        std::tm timestamp;
+        localtime_s(&timestamp, &currTime);
+        char timeBuffer[128];
+        strftime(timeBuffer, 80, "[%X]", &timestamp);
+        return std::string(timeBuffer);
+    }
 }
