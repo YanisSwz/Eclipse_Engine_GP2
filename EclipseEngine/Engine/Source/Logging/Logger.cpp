@@ -15,7 +15,7 @@ namespace Logging
         if (!m_instance)
         {
             std::string fileName = "Log_" + GetDateTime() + ".txt";
-            m_instance = new Logger(fileName, PRIORITY::DEBUG);
+            m_instance = new Logger(fileName);
         }
         return m_instance;
     }
@@ -26,9 +26,10 @@ namespace Logging
         return filePath;
     }
 
-    Logger::Logger(std::string _fileName, PRIORITY _priority)
+    Logger::Logger(std::string _fileName, PRIORITY _priority, bool _isStandardConsoleEnabled)
     {
         SetPriority(_priority);
+        EnableStandardConsoleOutput(_isStandardConsoleEnabled);
 
         m_fileName = _fileName;
 

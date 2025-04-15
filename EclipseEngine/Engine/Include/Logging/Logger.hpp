@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <stdarg.h>
 #include "ProjectExports.hpp"
 
 namespace Logging
@@ -30,6 +31,7 @@ namespace Logging
         ECLIPSE_ENGINE static std::string GetFilePath();
 
         ECLIPSE_ENGINE void SetPriority(PRIORITY _priority);
+        ECLIPSE_ENGINE void EnableStandardConsoleOutput(bool _isStandardConsoleEnabled);
 
         ECLIPSE_ENGINE void Log(PRIORITY _priority, const char* _message, ...);
 
@@ -38,9 +40,13 @@ namespace Logging
         static std::string m_folderName;
         static std::string m_fileName;
         PRIORITY m_priority;
+        bool m_isStandardConsoleEnabled;
 
-        Logger(std::string _fileName, PRIORITY _priority = PRIORITY::DEBUG);
+        Logger(std::string _fileName, PRIORITY _priority = PRIORITY::DEBUG, bool _isStandardConsoleEnabled = false);
         ~Logger();
+
+        void LogToConsole(PRIORITY _priority, const char* _message, va_list _list);
+        void LogToFile(PRIORITY _priority, const char* _message, va_list _list);
 
         COLOR PriorityToColor(PRIORITY _priority);
         const char* PriorityToStr(PRIORITY _priority);
