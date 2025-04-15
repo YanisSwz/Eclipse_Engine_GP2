@@ -23,6 +23,7 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 
 EditorApp::~EditorApp()
 {
+	Logging::Logger::Destroy();
 }
 
 bool EditorApp::ShouldClose()

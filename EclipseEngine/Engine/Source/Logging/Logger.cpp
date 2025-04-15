@@ -14,16 +14,26 @@ namespace Logging
     {
         if (!m_instance)
         {
-            std::string fileName = "Log_" + GetDateTime() + ".txt";
+            std::string fileName = std::string("Log_") + GetDateTime() + ".txt";
             m_instance = new Logger(fileName);
         }
         return m_instance;
+    }
+
+    void Logger::Destroy()
+    {
+        if (m_instance)
+            delete m_instance;
     }
 
     std::string Logger::GetFilePath()
     {
         std::string filePath = m_folderName + "/" + m_fileName;
         return filePath;
+    }
+
+    Logger::Logger()
+    {
     }
 
     Logger::Logger(std::string _fileName, PRIORITY _priority, bool _isStandardConsoleEnabled)
@@ -42,8 +52,6 @@ namespace Logging
 
     Logger::~Logger()
     {
-        if (m_instance)
-            delete m_instance;
     }
 
     void Logger::LogToConsole(PRIORITY _priority, const char* _message, va_list _list)
