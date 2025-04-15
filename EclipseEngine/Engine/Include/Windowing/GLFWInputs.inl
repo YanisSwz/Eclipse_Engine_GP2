@@ -56,7 +56,8 @@ namespace Windowing
 			GLFW_KEY_UP,
 			GLFW_KEY_DOWN,
 			GLFW_KEY_LEFT,
-			GLFW_KEY_RIGHT
+			GLFW_KEY_RIGHT,
+			GLFW_KEY_LEFT_CONTROL
 		};
 
 		return glfwKeyCode[index];

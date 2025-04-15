@@ -18,6 +18,7 @@ namespace Core
 		ECLIPSE_ENGINE ~Model();
 
 		ECLIPSE_ENGINE Resource::ModelData GetModelData() const;
+		ECLIPSE_ENGINE void SetData(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader);
 
 		Resource::Mesh* mesh = nullptr;
 		Resource::Texture* texture = nullptr;

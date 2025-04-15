@@ -18,7 +18,7 @@ namespace GUI
 		ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
 
-		std::vector<Core::Transform*> transforms = _scene->GetTransforms()->GetChildren();
+		std::vector<Core::Transform*> transforms = _scene->GetSystemManager()->GetTransformsRoot()->GetChildren();
 		for (Core::Transform* transform : transforms)
 		{
 			Core::GameObject* newGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);

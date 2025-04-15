@@ -26,4 +26,11 @@ namespace Core
 		modelData.TRS = GetGameObject()->transform->GetTransformMatrix();
 		return modelData;
 	}
+
+	void Model::SetData(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader) 
+	{
+		mesh = _mesh;
+		texture = _texture;
+		shader = _shader;
+	}
 }

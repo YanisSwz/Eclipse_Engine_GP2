@@ -3,9 +3,9 @@
 
 namespace Core
 {
-	GameObject::GameObject(Scene* _scene, Transform* _t, std::string _name)
+	GameObject::GameObject(SystemManager* _manager, Transform* _t, std::string _name)
 	{
-		m_scene = _scene;
+		m_systemManager = _manager;
 
 		if (_name == "default")
 			name = "GameObject" + std::to_string(m_id);
@@ -19,7 +19,7 @@ namespace Core
 		}
 		else
 		{
-			transform = m_scene->AddTransform();
+			transform = m_systemManager->AddTransform();
 			transform->SetGameObject(this);
 		}
 
@@ -46,12 +46,6 @@ namespace Core
 	void GameObject::Destroy(GameObject* _obj)
 	{
 		_obj->Destroy();
-	}
-
-	GameObject* GameObject::Instantiate(GameObject _original)
-	{
-		//TODO: Replace with arguments
-		return _original.m_scene->CreateGameObject();
 	}
 
 	std::string GameObject::GetName() const 

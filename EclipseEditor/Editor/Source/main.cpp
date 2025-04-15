@@ -1,5 +1,6 @@
-#include "EditorApp.hpp"
+#include "imgui.h"
 
+#include "EditorApp.hpp"
 #ifndef NDEBUG
 #include <crtdbg.h>
 #endif

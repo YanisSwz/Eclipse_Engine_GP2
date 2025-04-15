@@ -1,6 +1,7 @@
 #pragma once
 #include "Model.hpp"
 #include "ProjectExports.hpp"
+#include <vector>
 
 namespace Core
 {
@@ -10,6 +11,7 @@ namespace Core
 		ECLIPSE_ENGINE RenderSystem() = default;
 		ECLIPSE_ENGINE ~RenderSystem() = default;
 		ECLIPSE_ENGINE Model* AddModel(Resource::Mesh* _mesh = nullptr, Resource::Texture* _texture = nullptr, Resource::ShaderProgram* _shader = nullptr, bool _bIsDynamic = false);
+		ECLIPSE_ENGINE std::vector<Resource::ModelData> GetStaticModels() const;
 
 	private:
 		static const int MAX_SIZE = 100;

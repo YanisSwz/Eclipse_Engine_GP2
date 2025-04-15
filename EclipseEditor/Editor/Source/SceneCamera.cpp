@@ -122,6 +122,16 @@ void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 	m_eye.z = m_at.z - direction.z;
 }
 
+Math::Mat4 SceneCamera::GetView() const
+{
+	return Math::Mat4::ViewMatrix(m_eye, m_at, m_up);
+}
+
+Math::Mat4 SceneCamera::GetProjection() const
+{
+	return Math::Mat4::PerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);
+}
+
 Math::Mat4 SceneCamera::GetVP() const
 {
 	Math::Mat4 VP = Math::Mat4::PerspectiveMatrix(m_width, m_height, m_fov, m_near, m_far);

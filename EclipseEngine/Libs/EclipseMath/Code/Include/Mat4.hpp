@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec3.hpp"
 #include "Vec4.hpp"
+#include "Quat.hpp"
 
 namespace Math
 {
@@ -21,6 +22,7 @@ namespace Math
 
 		// Functions
 		float& GetValues();
+		const float* GetValuesPointer();
 		Vec4 Diagonal() const;
 		void Transpose();
 		float Trace() const;
@@ -51,12 +53,14 @@ namespace Math
 		static Mat4 RotationZ(float _theta);
 		static Mat4 Rotation(Vec3 _theta);
 		static Mat4 Rotation(Vec4 _theta);
+		static Mat4 Rotation(Quat _rota);
 		static Mat4 Translation(Vec3 _translate);
 		static Mat4 Translation(Vec4 _translate);
 		static Mat4 Scale(Vec3 _scale);
 		static Mat4 Scale(Vec4 _scale);
 		static Mat4 TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Vec3 _rotate = { 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
 		static Mat4 TRS(Vec4 _translate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _rotate = { 0.f, 0.f, 0.f, 0.f }, Vec4 _scale = { 1.f, 1.f, 1.f, 1.f });
+		static Mat4 TRS(Vec3 _translate = { 0.f, 0.f, 0.f }, Quat _rotate = { 1.f, 0.f, 0.f, 0.f }, Vec3 _scale = { 1.f, 1.f, 1.f });
 		static Mat4 PerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far);
 		static Mat4 ViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up);
 		static void Print(Mat4 _mat);
