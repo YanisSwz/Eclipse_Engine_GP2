@@ -18,7 +18,9 @@ namespace Core
 		ECLIPSE_ENGINE void RemoveChild(Transform* _child);
 		ECLIPSE_ENGINE void Update();
 		ECLIPSE_ENGINE inline Math::Mat4 GetTransformMatrix() const { return Math::Mat4::TRS(position, rotation, scale); };
-		
+		ECLIPSE_ENGINE void StartOverride();
+		ECLIPSE_ENGINE void EndOverride();
+
 		// Global position
 		Math::Vec3 position{ 0.f, 0.f, 0.f };
 		// Global scale
@@ -32,6 +34,7 @@ namespace Core
 		Math::Quat localRotation{ 1.f, 0.f, 0.f, 0.f };
 		Math::Vec3 localEulerAngles{ 0.f, 0.f, 0.f };
 
+		bool isSelected = false;
 	private:
 		inline Math::Mat4 GetLocalTransformMatrix() const { return Math::Mat4::TRS(localPosition, localRotation, localScale); };
 		Transform* m_parent = nullptr;

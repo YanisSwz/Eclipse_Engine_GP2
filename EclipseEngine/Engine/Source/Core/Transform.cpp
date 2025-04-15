@@ -27,7 +27,7 @@ namespace Core
 			return;
 		if (m_parent != nullptr)
 			m_parent->RemoveChild(this);
-		m_parent = _parent; 
+		m_parent = _parent;
 		m_parent->AddChild(this);
 	}
 
@@ -52,34 +52,62 @@ namespace Core
 				return;
 			}
 		}
-		
+
 	}
 
 	void Transform::Update()
 	{
-		localRotation = Math::Quat::QuaternionEuler(localEulerAngles.x, localEulerAngles.y, localEulerAngles.z);
-		if (m_parent != nullptr)
+		if (!isSelected)
 		{
-			// Extract new position, scale and rotation
-			Math::Quat tempPos{ 0.f, localPosition.x, localPosition.y, localPosition.z };
-			Math::Quat tempQ = m_parent->rotation * tempPos;
-			tempPos = tempQ * Math::Quat::Conjugate(m_parent->rotation);
-			position = m_parent->position + Math::Vec3{tempPos.x, tempPos.y, tempPos.z};
+			localRotation = Math::Quat::QuaternionEuler(localEulerAngles.x, localEulerAngles.y, localEulerAngles.z);
+			if (m_parent != nullptr)
+			{
+				// Extract new position, scale and rotation
+				Math::Quat tempPos{ 0.f, localPosition.x, localPosition.y, localPosition.z };
+				Math::Quat tempQ = m_parent->rotation * tempPos;
+				tempPos = tempQ * Math::Quat::Conjugate(m_parent->rotation);
+				position = m_parent->position + Math::Vec3{ tempPos.x, tempPos.y, tempPos.z };
 
-			scale = m_parent->scale * localScale;
+				scale = m_parent->scale * localScale;
 
-			rotation = m_parent->rotation * localRotation;
+				rotation = m_parent->rotation * localRotation;
+			}
+			else
+			{
+				position = localPosition;
+				scale = localScale;
+				rotation = localRotation;
+			}
 		}
-		else
-		{
-			position = localPosition;
-			scale = localScale;
-			rotation = localRotation;
-		}
-		
-		for(int i = 0; i < m_children.size(); ++i)
+
+		for (int i = 0; i < m_children.size(); ++i)
 		{
 			m_children[i]->Update();
 		}
+	}
+
+	void Transform::StartOverride()
+	{
+		isSelected = true;
+	}
+
+	void Transform::EndOverride()
+	{
+		// We get the position relative to the parent
+		localPosition = position - m_parent->position;
+
+		// We cancel the rotation of the parent to have the right local position
+		Math::Quat tempPos{ 0.f, localPosition.x, localPosition.y, localPosition.z };
+		Math::Quat inverseQ = Math::Quat::Inverse(m_parent->rotation);
+		Math::Quat tempQ = inverseQ * tempPos;
+		tempPos = tempQ * Math::Quat::Conjugate(inverseQ);
+		localPosition = Math::Vec3{tempPos.x, tempPos.y, tempPos.z};
+
+		for (int i = 0; i < m_children.size(); ++i)
+		{
+			m_children[i]->Update();
+		}
+
+		isSelected = false;
 	}
 }

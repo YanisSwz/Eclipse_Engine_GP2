@@ -65,6 +65,12 @@ namespace GUI
 		if (!_crtGOSelected)
 			return;
 
+		if (ImGuizmo::IsUsingAny() && !_crtGOSelected->transform->isSelected)
+			_crtGOSelected->transform->StartOverride();
+		else if(!ImGuizmo::IsUsingAny() && _crtGOSelected->transform->isSelected)
+			_crtGOSelected->transform->EndOverride();
+
+
 		float viewManipulateRight = ImGui::GetWindowPos().x + (float)ImGui::GetWindowWidth();
 		float viewManipulateTop = ImGui::GetWindowPos().y;
 		float windowWidth = (float)ImGui::GetWindowWidth();
@@ -92,17 +98,9 @@ namespace GUI
 			float scale[4];
 
 			ImGuizmo::DecomposeMatrixToComponents(TRS.GetValuesPointer(), position, rotation, scale);
-			_crtGOSelected->transform->localPosition.x = position[0];
-			_crtGOSelected->transform->localPosition.y = position[1];
-			_crtGOSelected->transform->localPosition.z = position[2];
-
-			_crtGOSelected->transform->localEulerAngles.x = rotation[0];
-			_crtGOSelected->transform->localEulerAngles.y = rotation[1];
-			_crtGOSelected->transform->localEulerAngles.z = rotation[2];
-
-			_crtGOSelected->transform->localScale.x = scale[0];
-			_crtGOSelected->transform->localScale.y = scale[1];
-			_crtGOSelected->transform->localScale.z = scale[2];
+			_crtGOSelected->transform->position.x = position[0];
+			_crtGOSelected->transform->position.y = position[1];
+			_crtGOSelected->transform->position.z = position[2];
 		}
 
 		ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
