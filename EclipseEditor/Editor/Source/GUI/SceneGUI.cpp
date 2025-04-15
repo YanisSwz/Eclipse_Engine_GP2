@@ -102,6 +102,8 @@ namespace GUI
 			_crtGOSelected->transform->position.y = position[1];
 			_crtGOSelected->transform->position.z = position[2];
 
+			_crtGOSelected->transform->rotation = Math::Quat::QuaternionEuler(rotation[0], rotation[1], rotation[2]);
+
 			_crtGOSelected->transform->scale.x = scale[0] * Math::Tools::Sign(_crtGOSelected->transform->scale.x);
 			_crtGOSelected->transform->scale.y = scale[1] * Math::Tools::Sign(_crtGOSelected->transform->scale.y);
 			_crtGOSelected->transform->scale.z = scale[2] * Math::Tools::Sign(_crtGOSelected->transform->scale.z);

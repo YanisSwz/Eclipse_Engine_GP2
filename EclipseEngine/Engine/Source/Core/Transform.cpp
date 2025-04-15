@@ -105,6 +105,10 @@ namespace Core
 
 		localScale = scale / m_parent->scale;
 
+		localRotation = Math::Quat::Inverse(m_parent->rotation) * rotation;
+		eulerAngles = rotation.GetEulerAnglesDegXYZ();
+		localEulerAngles = localRotation.GetEulerAnglesDegXYZ();
+
 		for (int i = 0; i < m_children.size(); ++i)
 		{
 			m_children[i]->Update();
