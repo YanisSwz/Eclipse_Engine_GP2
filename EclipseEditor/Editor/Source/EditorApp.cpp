@@ -124,6 +124,7 @@ void EditorApp::LoadScene()
 	
 	Resource::Mesh* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Avion.obj", "Assets/Models/Avion.obj");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Cube.obj", "Assets/Models/Cube.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("PopCat.img", "Assets/Textures/PopCat.png");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Avion.img", "Assets/Textures/Avion.jpg");
@@ -154,7 +155,7 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
 	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
-	obj1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
+	obj1->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);	
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
 	model2->SetData(model, texture, shaderProgramDeferredRendering);
 	

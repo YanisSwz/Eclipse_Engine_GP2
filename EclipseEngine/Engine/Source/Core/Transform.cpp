@@ -7,6 +7,7 @@ namespace Core
 	{
 		localPosition = _translation, position = _translation;
 		rotation = Math::Quat::QuaternionEuler(_rotation.x, _rotation.y, _rotation.z), localRotation = rotation;
+		eulerAngles = _rotation, localEulerAngles = eulerAngles;
 		localScale = _scale, scale = _scale;
 		if (_parent != nullptr)
 		{
@@ -58,6 +59,7 @@ namespace Core
 	{
 		if (m_parent != nullptr)
 		{
+			localRotation = Math::Quat::QuaternionEuler(localEulerAngles.x, localEulerAngles.y, localEulerAngles.z);
 			Math::Mat4 transform = m_parent->GetTransformMatrix() * GetLocalTransformMatrix();
 
 			// Extract new position, scale and rotation
@@ -121,9 +123,10 @@ namespace Core
 		q.w = sqrtf(1.f + m00 + m11 + m22)/2.f;
 		q.x = (m21 - m12) / (4.f * q.w);
 		q.y = (m02 - m20) / (4.f * q.w);
-		q.z = (m10 - m01) / (4.f * q.w);;
+		q.z = (m10 - m01) / (4.f * q.w);
+		q.Normalize();
 
-		return Math::Quat::Normalized(q);
+		return q;
 	}
 	
 }

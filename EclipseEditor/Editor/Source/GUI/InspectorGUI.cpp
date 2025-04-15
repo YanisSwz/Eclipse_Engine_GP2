@@ -43,7 +43,7 @@ namespace GUI
 
 		ImGui::SeparatorText("Transform");
 		GUI::DragVec3XYZ("Position", _transform->localPosition);
-		GUI::DragQuatXYZ("Rotation", _transform->localRotation);
+		GUI::DragVec3XYZ("Rotation", _transform->localEulerAngles);
 		GUI::DragVec3XYZ("Scale", _transform->localScale, 1.f);
 	}
 

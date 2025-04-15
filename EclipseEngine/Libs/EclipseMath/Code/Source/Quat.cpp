@@ -1,6 +1,7 @@
 #include "Quat.hpp"
 #include "Tools.hpp"
 #include "Vec3.hpp"
+#include "Mat4.hpp"
 #include <iostream>
 #include <algorithm>
 using namespace Math;

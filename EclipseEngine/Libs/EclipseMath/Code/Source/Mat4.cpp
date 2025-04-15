@@ -572,6 +572,19 @@ Mat4 Mat4::Rotation(Vec4 _theta)
 	return mat;
 }
 
+Mat4 Mat4::Rotation(Quat _rota)
+{
+	Mat3 rot = Quat::QuatToMatrix(_rota);
+	Mat4 mat
+	{
+		rot[0][0], rot[0][1], rot[0][2], 0.f,
+		rot[1][0], rot[1][1], rot[1][2], 0.f,
+		rot[2][0], rot[2][1], rot[2][2], 0.f,
+		0.f, 0.f, 0.f, 1.f
+	};
+	return mat;
+}
+
 Mat4 Mat4::Translation(Vec3 _translate)
 {
 	return { 1.f,	0.f,	0.f,	_translate[0],
@@ -614,6 +627,15 @@ Mat4 Mat4::TRS(Vec3 _translate, Vec3 _rotate, Vec3 _scale)
 }
 
 Mat4 Mat4::TRS(Vec4 _translate, Vec4 _rotate, Vec4 _scale)
+{
+	Mat4 TRS;
+	TRS *= Translation(_translate);
+	TRS *= Rotation(_rotate);
+	TRS *= Scale(_scale);
+	return TRS;
+}
+
+Mat4 Mat4::TRS(Vec3 _translate, Quat _rotate, Vec3 _scale)
 {
 	Mat4 TRS;
 	TRS *= Translation(_translate);

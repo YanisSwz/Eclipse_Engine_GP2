@@ -17,7 +17,7 @@ namespace Core
 		ECLIPSE_ENGINE void AddChild(Transform* _child);
 		ECLIPSE_ENGINE void RemoveChild(Transform* _child);
 		ECLIPSE_ENGINE void Update();
-		ECLIPSE_ENGINE inline Math::Mat4 GetTransformMatrix() const { return Math::Mat4::TRS(position, rotation.GetEulerAnglesRadXYZ(), scale); };
+		ECLIPSE_ENGINE inline Math::Mat4 GetTransformMatrix() const { return Math::Mat4::TRS(position, rotation, scale); };
 		
 		// Global position
 		Math::Vec3 position{ 0.f, 0.f, 0.f };
@@ -25,13 +25,15 @@ namespace Core
 		Math::Vec3 scale{ 1.f, 1.f, 1.f };
 		// Global rotation
 		Math::Quat rotation{ 1.f, 0.f, 0.f, 0.f };
+		Math::Vec3 eulerAngles{ 0.f, 0.f, 0.f };
 
 		Math::Vec3 localPosition{ 0.f, 0.f, 0.f };
 		Math::Vec3 localScale{ 1.f, 1.f, 1.f };
 		Math::Quat localRotation{ 1.f, 0.f, 0.f, 0.f };
+		Math::Vec3 localEulerAngles{ 0.f, 0.f, 0.f };
 
 	private:
-		inline Math::Mat4 GetLocalTransformMatrix() const { return Math::Mat4::TRS(localPosition, localRotation.GetEulerAnglesRadXYZ(), localScale); };
+		inline Math::Mat4 GetLocalTransformMatrix() const { return Math::Mat4::TRS(localPosition, localRotation, localScale); };
 		Math::Vec3 GetTranslation(Math::Mat4& _mat) const;
 		Math::Vec3 GetScale(Math::Mat4& _mat) const;
 		Math::Quat GetRotation(Math::Mat4& _mat) const;

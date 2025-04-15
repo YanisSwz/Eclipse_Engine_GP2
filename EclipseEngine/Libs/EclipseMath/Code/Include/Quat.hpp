@@ -1,10 +1,11 @@
 #pragma once
 #include "Vec3.hpp"
 #include "Mat3.hpp"
-#include "Mat4.hpp"
 
 namespace Math
 {
+	class Mat4;
+
 	class Quat
 	{
 	public:
