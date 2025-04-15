@@ -1,50 +1,48 @@
 #include "Logger.hpp"
-#include <string>
+#include <ctime>
 
 #define NOGDI
 #include <windows.h>
 
 namespace Logging
 {
-    const char* Logger::m_folderName = "Logs";
-    bool Logger::m_bIsFolderCreated = false;
+    Logger* Logger::m_instance = nullptr;
+    std::string Logger::m_folderName = "Logs";
+    std::string Logger::m_fileName = "";
 
-    Logger::Logger(const char* _fileName, PRIORITY _priority)
+    Logger* Logger::Get()
     {
-        Init(_fileName, _priority);
+        if (!m_instance)
+        {
+            std::string fileName = "Log_" + GetDateTime() + ".txt";
+            m_instance = new Logger(fileName, PRIORITY::DEBUG);
+        }
+        return m_instance;
+    }
+
+    std::string Logger::GetFilePath()
+    {
+        std::string filePath = m_folderName + "/" + m_fileName;
+        return filePath;
+    }
+
+    Logger::Logger(std::string _fileName, PRIORITY _priority)
+    {
+        SetPriority(_priority);
+
+        m_fileName = _fileName;
+
+        CreateDirectory(m_folderName.c_str(), NULL);
+
+        HANDLE handle = CreateFile(GetFilePath().c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (handle != 0)
+            CloseHandle(handle);
     }
 
     Logger::~Logger()
     {
-        FreeFile();
-    }
-
-    void Logger::Init(const char* _fileName, PRIORITY _priority)
-    {
-        SetPriority(_priority);
-
-        if (!m_bIsFolderCreated)
-        {
-            CreateDirectory(m_folderName, NULL);
-            Logger::m_bIsFolderCreated = true;
-        }
-
-        std::string filePathStr = std::string(m_folderName) + "/" + _fileName;
-        const char* filePath = filePathStr.c_str();
-        HANDLE handle = CreateFile(filePath, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
-        if (handle != 0)
-            CloseHandle(handle);
-
-        fopen_s(&m_file, filePath, "a");
-    }
-
-    void Logger::FreeFile()
-    {
-        if (m_file)
-        {
-            std::fclose(m_file);
-            m_file = nullptr;
-        }
+        if (m_instance)
+            delete m_instance;
     }
 
     COLOR Logger::PriorityToColor(PRIORITY _priority)
@@ -103,4 +101,24 @@ namespace Logging
             return "\033[0m";
         }
 	}
+
+    std::string Logger::GetDateTime()
+    {
+        std::time_t currTime = std::time(0);
+        std::tm timestamp;
+        localtime_s(&timestamp, &currTime);
+        char timeBuffer[128];
+        strftime(timeBuffer, 80, "%d-%m-%y_%H-%M", &timestamp);
+        return std::string(timeBuffer);
+    }
+
+    std::string Logger::GetTime()
+    {
+        std::time_t currTime = std::time(0);
+        std::tm timestamp;
+        localtime_s(&timestamp, &currTime);
+        char timeBuffer[128];
+        strftime(timeBuffer, 80, "[%X]", &timestamp);
+        return std::string(timeBuffer);
+    }
 }
