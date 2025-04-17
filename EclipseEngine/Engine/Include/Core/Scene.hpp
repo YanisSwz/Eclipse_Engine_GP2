@@ -13,7 +13,7 @@ namespace Core
 		ECLIPSE_ENGINE Scene() = default;
 		ECLIPSE_ENGINE ~Scene() = default;
 
-		ECLIPSE_ENGINE void Update();
+		ECLIPSE_ENGINE void Update(float _deltaTime);
 		ECLIPSE_ENGINE GameObject* CreateGameObject();
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
 

@@ -2,9 +2,9 @@
 
 namespace Core
 {
-	void Scene::Update()
+	void Scene::Update(float _deltaTime)
 	{
-		m_systemManager.Update();
+		m_systemManager.Update(_deltaTime);
 	}
 
 	GameObject* Scene::CreateGameObject()

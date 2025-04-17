@@ -2,9 +2,10 @@
 
 namespace Core
 {
-	void SystemManager::Update()
+	void SystemManager::Update(float _deltaTime)
 	{
 		m_transformSystem.Update();
+		m_physicsSystem.Update(_deltaTime);
 	}
 
 	Transform* SystemManager::AddTransform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)

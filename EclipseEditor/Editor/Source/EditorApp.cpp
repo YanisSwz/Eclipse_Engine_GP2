@@ -48,7 +48,7 @@ void EditorApp::Update()
 	m_renderInterface->Viewport(0, 0, m_sceneWidth, m_sceneHeight);
 
 	m_sceneGUI.UpdateGuizmoMode(m_window);
-	m_scene.Update();
+	m_scene.Update(deltaTime);
 
 	m_window->PollEvents();
 }
