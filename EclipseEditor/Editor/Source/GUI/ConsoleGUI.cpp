@@ -20,7 +20,7 @@ namespace GUI
 
 		ImGui::Begin("Console", 0, consoleWindowFlags);
 
-		std::string filePath = Logging::Logger::Get()->GetFilePath();
+		std::string filePath = Logging::Logger::GetInstance().GetFilePath();
 		
 		if (filePath != "")
 		{

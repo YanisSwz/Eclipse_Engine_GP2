@@ -10,17 +10,17 @@ namespace Logging
     std::string Logger::m_folderName = "Logs";
     std::string Logger::m_fileName = "";
 
-    Logger* Logger::Get()
+    Logger& Logger::GetInstance()
     {
         if (!m_instance)
         {
             std::string fileName = std::string("Log_") + GetDateTime() + ".txt";
             m_instance = new Logger(fileName);
         }
-        return m_instance;
+        return *m_instance;
     }
 
-    void Logger::Destroy()
+    void Logger::DestroyInstance()
     {
         if (m_instance)
             delete m_instance;
@@ -36,10 +36,10 @@ namespace Logging
     {
     }
 
-    Logger::Logger(std::string _fileName, PRIORITY _priority, bool _isStandardConsoleEnabled)
+    Logger::Logger(std::string _fileName, PRIORITY _priority, bool _bIsStandardConsoleEnabled)
     {
         SetPriority(_priority);
-        EnableStandardConsoleOutput(_isStandardConsoleEnabled);
+        EnableStandardConsoleOutput(_bIsStandardConsoleEnabled);
 
         m_fileName = _fileName;
 
@@ -70,7 +70,7 @@ namespace Logging
         FILE* file;
         fopen_s(&file, GetFilePath().c_str(), "a");
 
-        if (m_isStandardConsoleEnabled)
+        if (m_bIsStandardConsoleEnabled)
             fprintf(file, ColorToStr(PriorityToColor(_priority)));
 
         fprintf(file, GetTime().c_str());

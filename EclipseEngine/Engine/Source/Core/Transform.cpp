@@ -1,4 +1,5 @@
 #include "Transform.hpp"
+#include "GameObject.hpp"
 #include <utility>
 
 namespace Core
@@ -31,6 +32,17 @@ namespace Core
 		m_parent->AddChild(this);
 	}
 
+	std::vector<Transform*> Transform::GetChildren() const
+	{
+		std::vector<Transform*> children;
+		for(int i = 0; i < m_children.size(); ++i)
+		{
+			if (m_children[i]->IsActive())
+				children.push_back(m_children[i]);
+		}
+		return children;
+	}
+
 	void Transform::AddChild(Transform* _child)
 	{
 		for (int i = 0; i < m_children.size(); ++i)
@@ -57,6 +69,9 @@ namespace Core
 
 	void Transform::Update()
 	{
+		if (!IsActive() || IsDestroyed())
+			return;
+
 		if (!isSelected)
 		{
 			localRotation = Math::Quat::QuaternionEuler(localEulerAngles.x, localEulerAngles.y, localEulerAngles.z);
@@ -71,6 +86,7 @@ namespace Core
 				scale = m_parent->scale * localScale;
 
 				rotation = m_parent->rotation * localRotation;
+				eulerAngles = rotation.GetEulerAnglesDegXYZ();
 			}
 			else
 			{
@@ -78,7 +94,12 @@ namespace Core
 				scale = localScale;
 				rotation = localRotation;
 			}
+			//TODO add check to avoid calculating every frame
+			right = rotation.Rotate(Math::Vec3::right);
+			up = rotation.Rotate(Math::Vec3::up);
+			forward = rotation.Rotate(Math::Vec3::forward);
 		}
+
 
 		for (int i = 0; i < m_children.size(); ++i)
 		{
@@ -96,17 +117,18 @@ namespace Core
 		// We get the position relative to the parent
 		localPosition = position - m_parent->position;
 
-		// We cancel the rotation of the parent to have the right local position
+		// We cancel the rotation of the parent to have the correct local position
 		Math::Quat tempPos{ 0.f, localPosition.x, localPosition.y, localPosition.z };
 		Math::Quat inverseQ = Math::Quat::Inverse(m_parent->rotation);
 		Math::Quat tempQ = inverseQ * tempPos;
 		tempPos = tempQ * Math::Quat::Conjugate(inverseQ);
 		localPosition = Math::Vec3{tempPos.x, tempPos.y, tempPos.z};
 
+		// We cancel the scale of the parent
 		localScale = scale / m_parent->scale;
 
+		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		localRotation = Math::Quat::Inverse(m_parent->rotation) * rotation;
-		eulerAngles = rotation.GetEulerAnglesDegXYZ();
 		localEulerAngles = localRotation.GetEulerAnglesDegXYZ();
 
 		for (int i = 0; i < m_children.size(); ++i)
@@ -115,5 +137,16 @@ namespace Core
 		}
 
 		isSelected = false;
+	}
+
+	void Transform::Destroy()
+	{
+		for(int i = 0; i < m_children.size(); ++i)
+		{
+			if (!m_children[i]->IsDestroyed())
+				m_children[i]->GetGameObject()->Destroy();
+		}
+		active = false;
+		destroyed = true;
 	}
 }

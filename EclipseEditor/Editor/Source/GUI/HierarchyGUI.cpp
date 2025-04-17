@@ -29,13 +29,26 @@ namespace GUI
 			}
 		}
 
+		if (ImGui::Button("Add Game Object"))
+		{
+			if (_crtGOSelected != nullptr)
+				_scene->CreateGameObject()->transform->SetParent(_crtGOSelected->transform);
+			else
+				_scene->CreateGameObject();
+		}
+
+		if (ImGui::Button("Destroy Game Object"))
+		{
+			if(_crtGOSelected != nullptr)
+				_crtGOSelected->Destroy();
+		}
+
 		ImGui::End();
 		return nullptr;
 	}
 
 	Core::GameObject* HierarchyGUI::RecursiveDraw(Core::Transform* _crtTransform, Core::Scene* _scene, Core::GameObject* _crtGOSelected)
 	{
-		//Dirty ImGui test for scene graph hierarchy
 		std::vector<Core::Transform*> transforms = _crtTransform->GetChildren();
 		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 		if (transforms.size() == 0)
