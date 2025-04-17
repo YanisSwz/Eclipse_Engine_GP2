@@ -164,6 +164,8 @@ void EditorApp::LoadScene()
 	obj1->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);	
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
 	model2->SetData(model, texture, shaderProgramDeferredRendering);
+
+	obj1->AddComponent<Core::BoxCollider>();
 	
 	obj1->transform->AddChild(obj1_1->transform);
 

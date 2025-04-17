@@ -2,6 +2,7 @@
 #include "ProjectExports.hpp"
 #include "TransformSystem.hpp"
 #include "RenderSystem.hpp"
+#include "Physics/PhysicsSystem.hpp"
 #include <vector>
 
 namespace Core
@@ -22,10 +23,15 @@ namespace Core
 		{
 			T* basePtr = new T();
 
-			if (Model* d_ptr = dynamic_cast<Model*>(basePtr))
+			if (Model* dynamicModel_ptr = dynamic_cast<Model*>(basePtr))
 			{
 				delete basePtr;
-				return m_renderSystem.AddModel();
+				return dynamic_cast<T*>(m_renderSystem.AddModel());
+			}
+			else if (BoxCollider* dynamicBoxCollider_ptr = dynamic_cast<BoxCollider*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_physicsSystem.AddBoxCollider());
 			}
 
 			delete basePtr;
@@ -35,5 +41,6 @@ namespace Core
 	private:
 		TransformSystem m_transformSystem{};
 		RenderSystem m_renderSystem{};
+		PhysicsSystem m_physicsSystem{};
 	};
 }
