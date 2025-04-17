@@ -25,7 +25,7 @@ static void TraceImpl(const char* inFMT, ...)
 	vsnprintf(buffer, sizeof(buffer), inFMT, list);
 	va_end(list);
 
-	Logging::Logger::Get()->Log(Logging::PRIORITY::INFO, buffer);
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, buffer);
 }
 
 namespace Core
@@ -76,7 +76,7 @@ namespace Core
 	{
 		if (m_currentColliderCount == MAX_COLLIDER_SIZE)
 		{
-			Logging::Logger::Get()->Log(Logging::PRIORITY::WARNING, "You reach the maximum capacity of colliders!");
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "You reach the maximum capacity of colliders!");
 			return nullptr;
 		}
 
@@ -104,11 +104,8 @@ namespace Core
 
 	void PhysicsSystem::Update(float _deltaTime)
 	{
-		Logging::Logger::Get()->Log(Logging::PRIORITY::INFO, "PhysicsSystem Update");
-
 		// If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
 		const int cCollisionSteps = 1;
-
 		// Step the world
 		m_physicsSystem.Update(_deltaTime, cCollisionSteps, m_tempAllocator, m_jobSystem);
 
