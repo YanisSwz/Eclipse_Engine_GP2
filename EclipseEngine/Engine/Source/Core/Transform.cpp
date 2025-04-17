@@ -1,4 +1,5 @@
 #include "Transform.hpp"
+#include "GameObject.hpp"
 #include <utility>
 
 namespace Core
@@ -31,6 +32,17 @@ namespace Core
 		m_parent->AddChild(this);
 	}
 
+	std::vector<Transform*> Transform::GetChildren() const
+	{
+		std::vector<Transform*> children;
+		for(int i = 0; i < m_children.size(); ++i)
+		{
+			if (m_children[i]->IsActive())
+				children.push_back(m_children[i]);
+		}
+		return children;
+	}
+
 	void Transform::AddChild(Transform* _child)
 	{
 		for (int i = 0; i < m_children.size(); ++i)
@@ -57,6 +69,9 @@ namespace Core
 
 	void Transform::Update()
 	{
+		if (!IsActive() || IsDestroyed())
+			return;
+
 		if (!isSelected)
 		{
 			localRotation = Math::Quat::QuaternionEuler(localEulerAngles.x, localEulerAngles.y, localEulerAngles.z);
@@ -122,5 +137,16 @@ namespace Core
 		}
 
 		isSelected = false;
+	}
+
+	void Transform::Destroy()
+	{
+		for(int i = 0; i < m_children.size(); ++i)
+		{
+			if (!m_children[i]->IsDestroyed())
+				m_children[i]->GetGameObject()->Destroy();
+		}
+		active = false;
+		destroyed = true;
 	}
 }

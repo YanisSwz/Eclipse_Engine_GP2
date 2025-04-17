@@ -56,7 +56,10 @@ namespace Core
 	{
 		std::vector<Resource::ModelData> data;
 		for (int i = 0; i < m_currentStaticCount; ++i)
-			data.push_back(m_staticModels[i].GetModelData());
+		{
+			if(m_staticModels[i].IsActive())
+				data.push_back(m_staticModels[i].GetModelData());
+		}
 		
 		return data;
 	}

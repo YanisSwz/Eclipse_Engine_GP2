@@ -58,9 +58,16 @@ void EditorApp::Render()
 	GUI::BeginNewFrame();
 	m_sceneGUI.StartGuizmo();
 	m_dockingGUI.Start();
+
+	if(m_crtGOSelected != nullptr)
+	{
+		if (m_crtGOSelected->IsDestroyed())
+			m_crtGOSelected = nullptr;
+	}
 	Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
 	if (newGOSelected)
 		m_crtGOSelected = newGOSelected;
+
 	m_inspectorGUI.Draw(m_crtGOSelected);
 	m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
 	m_consoleGUI.Draw();

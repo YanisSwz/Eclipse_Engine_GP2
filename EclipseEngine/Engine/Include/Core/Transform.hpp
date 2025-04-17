@@ -13,13 +13,14 @@ namespace Core
 		ECLIPSE_ENGINE ~Transform();
 		ECLIPSE_ENGINE void SetParent(Transform* _parent);
 		ECLIPSE_ENGINE inline Transform* GetParent() const { return m_parent; };
-		ECLIPSE_ENGINE inline std::vector<Transform*> GetChildren() const { return m_children; };
+		ECLIPSE_ENGINE std::vector<Transform*> GetChildren() const;
 		ECLIPSE_ENGINE void AddChild(Transform* _child);
 		ECLIPSE_ENGINE void RemoveChild(Transform* _child);
 		ECLIPSE_ENGINE void Update();
 		ECLIPSE_ENGINE inline Math::Mat4 GetTransformMatrix() const { return Math::Mat4::TRS(position, rotation, scale); };
 		ECLIPSE_ENGINE void StartOverride();
 		ECLIPSE_ENGINE void EndOverride();
+		ECLIPSE_ENGINE void Destroy() override;
 
 		// Global position
 		Math::Vec3 position{ 0.f, 0.f, 0.f };
