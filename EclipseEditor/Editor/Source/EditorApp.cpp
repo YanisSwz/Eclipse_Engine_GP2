@@ -19,6 +19,7 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	InitGUI();
 	InitRHI();
 	LoadScene();
+	Logging::Logger::Get()->Log(Logging::PRIORITY::WARNING, "EditorApp is created!");
 }
 
 EditorApp::~EditorApp()
