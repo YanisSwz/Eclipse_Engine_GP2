@@ -62,7 +62,7 @@ namespace Resource
 		{
 			for (std::map<std::string, IResource*>::iterator it = m_resourcesReady.begin(); it != m_resourcesReady.end(); ++it)
 			{
-				it->second->Delete();
+				//it->second->Delete();
 				delete it->second;
 			}
 			m_resourcesReady.clear();
