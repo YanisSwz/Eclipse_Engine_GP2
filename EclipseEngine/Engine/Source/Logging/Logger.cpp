@@ -68,7 +68,7 @@ namespace Logging
     void Logger::LogToFile(PRIORITY _priority, const char* _message, va_list _list)
     {
         FILE* file;
-        fopen_s(&file, GetFilePath().c_str(), "w");
+        fopen_s(&file, GetFilePath().c_str(), "a");
 
         if (m_isStandardConsoleEnabled)
             fprintf(file, ColorToStr(PriorityToColor(_priority)));
