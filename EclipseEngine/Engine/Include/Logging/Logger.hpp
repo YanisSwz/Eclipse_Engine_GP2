@@ -27,13 +27,13 @@ namespace Logging
     class Logger
     {
     public:
-        ECLIPSE_ENGINE static Logger* Get();
-        ECLIPSE_ENGINE static void Destroy();
+        ECLIPSE_ENGINE static Logger& GetInstance();
+        ECLIPSE_ENGINE static void DestroyInstance();
 
         ECLIPSE_ENGINE static std::string GetFilePath();
 
         ECLIPSE_ENGINE void SetPriority(PRIORITY _priority);
-        ECLIPSE_ENGINE void EnableStandardConsoleOutput(bool _isStandardConsoleEnabled);
+        ECLIPSE_ENGINE void EnableStandardConsoleOutput(bool _bIsStandardConsoleEnabled);
 
         ECLIPSE_ENGINE void Log(PRIORITY _priority, const char* _message, ...);
 
@@ -42,10 +42,10 @@ namespace Logging
         static std::string m_folderName;
         static std::string m_fileName;
         PRIORITY m_priority;
-        bool m_isStandardConsoleEnabled;
+        bool m_bIsStandardConsoleEnabled;
 
         Logger();
-        Logger(std::string _fileName, PRIORITY _priority = PRIORITY::DEBUG, bool _isStandardConsoleEnabled = false);
+        Logger(std::string _fileName, PRIORITY _priority = PRIORITY::DEBUG, bool _bIsStandardConsoleEnabled = false);
         ~Logger();
 
         void LogToConsole(PRIORITY _priority, const char* _message, va_list _list);

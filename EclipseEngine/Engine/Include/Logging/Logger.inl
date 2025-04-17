@@ -6,7 +6,7 @@
 namespace Logging
 {
 	inline void Logger::SetPriority(PRIORITY _priority) { m_priority = _priority; }
-	inline void Logger::EnableStandardConsoleOutput(bool _isStandardConsoleEnabled) { m_isStandardConsoleEnabled = _isStandardConsoleEnabled; }
+	inline void Logger::EnableStandardConsoleOutput(bool _bIsStandardConsoleEnabled) { m_bIsStandardConsoleEnabled = _bIsStandardConsoleEnabled; }
 
 	void Logger::Log(PRIORITY _priority, const char* _message, ...)
 	{
@@ -15,7 +15,7 @@ namespace Logging
 			va_list list;
 			va_start(list, _message);
 
-			if (m_isStandardConsoleEnabled)
+			if (m_bIsStandardConsoleEnabled)
 				LogToConsole(_priority, _message, list);
 
 			if (m_fileName != "")
