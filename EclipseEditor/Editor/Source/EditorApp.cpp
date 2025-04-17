@@ -14,17 +14,17 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
 	m_height(_height)
 {
-	Logging::Logger::Get()->Log(Logging::PRIORITY::INFO, "EditorApp initialization!");
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "EditorApp initialization!");
 	InitWindowing(_windowName);
 	InitGUI();
 	InitRHI();
 	LoadScene();
-	Logging::Logger::Get()->Log(Logging::PRIORITY::WARNING, "EditorApp is created!");
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "EditorApp is created!");
 }
 
 EditorApp::~EditorApp()
 {
-	Logging::Logger::Destroy();
+	Logging::Logger::DestroyInstance();
 }
 
 bool EditorApp::ShouldClose()
