@@ -34,6 +34,10 @@ namespace Core
 		Math::Quat localRotation{ 1.f, 0.f, 0.f, 0.f };
 		Math::Vec3 localEulerAngles{ 0.f, 0.f, 0.f };
 
+		Math::Vec3 right{1.f, 0.f, 0.f};
+		Math::Vec3 up{ 0.f, 1.f, 0.f };
+		Math::Vec3 forward{ 0.f, 0.f, 1.f };
+
 		bool isSelected = false;
 	private:
 		inline Math::Mat4 GetLocalTransformMatrix() const { return Math::Mat4::TRS(localPosition, localRotation, localScale); };

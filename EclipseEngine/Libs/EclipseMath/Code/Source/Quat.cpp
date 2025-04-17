@@ -64,6 +64,22 @@ Quat Quat::QuaternionEuler(float yaw, float pitch, float roll)
 	return q;
 }
 
+Quat Quat::QuaternionAxisAngle(Vec3 _axis, float _angle)
+{
+	float angle = Tools::ToRad(_angle)/2.f;
+
+	float s = sinf(angle);
+	float x = _axis.x * s;
+	float y = _axis.y * s;
+	float z = _axis.z * s;
+
+	float w = cosf(angle);
+
+	Quat q{ w, x, y, z };
+	q.Normalize();
+	return q;
+}
+
 void Quat::Print() const
 {
 	std::cout << "Quaternion(" << w << ", " << x << ", " << y << ", " << z << ")" << std::endl;

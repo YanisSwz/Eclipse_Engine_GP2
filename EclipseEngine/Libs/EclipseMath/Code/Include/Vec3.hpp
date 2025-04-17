@@ -25,6 +25,11 @@ namespace Math
 		float y = 0.f;
 		float z = 0.f;
 
+		// Static Variables
+		static const Vec3 right;
+		static const Vec3 up;
+		static const Vec3 forward;
+
 		// Functions
 		void SetZero();
 		void SetOne();
@@ -60,7 +65,7 @@ namespace Math
 		static Vec3 Rotate(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
 		static Vec3 Rotate(Vec3 _vecToRotate, Vec3 _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
 		static void Print(Vec3 _vec);
-
+		
 		// Operator +, -, *, /
 		Vec3 operator+(float _scalar) const;
 		Vec3 operator+(Vec3 _vec) const;

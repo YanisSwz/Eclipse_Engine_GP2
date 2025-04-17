@@ -59,6 +59,7 @@ namespace Math
 		/// <param name="_pitch">: Y-axis rotation</param>
 		/// <param name="_roll">: Z-axis rotation</param>
 		static Quat QuaternionEuler(float _yaw = 0.f, float _pitch = 0.f, float _roll = 0.f);
+		static Quat QuaternionAxisAngle(Vec3 _axis, float _angle);
 		static void Print(Quat _q);
 		inline static Quat Identity() { return { 1.f, 0.f, 0.f, 0.f }; };
 		static Vec3 GetEulerAngles(Quat _q);

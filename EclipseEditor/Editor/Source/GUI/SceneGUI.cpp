@@ -91,18 +91,21 @@ namespace GUI
 
 		if (ImGuizmo::Manipulate(view.GetValuesPointer(), proj.GetValuesPointer(),
 			m_crtGuizmoOperation, m_crtGuizmoMode,
-			const_cast<float*>(TRS.GetValuesPointer())) )
+			const_cast<float*>(TRS.GetValuesPointer())))
 		{
-			float position[4];
-			float rotation[4];
-			float scale[4];
+			float position[3];
+			float rotation[3];
+			float scale[3];
 
 			ImGuizmo::DecomposeMatrixToComponents(TRS.GetValuesPointer(), position, rotation, scale);
 			_crtGOSelected->transform->position.x = position[0];
 			_crtGOSelected->transform->position.y = position[1];
 			_crtGOSelected->transform->position.z = position[2];
 
-			_crtGOSelected->transform->rotation = Math::Quat::QuaternionEuler(rotation[0], rotation[1], rotation[2]);
+			Math::Quat Xquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::right, rotation[0]);
+			Math::Quat Yquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::up, rotation[1]);
+			Math::Quat Zquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::forward, rotation[2]);
+			_crtGOSelected->transform->rotation = Zquat * Yquat * Xquat;
 
 			_crtGOSelected->transform->scale.x = scale[0] * Math::Tools::Sign(_crtGOSelected->transform->scale.x);
 			_crtGOSelected->transform->scale.y = scale[1] * Math::Tools::Sign(_crtGOSelected->transform->scale.y);

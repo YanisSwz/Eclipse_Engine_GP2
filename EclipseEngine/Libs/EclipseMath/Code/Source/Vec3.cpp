@@ -59,6 +59,11 @@ Vec3::Vec3(const Vec3& _copy)
 	z = _copy.z;
 }
 
+//####################### STATIC VARIABLES #######################
+
+const Vec3 Vec3::right{1.f, 0.f, 0.f};
+const Vec3 Vec3::up{ 0.f, 1.f, 0.f };
+const Vec3 Vec3::forward{ 0.f, 0.f, 1.f };
 
 //####################### FUNCTIONS #######################
 
