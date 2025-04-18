@@ -138,7 +138,7 @@ void EditorApp::LoadScene()
 
 	Resource::Mesh* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Avion.obj", "Assets/Models/Avion.obj");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Cube.obj", "Assets/Models/Cube.obj");
+	Resource::Mesh* cubeModel = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Cube.obj", "Assets/Models/Cube.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("PopCat.img", "Assets/Textures/PopCat.png");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Avion.img", "Assets/Textures/Avion.jpg");
@@ -161,6 +161,15 @@ void EditorApp::LoadScene()
 	m_defaultPipeline->Init(m_window->width, m_window->height);
 
 	// CORE TESTS
+	Core::GameObject* floor = m_scene.CreateGameObject();
+	floor->transform->localPosition = Math::Vec3(0.f, -1.f, 0.f);
+	floor->transform->localScale = Math::Vec3(100.f, 0.1f, 100.f);
+	Core::Model* floorModel = floor->AddComponent<Core::Model>();
+	floorModel->SetData(cubeModel, texture, shaderProgramDeferredRendering);
+	Core::BoxCollider* floorCollider = floor->AddComponent<Core::BoxCollider>();
+	floorCollider->SetPosition(0.f, -1.f, 0.f);
+	floorCollider->SetScale(100.f, 0.1f, 100.f);
+
 	Core::GameObject* obj1_1 = m_scene.CreateGameObject();
 	obj1_1->transform->localPosition = Math::Vec3(0.f, 1.f, 0.f);
 	obj1_1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
@@ -172,6 +181,9 @@ void EditorApp::LoadScene()
 	obj1->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);	
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
 	model2->SetData(model, texture, shaderProgramDeferredRendering);
+	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
+	cc->SetPosition(0.1f, 50.f, 0.f);
+	cc->SetDynamic(true);
 
 	obj1->transform->AddChild(obj1_1->transform);
 
@@ -182,12 +194,11 @@ void EditorApp::LoadScene()
 	model3->SetData(model, texture, shaderProgramDeferredRendering);
 	obj2->AddComponent<Core::BoxCollider>();
 
-
 	Core::GameObject* obj3 = m_scene.CreateGameObject();
 	obj3->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
-	obj3->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
+	obj3->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
-	model4->SetData(model, texture, shaderProgramDeferredRendering);
+	model4->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
 	bc->SetPosition(0.f, 100.f, 0.f);
 	bc->SetDynamic(true);

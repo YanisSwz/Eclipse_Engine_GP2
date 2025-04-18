@@ -18,7 +18,6 @@ namespace Core
 		ICollider() = default;
 		virtual ~ICollider() = default;
 
-		Math::Vec3 position = { 0.f, 0.f, 0.f };
 		bool b_isDynamic = false;
 
 		ECLIPSE_ENGINE void SetDynamic(bool _isDynamic);
@@ -28,6 +27,8 @@ namespace Core
 		virtual void Delete() = 0;
 
 	protected:
+		Math::Vec3 m_position = { 0.f, 0.f, 0.f };
+
 		JPH::BodyInterface* m_bodyInterface = nullptr;
 		JPH::BodyID m_bodyID;
 	};

@@ -37,7 +37,7 @@ namespace Core
 		JPH::Factory::sInstance = new JPH::Factory();
 
 		JPH::RegisterTypes();
-		m_tempAllocator = new JPH::TempAllocatorImpl{ 10 * 1024 * 1024 };
+		m_tempAllocator = new JPH::TempAllocatorImpl{ 10 * 1024 * 1024 }; // Pre-allocating 10 MB for the physics update
 
 		m_jobSystem = new JPH::JobSystemThreadPool(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
 
@@ -98,6 +98,36 @@ namespace Core
 		++m_currentBoxColliderCount;
 
 		return &m_boxColliders[m_currentBoxColliderCount - 1];
+	}
+
+	CapsuleCollider* PhysicsSystem::AddCapsuleCollider()
+	{
+		if (m_currentColliderCount >= MAX_COLLIDER_SIZE)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "Maximum capacity of colliders reached!");
+			return nullptr;
+		}
+
+		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
+		{
+			if (m_capsuleColliders[i].IsDestroyed())
+			{
+				m_capsuleColliders[i].Remove();
+				m_capsuleColliders[i].~CapsuleCollider();
+				new (&m_capsuleColliders[i]) CapsuleCollider(m_bodyInterface);
+				m_capsuleColliders[i].SetActive(true);
+				return &m_capsuleColliders[i];
+			}
+		}
+
+		m_capsuleColliders[m_currentCapsuleColliderCount].~CapsuleCollider();
+		new (&m_capsuleColliders[m_currentCapsuleColliderCount]) CapsuleCollider(m_bodyInterface);
+		m_capsuleColliders[m_currentCapsuleColliderCount].SetActive(true);
+
+		++m_currentColliderCount;
+		++m_currentCapsuleColliderCount;
+
+		return &m_capsuleColliders[m_currentCapsuleColliderCount - 1];
 	}
 
 	void PhysicsSystem::Update(float _deltaTime)

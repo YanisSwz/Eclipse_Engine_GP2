@@ -33,6 +33,11 @@ namespace Core
 				delete basePtr;
 				return dynamic_cast<T*>(m_physicsSystem.AddBoxCollider());
 			}
+			else if (CapsuleCollider* dynamicCapsuleCollider_ptr = dynamic_cast<CapsuleCollider*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_physicsSystem.AddCapsuleCollider());
+			}
 
 			delete basePtr;
 			return nullptr;

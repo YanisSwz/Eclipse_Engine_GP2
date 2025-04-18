@@ -18,16 +18,16 @@ namespace Core
 
 	void ICollider::SetPosition(float _posX, float _posY, float _posZ)
 	{
-		position = { _posX, _posY, _posZ };
+		m_position = { _posX, _posY, _posZ };
 		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-		m_bodyInterface->SetPosition(m_bodyID, { position.x, position.y, position.z }, isActivate);
+		m_bodyInterface->SetPosition(m_bodyID, { m_position.x, m_position.y, m_position.z }, isActivate);
 	}
 
 	void ICollider::SetPosition(Math::Vec3 _position)
 	{
-		position = _position;
+		m_position = _position;
 		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-		m_bodyInterface->SetPosition(m_bodyID, { position.x, position.y, position.z }, isActivate);
+		m_bodyInterface->SetPosition(m_bodyID, { m_position.x, m_position.y, m_position.z }, isActivate);
 	}
 
 	Math::Vec3 ICollider::GetPosition() const

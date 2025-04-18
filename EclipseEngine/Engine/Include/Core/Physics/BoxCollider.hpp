@@ -10,9 +10,6 @@ namespace Core
 		ECLIPSE_ENGINE BoxCollider();
 		ECLIPSE_ENGINE BoxCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic = false, Math::Vec3 _size = { 1.f, 1.f, 1.f }, Math::Vec3 _pos = { 0.f, 0.f, 0.f }, Math::Vec3 _rot = { 0.f, 0.f, 0.f });
 		ECLIPSE_ENGINE ~BoxCollider() override;
-
-		Math::Vec3 rotation = { 0.f, 0.f, 0.f };
-		Math::Vec3 scale = { 1.f, 1.f, 1.f };
 		
 		ECLIPSE_ENGINE void SetRotation(float _rotX, float _rotY, float _rotZ);
 		ECLIPSE_ENGINE void SetRotation(Math::Vec3 _rotation);
@@ -29,7 +26,9 @@ namespace Core
 		ECLIPSE_ENGINE void Delete() override;
 
 	private:
-		void UpdateData();
+		Math::Vec3 m_rotation = { 0.f, 0.f, 0.f };
+		Math::Vec3 m_scale = { 1.f, 1.f, 1.f };
 
+		void UpdateData();
 	};
 }
