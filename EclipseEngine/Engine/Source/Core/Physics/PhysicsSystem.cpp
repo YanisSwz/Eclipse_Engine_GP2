@@ -1,4 +1,5 @@
 #include "Physics/PhysicsSystem.hpp"
+#include "Core/GameObject.hpp"
 #include "Logging/Logger.hpp"
 
 // Jolt includes
@@ -6,10 +7,7 @@
 #include <Jolt/Core/Factory.h>
 #include <Jolt/Core/JobSystemThreadPool.h>
 #include <Jolt/Physics/PhysicsSettings.h>
-#include <Jolt/Physics/Collision/Shape/BoxShape.h>
-#include <Jolt/Physics/Collision/Shape/SphereShape.h>
-#include <Jolt/Physics/Body/BodyCreationSettings.h>
-#include <Jolt/Physics/Body/BodyActivationListener.h>
+
 // Disable common warnings triggered by Jolt, you can use JPH_SUPPRESS_WARNING_PUSH / JPH_SUPPRESS_WARNING_POP to store and restore the warning state
 JPH_SUPPRESS_WARNINGS
 
@@ -33,7 +31,7 @@ namespace Core
 	PhysicsSystem::PhysicsSystem()
 	{
 		JPH::RegisterDefaultAllocator();
-		
+
 		JPH::Trace = TraceImpl;
 
 		JPH::Factory::sInstance = new JPH::Factory();
@@ -41,7 +39,7 @@ namespace Core
 		JPH::RegisterTypes();
 		m_tempAllocator = new JPH::TempAllocatorImpl{ 10 * 1024 * 1024 };
 
-		m_jobSystem = new JPH::JobSystemThreadPool( JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1 );
+		m_jobSystem = new JPH::JobSystemThreadPool(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
 
 		const JPH::uint cMaxBodies = MAX_COLLIDER_SIZE;
 		// This determines how many mutexes to allocate to protect rigid bodies from concurrent access. Set it to 0 for the default settings.
@@ -72,7 +70,7 @@ namespace Core
 		m_rendererFile.close();
 	}
 
-	BoxCollider* PhysicsSystem::AddBoxCollider(bool _isDynamic, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot)
+	BoxCollider* PhysicsSystem::AddBoxCollider()
 	{
 		if (m_currentColliderCount == MAX_COLLIDER_SIZE)
 		{
@@ -86,14 +84,14 @@ namespace Core
 			{
 				m_boxColliders[i].Remove();
 				m_boxColliders[i].~BoxCollider();
-				new (&m_boxColliders[i]) BoxCollider(_isDynamic, _size, _pos, _rot);
+				new (&m_boxColliders[i]) BoxCollider(m_bodyInterface);
 				m_boxColliders[i].SetActive(true);
 				return &m_boxColliders[i];
 			}
 		}
 
 		m_boxColliders[m_currentBoxColliderCount].~BoxCollider();
-		new (&m_boxColliders[m_currentBoxColliderCount]) BoxCollider(_isDynamic, _size, _pos, _rot);
+		new (&m_boxColliders[m_currentBoxColliderCount]) BoxCollider(m_bodyInterface);
 		m_boxColliders[m_currentBoxColliderCount].SetActive(true);
 
 		++m_currentColliderCount;
@@ -104,6 +102,26 @@ namespace Core
 
 	void PhysicsSystem::Update(float _deltaTime)
 	{
+		if (b_firstUpdate)
+		{
+			b_firstUpdate = false;
+			_deltaTime = 0.f;
+		}
+
+		GameObject* GO;
+		for (int i = 0; i < m_currentBoxColliderCount; ++i)
+		{
+			if (m_boxColliders[i].b_isDynamic)
+			{
+				GO = m_boxColliders[i].GetGameObject();
+				if (GO)
+				{
+					GO->transform->position = m_boxColliders[i].GetPosition();
+					GO->transform->eulerAngles = m_boxColliders[i].GetRotation();
+				}
+			}
+		}
+
 		// If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
 		const int cCollisionSteps = 1;
 		// Step the world

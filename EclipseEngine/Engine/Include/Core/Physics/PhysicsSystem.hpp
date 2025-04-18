@@ -3,27 +3,18 @@
 #include "ProjectExports.hpp"
 #include <vector>
 
+// Jolt Include
+#include "Core/Physics/Layers.hpp"
 #include <Jolt/Jolt.h>
 #include <Jolt/Core/TempAllocator.h>
 #include <Jolt/Core/JobSystemThreadPool.h>
 #include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/Physics/Body/BodyInterface.h>
 
-// JoltViewer
+// JoltViewer include
 #include <Jolt/Core/StreamWrapper.h>
 #include <Jolt/Renderer/DebugRendererRecorder.h>
 #include <fstream>
-
-// Layer that objects can be in, determines which other objects it can collide with
-// Typically you at least want to have 1 layer for moving bodies and 1 layer for static bodies, but you can have more
-// layers if you want. E.g. you could have a layer for high detail collision (which is not used by the physics simulation
-// but only if you do collision testing).
-namespace Layers
-{
-	static constexpr JPH::ObjectLayer NON_MOVING = 0;
-	static constexpr JPH::ObjectLayer MOVING = 1;
-	static constexpr JPH::ObjectLayer NUM_LAYERS = 2;
-};
 
 /// Class that determines if two object layers can collide
 class ObjectLayerPairFilterImpl : public JPH::ObjectLayerPairFilter
@@ -33,9 +24,9 @@ public:
 	{
 		switch (inObject1)
 		{
-		case Layers::NON_MOVING:
-			return inObject2 == Layers::MOVING; // Non moving only collides with moving
-		case Layers::MOVING:
+		case JPH::Layers::NON_MOVING:
+			return inObject2 == JPH::Layers::MOVING; // Non moving only collides with moving
+		case JPH::Layers::MOVING:
 			return true; // Moving collides with everything
 		default:
 			JPH_ASSERT(false);
@@ -64,8 +55,8 @@ public:
 	BPLayerInterfaceImpl()
 	{
 		// Create a mapping table from object to broad phase layer
-		mObjectToBroadPhase[Layers::NON_MOVING] = BroadPhaseLayers::NON_MOVING;
-		mObjectToBroadPhase[Layers::MOVING] = BroadPhaseLayers::MOVING;
+		mObjectToBroadPhase[JPH::Layers::NON_MOVING] = BroadPhaseLayers::NON_MOVING;
+		mObjectToBroadPhase[JPH::Layers::MOVING] = BroadPhaseLayers::MOVING;
 	}
 
 	virtual JPH::uint					GetNumBroadPhaseLayers() const override
@@ -75,7 +66,7 @@ public:
 
 	virtual JPH::BroadPhaseLayer			GetBroadPhaseLayer(JPH::ObjectLayer inLayer) const override
 	{
-		JPH_ASSERT(inLayer < Layers::NUM_LAYERS);
+		JPH_ASSERT(inLayer < JPH::Layers::NUM_LAYERS);
 		return mObjectToBroadPhase[inLayer];
 	}
 
@@ -92,7 +83,7 @@ public:
 #endif // JPH_EXTERNAL_PROFILE || JPH_PROFILE_ENABLED
 
 private:
-	JPH::BroadPhaseLayer					mObjectToBroadPhase[Layers::NUM_LAYERS];
+	JPH::BroadPhaseLayer					mObjectToBroadPhase[JPH::Layers::NUM_LAYERS];
 };
 
 /// Class that determines if an object layer can collide with a broadphase layer
@@ -103,9 +94,9 @@ public:
 	{
 		switch (inLayer1)
 		{
-		case Layers::NON_MOVING:
+		case JPH::Layers::NON_MOVING:
 			return inLayer2 == BroadPhaseLayers::MOVING;
-		case Layers::MOVING:
+		case JPH::Layers::MOVING:
 			return true;
 		default:
 			JPH_ASSERT(false);
@@ -121,7 +112,7 @@ namespace Core
 	public:
 		ECLIPSE_ENGINE PhysicsSystem();
 		ECLIPSE_ENGINE ~PhysicsSystem();
-		ECLIPSE_ENGINE BoxCollider* AddBoxCollider(bool _isDynamic = false, Math::Vec3 _size = { 1.f, 1.f, 1.f }, Math::Vec3 _pos = { 0.f, 0.f, 0.f }, Math::Vec3 _rot = { 0.f, 0.f, 0.f });
+		ECLIPSE_ENGINE BoxCollider* AddBoxCollider();
 
 		ECLIPSE_ENGINE void Update(float _deltaTime);
 
@@ -147,5 +138,7 @@ namespace Core
 		JPH::DebugRendererRecorder* m_renderer = nullptr;
 		JPH::StreamOutWrapper* m_rendererStream = nullptr;
 		std::ofstream m_rendererFile;
+
+		bool b_firstUpdate = true;
 	};
 }
