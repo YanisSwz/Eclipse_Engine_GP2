@@ -132,8 +132,10 @@ namespace Core
 	{
 		if (m_bodyInterface)
 		{
-			m_bodyInterface->RemoveBody(m_bodyID);
-			m_bodyInterface->DestroyBody(m_bodyID);
+			if (m_bodyInterface->IsAdded(m_bodyID))
+				m_bodyInterface->RemoveBody(m_bodyID);
+			if (m_bodyID.IsInvalid())
+				m_bodyInterface->DestroyBody(m_bodyID);
 		}
 	}
 
