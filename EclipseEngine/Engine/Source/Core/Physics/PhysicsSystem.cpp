@@ -72,9 +72,9 @@ namespace Core
 
 	BoxCollider* PhysicsSystem::AddBoxCollider()
 	{
-		if (m_currentColliderCount == MAX_COLLIDER_SIZE)
+		if (m_currentColliderCount >= MAX_COLLIDER_SIZE)
 		{
-			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "You reach the maximum capacity of colliders!");
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "Maximum capacity of colliders reached!");
 			return nullptr;
 		}
 
