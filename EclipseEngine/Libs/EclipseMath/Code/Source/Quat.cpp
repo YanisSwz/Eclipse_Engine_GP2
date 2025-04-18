@@ -47,12 +47,12 @@ Quat Quat::QuaternionEuler(float yaw, float pitch, float roll)
 	if (fabsf(roll) > Tools::epsilon)
 		roll = Tools::ToRad(static_cast<float>(roll));
 
-	float cr = cos(roll * 0.5f);
-	float sr = sin(roll * 0.5f);
-	float cp = cos(pitch * 0.5f);
-	float sp = sin(pitch * 0.5f);
-	float cy = cos(yaw * 0.5f);
-	float sy = sin(yaw * 0.5f);
+	float cr = cosf(roll * 0.5f);
+	float sr = sinf(roll * 0.5f);
+	float cp = cosf(pitch * 0.5f);
+	float sp = sinf(pitch * 0.5f);
+	float cy = cosf(yaw * 0.5f);
+	float sy = sinf(yaw * 0.5f);
 
 	Quat q = Quat::Identity();
 	q.w = cr * cp * cy - sr * sp * sy;

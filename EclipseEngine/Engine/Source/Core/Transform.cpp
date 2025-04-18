@@ -93,6 +93,7 @@ namespace Core
 				position = localPosition;
 				scale = localScale;
 				rotation = localRotation;
+				eulerAngles = localEulerAngles;
 			}
 			//TODO add check to avoid calculating every frame
 			right = rotation.Rotate(Math::Vec3::right);

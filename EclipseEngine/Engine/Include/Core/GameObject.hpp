@@ -29,6 +29,15 @@ namespace Core
 		template <typename T>
 		T* AddComponent()
 		{
+			for (int i = 0; i < m_components.size(); ++i)
+			{
+				T* castedComponent = dynamic_cast<T*>(m_components[i]);
+				if (castedComponent != nullptr)
+				{
+					if (MonoBehaviour * dynamicModel_ptr != dynamic_cast<MonoBehaviour*>(castedComponent))
+						return nullptr;
+				}
+			}
 			m_components.push_back(m_systemManager->AddComponent<T>());
 			m_components[m_components.size() - 1]->SetGameObject(this);
 			return dynamic_cast<T*>(m_components[m_components.size() - 1]);
