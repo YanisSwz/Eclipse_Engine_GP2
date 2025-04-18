@@ -38,7 +38,7 @@ namespace Resource
 
 		std::vector<std::string> _paths(6);
 		for (int i = 0; i < 6; ++i)
-			_paths[i] = std::string{ _path }.append(m_faces[i]).append(TEXTURE_EXTENTION_TO_STR(textureExtention));
+			_paths[i] = std::string{ _path }.append(m_faces[i]).append(TEXTURE_EXTENSION_TO_STR(textureExtention));
 
 		int nrChannels;
 		stbi_set_flip_vertically_on_load(false);
