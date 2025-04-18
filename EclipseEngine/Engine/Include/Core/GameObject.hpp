@@ -34,7 +34,8 @@ namespace Core
 				T* castedComponent = dynamic_cast<T*>(m_components[i]);
 				if (castedComponent != nullptr)
 				{
-					if (MonoBehaviour * dynamicModel_ptr != dynamic_cast<MonoBehaviour*>(castedComponent))
+					MonoBehaviour* dynamicModel_ptr = dynamic_cast<MonoBehaviour*>(castedComponent);
+					if (dynamicModel_ptr == nullptr)
 						return nullptr;
 				}
 			}
