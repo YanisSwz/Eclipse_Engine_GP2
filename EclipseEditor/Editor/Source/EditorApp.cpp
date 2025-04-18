@@ -7,6 +7,7 @@
 #include "Resource/ResourceManager.hpp"
 #include "Resource/ModelData.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
+#include "Core/Physics/BoxCollider.hpp"
 
 #include "iostream"
 
@@ -161,7 +162,7 @@ void EditorApp::LoadScene()
 
 	// CORE TESTS
 	Core::GameObject* obj1_1 = m_scene.CreateGameObject();
-	obj1_1->transform->localPosition = Math::Vec3(1.f, 1.f, 0.f);
+	obj1_1->transform->localPosition = Math::Vec3(0.f, 1.f, 0.f);
 	obj1_1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* model1 = obj1_1->AddComponent<Core::Model>();
 	model1->SetData(model, texture, shaderProgramDeferredRendering);
@@ -172,8 +173,6 @@ void EditorApp::LoadScene()
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
 	model2->SetData(model, texture, shaderProgramDeferredRendering);
 
-	obj1->AddComponent<Core::BoxCollider>();
-	
 	obj1->transform->AddChild(obj1_1->transform);
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
@@ -181,12 +180,17 @@ void EditorApp::LoadScene()
 	obj2->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* model3 = obj2->AddComponent<Core::Model>();
 	model3->SetData(model, texture, shaderProgramDeferredRendering);
+	obj2->AddComponent<Core::BoxCollider>();
+
 
 	Core::GameObject* obj3 = m_scene.CreateGameObject();
-	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 0.f);
+	obj3->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
 	obj3->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
 	model4->SetData(model, texture, shaderProgramDeferredRendering);
+	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
+	bc->SetPosition(0.f, 100.f, 0.f);
+	bc->SetDynamic(true);
 }
 
 void EditorApp::DrawScene()

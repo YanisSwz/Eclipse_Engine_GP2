@@ -1,5 +1,5 @@
 #pragma once
-#include "Resource/TextureExtention.hpp"
+#include "Resource/TextureExtension.hpp"
 #include <vector>
 #include <string>
 

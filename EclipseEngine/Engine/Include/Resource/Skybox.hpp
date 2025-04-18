@@ -1,7 +1,7 @@
 #pragma once
 #include "RHIInterfaces/ICubeMap.hpp"
 #include "Resource/IResource.hpp"
-#include "Resource/TextureExtention.hpp"
+#include "Resource/TextureExtension.hpp"
 #include "Resource/Mesh.hpp"
 #include "Resource/ShaderProgram.hpp"
 #include <vector>
