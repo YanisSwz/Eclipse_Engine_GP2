@@ -8,5 +8,5 @@ namespace Resource
 		JPG
 	};
 
-	const char* TEXTURE_EXTENTION_TO_STR(TEXTURE_EXTENSION _textureExtention);
+	const char* TEXTURE_EXTENSION_TO_STR(TEXTURE_EXTENSION _textureExtension);
 }
