@@ -42,6 +42,9 @@ namespace GUI
 			file.close();
 		}
 
+		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+			ImGui::SetScrollHereY(1.f);
+
 		ImGui::End();
 	}
 }
