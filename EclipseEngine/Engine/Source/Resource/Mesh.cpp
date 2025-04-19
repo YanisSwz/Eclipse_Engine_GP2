@@ -64,6 +64,19 @@ namespace Resource
 		}
 	}
 
+	std::vector<Math::Vec3> Mesh::GetVerticesPosition() const
+	{
+		std::vector<Math::Vec3> verticesPosition;
+		for (int i = 0; i < m_vertexBuffer.size(); ++i)
+			verticesPosition.push_back(m_vertexBuffer[i].pos);
+		return verticesPosition;
+	}
+
+	std::vector<uint32_t> Mesh::GetVerticesIndex() const
+	{
+		return m_indexBuffer;
+	}
+
 	void Mesh::Generate(RHI::IRenderInterface* _rdrInterface)
 	{
 		m_rdrInter = _rdrInterface;
@@ -85,9 +98,6 @@ namespace Resource
 		m_vertexArrayObject->Unbind();
 		m_vertexBufferObject->Unbind();
 		m_indexBufferObject->Unbind();
-
-		m_vertexBuffer.clear();
-		m_indexBuffer.clear();
 
 		bIsLoaded = true;
 	}

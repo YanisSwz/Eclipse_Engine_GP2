@@ -130,6 +130,36 @@ namespace Core
 		return &m_capsuleColliders[m_currentCapsuleColliderCount - 1];
 	}
 
+	MeshCollider* PhysicsSystem::AddMeshCollider()
+	{
+		if (m_currentColliderCount >= MAX_COLLIDER_SIZE)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "Maximum capacity of colliders reached!");
+			return nullptr;
+		}
+
+		for (int i = 0; i < m_currentMeshColliderCount; ++i)
+		{
+			if (m_meshColliders[i].IsDestroyed())
+			{
+				m_meshColliders[i].Remove();
+				m_meshColliders[i].~MeshCollider();
+				new (&m_meshColliders[i]) MeshCollider(m_bodyInterface);
+				m_meshColliders[i].SetActive(true);
+				return &m_meshColliders[i];
+			}
+		}
+
+		m_meshColliders[m_currentMeshColliderCount].~MeshCollider();
+		new (&m_meshColliders[m_currentMeshColliderCount]) MeshCollider(m_bodyInterface);
+		m_meshColliders[m_currentMeshColliderCount].SetActive(true);
+
+		++m_currentColliderCount;
+		++m_currentMeshColliderCount;
+
+		return &m_meshColliders[m_currentMeshColliderCount - 1];
+	}
+
 	void PhysicsSystem::Update(float _deltaTime)
 	{
 		if (b_firstUpdate)
@@ -139,6 +169,8 @@ namespace Core
 		}
 
 		GameObject* GO;
+		Math::Vec3 rotation;
+		Math::Quat rotationQuat{ 0.f, 0.f, 0.f, 0.f };
 		for (int i = 0; i < m_currentBoxColliderCount; ++i)
 		{
 			if (m_boxColliders[i].b_isDynamic)
@@ -147,7 +179,34 @@ namespace Core
 				if (GO)
 				{
 					GO->transform->position = m_boxColliders[i].GetPosition();
-					GO->transform->eulerAngles = m_boxColliders[i].GetRotation();
+					rotationQuat = m_boxColliders[i].GetRotation() * (180.f / Math::Tools::PI);
+					GO->transform->rotation = rotationQuat;
+				}
+			}
+		}
+		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
+		{
+			if (m_capsuleColliders[i].b_isDynamic)
+			{
+				GO = m_capsuleColliders[i].GetGameObject();
+				if (GO)
+				{
+					GO->transform->position = m_capsuleColliders[i].GetPosition();
+					rotationQuat = m_capsuleColliders[i].GetRotation() * (180.f / Math::Tools::PI);
+					GO->transform->rotation = rotationQuat;
+				}
+			}
+		}
+		for (int i = 0; i < m_currentMeshColliderCount; ++i)
+		{
+			if (m_meshColliders[i].b_isDynamic)
+			{
+				GO = m_meshColliders[i].GetGameObject();
+				if (GO)
+				{
+					GO->transform->position = m_meshColliders[i].GetPosition();
+					rotationQuat = m_meshColliders[i].GetRotation();
+					GO->transform->rotation = rotationQuat;
 				}
 			}
 		}

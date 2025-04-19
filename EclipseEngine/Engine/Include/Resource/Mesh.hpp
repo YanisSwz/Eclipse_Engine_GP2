@@ -15,6 +15,8 @@ namespace Resource
 		ECLIPSE_ENGINE ~Mesh() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
+		ECLIPSE_ENGINE std::vector<Math::Vec3> GetVerticesPosition() const;
+		ECLIPSE_ENGINE std::vector<uint32_t> GetVerticesIndex() const;
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 
 		ECLIPSE_ENGINE void Draw() const;

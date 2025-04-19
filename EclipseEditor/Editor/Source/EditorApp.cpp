@@ -161,7 +161,9 @@ void EditorApp::LoadScene()
 	m_defaultPipeline->Init(m_window->width, m_window->height);
 
 	// CORE TESTS
+
 	Core::GameObject* floor = m_scene.CreateGameObject();
+	floor->name = "Floor";
 	floor->transform->localPosition = Math::Vec3(0.f, -1.f, 0.f);
 	floor->transform->localScale = Math::Vec3(100.f, 0.1f, 100.f);
 	Core::Model* floorModel = floor->AddComponent<Core::Model>();
@@ -170,31 +172,46 @@ void EditorApp::LoadScene()
 	floorCollider->SetPosition(0.f, -1.f, 0.f);
 	floorCollider->SetScale(100.f, 0.1f, 100.f);
 
-	Core::GameObject* obj1_1 = m_scene.CreateGameObject();
-	obj1_1->transform->localPosition = Math::Vec3(0.f, 1.f, 0.f);
-	obj1_1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
-	Core::Model* model1 = obj1_1->AddComponent<Core::Model>();
-	model1->SetData(model, texture, shaderProgramDeferredRendering);
+	Core::GameObject* vikingRoomObject = m_scene.CreateGameObject();
+	vikingRoomObject->name = "VikingRoom";
+	vikingRoomObject->transform->localPosition = Math::Vec3(0.f, 1.f, 0.f);
+	vikingRoomObject->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
+	Core::Model* vikingRoomModelObject = vikingRoomObject->AddComponent<Core::Model>();
+	vikingRoomModelObject->SetData(model, texture, shaderProgramDeferredRendering);
+	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
+	vikingRoomMeshCollider->SetPosition(-1.f, 50.f, 0.f);
+	vikingRoomMeshCollider->SetDynamic(true);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
+	obj1->name = "Capsule";
 	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
-	obj1->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);	
+	obj1->transform->localScale = Math::Vec3(1.f, 2.f, 1.f);	
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
-	model2->SetData(model, texture, shaderProgramDeferredRendering);
+	model2->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
 	cc->SetPosition(0.1f, 50.f, 0.f);
 	cc->SetDynamic(true);
 
-	obj1->transform->AddChild(obj1_1->transform);
+	Core::GameObject* capsule2 = m_scene.CreateGameObject();
+	capsule2->name = "Capsule";
+	capsule2->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
+	capsule2->transform->localScale = Math::Vec3(1.f, 2.f, 1.f);
+	Core::Model* capsuleModel2 = capsule2->AddComponent<Core::Model>();
+	capsuleModel2->SetData(cubeModel, texture, shaderProgramDeferredRendering);
+	Core::CapsuleCollider* cc2 = capsule2->AddComponent<Core::CapsuleCollider>();
+	cc2->SetPosition(3.5f, 150.f, 0.1f);
+	cc2->SetDynamic(true);
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
+	obj2->name = "BoxCollider Static";
 	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
 	obj2->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* model3 = obj2->AddComponent<Core::Model>();
-	model3->SetData(model, texture, shaderProgramDeferredRendering);
+	model3->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	obj2->AddComponent<Core::BoxCollider>();
 
 	Core::GameObject* obj3 = m_scene.CreateGameObject();
+	obj3->name = "BoxCollider Dynamic";
 	obj3->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
 	obj3->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();

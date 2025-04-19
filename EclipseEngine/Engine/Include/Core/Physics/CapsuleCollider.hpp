@@ -20,7 +20,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetPosRot(Math::Vec3 _position, Math::Vec3 _rotation);
 		ECLIPSE_ENGINE void SetPosRotHeightRadius(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _height, float _radius);
 		ECLIPSE_ENGINE void SetPosRotHeightRadius(Math::Vec3 _position, Math::Vec3 _rotation, float _height, float _radius);
-		ECLIPSE_ENGINE Math::Vec3 GetRotation() const;
+		ECLIPSE_ENGINE Math::Quat GetRotation() const;
 		ECLIPSE_ENGINE float GetHeight() const;
 		ECLIPSE_ENGINE float GetRadius() const;
 
@@ -29,7 +29,7 @@ namespace Core
 	private:
 		float m_height = 1.f;
 		float m_radius = 0.5f;
-		Math::Vec3 m_rotation = { 0.f, 0.f, 0.f };
+		Math::Quat m_rotation = { 0.f, 0.f, 0.f };
 
 		void UpdateData();
 	};
