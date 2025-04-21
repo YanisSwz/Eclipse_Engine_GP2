@@ -59,6 +59,13 @@ namespace Core
 
 	PhysicsSystem::~PhysicsSystem()
 	{
+		for (int i = 0; i < m_currentBoxColliderCount; ++i)
+			m_boxColliders[i].Delete();
+		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
+			m_capsuleColliders[i].Delete();
+		for (int i = 0; i < m_currentMeshColliderCount; ++i)
+			m_meshColliders[i].Delete();
+
 		JPH::UnregisterTypes();
 		delete JPH::Factory::sInstance;
 		JPH::Factory::sInstance = nullptr;
@@ -173,41 +180,32 @@ namespace Core
 		Math::Quat rotationQuat{ 0.f, 0.f, 0.f, 0.f };
 		for (int i = 0; i < m_currentBoxColliderCount; ++i)
 		{
-			if (m_boxColliders[i].b_isDynamic)
+			GO = m_boxColliders[i].GetGameObject();
+			if (GO)
 			{
-				GO = m_boxColliders[i].GetGameObject();
-				if (GO)
-				{
-					GO->transform->position = m_boxColliders[i].GetPosition();
-					rotationQuat = m_boxColliders[i].GetRotation() * (180.f / Math::Tools::PI);
-					GO->transform->rotation = rotationQuat;
-				}
+				GO->transform->position = m_boxColliders[i].GetPosition();
+				rotationQuat = m_boxColliders[i].GetRotation() * (180.f / Math::Tools::PI);
+				GO->transform->rotation = rotationQuat;
 			}
 		}
 		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
 		{
-			if (m_capsuleColliders[i].b_isDynamic)
+			GO = m_capsuleColliders[i].GetGameObject();
+			if (GO)
 			{
-				GO = m_capsuleColliders[i].GetGameObject();
-				if (GO)
-				{
-					GO->transform->position = m_capsuleColliders[i].GetPosition();
-					rotationQuat = m_capsuleColliders[i].GetRotation() * (180.f / Math::Tools::PI);
-					GO->transform->rotation = rotationQuat;
-				}
+				GO->transform->position = m_capsuleColliders[i].GetPosition();
+				rotationQuat = m_capsuleColliders[i].GetRotation() * (180.f / Math::Tools::PI);
+				GO->transform->rotation = rotationQuat;
 			}
 		}
 		for (int i = 0; i < m_currentMeshColliderCount; ++i)
 		{
-			if (m_meshColliders[i].b_isDynamic)
+			GO = m_meshColliders[i].GetGameObject();
+			if (GO)
 			{
-				GO = m_meshColliders[i].GetGameObject();
-				if (GO)
-				{
-					GO->transform->position = m_meshColliders[i].GetPosition();
-					rotationQuat = m_meshColliders[i].GetRotation();
-					GO->transform->rotation = rotationQuat;
-				}
+				GO->transform->position = m_meshColliders[i].GetPosition();
+				rotationQuat = m_meshColliders[i].GetRotation() * (180.f / Math::Tools::PI);
+				GO->transform->rotation = rotationQuat;
 			}
 		}
 

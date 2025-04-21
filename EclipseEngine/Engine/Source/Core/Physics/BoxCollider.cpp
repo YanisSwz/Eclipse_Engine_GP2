@@ -15,13 +15,15 @@ namespace Core
 	{
 	}
 
-	BoxCollider::BoxCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot)
+	BoxCollider::BoxCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{
 		m_bodyInterface = _bodyInterface;
 		b_isDynamic = _isDynamic;
+		m_mass = _mass;
 		m_position = _pos;
 		m_rotation = Math::Quat::QuaternionEuler(_rot.x, _rot.y, _rot.z);
 		m_scale = _size;
+		m_gameObject = _myGameObject;
 
 		JPH::BoxShapeSettings shapeSettings(JPH::Vec3(m_scale.x * 0.5f, m_scale.y * 0.5f, m_scale.z * 0.5f));
 		shapeSettings.SetEmbedded();
@@ -35,7 +37,9 @@ namespace Core
 			b_isDynamic ? JPH::Layers::MOVING : JPH::Layers::NON_MOVING);
 
 		bodySettings.mAllowDynamicOrKinematic = true;
-
+		bodySettings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateInertia;
+		bodySettings.mMassPropertiesOverride.mMass = m_mass;
+		
 		JPH::Body* body = m_bodyInterface->CreateBody(bodySettings);
 		m_bodyID = body->GetID();
 		m_bodyInterface->AddBody(m_bodyID, b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate);
@@ -43,21 +47,15 @@ namespace Core
 
 	BoxCollider::~BoxCollider()
 	{
-		Delete();
 	}
 
-	void BoxCollider::SetRotation(float _rotX, float _rotY, float _rotZ)
+	void BoxCollider::SetMass(float _mass)
 	{
-		m_rotation = Math::Quat::QuaternionEuler(_rotX, _rotY, _rotZ);
-		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-		m_bodyInterface->SetRotation(m_bodyID, JPH::Quat::sEulerAngles({ m_position.x, m_position.y, m_position.z }), isActivate);
-	}
-
-	void BoxCollider::SetRotation(Math::Vec3 _rotation)
-	{
-		m_rotation = Math::Quat::QuaternionEuler(_rotation.x, _rotation.y, _rotation.z);
-		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-		m_bodyInterface->SetRotation(m_bodyID, JPH::Quat::sEulerAngles({ m_position.x, m_position.y, m_position.z }), isActivate);
+		m_mass = _mass;
+		UpdateData();
+		this->Delete();
+		this->~BoxCollider();
+		new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
 	}
 
 	void BoxCollider::SetScale(float _scaleX, float _scaleY, float _scaleZ)
@@ -65,8 +63,9 @@ namespace Core
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
 		{
 			UpdateData();
+			this->Delete();
 			this->~BoxCollider();
-			new (this) BoxCollider(m_bodyInterface, b_isDynamic, { _scaleX, _scaleY, _scaleZ }, m_position, m_rotation.GetEulerAnglesRadXYZ());
+			new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, { _scaleX, _scaleY, _scaleZ }, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
 			// TODO Use ScaleShape
 		}
 	}
@@ -76,30 +75,20 @@ namespace Core
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scale.x, _scale.y, _scale.z }))
 		{
 			UpdateData();
+			this->Delete();
 			this->~BoxCollider();
-			new (this) BoxCollider(m_bodyInterface, b_isDynamic, _scale, m_position, m_rotation.GetEulerAnglesRadXYZ());
+			new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, _scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
 			// TODO Use ScaleShape
 		}
-	}
-
-	void BoxCollider::SetPosRot(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ)
-	{
-		SetPosition(_posX, _posY, _posZ);
-		SetRotation(_rotX, _rotY, _rotZ);
-	}
-
-	void BoxCollider::SetPosRot(Math::Vec3 _position, Math::Vec3 _rotation)
-	{
-		SetPosition(_position);
-		SetRotation(_rotation);
 	}
 	
 	void BoxCollider::SetPosRotScale(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ)
 	{
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
 		{
+			this->Delete();
 			this->~BoxCollider();
-			new (this) BoxCollider(m_bodyInterface, b_isDynamic, { _scaleX, _scaleY, _scaleZ }, { _posX, _posY, _posZ }, { _rotX, _rotY, _rotZ });
+			new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, { _scaleX, _scaleY, _scaleZ }, { _posX, _posY, _posZ }, { _rotX, _rotY, _rotZ }, m_gameObject);
 		}
 	}
 
@@ -107,31 +96,15 @@ namespace Core
 	{
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scale.x, _scale.y, _scale.z }))
 		{
+			this->Delete();
 			this->~BoxCollider();
-			new (this) BoxCollider(m_bodyInterface, b_isDynamic, _scale, _position, _rotation);
+			new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, _scale, _position, _rotation, m_gameObject);
 		}
-	}
-
-	Math::Quat BoxCollider::GetRotation() const
-	{
-		JPH::Quat rot = m_bodyInterface->GetRotation(m_bodyID);
-		return { rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ() };
 	}
 
 	Math::Vec3 BoxCollider::GetScale() const
 	{
 		return m_scale;
-	}
-
-	void BoxCollider::Delete()
-	{
-		if (m_bodyInterface)
-		{
-			if (m_bodyInterface->IsAdded(m_bodyID))
-				m_bodyInterface->RemoveBody(m_bodyID);
-			if (m_bodyID.IsInvalid())
-				m_bodyInterface->DestroyBody(m_bodyID);
-		}
 	}
 
 	void BoxCollider::UpdateData()

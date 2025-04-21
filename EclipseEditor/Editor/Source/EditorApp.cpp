@@ -179,8 +179,9 @@ void EditorApp::LoadScene()
 	Core::Model* vikingRoomModelObject = vikingRoomObject->AddComponent<Core::Model>();
 	vikingRoomModelObject->SetData(model, texture, shaderProgramDeferredRendering);
 	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
-	vikingRoomMeshCollider->SetPosition(-1.f, 50.f, 0.f);
+	vikingRoomMeshCollider->SetPosition(-2.f, 50.f, 0.f);
 	vikingRoomMeshCollider->SetDynamic(true);
+	//vikingRoomMeshCollider->SetMass(10.f);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
 	obj1->name = "Capsule";
@@ -212,12 +213,13 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* obj3 = m_scene.CreateGameObject();
 	obj3->name = "BoxCollider Dynamic";
-	obj3->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
+	obj3->transform->localPosition = Math::Vec3(1.f, 0.f, 0.f);
 	obj3->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
 	model4->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
 	bc->SetPosition(0.f, 100.f, 0.f);
+	bc->SetMass(50.f);
 	bc->SetDynamic(true);
 }
 

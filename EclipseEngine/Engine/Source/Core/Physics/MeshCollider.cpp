@@ -18,13 +18,15 @@ namespace Core
 	{
 	}
 
-	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot)
+	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{
 		m_bodyInterface = _bodyInterface;
 		b_isDynamic = _isDynamic;
+		m_mass = _mass;
 		m_position = _pos;
-		m_rotation = _rot;
+		m_rotation = Math::Quat::QuaternionEuler(_rot.x, _rot.y, _rot.z);
 		m_scale = _size;
+		m_gameObject = _myGameObject;
 
 		m_vertexList.clear();
 		m_indexTriangleList.clear();
@@ -36,7 +38,7 @@ namespace Core
 		Math::Vec3 pos;
 		for (int i = 0; i < verticesPosition.size(); ++i)
 		{
-			pos = verticesPosition[i];
+			pos = verticesPosition[i] * m_scale;
 			m_vertexList.push_back({ pos.x, pos.y, pos.z });
 		}
 		
@@ -60,7 +62,7 @@ namespace Core
 
 		bodySettings.mAllowDynamicOrKinematic = true;
 		bodySettings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateInertia;
-		bodySettings.mMassPropertiesOverride.mMass = 1.f;
+		bodySettings.mMassPropertiesOverride.mMass = m_mass;
 
 		JPH::Body* body = m_bodyInterface->CreateBody(bodySettings);
 		m_bodyID = body->GetID();
@@ -69,23 +71,14 @@ namespace Core
 
 	MeshCollider::~MeshCollider()
 	{
-		Delete();
 	}
 
-	Math::Quat MeshCollider::GetRotation() const
+	void MeshCollider::SetMass(float _mass)
 	{
-		JPH::Quat quat = m_bodyInterface->GetRotation(m_bodyID);
-		return { quat.GetW(), quat.GetX(), quat.GetY(), quat.GetZ()};
-	}
-
-	void MeshCollider::Delete()
-	{
-		if (m_bodyInterface)
-		{
-			if (m_bodyInterface->IsAdded(m_bodyID))
-				m_bodyInterface->RemoveBody(m_bodyID);
-			if (m_bodyID.IsInvalid())
-				m_bodyInterface->DestroyBody(m_bodyID);
-		}
+		m_mass = _mass;
+		UpdateData();
+		this->Delete();
+		this->~MeshCollider();
+		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
 	}
 }
