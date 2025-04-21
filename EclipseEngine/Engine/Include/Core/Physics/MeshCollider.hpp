@@ -22,15 +22,20 @@ namespace Core
 		
 		ECLIPSE_ENGINE void SetMesh(const char* _meshName);
 		ECLIPSE_ENGINE void SetMesh(Resource::Mesh* _mesh);
+		ECLIPSE_ENGINE void SetMeshScale(const char* _meshName, Math::Vec3 _scale);
+		ECLIPSE_ENGINE void SetMeshScale(Resource::Mesh* _mesh, Math::Vec3 _scale);
 		ECLIPSE_ENGINE void SetMass(float _mass) override;
+
+		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale);
+		ECLIPSE_ENGINE void Scale(float _scaleX, float _scaleY, float _scaleZ);
 
 	private:
 		Math::Vec3 m_scale = { 0.f, 0.f, 0.f };
 
-		bool b_isMeshChanged = false;
 		JPH::VertexList m_vertexList;
 		JPH::IndexedTriangleList m_indexTriangleList;
 		const char* m_defaultMesh = "Cube.obj";
+		Resource::Mesh* m_currentMesh = nullptr;
 
 		void SetDefaultMesh();
 	};

@@ -175,12 +175,12 @@ void EditorApp::LoadScene()
 	Core::GameObject* vikingRoomObject = m_scene.CreateGameObject();
 	vikingRoomObject->name = "VikingRoom";
 	vikingRoomObject->transform->localPosition = Math::Vec3(0.f, 1.f, 0.f);
-	vikingRoomObject->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
+	vikingRoomObject->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
 	Core::Model* vikingRoomModelObject = vikingRoomObject->AddComponent<Core::Model>();
 	vikingRoomModelObject->SetData(model, texture, shaderProgramDeferredRendering);
 	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
 	vikingRoomMeshCollider->SetPosition(-2.f, 50.f, 0.f);
-	vikingRoomMeshCollider->SetMesh(model);
+	vikingRoomMeshCollider->SetMeshScale(model, {0.5f, 0.5f, 0.5f});
 	vikingRoomMeshCollider->SetDynamic(true);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
