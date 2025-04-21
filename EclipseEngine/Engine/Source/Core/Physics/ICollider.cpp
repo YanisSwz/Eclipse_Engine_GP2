@@ -46,6 +46,16 @@ namespace Core
 		m_bodyInterface->AddImpulse(m_bodyID, { _dir.x * _impulse, _dir.y * _impulse, _dir.z * _impulse });
 	}
 
+	void ICollider::AddBodyToPhysicsEngine()
+	{
+		m_bodyInterface->AddBody(m_bodyID, b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate);
+	}
+
+	void ICollider::RemoveBodyToPhysicsEngine()
+	{
+		m_bodyInterface->RemoveBody(m_bodyID);
+	}
+
 	void ICollider::SetPosition(float _posX, float _posY, float _posZ)
 	{
 		m_position = { _posX, _posY, _posZ };

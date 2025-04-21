@@ -28,6 +28,8 @@ namespace Core
 		ECLIPSE_ENGINE void AddImpulse(float _impulseX, float _impulseY, float _impulseZ);
 		ECLIPSE_ENGINE void AddImpulse(Math::Vec3 _impulse);
 		ECLIPSE_ENGINE void AddImpulse(Math::Vec3 _dir, float _impulse);
+		ECLIPSE_ENGINE void AddBodyToPhysicsEngine();
+		ECLIPSE_ENGINE void RemoveBodyToPhysicsEngine();
 
 		ECLIPSE_ENGINE void SetPosition(float _posX, float _posY, float _posZ);
 		ECLIPSE_ENGINE void SetPosition(Math::Vec3 _position);

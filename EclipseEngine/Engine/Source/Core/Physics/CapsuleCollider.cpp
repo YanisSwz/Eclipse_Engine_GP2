@@ -27,7 +27,6 @@ namespace Core
 		m_rotation = Math::Quat::QuaternionEuler(_rot.x, _rot.y, _rot.z);
 		m_gameObject = _myGameObject;
 
-
 		JPH::CapsuleShapeSettings shapeSettings(m_height * 0.5f, m_radius);
 		shapeSettings.SetEmbedded();
 		JPH::ShapeSettings::ShapeResult shapeResult = shapeSettings.Create();

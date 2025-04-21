@@ -1,4 +1,7 @@
 #include "Physics/MeshCollider.hpp"
+#include "Logger.hpp"
+#include "Resource/ResourceManager.hpp"
+#include "Resource/Mesh.hpp"
 
 // Jolt Includes
 #include <Jolt/Jolt.h>
@@ -9,16 +12,13 @@
 #include <Jolt/Physics/Body/BodyActivationListener.h>
 using namespace JPH::literals;
 
-#include "Resource/ResourceManager.hpp"
-#include "Resource/Mesh.hpp"
-
 namespace Core
 {
 	MeshCollider::MeshCollider()
 	{
 	}
 
-	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
+	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject, JPH::VertexList _vertexList, JPH::IndexedTriangleList _indexTriangleList)
 	{
 		m_bodyInterface = _bodyInterface;
 		b_isDynamic = _isDynamic;
@@ -27,23 +27,12 @@ namespace Core
 		m_rotation = Math::Quat::QuaternionEuler(_rot.x, _rot.y, _rot.z);
 		m_scale = _size;
 		m_gameObject = _myGameObject;
+		m_vertexList = _vertexList;
+		m_indexTriangleList = _indexTriangleList;
 
-		m_vertexList.clear();
-		m_indexTriangleList.clear();
 
-		Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
-		std::vector<Math::Vec3> verticesPosition = mesh->GetVerticesPosition();
-		std::vector<uint32_t> verticesIndex = mesh->GetVerticesIndex();
-
-		Math::Vec3 pos;
-		for (int i = 0; i < verticesPosition.size(); ++i)
-		{
-			pos = verticesPosition[i] * m_scale;
-			m_vertexList.push_back({ pos.x, pos.y, pos.z });
-		}
-		
-		for (int i = 0; i < verticesIndex.size(); i += 3)
-			m_indexTriangleList.push_back({ verticesIndex[i], verticesIndex[i + 1], verticesIndex[i + 2] });
+		if (m_vertexList.size() == 0)
+			SetDefaultMesh();
 
 		JPH::MeshShapeSettings shapeSettings(m_vertexList, m_indexTriangleList);
 		shapeSettings.SetEmbedded();
@@ -73,12 +62,100 @@ namespace Core
 	{
 	}
 
+	void MeshCollider::SetMesh(const char* _meshName)
+	{
+		Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(_meshName);
+		if (!mesh)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Mesh not found for the mesh collider! The previous mesh collider will be used!");
+			return;
+		}
+
+		m_vertexList.clear();
+		m_indexTriangleList.clear();
+		std::vector<Math::Vec3> verticesPosition = mesh->GetVerticesPosition();
+		std::vector<uint32_t> verticesIndex = mesh->GetVerticesIndex();
+
+		JPH::VertexList vertexList;
+		JPH::IndexedTriangleList indexTriangleList;
+
+		Math::Vec3 pos;
+		for (int i = 0; i < verticesPosition.size(); ++i)
+		{
+			pos = verticesPosition[i] * m_scale;
+			vertexList.push_back({ pos.x, pos.y, pos.z });
+		}
+
+		for (int i = 0; i < verticesIndex.size(); i += 3)
+			indexTriangleList.push_back({ verticesIndex[i], verticesIndex[i + 1], verticesIndex[i + 2] });
+
+		this->Delete();
+		this->~MeshCollider();
+		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject, vertexList, indexTriangleList);
+	}
+
+	void MeshCollider::SetMesh(Resource::Mesh* _mesh)
+	{
+		if (!_mesh)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Mesh not found for the mesh collider! The previous mesh collider will be used!");
+			return;
+		}
+
+		m_vertexList.clear();
+		m_indexTriangleList.clear();
+		std::vector<Math::Vec3> verticesPosition = _mesh->GetVerticesPosition();
+		std::vector<uint32_t> verticesIndex = _mesh->GetVerticesIndex();
+
+		JPH::VertexList vertexList;
+		JPH::IndexedTriangleList indexTriangleList;
+
+		Math::Vec3 pos;
+		for (int i = 0; i < verticesPosition.size(); ++i)
+		{
+			pos = verticesPosition[i] * m_scale;
+			vertexList.push_back({ pos.x, pos.y, pos.z });
+		}
+
+		for (int i = 0; i < verticesIndex.size(); i += 3)
+			indexTriangleList.push_back({ verticesIndex[i], verticesIndex[i + 1], verticesIndex[i + 2] });
+
+		this->Delete();
+		this->~MeshCollider();
+		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject, vertexList, indexTriangleList);
+	}
+
 	void MeshCollider::SetMass(float _mass)
 	{
 		m_mass = _mass;
 		UpdateData();
 		this->Delete();
 		this->~MeshCollider();
-		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
+		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject, m_vertexList, m_indexTriangleList);
+	}
+
+	void MeshCollider::SetDefaultMesh()
+	{
+		Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(m_defaultMesh);
+		if (!mesh)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Mesh not found for the mesh collider! The previous mesh collider will be used!");
+			return;
+		}
+
+		m_vertexList.clear();
+		m_indexTriangleList.clear();
+		std::vector<Math::Vec3> verticesPosition = mesh->GetVerticesPosition();
+		std::vector<uint32_t> verticesIndex = mesh->GetVerticesIndex();
+
+		Math::Vec3 pos;
+		for (int i = 0; i < verticesPosition.size(); ++i)
+		{
+			pos = verticesPosition[i] * m_scale;
+			m_vertexList.push_back({ pos.x, pos.y, pos.z });
+		}
+
+		for (int i = 0; i < verticesIndex.size(); i += 3)
+			m_indexTriangleList.push_back({ verticesIndex[i], verticesIndex[i + 1], verticesIndex[i + 2] });
 	}
 }
