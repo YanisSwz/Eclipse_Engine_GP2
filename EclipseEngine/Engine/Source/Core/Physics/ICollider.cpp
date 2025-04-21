@@ -16,6 +16,36 @@ namespace Core
 		m_bodyInterface->SetObjectLayer(m_bodyID, objectLayer);
 	}
 
+	void ICollider::AddForce(float _forceX, float _forceY, float _forceZ)
+	{
+		m_bodyInterface->AddForce(m_bodyID, { _forceX, _forceY, _forceZ }, b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate);
+	}
+
+	void ICollider::AddForce(Math::Vec3 _force)
+	{
+		m_bodyInterface->AddForce(m_bodyID, { _force.x, _force.y, _force.z }, b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate);
+	}
+
+	void ICollider::AddForce(Math::Vec3 _dir, float _force)
+	{
+		m_bodyInterface->AddForce(m_bodyID, { _dir.x * _force, _dir.y * _force, _dir.z * _force }, b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate);
+	}
+
+	void ICollider::AddImpulse(float _impulseX, float _impulseY, float _impulseZ)
+	{
+		m_bodyInterface->AddImpulse(m_bodyID, { _impulseX, _impulseY, _impulseZ });
+	}
+
+	void ICollider::AddImpulse(Math::Vec3 _impulse)
+	{
+		m_bodyInterface->AddImpulse(m_bodyID, { _impulse.x, _impulse.y, _impulse.z });
+	}
+
+	void ICollider::AddImpulse(Math::Vec3 _dir, float _impulse)
+	{
+		m_bodyInterface->AddImpulse(m_bodyID, { _dir.x * _impulse, _dir.y * _impulse, _dir.z * _impulse });
+	}
+
 	void ICollider::SetPosition(float _posX, float _posY, float _posZ)
 	{
 		m_position = { _posX, _posY, _posZ };

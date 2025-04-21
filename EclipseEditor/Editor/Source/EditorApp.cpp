@@ -184,7 +184,7 @@ void EditorApp::LoadScene()
 	//vikingRoomMeshCollider->SetMass(10.f);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
-	obj1->name = "Capsule";
+	obj1->name = "Capsule1";
 	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
 	obj1->transform->localScale = Math::Vec3(1.f, 2.f, 1.f);	
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
@@ -194,13 +194,14 @@ void EditorApp::LoadScene()
 	cc->SetDynamic(true);
 
 	Core::GameObject* capsule2 = m_scene.CreateGameObject();
-	capsule2->name = "Capsule";
+	capsule2->name = "Capsule2";
 	capsule2->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
 	capsule2->transform->localScale = Math::Vec3(1.f, 2.f, 1.f);
 	Core::Model* capsuleModel2 = capsule2->AddComponent<Core::Model>();
 	capsuleModel2->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::CapsuleCollider* cc2 = capsule2->AddComponent<Core::CapsuleCollider>();
-	cc2->SetPosition(3.5f, 150.f, 0.1f);
+	cc2->SetPosition(3.5f, 75.f, 0.1f);
+	cc2->SetRotation(0.f, 0.f, 0.2f);
 	cc2->SetDynamic(true);
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
@@ -218,9 +219,11 @@ void EditorApp::LoadScene()
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
 	model4->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
-	bc->SetPosition(0.f, 100.f, 0.f);
-	bc->SetMass(50.f);
+	bc->SetPosition(1.f, 0.f, 0.f);
+	//bc->SetMass(50.f);
 	bc->SetDynamic(true);
+	bc->AddForce(0.f, 0.f, 20.f);
+	bc->AddImpulse(0.f, 5.f, 0.f);
 }
 
 void EditorApp::DrawScene()

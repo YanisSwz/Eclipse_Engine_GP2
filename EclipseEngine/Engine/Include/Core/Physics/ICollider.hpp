@@ -21,7 +21,14 @@ namespace Core
 		bool b_isDynamic = false;
 
 		ECLIPSE_ENGINE void SetDynamic(bool _isDynamic);
-		 virtual void SetMass(float _mass) = 0;
+		virtual void SetMass(float _mass) = 0;
+		ECLIPSE_ENGINE void AddForce(float _forceX, float _forceY, float _forceZ);
+		ECLIPSE_ENGINE void AddForce(Math::Vec3 _force);
+		ECLIPSE_ENGINE void AddForce(Math::Vec3 _dir, float _force);
+		ECLIPSE_ENGINE void AddImpulse(float _impulseX, float _impulseY, float _impulseZ);
+		ECLIPSE_ENGINE void AddImpulse(Math::Vec3 _impulse);
+		ECLIPSE_ENGINE void AddImpulse(Math::Vec3 _dir, float _impulse);
+
 		ECLIPSE_ENGINE void SetPosition(float _posX, float _posY, float _posZ);
 		ECLIPSE_ENGINE void SetPosition(Math::Vec3 _position);
 		ECLIPSE_ENGINE void SetRotation(float _rotX, float _rotY, float _rotZ);
@@ -38,7 +45,7 @@ namespace Core
 	protected:
 		Math::Vec3 m_position = { 0.f, 0.f, 0.f };
 		Math::Quat m_rotation = { 0.f, 0.f, 0.f };
-		float m_mass = 3.f;
+		float m_mass = 1.f;
 
 		JPH::BodyInterface* m_bodyInterface = nullptr;
 		JPH::BodyID m_bodyID;
