@@ -162,6 +162,19 @@ namespace Core
 		}
 	}
 
+	void MeshCollider::SetPosRotScale(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ)
+	{
+		SetPosRot({ _posX, _posY, _posZ }, Math::Vec3{ _rotX, _rotY, _rotZ });
+		Scale({ _scaleX, _scaleY, _scaleZ });
+	}
+
+	void MeshCollider::SetPosRotScale(Math::Vec3 _position, Math::Vec3 _rotation, Math::Vec3 _scale)
+	{
+
+		SetPosRot({ _position.x, _position.y, _position.z }, Math::Vec3{ _rotation.x, _rotation.y, _rotation.z });
+		Scale({ _scale.x, _scale.y, _scale.z });
+	}
+
 	void MeshCollider::Recreate()
 	{
 		Core::GameObject* gameObject = m_gameObject;

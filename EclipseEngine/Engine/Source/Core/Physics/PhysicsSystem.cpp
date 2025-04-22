@@ -175,6 +175,17 @@ namespace Core
 			_deltaTime = 0.f;
 		}
 
+		// If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
+		const int cCollisionSteps = 1;
+		// Step the world
+		m_physicsSystem.Update(_deltaTime, cCollisionSteps, m_tempAllocator, m_jobSystem);
+
+		// Draw for JoltViewer
+		JPH::BodyManager::DrawSettings drawSettings;
+		m_physicsSystem.DrawBodies(drawSettings, m_renderer);
+		m_renderer->EndFrame();
+
+
 		GameObject* GO;
 		Math::Vec3 rotation;
 		Math::Quat rotationQuat{ 0.f, 0.f, 0.f, 0.f };
@@ -208,15 +219,5 @@ namespace Core
 				GO->transform->rotation = rotationQuat;
 			}
 		}
-
-		// If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
-		const int cCollisionSteps = 1;
-		// Step the world
-		m_physicsSystem.Update(_deltaTime, cCollisionSteps, m_tempAllocator, m_jobSystem);
-
-		// Draw for JoltViewer
-		JPH::BodyManager::DrawSettings drawSettings;
-		m_physicsSystem.DrawBodies(drawSettings, m_renderer);
-		m_renderer->EndFrame();
 	}
 }
