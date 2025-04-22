@@ -38,4 +38,24 @@ namespace Core
 		m_localScale = _vec; 
 		m_scaleChanged = true;
 	}
+
+	/// <summary>
+	/// Notifies the transform that its position changed
+	/// </summary>
+	inline void Transform::SetPositionChanged() { m_positionChanged = true; }
+
+	/// <summary>
+	/// Notifies the transform that its scale changed
+	/// </summary>
+	inline void Transform::SetScaleChanged() { m_scaleChanged = true; }
+
+	/// <summary>
+	/// Notifies the transform that its rotation changed
+	/// </summary>
+	inline void Transform::SetRotationChanged() 
+	{ 
+		m_rotationChanged = true; 
+		if (m_children.size() > 0)
+			m_positionChanged = true;
+	}
 }

@@ -57,6 +57,9 @@ namespace Core
 		ECLIPSE_ENGINE void SetLocalScale(Math::Vec3 _vec) ;
 		ECLIPSE_ENGINE void SetLocalRotation(Math::Quat _quat) ;
 		ECLIPSE_ENGINE void SetLocalEulerAngles(Math::Vec3 _vec) ;
+		ECLIPSE_ENGINE void SetPositionChanged();
+		ECLIPSE_ENGINE void SetScaleChanged();
+		ECLIPSE_ENGINE void SetRotationChanged();
 
 	private:
 		Math::Mat4 GetLocalTransformMatrix() const;
