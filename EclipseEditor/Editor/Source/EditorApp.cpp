@@ -8,6 +8,7 @@
 #include "Resource/ModelData.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include "Core/Physics/BoxCollider.hpp"
+#include "Lighting/PointLight.hpp"
 
 #include "iostream"
 
@@ -159,6 +160,7 @@ void EditorApp::LoadScene()
 	m_contentBrowserGUI.Init();
 	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_defaultPipeline->Init(m_window->width, m_window->height);
+	
 
 	// CORE TESTS
 	Core::GameObject* floor = m_scene.CreateGameObject();
@@ -202,15 +204,18 @@ void EditorApp::LoadScene()
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
 	bc->SetPosition(0.f, 100.f, 0.f);
 	bc->SetDynamic(true);
+
+
+	Core::PointLight* pl1 = obj1->AddComponent<Core::PointLight>();
+	pl1->SetColor({ 1.f, 0.f, 0.f, 1.f });
+
+	Core::PointLight* pl2 = obj2->AddComponent<Core::PointLight>();
+	pl2->SetColor({ 0.f, 1.f, 0.f, 1.f });
 }
 
 void EditorApp::DrawScene()
 {
-	m_renderInterface->ClearBackgroundColor({ 0.f, 0.f, 0.f });
-	m_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
-	m_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
-
-	m_defaultPipeline->Draw(m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos(), m_scene.GetSystemManager()->GetStaticModels());
+	m_scene.GetSystemManager()->Render(m_renderInterface, m_defaultPipeline, m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos());
 }
 
 void EditorApp::DestroyScene()

@@ -14,6 +14,5 @@ namespace RHI::OpenGL
 		virtual void Delete() override = 0;
 
 	private:
-
 	};
 }

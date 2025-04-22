@@ -11,7 +11,18 @@ namespace Core
 	{
 	}
 
-	Math::Vec3 PointLight::GetPosition()
+	RHI::PointLightData PointLight::GetData() const
+	{
+		return RHI::PointLightData{
+			m_color,
+			GetPosition(),
+			m_constantAttenuation,
+			m_linearAttenuation,
+			m_quadraticAttenuation
+		};
+	}
+
+	Math::Vec3 PointLight::GetPosition() const
 	{
 		if (m_gameObject == nullptr)
 			return Math::Vec3();

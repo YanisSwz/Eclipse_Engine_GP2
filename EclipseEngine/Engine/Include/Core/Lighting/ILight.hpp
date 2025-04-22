@@ -1,7 +1,7 @@
 #pragma once
 #include "ProjectExports.hpp"
 #include "Component.hpp"
-#include "Vec3.hpp"
+#include "Vec4.hpp"
 
 namespace Core
 {
@@ -10,8 +10,10 @@ namespace Core
 	public:
 		ILight() = default;
 		~ILight() = default;
+
+		inline void SetColor(Math::Vec4 _color) { m_color = _color; };
 		
 	protected:
-		Math::Vec3 m_color;
+		Math::Vec4 m_color;
 	};
 }

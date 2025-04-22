@@ -11,14 +11,28 @@ namespace Core
 	{
 	}
 
-	Math::Vec3 SpotLight::GetPosition()
+	RHI::SpotLightData SpotLight::GetData() const
+	{
+		return RHI::SpotLightData{
+			m_color,
+			GetPosition(),
+			GetDirection(),
+			m_innerCutOff,
+			m_outerCutOff,
+			m_constantAttenuation,
+			m_linearAttenuation,
+			m_quadraticAttenuation
+		};
+	}
+
+	Math::Vec3 SpotLight::GetPosition() const
 	{
 		if (m_gameObject == nullptr)
 			return Math::Vec3();
 		return m_gameObject->transform->position;
 	}
 
-	Math::Vec3 SpotLight::GetDirection()
+	Math::Vec3 SpotLight::GetDirection() const
 	{
 		if (m_gameObject == nullptr)
 			return Math::Vec3();
