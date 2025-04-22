@@ -12,9 +12,9 @@ namespace Core
 		ECLIPSE_ENGINE ~CapsuleCollider() override;
 
 		ECLIPSE_ENGINE void SetMass(float _mass) override;
-		ECLIPSE_ENGINE void SetHeight(float _height);
-		ECLIPSE_ENGINE void SetRadius(float _radius);
-		ECLIPSE_ENGINE void SetHeightRadius(float _height, float _radius);
+		ECLIPSE_ENGINE void ScaleHeight(float _height);
+		ECLIPSE_ENGINE void ScaleRadius(float _radius);
+		ECLIPSE_ENGINE void ScaleHeightRadius(float _height, float _radius);
 		ECLIPSE_ENGINE void SetPosRotHeightRadius(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _height, float _radius);
 		ECLIPSE_ENGINE void SetPosRotHeightRadius(Math::Vec3 _position, Math::Vec3 _rotation, float _height, float _radius);
 		ECLIPSE_ENGINE float GetHeight() const;

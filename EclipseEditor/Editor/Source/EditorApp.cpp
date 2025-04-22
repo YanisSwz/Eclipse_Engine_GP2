@@ -170,17 +170,18 @@ void EditorApp::LoadScene()
 	floorModel->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* floorCollider = floor->AddComponent<Core::BoxCollider>();
 	floorCollider->SetPosition(0.f, -1.f, 0.f);
-	floorCollider->SetScale(100.f, 0.1f, 100.f);
+	floorCollider->Scale(100.f, 0.1f, 100.f);
 
 	Core::GameObject* vikingRoomObject = m_scene.CreateGameObject();
 	vikingRoomObject->name = "VikingRoom";
 	vikingRoomObject->transform->localPosition = Math::Vec3(0.f, 1.f, 0.f);
-	vikingRoomObject->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
+	vikingRoomObject->transform->localScale = Math::Vec3(3.f, 4.f, 5.f);
 	Core::Model* vikingRoomModelObject = vikingRoomObject->AddComponent<Core::Model>();
 	vikingRoomModelObject->SetData(model, texture, shaderProgramDeferredRendering);
 	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
 	vikingRoomMeshCollider->SetPosition(-2.f, 50.f, 0.f);
-	vikingRoomMeshCollider->SetMeshScale(model, {0.5f, 0.5f, 0.5f});
+	vikingRoomMeshCollider->SetMesh(model);
+	vikingRoomMeshCollider->Scale({ 3.f, 4.f, 5.f });
 	vikingRoomMeshCollider->SetDynamic(true);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
@@ -191,6 +192,7 @@ void EditorApp::LoadScene()
 	model2->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
 	cc->SetPosition(0.1f, 50.f, 0.f);
+	cc->ScaleHeightRadius(10.f, 5.f);
 	cc->SetDynamic(true);
 
 	Core::GameObject* capsule2 = m_scene.CreateGameObject();

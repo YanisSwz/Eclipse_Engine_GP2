@@ -58,19 +58,19 @@ namespace Core
 		Recreate();
 	}
 
-	void CapsuleCollider::SetHeight(float _height)
+	void CapsuleCollider::ScaleHeight(float _height)
 	{
 		m_height = _height;
 		Recreate();
 	}
 
-	void CapsuleCollider::SetRadius(float _radius)
+	void CapsuleCollider::ScaleRadius(float _radius)
 	{
 		m_radius = _radius;
 		Recreate();
 	}
 
-	void CapsuleCollider::SetHeightRadius(float _height, float _radius)
+	void CapsuleCollider::ScaleHeightRadius(float _height, float _radius)
 	{
 		m_height = _height;
 		m_radius = _radius;
@@ -80,13 +80,13 @@ namespace Core
 	void CapsuleCollider::SetPosRotHeightRadius(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _height, float _radius)
 	{
 		SetPosRot({ _posX, _posY, _posZ }, Math::Vec3{ _rotX, _rotY, _rotZ });
-		SetHeightRadius(_height, _radius);
+		ScaleHeightRadius(_height, _radius);
 	}
 
 	void CapsuleCollider::SetPosRotHeightRadius(Math::Vec3 _position, Math::Vec3 _rotation, float _height, float _radius)
 	{
 		SetPosRot(_position, _rotation);
-		SetHeightRadius(_height, _radius);
+		ScaleHeightRadius(_height, _radius);
 	}
 
 	void CapsuleCollider::Recreate()

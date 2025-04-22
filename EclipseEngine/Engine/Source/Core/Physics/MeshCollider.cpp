@@ -102,11 +102,11 @@ namespace Core
 		for (int i = 0; i < verticesPosition.size(); ++i)
 		{
 			pos = verticesPosition[i] * m_scale;
-			vertexList.push_back({ pos.x * _scale.x, pos.y * _scale.y, pos.z * _scale.z });
+			m_vertexList.push_back({ pos.x * _scale.x, pos.y * _scale.y, pos.z * _scale.z });
 		}
 
 		for (int i = 0; i < verticesIndex.size(); i += 3)
-			indexTriangleList.push_back({ verticesIndex[i], verticesIndex[i + 1], verticesIndex[i + 2] });
+			m_indexTriangleList.push_back({ verticesIndex[i], verticesIndex[i + 1], verticesIndex[i + 2] });
 
 		Recreate();
 	}
@@ -144,19 +144,32 @@ namespace Core
 
 	void MeshCollider::Scale(Math::Vec3 _scale)
 	{
-		SetMeshScale(m_currentMesh, _scale);
+		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scale.x, _scale.y, _scale.z }))
+		{
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scale.x, _scale.y, _scale.z });
+			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
+		}
 	}
 
 	void MeshCollider::Scale(float _scaleX, float _scaleY, float _scaleZ)
 	{
-		SetMeshScale(m_currentMesh, { _scaleX, _scaleY, _scaleZ });
+		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
+		{
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scaleX, _scaleY, _scaleZ });
+			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
+		}
 	}
 
 	void MeshCollider::Recreate()
 	{
 		Core::GameObject* gameObject = m_gameObject;
+
+		JPH::VertexList vertexList = m_vertexList;
+		JPH::IndexedTriangleList indexTriangleList = m_indexTriangleList;
 		UpdateData();
 		this->~MeshCollider();
-		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject);
+		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject, vertexList, indexTriangleList);
 	}
 }

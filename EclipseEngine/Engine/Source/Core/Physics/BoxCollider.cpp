@@ -56,43 +56,45 @@ namespace Core
 		Recreate();
 	}
 
-	void BoxCollider::SetScale(float _scaleX, float _scaleY, float _scaleZ)
+	void BoxCollider::Scale(float _scaleX, float _scaleY, float _scaleZ)
 	{
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
 		{
-			UpdateData();
-			this->~BoxCollider();
-			new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, { _scaleX, _scaleY, _scaleZ }, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
-			// TODO Use ScaleShape
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scaleX, _scaleY, _scaleZ });
+			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
 		}
 	}
 
-	void BoxCollider::SetScale(Math::Vec3 _scale)
+	void BoxCollider::Scale(Math::Vec3 _scale)
 	{
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scale.x, _scale.y, _scale.z }))
 		{
-			UpdateData();
-			this->~BoxCollider();
-			new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, _scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
-			// TODO Use ScaleShape
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scale.x, _scale.y, _scale.z });
+			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
 		}
 	}
 
 	void BoxCollider::SetPosRotScale(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ)
 	{
+		SetPosRot({ _posX, _posY, _posZ }, Math::Vec3{ _rotX, _rotY, _rotZ });
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
 		{
-			this->~BoxCollider();
-			new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, { _scaleX, _scaleY, _scaleZ }, { _posX, _posY, _posZ }, { _rotX, _rotY, _rotZ }, m_gameObject);
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scaleX, _scaleY, _scaleZ });
+			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
 		}
 	}
 
 	void BoxCollider::SetPosRotScale(Math::Vec3 _position, Math::Vec3 _rotation, Math::Vec3 _scale)
 	{
+		SetPosRot({ _position.x, _position.y, _position.z }, Math::Vec3{ _rotation.x, _rotation.y, _rotation.z });
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scale.x, _scale.y, _scale.z }))
 		{
-			this->~BoxCollider();
-			new (this) BoxCollider(m_bodyInterface, b_isDynamic, m_mass, _scale, _position, _rotation, m_gameObject);
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scale.x, _scale.y, _scale.z });
+			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
 		}
 	}
 
