@@ -146,8 +146,8 @@ namespace Core
 				GO = m_boxColliders[i].GetGameObject();
 				if (GO)
 				{
-					GO->transform->position = m_boxColliders[i].GetPosition();
-					GO->transform->eulerAngles = m_boxColliders[i].GetRotation();
+					GO->transform->SetPosition(m_boxColliders[i].GetPosition());
+					GO->transform->SetEulerAngles(m_boxColliders[i].GetRotation());
 				}
 			}
 		}

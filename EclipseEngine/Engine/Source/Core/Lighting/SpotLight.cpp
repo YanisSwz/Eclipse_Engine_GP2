@@ -15,13 +15,13 @@ namespace Core
 	{
 		if (m_gameObject == nullptr)
 			return Math::Vec3();
-		return m_gameObject->transform->position;
+		return m_gameObject->transform->GetPosition();
 	}
 
 	Math::Vec3 SpotLight::GetDirection()
 	{
 		if (m_gameObject == nullptr)
 			return Math::Vec3();
-		return m_gameObject->transform->forward;
+		return m_gameObject->transform->GetForward();
 	}
 }

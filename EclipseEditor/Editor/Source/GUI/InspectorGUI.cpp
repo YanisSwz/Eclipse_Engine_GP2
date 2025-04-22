@@ -42,9 +42,9 @@ namespace GUI
 			return;
 
 		ImGui::SeparatorText("Transform");
-		GUI::DragVec3XYZ("Position", _transform->localPosition);
-		GUI::DragVec3XYZ("Rotation", _transform->localEulerAngles);
-		GUI::DragVec3XYZ("Scale", _transform->localScale, 1.f);
+		GUI::DragVec3XYZ("Position", _transform->GetLocalPositionRef());
+		GUI::DragVec3XYZ("Rotation", _transform->GetLocalEulerAnglesRef());
+		GUI::DragVec3XYZ("Scale", _transform->GetLocalScaleRef(), 1.f);
 	}
 
 	void InspectorGUI::DrawModelComponent(Core::Model* _model)

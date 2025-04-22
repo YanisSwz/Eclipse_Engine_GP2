@@ -162,8 +162,8 @@ void EditorApp::LoadScene()
 
 	// CORE TESTS
 	Core::GameObject* floor = m_scene.CreateGameObject();
-	floor->transform->localPosition = Math::Vec3(0.f, -1.f, 0.f);
-	floor->transform->localScale = Math::Vec3(100.f, 0.1f, 100.f);
+	floor->transform->SetLocalPosition(Math::Vec3(0.f, -1.f, 0.f));
+	floor->transform->SetLocalScale(Math::Vec3(100.f, 0.1f, 100.f));
 	Core::Model* floorModel = floor->AddComponent<Core::Model>();
 	floorModel->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* floorCollider = floor->AddComponent<Core::BoxCollider>();
@@ -171,32 +171,32 @@ void EditorApp::LoadScene()
 	floorCollider->SetScale(100.f, 0.1f, 100.f);
 
 	Core::GameObject* obj1_1 = m_scene.CreateGameObject();
-	obj1_1->transform->localPosition = Math::Vec3(0.f, 1.f, 0.f);
-	obj1_1->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
+	obj1_1->transform->SetLocalPosition(Math::Vec3(0.f, 1.f, 0.f));
+	obj1_1->transform->SetScale(Math::Vec3(0.5f, 0.5f, 0.5f));
 	Core::Model* model1 = obj1_1->AddComponent<Core::Model>();
 	model1->SetData(model, texture, shaderProgramDeferredRendering);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
-	obj1->transform->localPosition = Math::Vec3(-1.f, 0.f, 0.f);
-	obj1->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);	
-	Core::Model* model2 = obj1->AddComponent<Core::Model>();
+	obj1->transform->SetLocalPosition(Math::Vec3(-1.f, 0.f, 0.f));
+	obj1->transform->SetScale(Math::Vec3(1.f, 1.f, 1.f));
+	Core::Model * model2 = obj1->AddComponent<Core::Model>();
 	model2->SetData(model, texture, shaderProgramDeferredRendering);
-	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
+	Core::CapsuleCollider * cc = obj1->AddComponent<Core::CapsuleCollider>();
 	cc->SetPosition(0.1f, 50.f, 0.f);
 	cc->SetDynamic(true);
 
 	obj1->transform->AddChild(obj1_1->transform);
 
-	Core::GameObject* obj2 = m_scene.CreateGameObject();
-	obj2->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
-	obj2->transform->localScale = Math::Vec3(0.5f, 0.5f, 0.5f);
-	Core::Model* model3 = obj2->AddComponent<Core::Model>();
+	Core::GameObject * obj2 = m_scene.CreateGameObject();
+	obj2->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
+	obj2->transform->SetScale(Math::Vec3(0.5f, 0.5f, 0.5f));
+	Core::Model * model3 = obj2->AddComponent<Core::Model>();
 	model3->SetData(model, texture, shaderProgramDeferredRendering);
 	obj2->AddComponent<Core::BoxCollider>();
 
-	Core::GameObject* obj3 = m_scene.CreateGameObject();
-	obj3->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
-	obj3->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
+	Core::GameObject * obj3 = m_scene.CreateGameObject();
+	obj3->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
+	obj3->transform->SetScale(Math::Vec3(1.f, 1.f, 1.f));
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
 	model4->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
