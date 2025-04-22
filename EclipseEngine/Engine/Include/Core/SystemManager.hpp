@@ -43,6 +43,21 @@ namespace Core
 				delete basePtr;
 				return dynamic_cast<T*>(m_physicsSystem.AddMeshCollider());
 			}
+			else if (DirectionalLight* dynamicDirectionalLight_ptr = dynamic_cast<DirectionalLight*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_renderSystem.AddDirLight());
+			}
+			else if (PointLight* dynamicPointLight_ptr = dynamic_cast<PointLight*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_renderSystem.AddPointLight());
+			}
+			else if (SpotLight* dynamicSpotLight_ptr = dynamic_cast<SpotLight*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_renderSystem.AddSpotLight());
+			}
 
 			delete basePtr;
 			return nullptr;

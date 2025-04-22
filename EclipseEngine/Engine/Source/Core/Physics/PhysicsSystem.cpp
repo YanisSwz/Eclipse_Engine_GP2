@@ -194,9 +194,9 @@ namespace Core
 			GO = m_boxColliders[i].GetGameObject();
 			if (GO)
 			{
-				GO->transform->position = m_boxColliders[i].GetPosition();
+				GO->transform->SetPosition(m_boxColliders[i].GetPosition());
 				rotationQuat = m_boxColliders[i].GetRotation() * (180.f / Math::Tools::PI);
-				GO->transform->rotation = rotationQuat;
+				GO->transform->SetRotation(rotationQuat);
 			}
 		}
 		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
@@ -204,9 +204,9 @@ namespace Core
 			GO = m_capsuleColliders[i].GetGameObject();
 			if (GO)
 			{
-				GO->transform->position = m_capsuleColliders[i].GetPosition();
+				GO->transform->SetPosition(m_capsuleColliders[i].GetPosition());
 				rotationQuat = m_capsuleColliders[i].GetRotation() * (180.f / Math::Tools::PI);
-				GO->transform->rotation = rotationQuat;
+				GO->transform->SetRotation(rotationQuat);
 			}
 		}
 		for (int i = 0; i < m_currentMeshColliderCount; ++i)
@@ -214,9 +214,9 @@ namespace Core
 			GO = m_meshColliders[i].GetGameObject();
 			if (GO)
 			{
-				GO->transform->position = m_meshColliders[i].GetPosition();
+				GO->transform->SetPosition(m_meshColliders[i].GetPosition());
 				rotationQuat = m_meshColliders[i].GetRotation() * (180.f / Math::Tools::PI);
-				GO->transform->rotation = rotationQuat;
+				GO->transform->SetRotation(rotationQuat);
 			}
 		}
 	}

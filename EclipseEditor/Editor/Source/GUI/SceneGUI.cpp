@@ -65,9 +65,9 @@ namespace GUI
 		if (!_crtGOSelected)
 			return;
 
-		if (ImGuizmo::IsUsingAny() && !_crtGOSelected->transform->isSelected)
+		if (ImGuizmo::IsUsingAny() && !_crtGOSelected->transform->IsSelected())
 			_crtGOSelected->transform->StartOverride();
-		else if(!ImGuizmo::IsUsingAny() && _crtGOSelected->transform->isSelected)
+		else if (!ImGuizmo::IsUsingAny() && _crtGOSelected->transform->IsSelected())
 			_crtGOSelected->transform->EndOverride();
 
 
@@ -98,22 +98,32 @@ namespace GUI
 			float scale[3];
 
 			ImGuizmo::DecomposeMatrixToComponents(TRS.GetValuesPointer(), position, rotation, scale);
-			_crtGOSelected->transform->position.x = position[0];
-			_crtGOSelected->transform->position.y = position[1];
-			_crtGOSelected->transform->position.z = position[2];
 
-			Math::Quat Xquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::right, rotation[0]);
-			Math::Quat Yquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::up, rotation[1]);
-			Math::Quat Zquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::forward, rotation[2]);
-			_crtGOSelected->transform->rotation = Zquat * Yquat * Xquat;
+			switch (m_crtGuizmoOperation)
+			{
+			case ImGuizmo::OPERATION::TRANSLATE:
+				_crtGOSelected->transform->SetPosition(Math::Vec3(position[0], position[1], position[2]));
+				break;
 
-			_crtGOSelected->transform->scale.x = scale[0] * Math::Tools::Sign(_crtGOSelected->transform->scale.x);
-			_crtGOSelected->transform->scale.y = scale[1] * Math::Tools::Sign(_crtGOSelected->transform->scale.y);
-			_crtGOSelected->transform->scale.z = scale[2] * Math::Tools::Sign(_crtGOSelected->transform->scale.z);
+			case ImGuizmo::OPERATION::ROTATE:
+			{
+				Math::Quat Xquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::right, rotation[0]);
+				Math::Quat Yquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::up, rotation[1]);
+				Math::Quat Zquat = Math::Quat::QuaternionAxisAngle(Math::Vec3::forward, rotation[2]);
+				_crtGOSelected->transform->SetRotation(Zquat * Yquat * Xquat);
+				break;
+			}
+
+			case ImGuizmo::OPERATION::SCALE:
+				_crtGOSelected->transform->SetScale(Math::Vec3(scale[0] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().x), scale[1] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().y), scale[2] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().z)));
+				break;
+			}
+
+			_crtGOSelected->transform->UpdateOverride();
+
+			ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
+				ImVec2(viewManipulateRight - 128.f, viewManipulateTop + 20.f),
+				ImVec2(128.f, 128.f), static_cast<ImU32>(0x00000000));
 		}
-
-		ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
-			ImVec2(viewManipulateRight - 128.f, viewManipulateTop + 20.f),
-			ImVec2(128.f, 128.f), static_cast<ImU32>(0x00000000));
 	}
 }
