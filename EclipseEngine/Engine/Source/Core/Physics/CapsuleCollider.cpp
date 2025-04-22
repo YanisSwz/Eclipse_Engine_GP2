@@ -18,6 +18,7 @@ namespace Core
 
 	CapsuleCollider::CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, float _height, float _radius, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{
+		b_isBodyDestroyed = false;
 		m_bodyInterface = _bodyInterface;
 		b_isDynamic = _isDynamic;
 		m_mass = _mass;

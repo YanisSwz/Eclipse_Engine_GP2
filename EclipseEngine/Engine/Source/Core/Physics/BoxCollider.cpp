@@ -17,6 +17,7 @@ namespace Core
 
 	BoxCollider::BoxCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{
+		b_isBodyDestroyed = false;
 		m_bodyInterface = _bodyInterface;
 		b_isDynamic = _isDynamic;
 		m_mass = _mass;

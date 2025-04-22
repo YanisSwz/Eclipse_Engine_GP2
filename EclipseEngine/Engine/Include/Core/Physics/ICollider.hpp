@@ -49,6 +49,7 @@ namespace Core
 		Math::Vec3 m_position = { 0.f, 0.f, 0.f };
 		Math::Quat m_rotation = { 0.f, 0.f, 0.f };
 		float m_mass = 1.f;
+		bool b_isBodyDestroyed = true;
 
 		JPH::BodyInterface* m_bodyInterface = nullptr;
 		JPH::BodyID m_bodyID;

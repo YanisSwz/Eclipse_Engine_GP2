@@ -140,13 +140,14 @@ namespace Core
 
 	void ICollider::Delete()
 	{
-		if (m_bodyInterface)
+		if (m_bodyInterface && !b_isBodyDestroyed)
 		{
 			if (m_bodyInterface->IsAdded(m_bodyID))
 				m_bodyInterface->RemoveBody(m_bodyID);
 			if (m_bodyID.IsInvalid())
 				m_bodyInterface->DestroyBody(m_bodyID);
 		}
+		b_isBodyDestroyed = true;
 		m_gameObject = nullptr;
 	}
 
