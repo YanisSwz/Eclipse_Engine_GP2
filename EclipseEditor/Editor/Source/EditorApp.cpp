@@ -60,7 +60,7 @@ void EditorApp::Render()
 	m_sceneGUI.StartGuizmo();
 	m_dockingGUI.Start();
 
-	if(m_crtGOSelected != nullptr)
+	if(m_crtGOSelected)
 	{
 		if (m_crtGOSelected->IsDestroyed())
 			m_crtGOSelected = nullptr;

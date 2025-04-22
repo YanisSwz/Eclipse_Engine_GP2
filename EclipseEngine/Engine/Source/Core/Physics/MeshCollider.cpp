@@ -60,6 +60,7 @@ namespace Core
 
 	MeshCollider::~MeshCollider()
 	{
+		Delete();
 	}
 
 	void MeshCollider::SetMesh(const char* _meshName)
@@ -107,18 +108,13 @@ namespace Core
 		for (int i = 0; i < verticesIndex.size(); i += 3)
 			indexTriangleList.push_back({ verticesIndex[i], verticesIndex[i + 1], verticesIndex[i + 2] });
 
-		this->Delete();
-		this->~MeshCollider();
-		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject, vertexList, indexTriangleList);
+		Recreate();
 	}
 
 	void MeshCollider::SetMass(float _mass)
 	{
 		m_mass = _mass;
-		UpdateData();
-		this->Delete();
-		this->~MeshCollider();
-		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject, m_vertexList, m_indexTriangleList);
+		Recreate();
 	}
 
 	void MeshCollider::SetDefaultMesh()
@@ -150,8 +146,17 @@ namespace Core
 	{
 		SetMeshScale(m_currentMesh, _scale);
 	}
+
 	void MeshCollider::Scale(float _scaleX, float _scaleY, float _scaleZ)
 	{
 		SetMeshScale(m_currentMesh, { _scaleX, _scaleY, _scaleZ });
+	}
+
+	void MeshCollider::Recreate()
+	{
+		Core::GameObject* gameObject = m_gameObject;
+		UpdateData();
+		this->~MeshCollider();
+		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject);
 	}
 }

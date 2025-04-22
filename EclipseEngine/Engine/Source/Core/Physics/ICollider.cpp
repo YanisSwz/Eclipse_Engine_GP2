@@ -131,6 +131,12 @@ namespace Core
 	{
 		return m_mass;
 	}
+	void ICollider::Destroy()
+	{
+		active = false;
+		destroyed = true;
+		Delete();
+	}
 
 	void ICollider::Delete()
 	{
@@ -141,6 +147,7 @@ namespace Core
 			if (m_bodyID.IsInvalid())
 				m_bodyInterface->DestroyBody(m_bodyID);
 		}
+		m_gameObject = nullptr;
 	}
 
 	void ICollider::UpdateData()

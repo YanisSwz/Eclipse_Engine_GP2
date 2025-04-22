@@ -42,6 +42,7 @@ namespace Core
 		ECLIPSE_ENGINE Math::Vec3 GetPosition() const;
 		ECLIPSE_ENGINE Math::Quat GetRotation() const;
 		ECLIPSE_ENGINE float GetMass() const;
+		ECLIPSE_ENGINE void Destroy() override;
 		ECLIPSE_ENGINE void Delete();
 
 	protected:
@@ -53,5 +54,6 @@ namespace Core
 		JPH::BodyID m_bodyID;
 
 		void UpdateData();
+		virtual void Recreate() = 0;
 	};
 }

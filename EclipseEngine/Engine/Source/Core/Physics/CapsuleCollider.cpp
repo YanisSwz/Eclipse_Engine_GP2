@@ -49,43 +49,32 @@ namespace Core
 
 	CapsuleCollider::~CapsuleCollider()
 	{
+		Delete();
 	}
 
 	void CapsuleCollider::SetMass(float _mass)
 	{
 		m_mass = _mass;
-		UpdateData();
-		this->Delete();
-		this->~CapsuleCollider();
-		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_mass, m_height, m_radius, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
+		Recreate();
 	}
 
 	void CapsuleCollider::SetHeight(float _height)
 	{
 		m_height = _height;
-		UpdateData();
-		this->Delete();
-		this->~CapsuleCollider();
-		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_mass, m_height, m_radius, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
+		Recreate();
 	}
 
 	void CapsuleCollider::SetRadius(float _radius)
 	{
 		m_radius = _radius;
-		UpdateData();
-		this->Delete();
-		this->~CapsuleCollider();
-		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_mass, m_height, m_radius, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
+		Recreate();
 	}
 
 	void CapsuleCollider::SetHeightRadius(float _height, float _radius)
 	{
 		m_height = _height;
 		m_radius = _radius;
-		UpdateData();
-		this->Delete();
-		this->~CapsuleCollider();
-		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_mass, m_height, m_radius, m_position, m_rotation.GetEulerAnglesRadXYZ(), m_gameObject);
+		Recreate();
 	}
 
 	void CapsuleCollider::SetPosRotHeightRadius(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _height, float _radius)
@@ -98,5 +87,13 @@ namespace Core
 	{
 		SetPosRot(_position, _rotation);
 		SetHeightRadius(_height, _radius);
+	}
+
+	void CapsuleCollider::Recreate()
+	{
+		Core::GameObject* gameObject = m_gameObject;
+		UpdateData();
+		this->~CapsuleCollider();
+		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_mass, m_height, m_radius, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject);
 	}
 }

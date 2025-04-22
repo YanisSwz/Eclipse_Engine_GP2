@@ -24,5 +24,7 @@ namespace Core
 		float m_height = 1.f;
 		float m_radius = 0.5f;
 		Math::Quat m_rotation = { 0.f, 0.f, 0.f };
+		
+		void Recreate() override;
 	};
 }

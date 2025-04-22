@@ -28,6 +28,8 @@ namespace Core
 
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale);
 		ECLIPSE_ENGINE void Scale(float _scaleX, float _scaleY, float _scaleZ);
+		ECLIPSE_ENGINE void SetPosRotScale(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ);
+		ECLIPSE_ENGINE void SetPosRotScale(Math::Vec3 _position, Math::Vec3 _rotation, Math::Vec3 _scale);
 
 	private:
 		Math::Vec3 m_scale = { 0.f, 0.f, 0.f };
@@ -38,5 +40,6 @@ namespace Core
 		Resource::Mesh* m_currentMesh = nullptr;
 
 		void SetDefaultMesh();
+		void Recreate() override;
 	};
 }

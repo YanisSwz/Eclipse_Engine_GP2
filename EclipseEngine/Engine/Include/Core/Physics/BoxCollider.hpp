@@ -23,5 +23,6 @@ namespace Core
 		Math::Vec3 m_scale = { 1.f, 1.f, 1.f };
 
 		void UpdateData();
+		void Recreate() override;
 	};
 }
