@@ -9,7 +9,7 @@ target_compile_features(ECLIPSE_ENGINE PRIVATE cxx_std_20)
 
 # Set Warning level 4 and warnings as errors flags
 if(MSVC)
-    target_compile_options(ECLIPSE_ENGINE PRIVATE /W4 /WX)
+    target_compile_options(ECLIPSE_ENGINE PRIVATE /W3 /WX)
 else()
     target_compile_options(ECLIPSE_ENGINE PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()

@@ -9,6 +9,8 @@
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include "Core/Physics/BoxCollider.hpp"
 
+#include "AudioAsset.hpp"
+
 #include "iostream"
 
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
@@ -155,6 +157,14 @@ void EditorApp::LoadScene()
 
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
+
+	Resource::AudioAsset file;
+	file.Load("Assets/Audio/kalimba.wav");
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "audio length: %f", file.m_audioFile.getLengthInSeconds());
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "audio depth: %i", file.m_audioFile.getBitDepth());
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "audio sampleRate: %d", file.m_audioFile.getSampleRate());
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "stereo: %s", file.m_audioFile.isStereo() ? "true" : "false");
+
 
 	m_contentBrowserGUI.Init();
 	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();

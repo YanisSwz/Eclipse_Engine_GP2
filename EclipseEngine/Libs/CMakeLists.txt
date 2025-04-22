@@ -46,3 +46,9 @@ endif()
 set(PHYSICS_REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics")
 include("${PHYSICS_REPO_ROOT}/Jolt/Jolt.cmake")
 target_link_libraries(ECLIPSE_ENGINE PUBLIC Jolt)
+
+# AudioFile
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(AudioFile)
+target_link_libraries(ECLIPSE_ENGINE PUBLIC AudioFile)
