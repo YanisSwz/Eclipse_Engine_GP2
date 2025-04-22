@@ -10,6 +10,9 @@
 #include "Core/Physics/BoxCollider.hpp"
 
 #include "AudioAsset.hpp"
+#define WITH_WINMM
+#include "soloud.h"
+#include "soloud_wav.h"
 
 #include "iostream"
 
@@ -165,6 +168,12 @@ void EditorApp::LoadScene()
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "audio sampleRate: %d", file.m_audioFile.getSampleRate());
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "stereo: %s", file.m_audioFile.isStereo() ? "true" : "false");
 
+	SoLoud::Soloud gSoloud;
+	gSoloud.init();
+	//SoLoud::Wav gWav;
+	//gWav.load("Assets/Audio/kalimba.wav");
+
+	//gSoloud.play(gWav);
 
 	m_contentBrowserGUI.Init();
 	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();

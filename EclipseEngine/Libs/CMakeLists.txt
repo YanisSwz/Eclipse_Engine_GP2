@@ -16,7 +16,6 @@ target_link_libraries(ECLIPSE_ENGINE PUBLIC glfw)
 set(ECLIPSE_MATH_LIB_UNITTEST_OPT OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(EclipseMath)
-
 target_link_libraries(ECLIPSE_ENGINE PUBLIC ECLIPSE_MATH)
 
 # GLAD
@@ -52,3 +51,7 @@ set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(AudioFile)
 target_link_libraries(ECLIPSE_ENGINE PUBLIC AudioFile)
+
+# SoLoud
+add_subdirectory(SoLoud)
+target_link_libraries(ECLIPSE_ENGINE PUBLIC SoLoud)
