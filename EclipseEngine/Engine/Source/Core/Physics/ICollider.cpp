@@ -88,7 +88,7 @@ namespace Core
 	{
 		m_rotation = _rotation;
 		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-		m_bodyInterface->SetRotation(m_bodyID, JPH::Quat::sEulerAngles({ m_rotation.x, m_rotation.y, m_rotation.z }), isActivate);
+		m_bodyInterface->SetRotation(m_bodyID, JPH::Quat( m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w), isActivate);
 	}
 
 	void ICollider::SetPosRot(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ)

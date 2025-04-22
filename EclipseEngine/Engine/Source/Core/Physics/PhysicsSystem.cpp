@@ -175,6 +175,42 @@ namespace Core
 			_deltaTime = 0.f;
 		}
 
+		GameObject* GO;
+		Math::Quat rotationQuat{ 0.f, 0.f, 0.f, 0.f };
+		for (int i = 0; i < m_currentBoxColliderCount; ++i)
+		{
+			GO = m_boxColliders[i].GetGameObject();
+			if (GO)
+			{
+				if (GO->transform->HasPositionChanged())
+					m_boxColliders[i].SetPosition(GO->transform->GetPosition());
+				if (GO->transform->HasRotationChanged())
+					m_boxColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+			}
+		}
+		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
+		{
+			GO = m_capsuleColliders[i].GetGameObject();
+			if (GO)
+			{
+				if (GO->transform->HasPositionChanged())
+					m_capsuleColliders[i].SetPosition(GO->transform->GetPosition());
+				if (GO->transform->HasRotationChanged())
+					m_capsuleColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+			}
+		}
+		for (int i = 0; i < m_currentMeshColliderCount; ++i)
+		{
+			GO = m_meshColliders[i].GetGameObject();
+			if (GO)
+			{
+				if (GO->transform->HasPositionChanged())
+					m_meshColliders[i].SetPosition(GO->transform->GetPosition());
+				if (GO->transform->HasRotationChanged())
+					m_meshColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+			}
+		}
+
 		// If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
 		const int cCollisionSteps = 1;
 		// Step the world
@@ -186,9 +222,6 @@ namespace Core
 		m_renderer->EndFrame();
 
 
-		GameObject* GO;
-		Math::Vec3 rotation;
-		Math::Quat rotationQuat{ 0.f, 0.f, 0.f, 0.f };
 		for (int i = 0; i < m_currentBoxColliderCount; ++i)
 		{
 			GO = m_boxColliders[i].GetGameObject();
