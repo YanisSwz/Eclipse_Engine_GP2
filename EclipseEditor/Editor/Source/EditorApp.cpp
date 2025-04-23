@@ -9,11 +9,6 @@
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include "Core/Physics/BoxCollider.hpp"
 
-#include "AudioAsset.hpp"
-#define WITH_WINMM
-#include "soloud.h"
-#include "soloud_wav.h"
-
 #include "iostream"
 
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
@@ -26,6 +21,8 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	InitRHI();
 	LoadScene();
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "EditorApp is created!");
+
+	m_scene.GetSystemManager()->GetAudioSystem()->PlayStartUp();
 }
 
 EditorApp::~EditorApp()
@@ -160,20 +157,6 @@ void EditorApp::LoadScene()
 
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
-
-	Resource::AudioAsset file;
-	file.Load("Assets/Audio/kalimba.wav");
-	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "audio length: %f", file.m_audioFile.getLengthInSeconds());
-	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "audio depth: %i", file.m_audioFile.getBitDepth());
-	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "audio sampleRate: %d", file.m_audioFile.getSampleRate());
-	Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "stereo: %s", file.m_audioFile.isStereo() ? "true" : "false");
-
-	SoLoud::Soloud gSoloud;
-	gSoloud.init();
-	//SoLoud::Wav gWav;
-	//gWav.load("Assets/Audio/kalimba.wav");
-
-	//gSoloud.play(gWav);
 
 	m_contentBrowserGUI.Init();
 	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();

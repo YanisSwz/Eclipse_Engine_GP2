@@ -3,7 +3,7 @@
 add_compile_definitions(WITH_WINMM)
 
 # Query all source files (sub-dir recursive) and stores it in MATH_LIB_SOURCES var
-file(GLOB_RECURSE SOLOUD_SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOLOUD_SOURCES "src/*.cpp" "src/*.c")
 
 # Create static library (.lib).
 add_library(SoLoud STATIC ${SOLOUD_SOURCES})

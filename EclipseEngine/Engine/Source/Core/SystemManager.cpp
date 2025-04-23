@@ -2,6 +2,16 @@
 
 namespace Core
 {
+	SystemManager::SystemManager()
+	{
+		m_audioSystem.Init();
+	}
+
+	SystemManager::~SystemManager()
+	{
+		m_audioSystem.Destroy();
+	}
+
 	void SystemManager::Update(float _deltaTime)
 	{
 		m_transformSystem.Update();
@@ -21,5 +31,10 @@ namespace Core
 	std::vector<Resource::ModelData> SystemManager::GetStaticModels() const
 	{
 		return m_renderSystem.GetStaticModels();
+	}
+
+	AudioSystem* SystemManager::GetAudioSystem()
+	{
+		return &m_audioSystem;
 	}
 }

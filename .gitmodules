@@ -7,6 +7,3 @@
 [submodule "EclipseEngine/Libs/TinyOBJ"]
 	path = EclipseEngine/Libs/TinyOBJ
 	url = https://github.com/tinyobjloader/tinyobjloader
-[submodule "EclipseEngine/Libs/AudioFile"]
-	path = EclipseEngine/Libs/AudioFile
-	url = https://github.com/adamstark/AudioFile
