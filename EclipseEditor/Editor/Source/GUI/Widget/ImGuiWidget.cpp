@@ -48,7 +48,7 @@ namespace GUI
 		return false;
 	}
 
-	void DragVec3XYZ(const char* _label, Math::Vec3& _vec3, float _resetValue, float _columnWidth)
+	bool DragVec3XYZ(const char* _label, Math::Vec3& _vec3, float _resetValue, float _columnWidth)
 	{
 		bool changed = false;
 
