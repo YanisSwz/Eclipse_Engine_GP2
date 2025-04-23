@@ -22,13 +22,13 @@ namespace GUI
 		~SceneGUI();
 
 		void Draw(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera, const unsigned int _textureID, int& _windowWidth, int& _windowHeight, int& _windowPosX, int& _windowPosY);
-		void StartGuizmo();
-		void UpdateGuizmoMode(Windowing::IWindow* _window);
+		void StartGizmo();
+		void UpdateGizmoMode(Windowing::IWindow* _window);
 
 	private:
-		ImGuizmo::OPERATION m_crtGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
-		ImGuizmo::MODE m_crtGuizmoMode = ImGuizmo::MODE::LOCAL;
+		ImGuizmo::OPERATION m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		ImGuizmo::MODE m_crtGizmoMode = ImGuizmo::MODE::LOCAL;
 
-		void DrawGuizmo(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera);
+		void DrawGizmo(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera);
 	};
 }

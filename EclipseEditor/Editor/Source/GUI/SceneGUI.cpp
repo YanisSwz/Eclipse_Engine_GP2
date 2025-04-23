@@ -31,36 +31,36 @@ namespace GUI
 			ImVec2(0, 1),
 			ImVec2(1, 0));
 
-		DrawGuizmo(_crtGOSelected, _camera);
+		DrawGizmo(_crtGOSelected, _camera);
 
 		ImGui::End();
 	}
 
-	void SceneGUI::StartGuizmo()
+	void SceneGUI::StartGizmo()
 	{
 		ImGuizmo::BeginFrame();
 	}
 
-	void SceneGUI::UpdateGuizmoMode(Windowing::IWindow* _window)
+	void SceneGUI::UpdateGizmoMode(Windowing::IWindow* _window)
 	{
 		if (_window->GetKey(Windowing::KEY_CODE::KEY_CTRL_LEFT, Windowing::INPUT_ACTION::INPUT_DOWN))
 		{
 			if (_window->GetKey(Windowing::KEY_CODE::KEY_R, Windowing::INPUT_ACTION::INPUT_PRESS))
-				m_crtGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+				m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 			else if (_window->GetKey(Windowing::KEY_CODE::KEY_T, Windowing::INPUT_ACTION::INPUT_PRESS))
-				m_crtGuizmoOperation = ImGuizmo::OPERATION::ROTATE;
+				m_crtGizmoOperation = ImGuizmo::OPERATION::ROTATE;
 			else if (_window->GetKey(Windowing::KEY_CODE::KEY_Y, Windowing::INPUT_ACTION::INPUT_PRESS))
-				m_crtGuizmoOperation = ImGuizmo::OPERATION::SCALE;
+				m_crtGizmoOperation = ImGuizmo::OPERATION::SCALE;
 
 
 			if (_window->GetKey(Windowing::KEY_CODE::KEY_U, Windowing::INPUT_ACTION::INPUT_PRESS))
-				m_crtGuizmoMode = ImGuizmo::MODE::LOCAL;
+				m_crtGizmoMode = ImGuizmo::MODE::LOCAL;
 			if (_window->GetKey(Windowing::KEY_CODE::KEY_I, Windowing::INPUT_ACTION::INPUT_PRESS))
-				m_crtGuizmoMode = ImGuizmo::MODE::WORLD;
+				m_crtGizmoMode = ImGuizmo::MODE::WORLD;
 		}
 	}
 
-	void SceneGUI::DrawGuizmo(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera)
+	void SceneGUI::DrawGizmo(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera)
 	{
 		if (!_crtGOSelected)
 			return;
@@ -90,7 +90,7 @@ namespace GUI
 		proj.Transpose();
 
 		if (ImGuizmo::Manipulate(view.GetValuesPointer(), proj.GetValuesPointer(),
-			m_crtGuizmoOperation, m_crtGuizmoMode,
+			m_crtGizmoOperation, m_crtGizmoMode,
 			const_cast<float*>(TRS.GetValuesPointer())))
 		{
 			float position[3];
@@ -99,7 +99,7 @@ namespace GUI
 
 			ImGuizmo::DecomposeMatrixToComponents(TRS.GetValuesPointer(), position, rotation, scale);
 
-			switch (m_crtGuizmoOperation)
+			switch (m_crtGizmoOperation)
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
 				_crtGOSelected->transform->SetPosition(Math::Vec3(position[0], position[1], position[2]));

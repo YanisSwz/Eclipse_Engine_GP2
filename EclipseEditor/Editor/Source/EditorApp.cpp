@@ -53,7 +53,7 @@ void EditorApp::Update()
 	m_defaultPipeline->Rescale(m_sceneWidth, m_sceneHeight);
 	m_renderInterface->Viewport(0, 0, m_sceneWidth, m_sceneHeight);
 
-	m_sceneGUI.UpdateGuizmoMode(m_window);
+	m_sceneGUI.UpdateGizmoMode(m_window);
 	m_scene.Update(deltaTime);
 
 	m_window->PollEvents();
@@ -62,7 +62,7 @@ void EditorApp::Update()
 void EditorApp::Render()
 {
 	GUI::BeginNewFrame();
-	m_sceneGUI.StartGuizmo();
+	m_sceneGUI.StartGizmo();
 	m_dockingGUI.Start();
 
 	if(m_crtGOSelected)
@@ -232,7 +232,7 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* parent = m_scene.CreateGameObject();
 	parent->name = "Parent";
-	parent->transform->SetLocalPosition({ 1.f, 0.f, 0.f });
+	parent->transform->SetLocalPosition({ -1.f, 1.5f, 0.f });
 	parent->transform->SetLocalScale({ 1.f, 1.f, 1.f });
 	Core::Model* model5 = parent->AddComponent<Core::Model>();
 	model5->SetData(model, texture, shaderProgramDeferredRendering);
@@ -249,6 +249,7 @@ void EditorApp::LoadScene()
 	Core::GameObject* dirLight = m_scene.CreateGameObject();
 	dirLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
 	dirLight->transform->SetLocalScale(Math::Vec3(1.f, 1.f, 1.f));
+	dirLight->transform->SetLocalEulerAngles(Math::Vec3(-180.f, 0.f, 0.f));
 	dirLight->name = "DirectionalLight";
 	Core::DirectionalLight* dirLightComp = dirLight->AddComponent<Core::DirectionalLight>();
 	dirLightComp->SetColor({ 1.f, 0.9f, 0.76f, 1.f });
