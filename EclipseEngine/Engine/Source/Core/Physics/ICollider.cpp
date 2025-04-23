@@ -93,32 +93,64 @@ namespace Core
 
 	void ICollider::SetPosRot(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ)
 	{
-		m_position = { _posX, _posY, _posZ };
 		m_rotation = Math::Quat::QuaternionEuler(_rotX, _rotY, _rotZ);
+		m_position = { _posX, _posY, _posZ };
 		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
 		m_bodyInterface->SetPositionAndRotation(m_bodyID, { m_position.x, m_position.y, m_position.z }, JPH::Quat::sEulerAngles({ m_rotation.x, m_rotation.y, m_rotation.z }), isActivate);
 	}
 
 	void ICollider::SetPosRot(Math::Vec3 _position, Math::Vec3 _rotation)
 	{
-		m_position = _position;
 		m_rotation = Math::Quat::QuaternionEuler(_rotation.x, _rotation.y, _rotation.z);
+		m_position = _position;
 		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
 		m_bodyInterface->SetPositionAndRotation(m_bodyID, { m_position.x, m_position.y, m_position.z }, JPH::Quat::sEulerAngles({ m_rotation.x, m_rotation.y, m_rotation.z }), isActivate);
 	}
 
 	void ICollider::SetPosRot(Math::Vec3 _position, Math::Quat _rotation)
 	{
-		m_position = _position;
 		m_rotation = _rotation;
+		m_position = _position;
 		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
 		m_bodyInterface->SetPositionAndRotation(m_bodyID, { m_position.x, m_position.y, m_position.z }, JPH::Quat::sEulerAngles({ m_rotation.x, m_rotation.y, m_rotation.z }), isActivate);
+	}
+
+	void ICollider::SetOffsetPos(float _offsetPosX, float _offsetPosY, float _offsetPosZ)
+	{
+		m_rotation = GetRotation();
+		m_position -= m_rotation.Rotate(m_offsetPos);
+		m_offsetPos = { _offsetPosX, _offsetPosY, _offsetPosZ };
+		m_position += m_rotation.Rotate(m_offsetPos);
+		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+		m_bodyInterface->SetPosition(m_bodyID, { m_position.x, m_position.y, m_position.z }, isActivate);
+	}
+
+	void ICollider::SetOffsetPos(Math::Vec3 _offsetPos)
+	{
+		m_rotation = GetRotation();
+		m_position -= m_rotation.Rotate(m_offsetPos);
+		m_offsetPos = _offsetPos;
+		m_position += m_rotation.Rotate(m_offsetPos);
+		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+		m_bodyInterface->SetPosition(m_bodyID, { m_position.x, m_position.y, m_position.z }, isActivate);
 	}
 
 	Math::Vec3 ICollider::GetPosition() const
 	{
 		JPH::Vec3 pos = m_bodyInterface->GetPosition(m_bodyID);
 		return { pos.GetX(), pos.GetY(), pos.GetZ() };
+	}
+
+	Math::Vec3 ICollider::GetOffsetPos() const
+	{
+		return m_offsetPos;
+	}
+
+	Math::Vec3 ICollider::GetOffsetPosRotated() const
+	{
+		JPH::Quat jphRot = m_bodyInterface->GetRotation(m_bodyID);
+		Math::Quat rot{ jphRot.GetW(), jphRot.GetX(), jphRot.GetY(), jphRot.GetZ() };
+		return rot.Rotate(m_offsetPos);
 	}
 
 	Math::Quat ICollider::GetRotation() const

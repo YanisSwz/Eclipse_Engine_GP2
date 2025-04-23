@@ -182,10 +182,11 @@ namespace Core
 			GO = m_boxColliders[i].GetGameObject();
 			if (GO)
 			{
-				if (GO->transform->HasPositionChanged())
-					m_boxColliders[i].SetPosition(GO->transform->GetPosition());
-				if (GO->transform->HasRotationChanged())
+				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
+				{
+					m_boxColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_boxColliders[i].GetOffsetPos()));
 					m_boxColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+				}
 			}
 		}
 		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
@@ -193,10 +194,11 @@ namespace Core
 			GO = m_capsuleColliders[i].GetGameObject();
 			if (GO)
 			{
-				if (GO->transform->HasPositionChanged())
-					m_capsuleColliders[i].SetPosition(GO->transform->GetPosition());
-				if (GO->transform->HasRotationChanged())
+				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
+				{
+					m_capsuleColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_capsuleColliders[i].GetOffsetPos()));
 					m_capsuleColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+				}
 			}
 		}
 		for (int i = 0; i < m_currentMeshColliderCount; ++i)
@@ -204,17 +206,15 @@ namespace Core
 			GO = m_meshColliders[i].GetGameObject();
 			if (GO)
 			{
-				if (GO->transform->HasPositionChanged())
-					m_meshColliders[i].SetPosition(GO->transform->GetPosition());
-				if (GO->transform->HasRotationChanged())
+				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
+				{
+					m_meshColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_meshColliders[i].GetOffsetPos()));
 					m_meshColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+				}
 			}
 		}
 
-		// If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
-		const int cCollisionSteps = 1;
-		// Step the world
-		m_physicsSystem.Update(_deltaTime, cCollisionSteps, m_tempAllocator, m_jobSystem);
+		m_physicsSystem.Update(_deltaTime, 1, m_tempAllocator, m_jobSystem);
 
 		// Draw for JoltViewer
 		JPH::BodyManager::DrawSettings drawSettings;
@@ -227,8 +227,8 @@ namespace Core
 			GO = m_boxColliders[i].GetGameObject();
 			if (GO)
 			{
-				GO->transform->SetPosition(m_boxColliders[i].GetPosition());
-				rotationQuat = m_boxColliders[i].GetRotation() * (180.f / Math::Tools::PI);
+				GO->transform->SetPosition(m_boxColliders[i].GetPosition() - m_boxColliders[i].GetOffsetPosRotated());
+				rotationQuat = m_boxColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);
 			}
 		}
@@ -237,8 +237,8 @@ namespace Core
 			GO = m_capsuleColliders[i].GetGameObject();
 			if (GO)
 			{
-				GO->transform->SetPosition(m_capsuleColliders[i].GetPosition());
-				rotationQuat = m_capsuleColliders[i].GetRotation() * (180.f / Math::Tools::PI);
+				GO->transform->SetPosition(m_capsuleColliders[i].GetPosition() - m_capsuleColliders[i].GetOffsetPosRotated());
+				rotationQuat = m_capsuleColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);
 			}
 		}
@@ -247,8 +247,8 @@ namespace Core
 			GO = m_meshColliders[i].GetGameObject();
 			if (GO)
 			{
-				GO->transform->SetPosition(m_meshColliders[i].GetPosition());
-				rotationQuat = m_meshColliders[i].GetRotation() * (180.f / Math::Tools::PI);
+				GO->transform->SetPosition(m_meshColliders[i].GetPosition() - m_meshColliders[i].GetOffsetPosRotated());
+				rotationQuat = m_meshColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);
 			}
 		}

@@ -37,16 +37,23 @@ namespace Core
 		ECLIPSE_ENGINE void SetPosRot(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ);
 		ECLIPSE_ENGINE void SetPosRot(Math::Vec3 _position, Math::Vec3 _rotation);
 		ECLIPSE_ENGINE void SetPosRot(Math::Vec3 _position, Math::Quat _rotation);
+		ECLIPSE_ENGINE void SetOffsetPos(float _offsetPosX, float _offsetPosY, float _offsetPosZ);
+		ECLIPSE_ENGINE void SetOffsetPos(Math::Vec3 _offsetPos);
+
 		ECLIPSE_ENGINE Math::Vec3 GetPosition() const;
+		ECLIPSE_ENGINE Math::Vec3 GetOffsetPos() const;
+		ECLIPSE_ENGINE Math::Vec3 GetOffsetPosRotated() const;
 		ECLIPSE_ENGINE Math::Quat GetRotation() const;
 		ECLIPSE_ENGINE float GetMass() const;
 		ECLIPSE_ENGINE bool GetIsDynamic() const;
+
 		ECLIPSE_ENGINE void Destroy() override;
 		ECLIPSE_ENGINE void Delete();
 
 	protected:
 		Math::Vec3 m_position = { 0.f, 0.f, 0.f };
-		Math::Quat m_rotation = { 0.f, 0.f, 0.f };
+		Math::Quat m_rotation = { 0.f, 0.f, 0.f, 0.f };
+		Math::Vec3 m_offsetPos = { 0.f, 0.f, 0.f };
 		float m_mass = 1.f;
 		bool b_isDynamic = false;
 		bool b_isBodyDestroyed = true;
