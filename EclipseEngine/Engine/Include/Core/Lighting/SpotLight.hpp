@@ -14,8 +14,8 @@ namespace Core
 		ECLIPSE_ENGINE RHI::SpotLightData GetData() const;
 
 	private:
-		float m_innerCutOff = 1.f;
-		float m_outerCutOff = 1.05f;
+		float m_innerCutOff = 0.91f;
+		float m_outerCutOff = 0.82f;
 		float m_constantAttenuation = 1.f;
 		float m_linearAttenuation = 0.09f;
 		float m_quadraticAttenuation = 0.032f;

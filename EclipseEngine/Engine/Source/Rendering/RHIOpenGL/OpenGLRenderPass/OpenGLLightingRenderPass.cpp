@@ -102,7 +102,7 @@ namespace RHI::OpenGL
 		{
 			for (int i = 0; i < _spotLightsData.size(); ++i)
 			{
-				std::string str = "pointLights[" + std::to_string(i) + "].";
+				std::string str = "spotLights[" + std::to_string(i) + "].";
 				m_shaderLight->SetVec4((str + "Color").c_str(), _spotLightsData[i].color);
 				m_shaderLight->SetVec3((str + "Position").c_str(), _spotLightsData[i].pos);
 				m_shaderLight->SetVec3((str + "Direction").c_str(), _spotLightsData[i].dir);

@@ -8,7 +8,9 @@
 #include "Resource/ModelData.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include "Core/Physics/BoxCollider.hpp"
+#include "Lighting/DirectionalLight.hpp"
 #include "Lighting/PointLight.hpp"
+#include "Lighting/SpotLight.hpp"
 
 #include "iostream"
 
@@ -205,12 +207,27 @@ void EditorApp::LoadScene()
 	bc->SetPosition(0.f, 100.f, 0.f);
 	bc->SetDynamic(true);
 
+	// LIGHTS
+	Core::GameObject* dirLight = m_scene.CreateGameObject();
+	dirLight->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
+	dirLight->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
+	dirLight->name = "DirectionalLight";
+	Core::DirectionalLight* dirLightComp = dirLight->AddComponent<Core::DirectionalLight>();
+	dirLightComp->SetColor({ 1.f, 0.9f, 0.76f, 1.f });
 
-	Core::PointLight* pl1 = obj1->AddComponent<Core::PointLight>();
-	pl1->SetColor({ 1.f, 0.f, 0.f, 1.f });
+	Core::GameObject* pointLight = m_scene.CreateGameObject();
+	pointLight->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
+	pointLight->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
+	pointLight->name = "PointLight";
+	Core::PointLight* pointLightComp = pointLight->AddComponent<Core::PointLight>();
+	pointLightComp->SetColor({ 0.f, 0.f, 1.f, 1.f });
 
-	Core::PointLight* pl2 = obj2->AddComponent<Core::PointLight>();
-	pl2->SetColor({ 0.f, 1.f, 0.f, 1.f });
+	Core::GameObject* spotLight = m_scene.CreateGameObject();
+	spotLight->transform->localPosition = Math::Vec3(0.f, 0.f, 0.f);
+	spotLight->transform->localScale = Math::Vec3(1.f, 1.f, 1.f);
+	spotLight->name = "SpotLight";
+	Core::SpotLight* spotLightComp = spotLight->AddComponent<Core::SpotLight>();
+	spotLightComp->SetColor({ 1.f, 0.f, 0.f, 1.f });
 }
 
 void EditorApp::DrawScene()
