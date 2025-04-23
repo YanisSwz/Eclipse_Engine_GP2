@@ -205,6 +205,11 @@ namespace Core
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
 		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
 
+		//We also update the transform's up, right and forward local vectors
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
+
 		m_rotationChanged = true;
 
 		// If we rotate parent, children move in space
@@ -222,6 +227,11 @@ namespace Core
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
 		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
 
+		//We also update the transform's up, right and forward local vectors
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
+
 		m_rotationChanged = true;
 
 		// If we rotate parent, children move in space
@@ -234,6 +244,11 @@ namespace Core
 		m_localRotation = _quat;
 		m_rotationChanged = true;
 
+		//We also update the transform's up, right and forward local vectors
+		m_right = m_localRotation.Rotate(Math::Vec3::right);
+		m_up = m_localRotation.Rotate(Math::Vec3::up);
+		m_forward = m_localRotation.Rotate(Math::Vec3::forward);
+
 		// If we rotate parent, children move in space
 		if (m_children.size() > 0)
 			m_positionChanged = true;
@@ -243,6 +258,11 @@ namespace Core
 	{
 		m_localEulerAngles = _vec;
 		m_rotationChanged = true;
+
+		//We also update the transform's up, right and forward local vectors
+		m_right = m_localRotation.Rotate(Math::Vec3::right);
+		m_up = m_localRotation.Rotate(Math::Vec3::up);
+		m_forward = m_localRotation.Rotate(Math::Vec3::forward);
 
 		// If we rotate parent, children move in space
 		if (m_children.size() > 0)
