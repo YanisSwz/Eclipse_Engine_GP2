@@ -47,7 +47,7 @@ uniform int SpotLightNb;
 
 vec3 DirLightComputation(DirLight dirLight, vec3 FragPos, vec3 Normal, vec3 Diffuse, float Specular, vec3 ViewDir)
 {
-    vec3 diffuse = max(dot(Normal, dirLight.Direction), 0.0) * Diffuse * dirLight.Color.rgb * dirLight.Color.a;
+    vec3 diffuse = max(dot(Normal, -dirLight.Direction), 0.0) * Diffuse * dirLight.Color.rgb * dirLight.Color.a;
     return diffuse;
 }
 
