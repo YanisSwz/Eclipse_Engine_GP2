@@ -225,8 +225,6 @@ void EditorApp::LoadScene()
 	model4->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
 	bc->SetPosition(1.f, 0.f, 0.f);
-	bc->SetOffsetPos(0.f, -1.f, 0.f);
-	//bc->SetMass(50.f);
 	bc->SetDynamic(true);
 	bc->AddForce(0.f, 0.f, 20.f);
 	bc->AddImpulse(0.f, 5.f, 0.f);
