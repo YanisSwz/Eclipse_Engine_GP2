@@ -53,6 +53,7 @@ namespace Core
 		bodySettings.mAllowDynamicOrKinematic = true;
 		bodySettings.mOverrideMassProperties = JPH::EOverrideMassProperties::MassAndInertiaProvided;
 		bodySettings.mMassPropertiesOverride.mMass = m_mass;
+		bodySettings.mAllowSleeping = false;
 
 		JPH::Body* body = m_bodyInterface->CreateBody(bodySettings);
 		m_bodyID = body->GetID();
