@@ -1,8 +1,11 @@
 #pragma once
+#include "RHIInterfaces/IRenderInterface.hpp"
+#include "RHIInterfaces/IPipeline/IGraphicPipeline.hpp"
 #include "Model.hpp"
 #include "Lighting/DirectionalLight.hpp"
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
+#include "RHIInterfaces/Lights.hpp"
 #include "ProjectExports.hpp"
 #include <vector>
 
@@ -14,10 +17,11 @@ namespace Core
 		ECLIPSE_ENGINE RenderSystem() = default;
 		ECLIPSE_ENGINE ~RenderSystem() = default;
 		ECLIPSE_ENGINE Model* AddModel(Resource::Mesh* _mesh = nullptr, Resource::Texture* _texture = nullptr, Resource::ShaderProgram* _shader = nullptr, bool _bIsDynamic = false);
-		ECLIPSE_ENGINE std::vector<Resource::ModelData> GetStaticModels() const;
 		ECLIPSE_ENGINE DirectionalLight* AddDirLight();
 		ECLIPSE_ENGINE PointLight* AddPointLight();
 		ECLIPSE_ENGINE SpotLight* AddSpotLight();
+
+		ECLIPSE_ENGINE void Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos);
 
 	private:
 		static const int MAX_SIZE = 100;
@@ -33,5 +37,11 @@ namespace Core
 		DirectionalLight m_directionalLights[MAX_LIGHTS_SIZE];
 		PointLight m_pointLights[MAX_LIGHTS_SIZE];
 		SpotLight m_spotLights[MAX_LIGHTS_SIZE];
+
+		std::vector<Resource::ModelData> GetStaticModels() const;
+
+		std::vector<RHI::DirLightData> GetDirLights() const;
+		std::vector<RHI::PointLightData> GetPointLights() const;
+		std::vector<RHI::SpotLightData> GetSpotLights() const;
 	};
 }

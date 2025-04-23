@@ -45,7 +45,7 @@ namespace RHI::OpenGL
 		delete m_FB;
 	}
 
-	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels)
+	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights)
 	{
 		// Deferred Render Pass
 		m_deferredRenderPass->Bind();
@@ -55,7 +55,7 @@ namespace RHI::OpenGL
 
 		// Lighting Render Pass
 		m_deferredRenderPass->Unbind();
-		m_lightingRenderPass->Draw(_viewPos, m_FB, m_deferredRenderPass->gPosition, m_deferredRenderPass->gNormal, m_deferredRenderPass->gAlbedoSpec);
+		m_lightingRenderPass->Draw(_viewPos, m_FB, m_deferredRenderPass->gPosition, m_deferredRenderPass->gNormal, m_deferredRenderPass->gAlbedoSpec, _dirLights, _pointLights, _spotLights);
 	}
 
 	unsigned int OpenGLDefaultGraphicPipeline::GetFinalTexture() const

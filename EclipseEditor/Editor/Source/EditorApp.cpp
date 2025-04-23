@@ -8,6 +8,9 @@
 #include "Resource/ModelData.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include "Core/Physics/BoxCollider.hpp"
+#include "Lighting/DirectionalLight.hpp"
+#include "Lighting/PointLight.hpp"
+#include "Lighting/SpotLight.hpp"
 
 #include "iostream"
 
@@ -161,6 +164,7 @@ void EditorApp::LoadScene()
 	m_contentBrowserGUI.Init();
 	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_defaultPipeline->Init(m_window->width, m_window->height);
+	
 
 	// CORE TESTS
 
@@ -225,15 +229,33 @@ void EditorApp::LoadScene()
 	bc->SetDynamic(true);
 	bc->AddForce(0.f, 0.f, 20.f);
 	bc->AddImpulse(0.f, 5.f, 0.f);
+
+	// LIGHTS
+	Core::GameObject* dirLight = m_scene.CreateGameObject();
+	dirLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
+	dirLight->transform->SetLocalScale(Math::Vec3(1.f, 1.f, 1.f));
+	dirLight->name = "DirectionalLight";
+	Core::DirectionalLight* dirLightComp = dirLight->AddComponent<Core::DirectionalLight>();
+	dirLightComp->SetColor({ 1.f, 0.9f, 0.76f, 1.f });
+
+	Core::GameObject* pointLight = m_scene.CreateGameObject();
+	pointLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
+	pointLight->transform->SetLocalScale(Math::Vec3(1.f, 1.f, 1.f));
+	pointLight->name = "PointLight";
+	Core::PointLight* pointLightComp = pointLight->AddComponent<Core::PointLight>();
+	pointLightComp->SetColor({ 0.f, 0.f, 1.f, 1.f });
+
+	Core::GameObject* spotLight = m_scene.CreateGameObject();
+	spotLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
+	spotLight->transform->SetLocalScale(Math::Vec3(1.f, 1.f, 1.f));
+	spotLight->name = "SpotLight";
+	Core::SpotLight* spotLightComp = spotLight->AddComponent<Core::SpotLight>();
+	spotLightComp->SetColor({ 1.f, 0.f, 0.f, 1.f });
 }
 
 void EditorApp::DrawScene()
 {
-	m_renderInterface->ClearBackgroundColor({ 0.f, 0.f, 0.f });
-	m_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
-	m_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
-
-	m_defaultPipeline->Draw(m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos(), m_scene.GetSystemManager()->GetStaticModels());
+	m_scene.GetSystemManager()->Render(m_renderInterface, m_defaultPipeline, m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos());
 }
 
 void EditorApp::DestroyScene()
