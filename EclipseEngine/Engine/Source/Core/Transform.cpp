@@ -239,6 +239,8 @@ namespace Core
 			m_positionChanged = true;
 	}
 
+
+	// TODO: check if local rotation setters are correct
 	void Transform::SetLocalRotation(Math::Quat _quat)
 	{
 		m_localRotation = _quat;
@@ -253,7 +255,6 @@ namespace Core
 		if (m_children.size() > 0)
 			m_positionChanged = true;
 	}
-
 	void Transform::SetLocalEulerAngles(Math::Vec3 _vec)
 	{
 		m_localEulerAngles = _vec;
