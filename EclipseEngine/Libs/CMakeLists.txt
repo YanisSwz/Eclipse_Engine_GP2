@@ -16,7 +16,6 @@ target_link_libraries(ECLIPSE_ENGINE PUBLIC glfw)
 set(ECLIPSE_MATH_LIB_UNITTEST_OPT OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(EclipseMath)
-
 target_link_libraries(ECLIPSE_ENGINE PUBLIC ECLIPSE_MATH)
 
 # GLAD
@@ -46,3 +45,7 @@ endif()
 set(PHYSICS_REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics")
 include("${PHYSICS_REPO_ROOT}/Jolt/Jolt.cmake")
 target_link_libraries(ECLIPSE_ENGINE PUBLIC Jolt)
+
+# SoLoud
+add_subdirectory(SoLoud)
+target_link_libraries(ECLIPSE_ENGINE PUBLIC SoLoud)

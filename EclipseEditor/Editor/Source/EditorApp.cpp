@@ -21,6 +21,8 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	InitRHI();
 	LoadScene();
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "EditorApp is created!");
+
+	m_scene.GetSystemManager()->GetAudioSystem()->PlayStartUp();
 }
 
 EditorApp::~EditorApp()
