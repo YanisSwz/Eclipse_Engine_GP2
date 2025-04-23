@@ -230,6 +230,21 @@ void EditorApp::LoadScene()
 	bc->AddForce(0.f, 0.f, 20.f);
 	bc->AddImpulse(0.f, 5.f, 0.f);
 
+	Core::GameObject* parent = m_scene.CreateGameObject();
+	parent->name = "Parent";
+	parent->transform->SetLocalPosition({ 1.f, 0.f, 0.f });
+	parent->transform->SetLocalScale({ 1.f, 1.f, 1.f });
+	Core::Model* model5 = parent->AddComponent<Core::Model>();
+	model5->SetData(model, texture, shaderProgramDeferredRendering);
+
+	Core::GameObject* child = m_scene.CreateGameObject();
+	child->name = "Child";
+	child->transform->SetLocalPosition({ 1.f, 1.f, 0.f });
+	child->transform->SetLocalScale({ 0.5f, 0.5f, 0.5f });
+	Core::Model* model6 = child->AddComponent<Core::Model>();
+	model6->SetData(model, texture, shaderProgramDeferredRendering);
+	parent->transform->AddChild(child->transform);
+
 	// LIGHTS
 	Core::GameObject* dirLight = m_scene.CreateGameObject();
 	dirLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
