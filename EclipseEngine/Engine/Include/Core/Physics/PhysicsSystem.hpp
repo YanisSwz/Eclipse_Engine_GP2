@@ -1,6 +1,7 @@
 #pragma once
 #include "Physics/BoxCollider.hpp"
 #include "Physics/CapsuleCollider.hpp"
+#include "Physics/MeshCollider.hpp"
 #include "ProjectExports.hpp"
 #include <vector>
 
@@ -115,6 +116,7 @@ namespace Core
 		ECLIPSE_ENGINE ~PhysicsSystem();
 		ECLIPSE_ENGINE BoxCollider* AddBoxCollider();
 		ECLIPSE_ENGINE CapsuleCollider* AddCapsuleCollider();
+		ECLIPSE_ENGINE MeshCollider* AddMeshCollider();
 
 		ECLIPSE_ENGINE void Update(float _deltaTime);
 
@@ -125,6 +127,8 @@ namespace Core
 		BoxCollider m_boxColliders[MAX_COLLIDER_SIZE];
 		int m_currentCapsuleColliderCount = 0;
 		CapsuleCollider m_capsuleColliders[MAX_COLLIDER_SIZE];
+		int m_currentMeshColliderCount = 0;
+		MeshCollider m_meshColliders[MAX_COLLIDER_SIZE];
 
 		// Jolt Physics Setup
 		JPH::TempAllocatorImpl* m_tempAllocator; // Pre-allocating memory for the physics update

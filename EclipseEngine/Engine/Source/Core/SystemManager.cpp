@@ -2,6 +2,16 @@
 
 namespace Core
 {
+	SystemManager::SystemManager()
+	{
+		m_audioSystem.Init();
+	}
+
+	SystemManager::~SystemManager()
+	{
+		m_audioSystem.Destroy();
+	}
+
 	void SystemManager::Update(float _deltaTime)
 	{
 		m_transformSystem.Update();
@@ -18,8 +28,13 @@ namespace Core
 		return m_transformSystem.GetRoot();
 	}
 
-	std::vector<Resource::ModelData> SystemManager::GetStaticModels() const
+	void SystemManager::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos)
 	{
-		return m_renderSystem.GetStaticModels();
+		m_renderSystem.Render(_renderInterface, _pipeline, _VP, _viewPos);
+	}
+
+	AudioSystem* SystemManager::GetAudioSystem()
+	{
+		return &m_audioSystem;
 	}
 }

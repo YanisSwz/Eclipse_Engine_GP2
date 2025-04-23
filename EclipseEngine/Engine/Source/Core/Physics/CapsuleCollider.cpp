@@ -16,15 +16,17 @@ namespace Core
 	{
 	}
 
-	CapsuleCollider::CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _height, float _radius, Math::Vec3 _pos, Math::Vec3 _rot)
+	CapsuleCollider::CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, float _height, float _radius, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{
+		b_isBodyDestroyed = false;
 		m_bodyInterface = _bodyInterface;
 		b_isDynamic = _isDynamic;
+		m_mass = _mass;
 		m_height = _height;
 		m_radius = _radius;
 		m_position = _pos;
-		m_rotation = _rot;
-
+		m_rotation = Math::Quat::QuaternionEuler(_rot.x, _rot.y, _rot.z);
+		m_gameObject = _myGameObject;
 
 		JPH::CapsuleShapeSettings shapeSettings(m_height * 0.5f, m_radius);
 		shapeSettings.SetEmbedded();
@@ -38,6 +40,8 @@ namespace Core
 			b_isDynamic ? JPH::Layers::MOVING : JPH::Layers::NON_MOVING);
 
 		bodySettings.mAllowDynamicOrKinematic = true;
+		bodySettings.mOverrideMassProperties = JPH::EOverrideMassProperties::MassAndInertiaProvided;
+		bodySettings.mMassPropertiesOverride.mMass = m_mass;
 
 		JPH::Body* body = m_bodyInterface->CreateBody(bodySettings);
 		m_bodyID = body->GetID();
@@ -49,89 +53,48 @@ namespace Core
 		Delete();
 	}
 
-	void CapsuleCollider::SetRotation(float _rotX, float _rotY, float _rotZ)
+	void CapsuleCollider::SetMass(float _mass)
 	{
-		m_rotation = { _rotX, _rotY, _rotZ };
-		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-		m_bodyInterface->SetRotation(m_bodyID, JPH::Quat::sEulerAngles({ m_position.x, m_position.y, m_position.z }), isActivate);
+		m_mass = _mass;
+		Recreate();
 	}
 
-	void CapsuleCollider::SetRotation(Math::Vec3 _rotation)
-	{
-		m_rotation = _rotation;
-		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-		m_bodyInterface->SetRotation(m_bodyID, JPH::Quat::sEulerAngles({ m_position.x, m_position.y, m_position.z }), isActivate);
-	}
-
-	void CapsuleCollider::SetHeight(float _height)
+	void CapsuleCollider::ScaleHeight(float _height)
 	{
 		m_height = _height;
-		UpdateData();
-		this->~CapsuleCollider();
-		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_height, m_radius, m_position, m_rotation);
+		Recreate();
 	}
 
-	void CapsuleCollider::SetRadius(float _radius)
+	void CapsuleCollider::ScaleRadius(float _radius)
 	{
 		m_radius = _radius;
-		UpdateData();
-		this->~CapsuleCollider();
-		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_height, m_radius, m_position, m_rotation);
+		Recreate();
 	}
 
-	void CapsuleCollider::SetHeightRadius(float _height, float _radius)
+	void CapsuleCollider::ScaleHeightRadius(float _height, float _radius)
 	{
 		m_height = _height;
 		m_radius = _radius;
-		UpdateData();
-		this->~CapsuleCollider();
-		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_height, m_radius, m_position, m_rotation);
-	}
-
-	void CapsuleCollider::SetPosRot(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ)
-	{
-		SetPosition(_posX, _posY, _posZ);
-		SetRotation(_rotX, _rotY, _rotZ);
-	}
-
-	void CapsuleCollider::SetPosRot(Math::Vec3 _position, Math::Vec3 _rotation)
-	{
-		SetPosition(_position);
-		SetRotation(_rotation);
+		Recreate();
 	}
 
 	void CapsuleCollider::SetPosRotHeightRadius(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _height, float _radius)
 	{
-		SetPosRot({ _posX, _posY, _posZ }, { _rotX, _rotY, _rotZ });
-		SetHeightRadius(_height, _radius);
+		SetPosRot({ _posX, _posY, _posZ }, Math::Vec3{ _rotX, _rotY, _rotZ });
+		ScaleHeightRadius(_height, _radius);
 	}
 
 	void CapsuleCollider::SetPosRotHeightRadius(Math::Vec3 _position, Math::Vec3 _rotation, float _height, float _radius)
 	{
 		SetPosRot(_position, _rotation);
-		SetHeightRadius(_height, _radius);
+		ScaleHeightRadius(_height, _radius);
 	}
 
-	Math::Vec3 CapsuleCollider::GetRotation() const
+	void CapsuleCollider::Recreate()
 	{
-		JPH::Vec3 rot = m_bodyInterface->GetRotation(m_bodyID).GetEulerAngles();
-		return { rot.GetX(), rot.GetY(), rot.GetZ() };
-	}
-
-	void CapsuleCollider::Delete()
-	{
-		if (m_bodyInterface)
-		{
-			if (m_bodyInterface->IsAdded(m_bodyID))
-				m_bodyInterface->RemoveBody(m_bodyID);
-			if (m_bodyID.IsInvalid())
-				m_bodyInterface->DestroyBody(m_bodyID);
-		}
-	}
-
-	void CapsuleCollider::UpdateData()
-	{
-		m_position = GetPosition();
-		m_rotation = GetRotation();
+		Core::GameObject* gameObject = m_gameObject;
+		UpdateData();
+		this->~CapsuleCollider();
+		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_mass, m_height, m_radius, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject);
 	}
 }

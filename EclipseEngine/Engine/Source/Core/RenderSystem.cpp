@@ -52,18 +52,6 @@ namespace Core
 		}
 	}
 
-	std::vector<Resource::ModelData> RenderSystem::GetStaticModels() const
-	{
-		std::vector<Resource::ModelData> data;
-		for (int i = 0; i < m_currentStaticCount; ++i)
-		{
-			if(m_staticModels[i].IsActive())
-				data.push_back(m_staticModels[i].GetModelData());
-		}
-		
-		return data;
-	}
-
 	DirectionalLight* RenderSystem::AddDirLight()
 	{
 		if (m_currentDirCount >= MAX_LIGHTS_SIZE)
@@ -134,5 +122,65 @@ namespace Core
 		m_spotLights[m_currentSpotCount].SetActive(true);
 		++m_currentSpotCount;
 		return &m_spotLights[m_currentSpotCount - 1];
+	}
+
+	void RenderSystem::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos)
+	{
+		if (_renderInterface != nullptr && _pipeline != nullptr)
+		{
+			_renderInterface->ClearBackgroundColor(Math::Vec4(0.f, 0.f, 0.f));
+			_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
+			_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
+
+			_pipeline->Draw(_VP, _viewPos, GetStaticModels(), GetDirLights(), GetPointLights(), GetSpotLights());
+		}
+	}
+
+	std::vector<Resource::ModelData> RenderSystem::GetStaticModels() const
+	{
+		std::vector<Resource::ModelData> data;
+		for (int i = 0; i < m_currentStaticCount; ++i)
+		{
+			if (m_staticModels[i].IsActive())
+				data.push_back(m_staticModels[i].GetModelData());
+		}
+
+		return data;
+	}
+
+	std::vector<RHI::DirLightData> RenderSystem::GetDirLights() const
+	{
+		std::vector<RHI::DirLightData> data;
+		for (int i = 0; i < m_currentDirCount; ++i)
+		{
+			if (m_directionalLights[i].IsActive())
+				data.push_back(m_directionalLights[i].GetData());
+		}
+
+		return data;
+	}
+
+	std::vector<RHI::PointLightData> RenderSystem::GetPointLights() const
+	{
+		std::vector<RHI::PointLightData> data;
+		for (int i = 0; i < m_currentPointCount; ++i)
+		{
+			if (m_pointLights[i].IsActive())
+				data.push_back(m_pointLights[i].GetData());
+		}
+
+		return data;
+	}
+
+	std::vector<RHI::SpotLightData> RenderSystem::GetSpotLights() const
+	{
+		std::vector<RHI::SpotLightData> data;
+		for (int i = 0; i < m_currentSpotCount; ++i)
+		{
+			if (m_spotLights[i].IsActive())
+				data.push_back(m_spotLights[i].GetData());
+		}
+
+		return data;
 	}
 }

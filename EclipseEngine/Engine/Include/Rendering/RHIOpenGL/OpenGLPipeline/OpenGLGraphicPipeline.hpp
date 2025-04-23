@@ -13,7 +13,7 @@ namespace RHI::OpenGL
 		virtual void Rescale(int _width, int _height) override = 0;
 		virtual void Delete() override = 0;
 	
-		virtual void Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels) override = 0;
+		virtual void Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights) override = 0;
 		virtual unsigned int GetFinalTexture() const override = 0;
 
 	private:

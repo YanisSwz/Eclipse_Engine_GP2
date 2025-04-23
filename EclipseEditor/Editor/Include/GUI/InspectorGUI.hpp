@@ -5,6 +5,9 @@ namespace Core
 	class GameObject;
 	class Transform;
 	class Model;
+	class BoxCollider;
+	class CapsuleCollider;
+	class MeshCollider;
 }
 
 namespace GUI
@@ -20,6 +23,9 @@ namespace GUI
 	private:
 		void DrawTransformComponent(Core::Transform* _transform);
 		void DrawModelComponent(Core::Model* _model);
+		void DrawBoxColliderComponent(Core::BoxCollider* _collider);
+		void DrawCapsuleColliderComponent(Core::CapsuleCollider* _collider);
+		void DrawMeshColliderComponent(Core::MeshCollider* _collider);
 
 	};
 }
