@@ -51,7 +51,7 @@ namespace Core
 			b_isDynamic ? JPH::Layers::MOVING : JPH::Layers::NON_MOVING);
 
 		bodySettings.mAllowDynamicOrKinematic = true;
-		bodySettings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateInertia;
+		bodySettings.mOverrideMassProperties = JPH::EOverrideMassProperties::MassAndInertiaProvided;
 		bodySettings.mMassPropertiesOverride.mMass = m_mass;
 
 		JPH::Body* body = m_bodyInterface->CreateBody(bodySettings);

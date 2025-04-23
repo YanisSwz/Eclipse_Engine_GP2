@@ -131,6 +131,12 @@ namespace Core
 	{
 		return m_mass;
 	}
+
+	bool ICollider::GetIsDynamic() const
+	{
+		return b_isDynamic;
+	}
+	
 	void ICollider::Destroy()
 	{
 		active = false;

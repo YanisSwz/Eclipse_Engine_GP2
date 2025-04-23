@@ -15,10 +15,12 @@ namespace GUI
 	void BeginNewFrame();
 	void EndFrame();
 	void RenderGUI();
+	bool DragFloat(const char* _label, const char* _invisibleLabel, float* _float, float _speed = 0.1f, float _minValue = 0.f, float _maxValue = 1.f, const char* _format = "%.3f");
 	void DragVec3XYZ(const char* _label, Math::Vec3& _vec3, float _resetValue = 0.0f, float _columnWidth = 100.0f);
 	void DragQuatXYZ(const char* _label, Math::Quat& _quat, float _resetValue = 0.0f, float _columnWidth = 100.f);
 	void DrawImage(const char* _imageName, unsigned int _imageID, float _size = 50.f);
 	bool ComboFilter(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values);
+	bool CheckBox(const char* _checkBoxName, const char* _invisibleCheckBoxName, bool* _boolean);
 
 	ImVec4 ColorToVec4(Logging::COLOR _color);
 	void ColoredText(const char* _message, Logging::COLOR _color);

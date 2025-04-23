@@ -27,6 +27,27 @@ namespace GUI
 #endif // ImGuiImplementOpenGL
 	}
 
+	bool DragFloat(const char* _label, const char* _invisibleLabel, float* _float, float _speed, float _minValue, float _maxValue, const char* _format)
+	{
+		std::string invisibleLabel = "##";
+		invisibleLabel.append(_invisibleLabel);
+		ImGui::PushID(invisibleLabel.c_str());
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, 100.f);
+		ImGui::Text(_label);
+		ImGui::NextColumn();
+
+		if (ImGui::DragFloat(invisibleLabel.c_str(), _float, _speed, _minValue, _maxValue, _format))
+		{
+			ImGui::Columns(1);
+			ImGui::PopID();
+			return true;
+		}
+		ImGui::Columns(1);
+		ImGui::PopID();
+		return false;
+	}
+
 	void DragVec3XYZ(const char* _label, Math::Vec3& _vec3, float _resetValue, float _columnWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -58,7 +79,6 @@ namespace GUI
 		ImGui::DragFloat("##X", &_vec3.x, 0.1f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
-
 
 		// Draw Y
 		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 3.f);
@@ -181,12 +201,13 @@ namespace GUI
 
 	bool ComboFilter(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values)
 	{
+		std::string invisibleComboName = "##";
+		invisibleComboName.append(_comboName).append("(w/ filter)");
+		ImGui::PushID(invisibleComboName.c_str());
 		ImGui::Columns(2);
 		ImGui::SetColumnWidth(0, 100.f);
 		ImGui::Text(_comboName);
 		ImGui::NextColumn();
-		std::string invisibleComboName = "##";
-		invisibleComboName.append(_comboName).append("(w/ filter");
 		if (ImGui::BeginCombo(invisibleComboName.c_str(), _crtValue->c_str()))
 		{
 			ImGuiTextFilter filter;
@@ -206,12 +227,35 @@ namespace GUI
 					{
 						*_crtValue = _values[i];
 						ImGui::EndCombo();
+						ImGui::PopID();
 						return true;
 					}
 				}
 			}
 			ImGui::EndCombo();
 		}
+		ImGui::PopID();
+		return false;
+	}
+
+	bool CheckBox(const char* _checkBoxName, const char* _invisibleCheckBoxName, bool* _boolean)
+	{
+		std::string invisibleCheckBoxName = "##";
+		invisibleCheckBoxName.append(_invisibleCheckBoxName);
+		ImGui::PushID(invisibleCheckBoxName.c_str());
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, 100.f);
+		ImGui::Text(_checkBoxName);
+		ImGui::NextColumn();
+
+		if (ImGui::Checkbox(invisibleCheckBoxName.c_str(), _boolean))
+		{
+			ImGui::Columns(1);
+			ImGui::PopID();
+			return true;
+		}
+		ImGui::Columns(1);
+		ImGui::PopID();
 		return false;
 	}
 

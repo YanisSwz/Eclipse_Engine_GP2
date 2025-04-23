@@ -18,8 +18,6 @@ namespace Core
 		ICollider() = default;
 		virtual ~ICollider() = default;
 
-		bool b_isDynamic = false;
-
 		ECLIPSE_ENGINE void SetDynamic(bool _isDynamic);
 		virtual void SetMass(float _mass) = 0;
 		ECLIPSE_ENGINE void AddForce(float _forceX, float _forceY, float _forceZ);
@@ -42,6 +40,7 @@ namespace Core
 		ECLIPSE_ENGINE Math::Vec3 GetPosition() const;
 		ECLIPSE_ENGINE Math::Quat GetRotation() const;
 		ECLIPSE_ENGINE float GetMass() const;
+		ECLIPSE_ENGINE bool GetIsDynamic() const;
 		ECLIPSE_ENGINE void Destroy() override;
 		ECLIPSE_ENGINE void Delete();
 
@@ -49,6 +48,7 @@ namespace Core
 		Math::Vec3 m_position = { 0.f, 0.f, 0.f };
 		Math::Quat m_rotation = { 0.f, 0.f, 0.f };
 		float m_mass = 1.f;
+		bool b_isDynamic = false;
 		bool b_isBodyDestroyed = true;
 
 		JPH::BodyInterface* m_bodyInterface = nullptr;
