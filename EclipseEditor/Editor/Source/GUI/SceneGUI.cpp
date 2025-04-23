@@ -121,9 +121,10 @@ namespace GUI
 
 			_crtGOSelected->transform->UpdateOverride();
 
-			ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
-				ImVec2(viewManipulateRight - 128.f, viewManipulateTop + 20.f),
-				ImVec2(128.f, 128.f), static_cast<ImU32>(0x00000000));
 		}
+
+		ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
+			ImVec2(viewManipulateRight - 128.f, viewManipulateTop + 20.f),
+			ImVec2(128.f, 128.f), static_cast<ImU32>(0x00000000));
 	}
 }
