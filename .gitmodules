@@ -7,6 +7,3 @@
 [submodule "EclipseEngine/Libs/TinyOBJ"]
 	path = EclipseEngine/Libs/TinyOBJ
 	url = https://github.com/tinyobjloader/tinyobjloader
-[submodule "EclipseEngine/Libs/JoltPhysics"]
-	path = EclipseEngine/Libs/JoltPhysics
-	url = https://github.com/jrouwe/JoltPhysics
