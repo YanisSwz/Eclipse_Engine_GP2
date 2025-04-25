@@ -7,7 +7,10 @@
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
+#include <Jolt/Math/Math.h>
 using namespace JPH::literals;
+
+#include "Logging/Logger.hpp"
 
 namespace Core
 {
@@ -60,6 +63,7 @@ namespace Core
 
 	void BoxCollider::Scale(float _scaleX, float _scaleY, float _scaleZ)
 	{
+		m_scale = { _scaleX, _scaleY, _scaleZ };
 		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
 		{
 			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scaleX, _scaleY, _scaleZ });
@@ -70,39 +74,16 @@ namespace Core
 
 	void BoxCollider::Scale(Math::Vec3 _scale)
 	{
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scale.x, _scale.y, _scale.z }))
+		if (_scale.x <= 0.f || _scale.y <= 0.f || _scale.z <= 0.f || _scale.x >= JPH::cLargeFloat || _scale.y >= JPH::cLargeFloat || _scale.z >= JPH::cLargeFloat)
+			return;
+
+		m_scale = _scale;
+		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ m_scale.x, m_scale.y, m_scale.z }))
 		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scale.x, _scale.y, _scale.z });
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ m_scale.x, m_scale.y, m_scale.z });
 			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
 			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
 		}
-	}
-
-	void BoxCollider::SetPosRotScale(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ)
-	{
-		SetPosRot({ _posX, _posY, _posZ }, Math::Vec3{ _rotX, _rotY, _rotZ });
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
-		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scaleX, _scaleY, _scaleZ });
-			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
-		}
-	}
-
-	void BoxCollider::SetPosRotScale(Math::Vec3 _position, Math::Vec3 _rotation, Math::Vec3 _scale)
-	{
-		SetPosRot({ _position.x, _position.y, _position.z }, Math::Vec3{ _rotation.x, _rotation.y, _rotation.z });
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scale.x, _scale.y, _scale.z }))
-		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scale.x, _scale.y, _scale.z });
-			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
-		}
-	}
-
-	Math::Vec3 BoxCollider::GetScale() const
-	{
-		return m_scale;
 	}
 
 	void BoxCollider::UpdateData()

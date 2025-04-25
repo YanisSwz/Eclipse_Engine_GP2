@@ -115,6 +115,19 @@ namespace Core
 		m_bodyInterface->SetPositionAndRotation(m_bodyID, { m_position.x, m_position.y, m_position.z }, JPH::Quat::sEulerAngles({ m_rotation.x, m_rotation.y, m_rotation.z }), isActivate);
 	}
 
+	void ICollider::SetPosRotScale(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ)
+	{
+		SetPosRot({ _posX, _posY, _posZ }, Math::Vec3{ _rotX, _rotY, _rotZ });
+		Scale({ _scaleX, _scaleY, _scaleZ });
+	}
+
+	void ICollider::SetPosRotScale(Math::Vec3 _position, Math::Vec3 _rotation, Math::Vec3 _scale)
+	{
+
+		SetPosRot({ _position.x, _position.y, _position.z }, Math::Vec3{ _rotation.x, _rotation.y, _rotation.z });
+		Scale({ _scale.x, _scale.y, _scale.z });
+	}
+
 	void ICollider::SetOffsetPos(float _offsetPosX, float _offsetPosY, float _offsetPosZ)
 	{
 		m_rotation = GetRotation();
@@ -157,6 +170,11 @@ namespace Core
 	{
 		JPH::Quat rot = m_bodyInterface->GetRotation(m_bodyID);
 		return { rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ() };
+	}
+
+	Math::Vec3 ICollider::GetScale() const
+	{
+		return m_scale;
 	}
 
 	float ICollider::GetMass() const
