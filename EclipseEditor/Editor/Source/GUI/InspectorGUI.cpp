@@ -66,7 +66,7 @@ namespace GUI
 
 		std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
 		std::string meshName = _model->mesh->name;
-		if (GUI::ComboFilter("Mesh: ", &meshName, meshNames))
+		if (GUI::ComboFilter("Mesh ", &meshName, meshNames))
 			_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(meshName);
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -84,7 +84,7 @@ namespace GUI
 
 		std::vector<std::string> textureNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Texture>();
 		std::string textureName = _model->texture->name;
-		if (GUI::ComboFilter("Texture: ", &textureName, textureNames))
+		if (GUI::ComboFilter("Texture ", &textureName, textureNames))
 			_model->texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(textureName);
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -108,15 +108,24 @@ namespace GUI
 		ImGui::SeparatorText("Box Collider");
 
 		bool isDynamic = _collider->GetIsDynamic();
-		if (GUI::CheckBox("Is Dynamic: ", "BoxColliderIsDynamic", &isDynamic))
+		if (GUI::CheckBox("Is Dynamic ", "BoxColliderIsDynamic", &isDynamic))
 			_collider->SetDynamic(isDynamic);
 
 		float mass = _collider->GetMass();
-		if (GUI::DragFloat("Mass: ", "BoxColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
+		if (GUI::DragFloat("Mass ", "BoxColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
 		{
 			if (mass > 0.f)
 				_collider->SetMass(mass);
 		}
+
+		Math::Vec3 posOffset = _collider->GetOffsetPos();
+		if (GUI::DragVec3XYZ("Offset", posOffset))
+			_collider->SetOffsetPos(posOffset);
+
+		// TODO Buged
+		//Math::Vec3 scale = _collider->GetScale();
+		//if (GUI::DragVec3XYZ("Size", scale, 1.f))
+		//	_collider->Scale(scale);
 	}
 
 	void InspectorGUI::DrawCapsuleColliderComponent(Core::CapsuleCollider* _collider)
@@ -127,14 +136,28 @@ namespace GUI
 		ImGui::SeparatorText("Capsule Collider");
 
 		bool isDynamic = _collider->GetIsDynamic();
-		if (GUI::CheckBox("Is Dynamic: ", "CapsuleColliderIsDynamic", &isDynamic))
+		if (GUI::CheckBox("Is Dynamic ", "CapsuleColliderIsDynamic", &isDynamic))
 			_collider->SetDynamic(isDynamic);
 
 		float mass = _collider->GetMass();
-		if (GUI::DragFloat("Mass: ", "CapsuleColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
+		if (GUI::DragFloat("Mass ", "CapsuleColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
 		{
 			if (mass > 0.f)
 				_collider->SetMass(mass);
+		}
+
+		Math::Vec3 posOffset = _collider->GetOffsetPos();
+		if (GUI::DragVec3XYZ("Offset", posOffset))
+			_collider->SetOffsetPos(posOffset);
+
+		Math::Vec3 scale = _collider->GetScale();
+		if (GUI::DragFloat("Height", "BoxColliderHeight", &scale.y, 0.1f, 0.f, 100.f, "%.3f m"))
+			_collider->Scale(scale);
+		
+		if (GUI::DragFloat("Radius", "BoxColliderRadius", &scale.x, 0.1f, 0.f, 100.f, "%.3f m"))
+		{
+			scale.z = scale.x;
+			_collider->Scale(scale);
 		}
 	}
 
@@ -146,14 +169,23 @@ namespace GUI
 		ImGui::SeparatorText("Mesh Collider");
 
 		bool isDynamic = _collider->GetIsDynamic();
-		if (GUI::CheckBox("Is Dynamic: ", "MeshColliderIsDynamic", &isDynamic))
+		if (GUI::CheckBox("Is Dynamic ", "MeshColliderIsDynamic", &isDynamic))
 			_collider->SetDynamic(isDynamic);
 
 		float mass = _collider->GetMass();
-		if (GUI::DragFloat("Mass: ", "MeshColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
+		if (GUI::DragFloat("Mass ", "MeshColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
 		{
 			if (mass > 0.f)
 				_collider->SetMass(mass);
 		}
+
+		Math::Vec3 posOffset = _collider->GetOffsetPos();
+		if (GUI::DragVec3XYZ("Offset", posOffset))
+			_collider->SetOffsetPos(posOffset);
+
+		// TODO Buged
+		//Math::Vec3 scale = _collider->GetScale();
+		//if (GUI::DragVec3XYZ("Size", scale, 1.f))
+		//	_collider->Scale(scale);
 	}
 }

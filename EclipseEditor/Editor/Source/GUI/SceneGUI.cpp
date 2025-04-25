@@ -70,7 +70,6 @@ namespace GUI
 		else if (!ImGuizmo::IsUsingAny() && _crtGOSelected->transform->IsSelected())
 			_crtGOSelected->transform->EndOverride();
 
-
 		float viewManipulateRight = ImGui::GetWindowPos().x + (float)ImGui::GetWindowWidth();
 		float viewManipulateTop = ImGui::GetWindowPos().y;
 		float windowWidth = (float)ImGui::GetWindowWidth();
@@ -120,7 +119,6 @@ namespace GUI
 			}
 
 			_crtGOSelected->transform->UpdateOverride();
-
 		}
 
 		ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
