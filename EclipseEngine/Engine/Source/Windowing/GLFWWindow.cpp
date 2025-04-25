@@ -20,6 +20,7 @@ namespace Windowing
 
         glfwWindowHint(GLFW_SAMPLES, 4);
         m_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
+        glfwSetWindowSizeLimits(m_window, 800, 400, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
         if (m_window == nullptr)
         {
