@@ -71,16 +71,19 @@ namespace GUI
 		int meshFilesSize = static_cast<int>(m_meshFiles.size());
 
 		int nbElem = folderChildrenSize + texturesFilesSize + meshFilesSize;
-		int nbElemInCollumn = static_cast<int>(ImGui::GetContentRegionAvail().x / 100.f) - 1;
-		if (nbElemInCollumn > 0)
+		int nbElemInColumn = static_cast<int>(ImGui::GetContentRegionAvail().x / 100.f);
+		if (nbElemInColumn == 0)
+			nbElemInColumn = 1;
+
+		if (nbElemInColumn > 0)
 		{
-			if (ImGui::BeginTable("Content Browser Table", nbElemInCollumn, ImGuiTableFlags_NoBordersInBody))
+			if (ImGui::BeginTable("Content Browser Table", nbElemInColumn, ImGuiTableFlags_SizingFixedSame | ImGuiTableFlags_NoBordersInBody))
 			{
 				for (int i = 0; i < nbElem; ++i)
 				{
-					if (i % nbElemInCollumn == 0)
+					if (i % nbElemInColumn == 0)
 						ImGui::TableNextRow();
-					ImGui::TableSetColumnIndex(i % nbElemInCollumn);
+					ImGui::TableSetColumnIndex(i % nbElemInColumn);
 
 					if (i < folderChildrenSize)
 					{

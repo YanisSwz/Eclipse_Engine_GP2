@@ -16,8 +16,8 @@ namespace GUI
 
 	void ConsoleGUI::Draw()
 	{
+		ImGui::SetNextWindowSizeConstraints({ 300.f, 100.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags consoleWindowFlags = ImGuiWindowFlags_None;
-
 		ImGui::Begin("Console", 0, consoleWindowFlags);
 
 		std::string filePath = Logging::Logger::GetInstance().GetFilePath();
