@@ -70,9 +70,6 @@ namespace GUI
 		else if (!ImGuizmo::IsUsingAny() && _crtGOSelected->transform->IsSelected())
 			_crtGOSelected->transform->EndOverride();
 
-
-		float viewManipulateRight = ImGui::GetWindowPos().x + (float)ImGui::GetWindowWidth();
-		float viewManipulateTop = ImGui::GetWindowPos().y;
 		float windowWidth = (float)ImGui::GetWindowWidth();
 		float windowHeight = (float)ImGui::GetWindowHeight();
 
@@ -122,9 +119,5 @@ namespace GUI
 			_crtGOSelected->transform->UpdateOverride();
 
 		}
-
-		ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
-			ImVec2(viewManipulateRight - 128.f, viewManipulateTop + 20.f),
-			ImVec2(128.f, 128.f), static_cast<ImU32>(0x00000000));
 	}
 }
