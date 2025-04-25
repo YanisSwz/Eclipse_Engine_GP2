@@ -18,7 +18,9 @@ namespace Core
 			GetPosition(),
 			m_constantAttenuation,
 			m_linearAttenuation,
-			m_quadraticAttenuation
+			m_quadraticAttenuation,
+			0.f,
+			0.f
 		};
 	}
 

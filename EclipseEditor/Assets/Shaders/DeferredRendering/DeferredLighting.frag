@@ -7,10 +7,12 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
 uniform vec3 viewPos;
+uniform vec4 ambient;
 
 struct DirLight {
     vec4 Color;
     vec3 Direction;
+    float Padding;
 };
 
 struct PointLight {
@@ -19,18 +21,20 @@ struct PointLight {
     float ConstantAttenuation;
     float LinearAttenuation;
     float QuadraticAttenuation;
+    float Padding1;
+    float Padding2;
 };
 
 struct SpotLight {
-
     vec4 Color;
     vec3 Position;
-    vec3 Direction;
     float InnerCutoff;
+    vec3 Direction;
     float OuterCutoff;
     float ConstantAttenuation;
     float LinearAttenuation;
     float QuadraticAttenuation;
+    float Padding;
 };
 
 #define NR_DIR_LIGHTS 12
@@ -53,12 +57,13 @@ vec3 DirLightComputation(DirLight dirLight, vec3 FragPos, vec3 Normal, vec3 Diff
 
 vec3 PointLightComputation(PointLight pointLight, vec3 FragPos, vec3 Normal, vec3 Diffuse, float Specular, vec3 ViewDir)
 {
+    vec3 Norm = normalize(Normal);
     // diffuse
     vec3 lightDir = normalize(pointLight.Position - FragPos);
-    vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * pointLight.Color.rgb * pointLight.Color.a;
+    vec3 diffuse = max(dot(Norm, lightDir), 0.0) * Diffuse * pointLight.Color.rgb * pointLight.Color.a;
     // specular
     vec3 halfwayDir = normalize(lightDir + ViewDir);
-    float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
+    float spec = pow(max(dot(Norm, halfwayDir), 0.0), 32.0);
     vec3 specular = pointLight.Color.rgb * pointLight.Color.a * spec * Specular;
     // attenuation
     float distance = length(pointLight.Position - FragPos);
@@ -79,7 +84,7 @@ vec3 SpotLightComputation(SpotLight spotLight, vec3 FragPos, vec3 Normal, vec3 D
         vec3 diffuse = max(dot(norm, lightDir), 0.0) * Diffuse * spotLight.Color.rgb * spotLight.Color.a;
         // specular
         vec3 halfwayDir = normalize(lightDir + ViewDir);
-        float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
+        float spec = pow(max(dot(Normal, halfwayDir), 0.0), 32.0);
         vec3 specular = spotLight.Color.rgb * spotLight.Color.a * spec * Specular;
         // intensity
         float theta = dot(lightDir, normalize(-spotLight.Direction));
@@ -110,8 +115,7 @@ void main()
     float Specular = texture(gAlbedoSpec, TexCoords).a;
 
     vec3 ViewDir = normalize(viewPos - FragPos);
-    vec3 lighting;
-    //vec3 lighting = Diffuse * 0.25f; // hard-coded ambient component
+    vec3 lighting = Diffuse * ambient.rgb * ambient.a;
     for (int i = 0; i < DirLightNb; ++i)
         lighting += DirLightComputation(dirLights[i], FragPos, Normal, Diffuse, Specular, ViewDir);
     for (int i = 0; i < PointLightNb; ++i)
@@ -119,5 +123,5 @@ void main()
     for (int i = 0; i < SpotLightNb; ++i)
         lighting += SpotLightComputation(spotLights[i], FragPos, Normal, Diffuse, Specular, ViewDir);
 
-    FragColor = vec4(lighting, 1.0);
+    FragColor = vec4(lighting, 1.f);
 }

@@ -65,7 +65,7 @@ void EditorApp::Render()
 	m_sceneGUI.StartGizmo();
 	m_dockingGUI.Start();
 
-	if(m_crtGOSelected)
+	if (m_crtGOSelected)
 	{
 		if (m_crtGOSelected->IsDestroyed())
 			m_crtGOSelected = nullptr;
@@ -81,7 +81,6 @@ void EditorApp::Render()
 	GUI::EndFrame();
 
 	DrawScene();
-
 
 	GUI::RenderGUI();
 	m_dockingGUI.End();
@@ -164,11 +163,12 @@ void EditorApp::LoadScene()
 	m_contentBrowserGUI.Init();
 	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_defaultPipeline->Init(m_window->width, m_window->height);
-	
+
 
 	// CORE TESTS
 
 	Core::GameObject* floor = m_scene.CreateGameObject();
+	floor->name = "Floor";
 	floor->transform->SetLocalPosition(Math::Vec3(0.f, -1.f, 0.f));
 	floor->transform->SetLocalScale(Math::Vec3(100.f, 0.1f, 100.f));
 	Core::Model* floorModel = floor->AddComponent<Core::Model>();
@@ -211,16 +211,16 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
 	obj2->name = "BoxCollider Static";
-	obj2->transform->SetLocalPosition({0.f, 0.f, 0.f});
-	obj2->transform->SetLocalScale({0.5f, 0.5f, 0.5f});
+	obj2->transform->SetLocalPosition({ 0.f, 0.f, 0.f });
+	obj2->transform->SetLocalScale({ 0.5f, 0.5f, 0.5f });
 	Core::Model* model3 = obj2->AddComponent<Core::Model>();
 	model3->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	obj2->AddComponent<Core::BoxCollider>();
 
 	Core::GameObject* obj3 = m_scene.CreateGameObject();
 	obj3->name = "BoxCollider Dynamic";
-	obj3->transform->SetLocalPosition({1.f, 0.f, 0.f});
-	obj3->transform->SetLocalScale({1.f, 1.f, 1.f});
+	obj3->transform->SetLocalPosition({ 1.f, 0.f, 0.f });
+	obj3->transform->SetLocalScale({ 1.f, 1.f, 1.f });
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
 	model4->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();

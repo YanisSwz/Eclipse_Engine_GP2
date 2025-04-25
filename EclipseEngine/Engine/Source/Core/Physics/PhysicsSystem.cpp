@@ -169,9 +169,9 @@ namespace Core
 
 	void PhysicsSystem::Update(float _deltaTime)
 	{
-		if (b_firstUpdate)
+		if (bfirstUpdate)
 		{
-			b_firstUpdate = false;
+			bfirstUpdate = false;
 			_deltaTime = 0.f;
 		}
 

@@ -91,6 +91,7 @@ namespace Core
 		}
 
 		m_currentMesh = _mesh;
+		m_scale = _scale;
 
 		m_vertexList.clear();
 		m_indexTriangleList.clear();
@@ -144,37 +145,32 @@ namespace Core
 			m_indexTriangleList.push_back({ verticesIndex[i], verticesIndex[i + 1], verticesIndex[i + 2] });
 	}
 
-	void MeshCollider::Scale(Math::Vec3 _scale)
-	{
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scale.x, _scale.y, _scale.z }))
-		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scale.x, _scale.y, _scale.z });
-			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
-		}
-	}
-
 	void MeshCollider::Scale(float _scaleX, float _scaleY, float _scaleZ)
 	{
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
+		if (_scaleX <= 0.f || _scaleY <= 0.f || _scaleZ <= 0.f)
+			return;
+
+		m_scale = { _scaleX, _scaleY, _scaleZ };
+		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ m_scale.x, m_scale.y, m_scale.z }))
 		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scaleX, _scaleY, _scaleZ });
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ m_scale.x, m_scale.y, m_scale.z });
 			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
 			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
 		}
 	}
 
-	void MeshCollider::SetPosRotScale(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ)
+	void MeshCollider::Scale(Math::Vec3 _scale)
 	{
-		SetPosRot({ _posX, _posY, _posZ }, Math::Vec3{ _rotX, _rotY, _rotZ });
-		Scale({ _scaleX, _scaleY, _scaleZ });
-	}
+		if (_scale.x <= 0.f || _scale.y <= 0.f || _scale.z <= 0.f)
+			return;
 
-	void MeshCollider::SetPosRotScale(Math::Vec3 _position, Math::Vec3 _rotation, Math::Vec3 _scale)
-	{
-
-		SetPosRot({ _position.x, _position.y, _position.z }, Math::Vec3{ _rotation.x, _rotation.y, _rotation.z });
-		Scale({ _scale.x, _scale.y, _scale.z });
+		m_scale = _scale;
+		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ m_scale.x, m_scale.y, m_scale.z }))
+		{
+			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ m_scale.x, m_scale.y, m_scale.z });
+			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
+			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
+		}
 	}
 
 	void MeshCollider::Recreate()

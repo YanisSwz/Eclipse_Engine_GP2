@@ -131,7 +131,7 @@ namespace Core
 		MeshCollider m_meshColliders[MAX_COLLIDER_SIZE];
 
 		// Jolt Physics Setup
-		JPH::TempAllocatorImpl* m_tempAllocator; // Pre-allocating memory for the physics update
+		JPH::TempAllocatorImpl* m_tempAllocator = nullptr; // Pre-allocating memory for the physics update
 		JPH::JobSystemThreadPool* m_jobSystem = nullptr;
 		JPH::PhysicsSystem m_physicsSystem;
 		JPH::BodyInterface* m_bodyInterface = nullptr;
@@ -147,6 +147,6 @@ namespace Core
 		JPH::StreamOutWrapper* m_rendererStream = nullptr;
 		std::ofstream m_rendererFile;
 
-		bool b_firstUpdate = true;
+		bool bfirstUpdate = true;
 	};
 }

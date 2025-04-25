@@ -117,7 +117,6 @@ namespace GUI
 			}
 
 			_crtGOSelected->transform->UpdateOverride();
-
 		}
 	}
 }

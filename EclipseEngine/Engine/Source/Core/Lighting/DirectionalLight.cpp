@@ -15,7 +15,8 @@ namespace Core
 	{
 		return RHI::DirLightData{
 			m_color,
-			GetDirection()
+			GetDirection(),
+			0.f
 		};
 	}
 
