@@ -19,6 +19,7 @@ namespace GUI
 
 	void InspectorGUI::Draw(Core::GameObject* _crtGOselected)
 	{
+		ImGui::SetNextWindowSizeConstraints({400.f, 50.f}, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags inspectorWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Inspector", 0, inspectorWindowFlags);
 
@@ -27,11 +28,11 @@ namespace GUI
 			ImGui::End();
 			return;
 		}
-		if (ImGui::InputText("Name: ", _crtGOselected->name.data(), 255))
+		if (ImGui::InputText("##Name", _crtGOselected->name.data(), 255))
 		{
 			_crtGOselected->name = _crtGOselected->name.c_str();
 			if (_crtGOselected->name.size() == 0)
-				_crtGOselected->name = " ";
+				_crtGOselected->name = "GameObject" + std::to_string(_crtGOselected->GetID());
 		}
 		DrawTransformComponent(_crtGOselected->transform);
 		DrawModelComponent(_crtGOselected->GetComponent<Core::Model>());

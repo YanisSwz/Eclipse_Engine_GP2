@@ -27,13 +27,16 @@ namespace GUI
 #endif // ImGuiImplementOpenGL
 	}
 
-	bool DragFloat(const char* _label, const char* _invisibleLabel, float* _float, float _speed, float _minValue, float _maxValue, const char* _format)
+	bool DragFloat(const char* _label, const char* _invisibleLabel, float* _float, float _speed, float _minValue, float _maxValue, const char* _format, float _maxColumnWidth)
 	{
 		std::string invisibleLabel = "##";
 		invisibleLabel.append(_invisibleLabel);
 		ImGui::PushID(invisibleLabel.c_str());
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, 100.f);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
 		ImGui::Text(_label);
 		ImGui::NextColumn();
 
@@ -48,7 +51,7 @@ namespace GUI
 		return false;
 	}
 
-	bool DragVec3XYZ(const char* _label, Math::Vec3& _vec3, float _resetValue, float _columnWidth)
+	bool DragVec3XYZ(const char* _label, Math::Vec3& _vec3, float _resetValue, float _maxColumnWidth)
 	{
 		bool changed = false;
 
@@ -58,7 +61,10 @@ namespace GUI
 		// Draw widget label
 		ImGui::PushID(_label);
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, _columnWidth);
+		if((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth()/4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
 		ImGui::Text(_label);
 		ImGui::NextColumn();
 
@@ -122,7 +128,7 @@ namespace GUI
 		return changed;
 	}
 
-	bool DragQuatXYZ(const char* _label, Math::Quat& _quat, float _resetValue, float _columnWidth)
+	bool DragQuatXYZ(const char* _label, Math::Quat& _quat, float _resetValue, float _maxColumnWidth)
 	{
 		bool changed = false;
 
@@ -133,8 +139,11 @@ namespace GUI
 		// Draw widget label
 		ImGui::PushID(_label);
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, _columnWidth);
-		ImGui::Text(_label);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
+		ImGui::TextWrapped(_label);
 		ImGui::NextColumn();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
@@ -207,13 +216,16 @@ namespace GUI
 		ImGui::PopStyleVar();
 	}
 
-	bool ComboFilter(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values)
+	bool ComboFilter(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values, float _maxColumnWidth)
 	{
 		std::string invisibleComboName = "##";
 		invisibleComboName.append(_comboName).append("(w/ filter)");
 		ImGui::PushID(invisibleComboName.c_str());
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, 100.f);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
 		ImGui::Text(_comboName);
 		ImGui::NextColumn();
 		if (ImGui::BeginCombo(invisibleComboName.c_str(), _crtValue->c_str()))
@@ -246,13 +258,16 @@ namespace GUI
 		return false;
 	}
 
-	bool CheckBox(const char* _checkBoxName, const char* _invisibleCheckBoxName, bool* _boolean)
+	bool CheckBox(const char* _checkBoxName, const char* _invisibleCheckBoxName, bool* _boolean, float _maxColumnWidth)
 	{
 		std::string invisibleCheckBoxName = "##";
 		invisibleCheckBoxName.append(_invisibleCheckBoxName);
 		ImGui::PushID(invisibleCheckBoxName.c_str());
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, 100.f);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
 		ImGui::Text(_checkBoxName);
 		ImGui::NextColumn();
 
