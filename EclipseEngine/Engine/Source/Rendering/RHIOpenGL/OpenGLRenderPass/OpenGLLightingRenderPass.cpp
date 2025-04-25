@@ -74,6 +74,7 @@ namespace RHI::OpenGL
 				std::string str = "dirLights[" + std::to_string(i) + "].";
 				m_shaderLight->SetVec4((str + "Color").c_str(), _dirLightsData[i].color);
 				m_shaderLight->SetVec3((str + "Direction").c_str(), _dirLightsData[i].dir);
+				m_shaderLight->SetFloat((str + "Padding").c_str(), _dirLightsData[i].padding);
 			}
 			m_shaderLight->SetInt("DirLightNb", static_cast<int>(_dirLightsData.size()));
 		}
@@ -91,6 +92,8 @@ namespace RHI::OpenGL
 				m_shaderLight->SetFloat((str + "ConstantAttenuation").c_str(), _pointLightsData[i].constAttenuation);
 				m_shaderLight->SetFloat((str + "LinearAttenuation").c_str(), _pointLightsData[i].linAttenuation);
 				m_shaderLight->SetFloat((str + "QuadraticAttenuation").c_str(), _pointLightsData[i].quadAttenuation);
+				m_shaderLight->SetFloat((str + "Padding1").c_str(), _pointLightsData[i].padding1);
+				m_shaderLight->SetFloat((str + "Padding2").c_str(), _pointLightsData[i].padding2);
 			}
 			m_shaderLight->SetInt("PointLightNb", static_cast<int>(_pointLightsData.size()));
 		}
@@ -105,12 +108,13 @@ namespace RHI::OpenGL
 				std::string str = "spotLights[" + std::to_string(i) + "].";
 				m_shaderLight->SetVec4((str + "Color").c_str(), _spotLightsData[i].color);
 				m_shaderLight->SetVec3((str + "Position").c_str(), _spotLightsData[i].pos);
-				m_shaderLight->SetVec3((str + "Direction").c_str(), _spotLightsData[i].dir);
 				m_shaderLight->SetFloat((str + "InnerCutoff").c_str(), _spotLightsData[i].innerCutOff);
+				m_shaderLight->SetVec3((str + "Direction").c_str(), _spotLightsData[i].dir);
 				m_shaderLight->SetFloat((str + "OuterCutoff").c_str(), _spotLightsData[i].outerCutOff);
 				m_shaderLight->SetFloat((str + "ConstantAttenuation").c_str(), _spotLightsData[i].constAttenuation);
 				m_shaderLight->SetFloat((str + "LinearAttenuation").c_str(), _spotLightsData[i].linAttenuation);
 				m_shaderLight->SetFloat((str + "QuadraticAttenuation").c_str(), _spotLightsData[i].quadAttenuation);
+				m_shaderLight->SetFloat((str + "Padding").c_str(), _spotLightsData[i].padding);
 			}
 			m_shaderLight->SetInt("SpotLightNb", static_cast<int>(_spotLightsData.size()));
 		}

@@ -16,12 +16,13 @@ namespace Core
 		return RHI::SpotLightData{
 			m_color,
 			GetPosition(),
-			GetDirection(),
 			m_innerCutOff,
+			GetDirection(),
 			m_outerCutOff,
 			m_constantAttenuation,
 			m_linearAttenuation,
-			m_quadraticAttenuation
+			m_quadraticAttenuation,
+			0.f
 		};
 	}
 

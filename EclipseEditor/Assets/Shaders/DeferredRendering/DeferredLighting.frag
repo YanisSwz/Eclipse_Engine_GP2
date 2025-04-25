@@ -11,6 +11,7 @@ uniform vec3 viewPos;
 struct DirLight {
     vec4 Color;
     vec3 Direction;
+    float Padding;
 };
 
 struct PointLight {
@@ -19,18 +20,21 @@ struct PointLight {
     float ConstantAttenuation;
     float LinearAttenuation;
     float QuadraticAttenuation;
+    float Padding1;
+    float Padding2;
 };
 
 struct SpotLight {
 
     vec4 Color;
     vec3 Position;
-    vec3 Direction;
     float InnerCutoff;
+    vec3 Direction;
     float OuterCutoff;
     float ConstantAttenuation;
     float LinearAttenuation;
     float QuadraticAttenuation;
+    float Padding;
 };
 
 #define NR_DIR_LIGHTS 12
