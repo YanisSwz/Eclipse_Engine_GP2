@@ -20,6 +20,8 @@ namespace GUI
 		ImGuiWindowFlags consoleWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Console", 0, consoleWindowFlags);
 
+		ImGui::SetWindowFontScale(1.25f);
+
 		std::string filePath = Logging::Logger::GetInstance().GetFilePath();
 		
 		if (filePath != "")

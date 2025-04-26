@@ -18,8 +18,16 @@ namespace Windowing
             return;
         }
 
+        // GLFW Hints Setup
+        const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
         glfwWindowHint(GLFW_SAMPLES, 4);
-        m_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
+        glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+
+        m_window = glfwCreateWindow(width, height, name, NULL, NULL);
         glfwSetWindowSizeLimits(m_window, 800, 400, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
         if (m_window == nullptr)
