@@ -63,27 +63,22 @@ namespace Core
 
 	void BoxCollider::Scale(float _scaleX, float _scaleY, float _scaleZ)
 	{
+		if (_scaleX <= 0.f || _scaleY <= 0.f || _scaleZ <= 0.f)
+			return;
+
 		m_scale = { _scaleX, _scaleY, _scaleZ };
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ _scaleX, _scaleY, _scaleZ }))
-		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ _scaleX, _scaleY, _scaleZ });
-			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
-		}
+		Recreate();
+
 	}
 
 	void BoxCollider::Scale(Math::Vec3 _scale)
 	{
-		if (_scale.x <= 0.f || _scale.y <= 0.f || _scale.z <= 0.f || _scale.x >= JPH::cLargeFloat || _scale.y >= JPH::cLargeFloat || _scale.z >= JPH::cLargeFloat)
+		if (_scale.x <= 0.f || _scale.y <= 0.f || _scale.z <= 0.f)
 			return;
 
 		m_scale = _scale;
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ m_scale.x, m_scale.y, m_scale.z }))
-		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ m_scale.x, m_scale.y, m_scale.z });
-			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
-		}
+		Recreate();
+
 	}
 
 	void BoxCollider::UpdateData()

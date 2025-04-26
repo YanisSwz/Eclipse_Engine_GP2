@@ -115,10 +115,9 @@ namespace GUI
 		if (GUI::DragVec3XYZ("Offset", posOffset))
 			_collider->SetOffsetPos(posOffset);
 
-		// TODO Buged
-		//Math::Vec3 scale = _collider->GetScale();
-		//if (GUI::DragVec3XYZ("Size", scale, 1.f))
-		//	_collider->Scale(scale);
+		Math::Vec3 scale = _collider->GetScale();
+		if (GUI::DragVec3XYZ("Size", scale, 1.f))
+			_collider->Scale(scale);
 	}
 
 	void InspectorGUI::DrawCapsuleColliderComponent(Core::CapsuleCollider* _collider)
@@ -176,9 +175,8 @@ namespace GUI
 		if (GUI::DragVec3XYZ("Offset", posOffset))
 			_collider->SetOffsetPos(posOffset);
 
-		// TODO Buged
-		//Math::Vec3 scale = _collider->GetScale();
-		//if (GUI::DragVec3XYZ("Size", scale, 1.f))
-		//	_collider->Scale(scale);
+		Math::Vec3 scale = _collider->GetScale();
+		if (GUI::DragVec3XYZ("Size", scale, 1.f))
+			_collider->Scale(scale);
 	}
 }

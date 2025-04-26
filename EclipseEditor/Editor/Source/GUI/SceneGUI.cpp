@@ -12,6 +12,7 @@ namespace GUI
 		ImGui::Begin("Scene", 0, sceneWindowFlags);
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
+
 		_windowWidth = static_cast<int>(windowSize.x);
 		_windowHeight = static_cast<int>(windowSize.y);
 		_windowPosX = static_cast<int>(windowPos.x);
