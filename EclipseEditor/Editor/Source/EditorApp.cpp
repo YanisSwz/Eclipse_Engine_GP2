@@ -124,6 +124,10 @@ void EditorApp::InitGUI()
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 	io.ConfigWindowsMoveFromTitleBarOnly = true;
+
+	io.IniFilename = "Assets/editor.ini";
+	io.Fonts->AddFontFromFileTTF("Assets/Fonts/SourceSans3-Medium.ttf", 24);
+
 	ImGui::StyleColorsDark();
 
 #ifdef ImGuiImplementGLFW
