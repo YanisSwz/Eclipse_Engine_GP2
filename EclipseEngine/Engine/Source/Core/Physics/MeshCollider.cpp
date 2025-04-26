@@ -151,12 +151,7 @@ namespace Core
 			return;
 
 		m_scale = { _scaleX, _scaleY, _scaleZ };
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ m_scale.x, m_scale.y, m_scale.z }))
-		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ m_scale.x, m_scale.y, m_scale.z });
-			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
-		}
+		Recreate();
 	}
 
 	void MeshCollider::Scale(Math::Vec3 _scale)
@@ -165,12 +160,7 @@ namespace Core
 			return;
 
 		m_scale = _scale;
-		if (m_bodyInterface->GetShape(m_bodyID)->IsValidScale({ m_scale.x, m_scale.y, m_scale.z }))
-		{
-			JPH::Shape::ShapeResult shapeResult = m_bodyInterface->GetShape(m_bodyID)->ScaleShape({ m_scale.x, m_scale.y, m_scale.z });
-			JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-			m_bodyInterface->SetShape(m_bodyID, shapeResult.Get(), false, isActivate);
-		}
+		Recreate();
 	}
 
 	void MeshCollider::Recreate()
