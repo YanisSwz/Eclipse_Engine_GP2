@@ -15,11 +15,6 @@ namespace GUI
 
 	}
 
-	FolderGUI::~FolderGUI()
-	{
-
-	}
-
 	void FolderGUI::Init()
 	{
 		if (name == "Texture")

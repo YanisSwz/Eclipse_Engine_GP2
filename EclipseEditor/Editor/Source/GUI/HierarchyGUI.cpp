@@ -5,14 +5,6 @@
 
 namespace GUI
 {
-	HierarchyGUI::HierarchyGUI()
-	{
-	}
-
-	HierarchyGUI::~HierarchyGUI()
-	{
-	}
-
 	Core::GameObject* HierarchyGUI::Draw(Core::Scene* _scene, Core::GameObject* _crtGOSelected)
 	{
 		ImGui::SetNextWindowSizeConstraints({ 200.f, 100.f }, ImGui::GetMainViewport()->Size);

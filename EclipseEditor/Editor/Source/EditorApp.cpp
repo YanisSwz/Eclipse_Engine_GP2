@@ -76,6 +76,7 @@ void EditorApp::Render()
 
 	m_inspectorGUI.Draw(m_crtGOSelected);
 	m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
+	m_gameGUI.Draw();
 	m_consoleGUI.Draw();
 	m_contentBrowserGUI.Draw();
 	GUI::EndFrame();

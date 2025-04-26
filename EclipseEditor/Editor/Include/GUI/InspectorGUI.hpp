@@ -15,8 +15,8 @@ namespace GUI
 	class InspectorGUI
 	{
 	public:
-		InspectorGUI();
-		~InspectorGUI();
+		InspectorGUI() = default;
+		~InspectorGUI() = default;
 
 		void Draw(Core::GameObject* _crtGOselected);
 

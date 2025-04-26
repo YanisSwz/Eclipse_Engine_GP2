@@ -5,16 +5,9 @@
 
 namespace GUI
 {
-	SceneGUI::SceneGUI()
-	{
-	}
-
-	SceneGUI::~SceneGUI()
-	{
-	}
-
 	void SceneGUI::Draw(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera, const unsigned int _textureID, int& _windowWidth, int& _windowHeight, int& _windowPosX, int& _windowPosY)
 	{
+		ImGui::SetNextWindowSizeConstraints({ 300.f, 300.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags sceneWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Scene", 0, sceneWindowFlags);
 		ImVec2 windowSize = ImGui::GetWindowSize();

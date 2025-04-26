@@ -9,14 +9,6 @@
 
 namespace GUI
 {
-	InspectorGUI::InspectorGUI()
-	{
-	}
-
-	InspectorGUI::~InspectorGUI()
-	{
-	}
-
 	void InspectorGUI::Draw(Core::GameObject* _crtGOselected)
 	{
 		ImGui::SetNextWindowSizeConstraints({400.f, 50.f}, ImGui::GetMainViewport()->Size);

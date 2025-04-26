@@ -4,14 +4,6 @@
 
 namespace GUI
 {
-	DockingGUI::DockingGUI()
-	{
-	}
-
-	DockingGUI::~DockingGUI()
-	{
-	}
-
 	void DockingGUI::Start()
 	{
 		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -27,16 +19,30 @@ namespace GUI
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-		ImGui::Begin("DockSpace Demo", 0, window_flags);
-
+		ImGui::Begin("DockSpace", 0, window_flags);
+		ImGui::PopStyleVar(3);
 		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
 
+		if (ImGui::BeginMenuBar()) 
+		{
+			if (ImGui::BeginMenu("File")) 
+			{
+				ImGui::MenuItem("Save");
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Edit")) 
+			{
+				ImGui::MenuItem("Settings");
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
 		ImGui::End();
-		ImGui::PopStyleVar(3);
 	}
 
 	void DockingGUI::End()

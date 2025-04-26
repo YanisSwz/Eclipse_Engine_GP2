@@ -18,8 +18,8 @@ namespace GUI
 	class SceneGUI
 	{
 	public:
-		SceneGUI();
-		~SceneGUI();
+		SceneGUI() = default;
+		~SceneGUI() = default;
 
 		void Draw(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera, const unsigned int _textureID, int& _windowWidth, int& _windowHeight, int& _windowPosX, int& _windowPosY);
 		void StartGizmo();

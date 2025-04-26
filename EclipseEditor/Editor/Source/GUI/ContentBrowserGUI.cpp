@@ -3,14 +3,6 @@
 
 namespace GUI
 {
-	ContentBrowseGUI::ContentBrowseGUI()
-	{
-	}
-
-	ContentBrowseGUI::~ContentBrowseGUI()
-	{
-	}
-
 	void ContentBrowseGUI::Init()
 	{
 		m_folderRoot = new FolderGUI("Root");

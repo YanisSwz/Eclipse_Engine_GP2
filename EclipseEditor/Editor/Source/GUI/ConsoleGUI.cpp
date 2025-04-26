@@ -6,14 +6,6 @@
 
 namespace GUI
 {
-	ConsoleGUI::ConsoleGUI()
-	{
-	}
-
-	ConsoleGUI::~ConsoleGUI()
-	{
-	}
-
 	void ConsoleGUI::Draw()
 	{
 		ImGui::SetNextWindowSizeConstraints({ 300.f, 100.f }, ImGui::GetMainViewport()->Size);
