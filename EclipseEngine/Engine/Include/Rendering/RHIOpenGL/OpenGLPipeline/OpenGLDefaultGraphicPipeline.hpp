@@ -1,6 +1,7 @@
 #pragma once
 #include "RHIOpenGL/OpenGLPipeline/OpenGLGraphicPipeline.hpp"
 #include "RHIOpenGL/OpenGLRenderPass/OpenGLDeferredRenderPass.hpp"
+#include "RHIOpenGL/OpenGLRenderPass/OpenGLSkyboxRenderPass.hpp"
 #include "RHIOpenGL/OpenGLRenderPass/OpenGLStaticModelRenderPass.hpp"
 #include "RHIOpenGL/OpenGLRenderPass/OpenGLLightingRenderPass.hpp"
 #include "RHIOpenGL/OpenGLFrameBuffer.hpp"
@@ -22,8 +23,11 @@ namespace RHI::OpenGL
 
 	private:
 		OpenGLDeferredRenderPass* m_deferredRenderPass = nullptr;
+		OpenGLSkyboxRenderPass* m_skyboxRenderPass = nullptr;
 		OpenGLStaticModelRenderPass* m_staticModelRenderPass = nullptr;
 		OpenGLLightingRenderPass* m_lightingRenderPass = nullptr;
 		OpenGLFrameBuffer* m_FB = nullptr;
+		
+		Math::Vec4 m_backgroundColor{ 1.f, 0.f, 1.f, 1.f };
 	};
 }

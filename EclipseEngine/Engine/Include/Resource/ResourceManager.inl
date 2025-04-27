@@ -21,33 +21,21 @@ namespace Resource
 	{
 		const std::type_info& typeT = typeid(T);
 		const std::type_info& typeShaderProgram = typeid(ShaderProgram);
+		const std::type_info& typeSkybox = typeid(Skybox);
 		if (typeT == typeShaderProgram)
 		{
 			ShaderProgram* shaderResource = new ShaderProgram(_resourceName);
 			shaderResource->SetVertFragShader(_resourcePath1, _resourcePath2);
 			m_resourcesToGenerate[_resourceName] = shaderResource;
-			return shaderResource;
-		}
-
-		T* resource = new T(_resourceName);
-		m_resourcesToLoad[_resourceName] = resource;
-		m_resourcesPath[_resourceName] = _resourcePath1;
-		return resource;
-	}
-
-	template <typename T>
-	T* ResourceManager::AddResourceToLoad(std::string _resourceName, std::string _resourcePath1, std::string _resourcePath2, std::string _resourcePath3)
-	{
-		const std::type_info& typeT = typeid(T);
-		const std::type_info& typeSkybox = typeid(Skybox);
+			return dynamic_cast<T*>(shaderResource);
+		}		
 		if (typeT == typeSkybox)
 		{
 			Skybox* skyboxResource = new Skybox(_resourceName);
 			skyboxResource->SetModelName(_resourcePath2);
-			skyboxResource->SetShaderName(_resourcePath3);
 			m_resourcesToLoad[_resourceName] = skyboxResource;
 			m_resourcesPath[_resourceName] = _resourcePath1;
-			return skyboxResource;
+			return dynamic_cast<T*>(skyboxResource);
 		}
 
 		T* resource = new T(_resourceName);

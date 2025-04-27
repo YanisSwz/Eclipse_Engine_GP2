@@ -29,9 +29,6 @@ namespace RHI::OpenGL
 
 	void OpenGLStaticModelRenderPass::Draw(Math::Mat4 _VP, std::vector<Resource::ModelData> _models) const
 	{
-		glClearColor(0.f, 0.f, 0.f, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		for (Resource::ModelData modelData : _models)
 		{
 			modelData.shaderProgram->Bind();
