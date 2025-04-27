@@ -192,6 +192,12 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Bunny.img", "Assets/Textures/Bunny.jpg");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Earth.img", "Assets/Textures/Earth.jpg");
 
+
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("SkyboxShader.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("SkyboxShader.frag", "Assets/Shaders/Skybox/SkyboxShader.frag");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("SkyboxShader.shd", "SkyboxShader.vert", "SkyboxShader.frag");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Skybox>("Skybox.skb", "Assets/Skybox/Default", "Cube.obj");
+
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultDeferredRendering.vert", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.vert");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultDeferredRendering.frag", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.frag");
 	Resource::ShaderProgram* shaderProgramDeferredRendering = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DefaultDeferredRendering.shd", "DefaultDeferredRendering.vert", "DefaultDeferredRendering.frag");

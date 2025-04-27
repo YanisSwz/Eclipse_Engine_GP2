@@ -30,7 +30,7 @@ namespace RHI::OpenGL
 	{
 	}
 
-	void OpenGLLightingRenderPass::Draw(Math::Vec3 _viewPos, OpenGLFrameBuffer* _finalFB, GLuint _gPosition, GLuint _gNormal, GLuint _gAlbedoSpec, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLightsData, std::vector<RHI::PointLightData> _pointLightsData, std::vector<RHI::SpotLightData> _spotLightsData)
+	void OpenGLLightingRenderPass::Draw(Math::Vec3 _viewPos, GLuint _gPosition, GLuint _gNormal, GLuint _gAlbedoSpec, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLightsData, std::vector<RHI::PointLightData> _pointLightsData, std::vector<RHI::SpotLightData> _spotLightsData)
 	{
 		if (!m_shaderLight)
 		{
@@ -39,7 +39,6 @@ namespace RHI::OpenGL
 				return;
 		}
 
-		_finalFB->Bind();
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -63,7 +62,6 @@ namespace RHI::OpenGL
 
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		m_shaderLight->Unbind();
-		_finalFB->Unbind();
 	}
 
 	void OpenGLLightingRenderPass::SetDirLights(std::vector<RHI::DirLightData> _dirLightsData)

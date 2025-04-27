@@ -18,7 +18,6 @@ namespace Resource
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 		ECLIPSE_ENGINE void SetModelName(std::string _model);
-		ECLIPSE_ENGINE void SetShaderName(std::string _shader);
 
 		ECLIPSE_ENGINE void Draw();
 
@@ -29,9 +28,7 @@ namespace Resource
 
 		RHI::ICubeMap* m_cubeMap = nullptr;
 		Resource::Mesh* m_mesh = nullptr;
-		Resource::ShaderProgram* m_shaderProgram = nullptr;
 		std::string m_meshName = "";
-		std::string m_shaderProgramName = "";
 
 		TEXTURE_EXTENSION textureExtention = TEXTURE_EXTENSION::JPG;
 		std::vector<unsigned char*> m_data;
