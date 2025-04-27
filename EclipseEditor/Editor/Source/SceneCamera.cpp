@@ -19,13 +19,15 @@ void SceneCamera::Update(Windowing::IWindow* _window, float _deltaTime, Math::Ve
 void SceneCamera::UpdateInput(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize)
 {
 	Math::Vec2 cursorPos = _window->GetCursorPos();
+	
+	InputChangeSpeed(_window, _deltaTime);
+	
 	if (!_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN) || cursorPos.x < _sceneWindowPos.x || cursorPos.y < _sceneWindowPos.y || cursorPos.x > _sceneWindowSize.x + _sceneWindowPos.x || cursorPos.y > _sceneWindowSize.y + _sceneWindowPos.y)
 	{
 		_window->SetCursorMode(Windowing::CURSOR_MODE::CURSOR_VISIBLE);
 		return;
 	}
 
-	InputChangeSpeed(_window);
 	InputMove(_window, _deltaTime);
 
 	if (_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_PRESS))
@@ -45,15 +47,31 @@ void SceneCamera::UpdateInput(Windowing::IWindow* _window, float _deltaTime, Mat
 	}
 }
 
-void Core::SceneCamera::InputChangeSpeed(Windowing::IWindow* _window)
+void Core::SceneCamera::InputChangeSpeed(Windowing::IWindow* _window, float _deltaTime)
 {
+	if (bisMouseSpeedChanged)
+	{
+		if (m_timerBeforeTurnMouseSpeedChangedToOff > 0.f)
+		{
+			m_timerBeforeTurnMouseSpeedChangedToOff -= _deltaTime;
+			if (m_timerBeforeTurnMouseSpeedChangedToOff <= 0.f)
+				bisMouseSpeedChanged = false;
+		}
+	}
+
 	if (_window->GetMouseButton(Windowing::MOUSE_CODE::RIGHT_BUTTON, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		m_moveSpeed += (m_increaseSpeedValue * _window->GetMouseScrollValue());
-		if (m_moveSpeed > m_maxSpeed)
-			m_moveSpeed = m_maxSpeed;
-		else if (m_moveSpeed < m_minSpeed)
-			m_moveSpeed = m_minSpeed;
+		float deltaMouseScroll = _window->GetMouseScrollValue();
+		if (deltaMouseScroll != 0.f)
+		{
+			bisMouseSpeedChanged = true;
+			m_timerBeforeTurnMouseSpeedChangedToOff = m_delayBeforeTurnMouseSpeedChangedToOff;
+			m_moveSpeed += (m_increaseSpeedValue * deltaMouseScroll);
+			if (m_moveSpeed > m_maxSpeed)
+				m_moveSpeed = m_maxSpeed;
+			else if (m_moveSpeed < m_minSpeed)
+				m_moveSpeed = m_minSpeed;
+		}
 	}
 }
 
@@ -112,7 +130,7 @@ void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 	Math::Vec2 mouseDelta = (newMousePos - m_oldMouse) * m_mouseSensitivity * _deltaTime;
 
 	m_rotation.x -= mouseDelta.x;
-	if (m_rotation.y - mouseDelta.y < Math::Tools::PI / 2.f && m_rotation.y - mouseDelta.y > - Math::Tools::PI / 2.f)
+	if (m_rotation.y - mouseDelta.y < Math::Tools::PI / 2.f && m_rotation.y - mouseDelta.y > -Math::Tools::PI / 2.f)
 		m_rotation.y -= mouseDelta.y;
 
 	Math::Mat4 finalMatrix = Math::Mat4::RotationY(m_rotation.x) * Math::Mat4::RotationX(m_rotation.y);
@@ -142,4 +160,14 @@ Math::Mat4 SceneCamera::GetVP() const
 Math::Vec3 SceneCamera::GetViewPos() const
 {
 	return m_eye;
+}
+
+float SceneCamera::GetMouseSpeed() const
+{
+	return m_moveSpeed;
+}
+
+bool SceneCamera::MouseSpeedChanged() const
+{
+	return bisMouseSpeedChanged;
 }

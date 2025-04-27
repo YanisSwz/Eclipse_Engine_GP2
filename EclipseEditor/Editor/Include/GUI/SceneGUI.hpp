@@ -28,6 +28,7 @@ namespace GUI
 	private:
 		ImGuizmo::OPERATION m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 		ImGuizmo::MODE m_crtGizmoMode = ImGuizmo::MODE::LOCAL;
+		ImVec2 m_windowSizeCameraChangedSpeed{ 100.f, 100.f };
 
 		void DrawGizmo(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera);
 	};
