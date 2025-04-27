@@ -2,12 +2,12 @@
 
 namespace Core
 {
-	int Object::idCount = 0;
+	int Object::m_idCount = 0;
 
 	Object::Object()
 	{
-		m_id = idCount;
-		++idCount;
+		m_id = m_idCount;
+		++m_idCount;
 	}
 
 	int Object::GetID() const
@@ -17,23 +17,23 @@ namespace Core
 
 	void Object::Destroy()
 	{
-		active = false;
-		destroyed = true;
+		m_active = false;
+		m_destroyed = true;
 	}
 
 	bool Object::IsDestroyed() const
 	{
-		return destroyed;
+		return m_destroyed;
 	}
 
 	void Object::SetActive(bool _activate)
 	{
-		active = _activate;
+		m_active = _activate;
 	}
 
 	bool Object::IsActive() const
 	{
-		return active;
+		return m_active;
 	}
 
 	void Object::Destroy(Object* _obj)
