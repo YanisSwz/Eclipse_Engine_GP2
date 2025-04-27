@@ -7,41 +7,38 @@ namespace GUI
 {
 	Core::GameObject* HierarchyGUI::Draw(Core::Scene* _scene, Core::GameObject* _crtGOSelected)
 	{
+		Core::GameObject* newGameObjectSelected = nullptr;
+
 		ImGui::SetNextWindowSizeConstraints({ 200.f, 100.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
+		
+		if (ImGui::BeginPopupContextWindow("HierarchiePopUpMenu"))
+		{
+			if (ImGui::Button("Add Node"))
+			{
+				newGameObjectSelected = _scene->CreateGameObject();
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
 
 		std::vector<Core::Transform*> transforms = _scene->GetSystemManager()->GetTransformsRoot()->GetChildren();
 		for (Core::Transform* transform : transforms)
 		{
-			Core::GameObject* newGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
-			if (newGOSelected)
-			{
-				ImGui::End();
-				return newGOSelected;
-			}
-		}
-
-		if (ImGui::Button("Add Game Object"))
-		{
-			if (_crtGOSelected != nullptr)
-				_scene->CreateGameObject()->transform->SetParent(_crtGOSelected->transform);
-			else
-				_scene->CreateGameObject();
-		}
-
-		if (ImGui::Button("Destroy Game Object"))
-		{
-			if(_crtGOSelected != nullptr)
-				_crtGOSelected->Destroy();
+			Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
+			if (tempNewGOSelected)
+				newGameObjectSelected = tempNewGOSelected;
 		}
 
 		ImGui::End();
-		return nullptr;
+		return newGameObjectSelected;
 	}
 
 	Core::GameObject* HierarchyGUI::RecursiveDraw(Core::Transform* _crtTransform, Core::Scene* _scene, Core::GameObject* _crtGOSelected)
 	{
+		Core::GameObject* newGameObjectSelected = nullptr;
+
 		std::vector<Core::Transform*> transforms = _crtTransform->GetChildren();
 		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 		if (transforms.size() == 0)
@@ -53,23 +50,42 @@ namespace GUI
 		if (ImGui::TreeNodeEx(_crtTransform->GetGameObject()->GetName().c_str(), treeNodeFlags))
 		{
 			if (ImGui::IsItemClicked())
-			{
-				ImGui::TreePop();
-				return _crtTransform->GetGameObject();
-			}
+				newGameObjectSelected = _crtTransform->GetGameObject();
 
+			if (ImGui::BeginPopupContextItem("HierarchiePopUpMenu"))
+			{
+				newGameObjectSelected = _crtTransform->GetGameObject();
+				if (ImGui::Button("Add Node"))
+				{
+					if (_crtGOSelected)
+					{
+						newGameObjectSelected = _scene->CreateGameObject();
+						newGameObjectSelected->transform->SetParent(_crtGOSelected->transform);
+						ImGui::CloseCurrentPopup();
+					}
+					else
+					{
+						newGameObjectSelected = _scene->CreateGameObject();
+						ImGui::CloseCurrentPopup();
+					}
+				}
+
+				if (_crtGOSelected)
+				{
+					if (ImGui::Button("Delete Node"))
+						_crtGOSelected->Destroy();
+				}
+				ImGui::EndPopup();
+			}
 			for (Core::Transform* transform : transforms)
 			{
-				Core::GameObject* newGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
-				if (newGOSelected)
-				{
-					ImGui::TreePop();
-					return newGOSelected;
-				}
+				Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
+				if (tempNewGOSelected)
+					newGameObjectSelected = tempNewGOSelected;
 			}
-			
+
 			ImGui::TreePop();
 		}
-		return nullptr;
+		return newGameObjectSelected;
 	}
 }
