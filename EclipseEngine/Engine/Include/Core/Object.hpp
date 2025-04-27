@@ -17,7 +17,7 @@ namespace Core
 		ECLIPSE_ENGINE int GetID() const;
 
 	protected:
-		static int m_idCount;
+		static int idCount;
 		int m_id = -1;
 		bool m_active = false;
 		bool m_destroyed = false;

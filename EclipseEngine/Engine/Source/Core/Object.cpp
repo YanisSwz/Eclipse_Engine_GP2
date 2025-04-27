@@ -2,12 +2,12 @@
 
 namespace Core
 {
-	int Object::m_idCount = 0;
+	int Object::idCount = 0;
 
 	Object::Object()
 	{
-		m_id = m_idCount;
-		++m_idCount;
+		m_id = idCount;
+		++idCount;
 	}
 
 	int Object::GetID() const

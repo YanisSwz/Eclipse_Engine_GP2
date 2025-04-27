@@ -60,12 +60,12 @@ private:
 	GUI::ContentBrowseGUI m_contentBrowserGUI;
 	GUI::GameGUI m_gameGUI;
 
-	bool bisHierarchieWindowEnable = true;
-	bool bisInspectorWindowEnable = true;
-	bool bisSceneWindowEnable = true;
-	bool bisConsoleWindowEnable = true;
-	bool bisContentBrowserWindowEnable = true;
-	bool bisGameWindowEnable = true;
+	bool bIsHierarchieWindowEnabled = true;
+	bool bIsInspectorWindowEnabled = true;
+	bool bIsSceneWindowEnabled = true;
+	bool bIsConsoleWindowEnabled = true;
+	bool bIsContentBrowserWindowEnabled = true;
+	bool bIsGameWindowEnabled = true;
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();
