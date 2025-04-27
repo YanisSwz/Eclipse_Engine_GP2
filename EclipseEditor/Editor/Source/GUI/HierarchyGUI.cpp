@@ -13,7 +13,7 @@ namespace GUI
 		ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
 		
-		if (ImGui::BeginPopupContextWindow("HierarchiePopUpMenu"))
+		if (ImGui::BeginPopupContextWindow("HierarchyPopUpMenu"))
 		{
 			if (ImGui::Button("Add Node"))
 			{
@@ -52,7 +52,7 @@ namespace GUI
 			if (ImGui::IsItemClicked())
 				newGameObjectSelected = _crtTransform->GetGameObject();
 
-			if (ImGui::BeginPopupContextItem("HierarchiePopUpMenu"))
+			if (ImGui::BeginPopupContextItem("HierarchyPopUpMenu"))
 			{
 				newGameObjectSelected = _crtTransform->GetGameObject();
 				if (ImGui::Button("Add Node"))

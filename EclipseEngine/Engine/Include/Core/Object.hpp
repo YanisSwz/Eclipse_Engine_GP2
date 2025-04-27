@@ -18,7 +18,7 @@ namespace Core
 
 	protected:
 		static int idCount;
-		int m_id = -1;
+		int id = -1;
 		bool active = false;
 		bool destroyed = false;
 	};
