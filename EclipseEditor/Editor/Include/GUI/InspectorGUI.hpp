@@ -4,6 +4,7 @@
 namespace Core
 {
 	class GameObject;
+	class Component;
 	class Transform;
 	class Model;
 	class BoxCollider;
@@ -25,6 +26,7 @@ namespace GUI
 		void Draw(Core::GameObject* _crtGOSelected);
 
 	private:
+		void DrawDeleteComponentPopup(Core::Component* _component);
 		void DrawTransformComponent(Core::Transform* _transform);
 		void DrawModelComponent(Core::Model* _model);
 		void DrawBoxColliderComponent(Core::BoxCollider* _collider);
