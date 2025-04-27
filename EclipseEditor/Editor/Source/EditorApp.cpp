@@ -65,20 +65,58 @@ void EditorApp::Render()
 	m_sceneGUI.StartGizmo();
 	m_dockingGUI.Start();
 
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File", true))
+		{
+			if (ImGui::MenuItem("Save"))
+				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Save");
+			if (ImGui::MenuItem("Load"))
+				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Load");
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Window", true))
+		{
+			ImGui::MenuItem("Hierarchi", "", &bisHierarchieWindowEnable);
+			ImGui::MenuItem("Inspector", "", &bisInspectorWindowEnable);
+			ImGui::MenuItem("Scene", "", &bisSceneWindowEnable);
+			ImGui::MenuItem("Game", "", &bisGameWindowEnable);
+			ImGui::MenuItem("Content Browser", "", &bisContentBrowserWindowEnable);
+			ImGui::MenuItem("Console", "", &bisConsoleWindowEnable);
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+
 	if (m_crtGOSelected)
 	{
 		if (m_crtGOSelected->IsDestroyed())
 			m_crtGOSelected = nullptr;
 	}
-	Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
-	if (newGOSelected)
-		m_crtGOSelected = newGOSelected;
 
-	m_inspectorGUI.Draw(m_crtGOSelected);
-	m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
-	m_gameGUI.Draw();
-	m_consoleGUI.Draw();
-	m_contentBrowserGUI.Draw();
+	if (bisHierarchieWindowEnable)
+	{
+		Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
+		if (newGOSelected)
+			m_crtGOSelected = newGOSelected;
+	}
+
+	if (bisInspectorWindowEnable)
+		m_inspectorGUI.Draw(m_crtGOSelected);
+
+	if (bisSceneWindowEnable)
+		m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
+
+	if (bisGameWindowEnable)
+		m_gameGUI.Draw();
+
+	if (bisConsoleWindowEnable)
+		m_consoleGUI.Draw();
+
+	if (bisContentBrowserWindowEnable)
+		m_contentBrowserGUI.Draw();
+
 	GUI::EndFrame();
 
 	DrawScene();
