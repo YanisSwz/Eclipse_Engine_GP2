@@ -124,6 +124,11 @@ namespace Core
 		return &m_spotLights[m_currentSpotCount - 1];
 	}
 
+	void RenderSystem::SetAmbientLight(Math::Vec4 _ambientLight)
+	{
+		m_ambientLight = _ambientLight;
+	}
+
 	void RenderSystem::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos)
 	{
 		if (_renderInterface != nullptr && _pipeline != nullptr)
@@ -132,7 +137,7 @@ namespace Core
 			_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 			_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
-			_pipeline->Draw(_VP, _viewPos, GetStaticModels(), GetDirLights(), GetPointLights(), GetSpotLights());
+			_pipeline->Draw(_VP, _viewPos, GetStaticModels(), m_ambientLight, GetDirLights(), GetPointLights(), GetSpotLights());
 		}
 	}
 

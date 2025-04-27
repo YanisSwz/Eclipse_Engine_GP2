@@ -3,14 +3,6 @@
 
 namespace GUI
 {
-	ContentBrowseGUI::ContentBrowseGUI()
-	{
-	}
-
-	ContentBrowseGUI::~ContentBrowseGUI()
-	{
-	}
-
 	void ContentBrowseGUI::Init()
 	{
 		m_folderRoot = new FolderGUI("Root");
@@ -20,6 +12,7 @@ namespace GUI
 
 	void ContentBrowseGUI::Draw()
 	{
+		ImGui::SetNextWindowSizeConstraints({ 100.f, 200.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags contentBrowserWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Content Browser", 0, contentBrowserWindowFlags);
 

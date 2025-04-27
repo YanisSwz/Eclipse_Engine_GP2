@@ -5,8 +5,8 @@ namespace GUI
 	class DockingGUI
 	{
 	public:
-		DockingGUI();
-		~DockingGUI();
+		DockingGUI() = default;
+		~DockingGUI() = default;
 
 		void Start();
 		void End();

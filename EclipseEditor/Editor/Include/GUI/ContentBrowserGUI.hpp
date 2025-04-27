@@ -6,8 +6,8 @@ namespace GUI
 	class ContentBrowseGUI
 	{
 	public:
-		ContentBrowseGUI();
-		~ContentBrowseGUI();
+		ContentBrowseGUI() = default;
+		~ContentBrowseGUI() = default;
 
 		void Init();
 		void Draw();

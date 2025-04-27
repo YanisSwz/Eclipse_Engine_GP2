@@ -6,19 +6,13 @@
 
 namespace GUI
 {
-	ConsoleGUI::ConsoleGUI()
-	{
-	}
-
-	ConsoleGUI::~ConsoleGUI()
-	{
-	}
-
 	void ConsoleGUI::Draw()
 	{
+		ImGui::SetNextWindowSizeConstraints({ 300.f, 100.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags consoleWindowFlags = ImGuiWindowFlags_None;
-
 		ImGui::Begin("Console", 0, consoleWindowFlags);
+
+		ImGui::SetWindowFontScale(1.25f);
 
 		std::string filePath = Logging::Logger::GetInstance().GetFilePath();
 		

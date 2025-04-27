@@ -5,20 +5,14 @@
 
 namespace GUI
 {
-	SceneGUI::SceneGUI()
-	{
-	}
-
-	SceneGUI::~SceneGUI()
-	{
-	}
-
 	void SceneGUI::Draw(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera, const unsigned int _textureID, int& _windowWidth, int& _windowHeight, int& _windowPosX, int& _windowPosY)
 	{
+		ImGui::SetNextWindowSizeConstraints({ 300.f, 300.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags sceneWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Scene", 0, sceneWindowFlags);
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
+
 		_windowWidth = static_cast<int>(windowSize.x);
 		_windowHeight = static_cast<int>(windowSize.y);
 		_windowPosX = static_cast<int>(windowPos.x);
@@ -70,9 +64,6 @@ namespace GUI
 		else if (!ImGuizmo::IsUsingAny() && _crtGOSelected->transform->IsSelected())
 			_crtGOSelected->transform->EndOverride();
 
-
-		float viewManipulateRight = ImGui::GetWindowPos().x + (float)ImGui::GetWindowWidth();
-		float viewManipulateTop = ImGui::GetWindowPos().y;
 		float windowWidth = (float)ImGui::GetWindowWidth();
 		float windowHeight = (float)ImGui::GetWindowHeight();
 
@@ -120,11 +111,6 @@ namespace GUI
 			}
 
 			_crtGOSelected->transform->UpdateOverride();
-
 		}
-
-		ImGuizmo::ViewManipulate(const_cast<float*>(view.GetValuesPointer()), 8.f,
-			ImVec2(viewManipulateRight - 128.f, viewManipulateTop + 20.f),
-			ImVec2(128.f, 128.f), static_cast<ImU32>(0x00000000));
 	}
 }

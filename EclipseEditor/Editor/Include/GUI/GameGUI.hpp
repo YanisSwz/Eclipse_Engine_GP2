@@ -2,15 +2,14 @@
 
 namespace GUI
 {
-	class ConsoleGUI
+	class GameGUI
 	{
 	public:
-		ConsoleGUI() = default;
-		~ConsoleGUI() = default;
+		GameGUI() = default;
+		~GameGUI() = default;
 
 		void Draw();
 
 	private:
-
 	};
 }

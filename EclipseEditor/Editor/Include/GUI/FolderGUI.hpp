@@ -14,7 +14,7 @@ namespace GUI
 	{
 	public:
 		FolderGUI(std::string _name = "");
-		~FolderGUI();
+		~FolderGUI() = default;
 
 		std::string name;
 

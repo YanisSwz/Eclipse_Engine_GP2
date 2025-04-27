@@ -16,19 +16,18 @@ namespace Core
 	{
 	}
 
-	CapsuleCollider::CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, float _height, float _radius, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
+	CapsuleCollider::CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _scale, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{
 		b_isBodyDestroyed = false;
 		m_bodyInterface = _bodyInterface;
 		b_isDynamic = _isDynamic;
 		m_mass = _mass;
-		m_height = _height;
-		m_radius = _radius;
+		m_scale = _scale;
 		m_position = _pos;
 		m_rotation = Math::Quat::QuaternionEuler(_rot.x, _rot.y, _rot.z);
 		m_gameObject = _myGameObject;
 
-		JPH::CapsuleShapeSettings shapeSettings(m_height * 0.5f, m_radius);
+		JPH::CapsuleShapeSettings shapeSettings(m_scale.y * 0.5f, m_scale.x);
 		shapeSettings.SetEmbedded();
 		JPH::ShapeSettings::ShapeResult shapeResult = shapeSettings.Create();
 		JPH::ShapeRefC shape = shapeResult.Get();
@@ -60,35 +59,22 @@ namespace Core
 		Recreate();
 	}
 
-	void CapsuleCollider::ScaleHeight(float _height)
+	void CapsuleCollider::Scale(float _scaleX, float _scaleY, float _scaleZ)
 	{
-		m_height = _height;
+		if (_scaleX <= 0.f || _scaleY <= 0.f || _scaleZ <= 0.f)
+			return;
+
+		m_scale = { _scaleX, _scaleY, _scaleZ };
 		Recreate();
 	}
 
-	void CapsuleCollider::ScaleRadius(float _radius)
+	void CapsuleCollider::Scale(Math::Vec3 _scale)
 	{
-		m_radius = _radius;
+		if (_scale.x <= 0.f || _scale.y <= 0.f || _scale.z <= 0.f)
+			return;
+
+		m_scale = _scale;
 		Recreate();
-	}
-
-	void CapsuleCollider::ScaleHeightRadius(float _height, float _radius)
-	{
-		m_height = _height;
-		m_radius = _radius;
-		Recreate();
-	}
-
-	void CapsuleCollider::SetPosRotHeightRadius(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ, float _height, float _radius)
-	{
-		SetPosRot({ _posX, _posY, _posZ }, Math::Vec3{ _rotX, _rotY, _rotZ });
-		ScaleHeightRadius(_height, _radius);
-	}
-
-	void CapsuleCollider::SetPosRotHeightRadius(Math::Vec3 _position, Math::Vec3 _rotation, float _height, float _radius)
-	{
-		SetPosRot(_position, _rotation);
-		ScaleHeightRadius(_height, _radius);
 	}
 
 	void CapsuleCollider::Recreate()
@@ -96,6 +82,6 @@ namespace Core
 		Core::GameObject* gameObject = m_gameObject;
 		UpdateData();
 		this->~CapsuleCollider();
-		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_mass, m_height, m_radius, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject);
+		new (this) CapsuleCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject);
 	}
 }

@@ -12,8 +12,8 @@ namespace GUI
 	class HierarchyGUI
 	{
 	public:
-		HierarchyGUI();
-		~HierarchyGUI();
+		HierarchyGUI() = default;
+		~HierarchyGUI() = default;
 
 		Core::GameObject* Draw(Core::Scene* _scene, Core::GameObject* _crtGOSelected);
 		Core::GameObject* RecursiveDraw(Core::Transform* _crtTransform, Core::Scene* _scene, Core::GameObject* _crtGOSelected);

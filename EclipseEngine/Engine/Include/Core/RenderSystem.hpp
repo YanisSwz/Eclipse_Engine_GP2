@@ -20,6 +20,7 @@ namespace Core
 		ECLIPSE_ENGINE DirectionalLight* AddDirLight();
 		ECLIPSE_ENGINE PointLight* AddPointLight();
 		ECLIPSE_ENGINE SpotLight* AddSpotLight();
+		ECLIPSE_ENGINE void SetAmbientLight(Math::Vec4 _ambientLight);
 
 		ECLIPSE_ENGINE void Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos);
 
@@ -37,6 +38,7 @@ namespace Core
 		DirectionalLight m_directionalLights[MAX_LIGHTS_SIZE];
 		PointLight m_pointLights[MAX_LIGHTS_SIZE];
 		SpotLight m_spotLights[MAX_LIGHTS_SIZE];
+		Math::Vec4 m_ambientLight = Math::Vec4(1.f, 1.f, 1.f, 0.25f);
 
 		std::vector<Resource::ModelData> GetStaticModels() const;
 
