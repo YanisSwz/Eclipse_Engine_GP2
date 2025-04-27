@@ -76,14 +76,14 @@ void EditorApp::Render()
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Window", true))
+		if (ImGui::BeginMenu("Windows", true))
 		{
-			ImGui::MenuItem("Hierarchi", "", &bisHierarchieWindowEnable);
-			ImGui::MenuItem("Inspector", "", &bisInspectorWindowEnable);
-			ImGui::MenuItem("Scene", "", &bisSceneWindowEnable);
-			ImGui::MenuItem("Game", "", &bisGameWindowEnable);
-			ImGui::MenuItem("Content Browser", "", &bisContentBrowserWindowEnable);
-			ImGui::MenuItem("Console", "", &bisConsoleWindowEnable);
+			ImGui::MenuItem("Hierarchy", "", &bIsHierarchieWindowEnabled);
+			ImGui::MenuItem("Inspector", "", &bIsInspectorWindowEnabled);
+			ImGui::MenuItem("Scene", "", &bIsSceneWindowEnabled);
+			ImGui::MenuItem("Game", "", &bIsGameWindowEnabled);
+			ImGui::MenuItem("Content Browser", "", &bIsContentBrowserWindowEnabled);
+			ImGui::MenuItem("Console", "", &bIsConsoleWindowEnabled);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -95,26 +95,26 @@ void EditorApp::Render()
 			m_crtGOSelected = nullptr;
 	}
 
-	if (bisHierarchieWindowEnable)
+	if (bIsHierarchieWindowEnabled)
 	{
 		Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
 		if (newGOSelected)
 			m_crtGOSelected = newGOSelected;
 	}
 
-	if (bisInspectorWindowEnable)
+	if (bIsInspectorWindowEnabled)
 		m_inspectorGUI.Draw(m_crtGOSelected);
 
-	if (bisSceneWindowEnable)
+	if (bIsSceneWindowEnabled)
 		m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
 
-	if (bisGameWindowEnable)
+	if (bIsGameWindowEnabled)
 		m_gameGUI.Draw();
 
-	if (bisConsoleWindowEnable)
+	if (bIsConsoleWindowEnabled)
 		m_consoleGUI.Draw();
 
-	if (bisContentBrowserWindowEnable)
+	if (bIsContentBrowserWindowEnabled)
 		m_contentBrowserGUI.Draw();
 
 	GUI::EndFrame();

@@ -168,8 +168,8 @@ namespace Core
 			if (!m_children[i]->IsDestroyed())
 				m_children[i]->GetGameObject()->Destroy();
 		}
-		active = false;
-		destroyed = true;
+		m_active = false;
+		m_destroyed = true;
 	}
 
 	void Transform::SetPosition(Math::Vec3 _vec)

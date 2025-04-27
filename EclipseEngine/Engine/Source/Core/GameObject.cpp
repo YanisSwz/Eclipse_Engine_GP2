@@ -23,7 +23,7 @@ namespace Core
 			transform->SetGameObject(this);
 		}
 
-		active = true;
+		m_active = true;
 	}
 
 	GameObject::~GameObject()
@@ -34,13 +34,13 @@ namespace Core
 
 	void GameObject::Destroy()
 	{
-		active = false;
+		m_active = false;
 		transform->Destroy();
 		for (int i = 0; i < m_components.size(); ++i)
 		{
 			m_components[i]->Destroy();
 		}
-		destroyed = true;
+		m_destroyed = true;
 	}
 
 	void GameObject::Destroy(GameObject* _obj)

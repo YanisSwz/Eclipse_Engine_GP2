@@ -17,23 +17,23 @@ namespace Core
 
 	void Object::Destroy()
 	{
-		active = false;
-		destroyed = true;
+		m_active = false;
+		m_destroyed = true;
 	}
 
 	bool Object::IsDestroyed() const
 	{
-		return destroyed;
+		return m_destroyed;
 	}
 
 	void Object::SetActive(bool _activate)
 	{
-		active = _activate;
+		m_active = _activate;
 	}
 
 	bool Object::IsActive() const
 	{
-		return active;
+		return m_active;
 	}
 
 	void Object::Destroy(Object* _obj)

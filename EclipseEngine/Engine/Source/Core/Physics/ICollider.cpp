@@ -189,8 +189,8 @@ namespace Core
 	
 	void ICollider::Destroy()
 	{
-		active = false;
-		destroyed = true;
+		m_active = false;
+		m_destroyed = true;
 		Delete();
 	}
 
