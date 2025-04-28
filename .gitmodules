@@ -7,3 +7,6 @@
 [submodule "EclipseEngine/Libs/TinyOBJ"]
 	path = EclipseEngine/Libs/TinyOBJ
 	url = https://github.com/tinyobjloader/tinyobjloader
+[submodule "EclipseEngine/Libs/Meta"]
+	path = EclipseEngine/Libs/Meta
+	url = https://github.com/skypjack/meta
