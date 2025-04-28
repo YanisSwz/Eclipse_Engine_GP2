@@ -37,6 +37,7 @@ namespace GUI
 			if (_crtGOSelected->name.size() == 0)
 				_crtGOSelected->name = "GameObject" + std::to_string(_crtGOSelected->GetID());
 		}
+		GUI::CheckBox("Active", "##", &_crtGOSelected->GetActiveRef());
 		ImGui::NewLine();
 
 		DrawTransformComponent(_crtGOSelected->transform);

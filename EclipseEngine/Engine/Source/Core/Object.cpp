@@ -36,6 +36,11 @@ namespace Core
 		return m_active;
 	}
 
+	bool& Object::GetActiveRef()
+	{
+		return m_active;
+	}
+
 	void Object::Destroy(Object* _obj)
 	{
 		_obj->Destroy();
