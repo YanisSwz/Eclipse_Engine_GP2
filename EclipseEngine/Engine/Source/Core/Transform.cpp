@@ -1,5 +1,6 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
+#include "Logging/Logger.hpp"
 #include <utility>
 
 namespace Core
@@ -239,31 +240,36 @@ namespace Core
 			m_positionChanged = true;
 	}
 
-
-	// TODO: check if local rotation setters are correct
 	void Transform::SetLocalRotation(Math::Quat _quat)
 	{
 		m_localRotation = _quat;
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_rotation = m_parent->m_rotation * m_localRotation;
+		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
-		m_right = m_localRotation.Rotate(Math::Vec3::right);
-		m_up = m_localRotation.Rotate(Math::Vec3::up);
-		m_forward = m_localRotation.Rotate(Math::Vec3::forward);
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
 
 		// If we rotate parent, children move in space
 		if (m_children.size() > 0)
 			m_positionChanged = true;
 	}
+
 	void Transform::SetLocalEulerAngles(Math::Vec3 _vec)
 	{
 		m_localEulerAngles = _vec;
+		m_localRotation = Math::Quat::QuaternionEuler(m_localEulerAngles.x, m_localEulerAngles.y, m_localEulerAngles.z);
+		m_rotation = m_parent->m_rotation * m_localRotation;
+		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
-		m_right = m_localRotation.Rotate(Math::Vec3::right);
-		m_up = m_localRotation.Rotate(Math::Vec3::up);
-		m_forward = m_localRotation.Rotate(Math::Vec3::forward);
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
 
 		// If we rotate parent, children move in space
 		if (m_children.size() > 0)
