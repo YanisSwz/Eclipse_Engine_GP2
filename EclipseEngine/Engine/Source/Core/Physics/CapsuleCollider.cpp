@@ -12,7 +12,16 @@ using namespace JPH::literals;
 
 namespace Core
 {
-
+	meta::factory<CapsuleCollider> CapsuleCollider::factory = meta::reflect<CapsuleCollider>(m_hash("CapsuleCollider"))
+		.data<&CapsuleCollider::m_active>(m_hash("IsActive"))
+		.func<&CapsuleCollider::GetIsDynamic>(m_hash("GetIsDynamic"))
+		.func<&CapsuleCollider::GetMass>(m_hash("GetMass"))
+		.func<&CapsuleCollider::GetOffsetPos>(m_hash("GetPositionOffset"))
+		.func<&CapsuleCollider::GetScale>(m_hash("GetScale"))
+		.func<&CapsuleCollider::SetDynamic>(m_hash("SetIsDynamic"))
+		.func<&CapsuleCollider::SetMass>(m_hash("SetMass"));
+		//.func<&BoxCollider::SetOffsetPos<Math::Vec3>>(m_hash("SetPositionOffset"))
+		//.func<&BoxCollider::Scale>(m_hash("SetScale"));
 
 	CapsuleCollider::CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _scale, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{

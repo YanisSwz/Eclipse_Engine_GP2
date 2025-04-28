@@ -22,7 +22,7 @@ namespace Core
 		.func<&BoxCollider::GetScale>(m_hash("GetScale"))
 		.func<&BoxCollider::SetDynamic>(m_hash("SetIsDynamic"))
 		.func<&BoxCollider::SetMass>(m_hash("SetMass"));
-		//.func<&BoxCollider::SetOffsetPos>(m_hash("SetPositionOffset"))
+		//.func<&BoxCollider::SetOffsetPos<Math::Vec3>>(m_hash("SetPositionOffset"))
 		//.func<&BoxCollider::Scale>(m_hash("SetScale"));
 
 	BoxCollider::BoxCollider()

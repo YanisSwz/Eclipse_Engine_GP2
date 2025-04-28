@@ -14,6 +14,17 @@ using namespace JPH::literals;
 
 namespace Core
 {
+	meta::factory<MeshCollider> MeshCollider::factory = meta::reflect<MeshCollider>(m_hash("MeshCollider"))
+		.data<&MeshCollider::m_active>(m_hash("IsActive"))
+		.func<&MeshCollider::GetIsDynamic>(m_hash("GetIsDynamic"))
+		.func<&MeshCollider::GetMass>(m_hash("GetMass"))
+		.func<&MeshCollider::GetOffsetPos>(m_hash("GetPositionOffset"))
+		.func<&MeshCollider::GetScale>(m_hash("GetScale"))
+		.func<&MeshCollider::SetDynamic>(m_hash("SetIsDynamic"))
+		.func<&MeshCollider::SetMass>(m_hash("SetMass"));
+		//.func<&MeshCollider::SetOffsetPos<Math::Vec3>>(m_hash("SetPositionOffset"))
+		//.func<&MeshCollider::Scale>(m_hash("SetScale"));
+
 	MeshCollider::MeshCollider()
 	{
 	}
