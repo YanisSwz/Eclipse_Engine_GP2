@@ -12,9 +12,7 @@ using namespace JPH::literals;
 
 namespace Core
 {
-	CapsuleCollider::CapsuleCollider()
-	{
-	}
+
 
 	CapsuleCollider::CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _scale, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{

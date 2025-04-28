@@ -1,12 +1,15 @@
 #pragma once
 #include "ICollider.hpp"
 #include "ProjectExports.hpp"
+#include "meta/factory.hpp"
 
 namespace Core
 {
 	class CapsuleCollider : public ICollider
 	{
 	public:
+		static meta::factory<CapsuleCollider> factory;
+
 		ECLIPSE_ENGINE CapsuleCollider();
 		ECLIPSE_ENGINE CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic = false, float _mass = 1.f, Math::Vec3 _scale = {1.f, 1.f, 1.f}, Math::Vec3 _pos = {0.f, 0.f, 0.f}, Math::Vec3 _rot = {0.f, 0.f, 0.f}, GameObject* _myGameObject = nullptr);
 		ECLIPSE_ENGINE ~CapsuleCollider() override;
@@ -16,6 +19,7 @@ namespace Core
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale) override;
 
 	private:
+		static std::hash<std::string_view> m_hash;
 		
 		void Recreate() override;
 	};

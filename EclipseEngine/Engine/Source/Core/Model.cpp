@@ -3,18 +3,16 @@
 
 namespace Core
 {
-	Model::Model()
-	{
-	}
+	meta::factory<Model> Model::factory = meta::reflect<Model>(m_hash("Model"))
+		.data<&Model::m_active>(m_hash("IsActive"))
+		.data<&Model::mesh>(m_hash("Mesh"))
+		.data<&Model::texture>(m_hash("Texture"))
+		.data<&Model::shader>(m_hash("Shader"));
 
 	Model::Model(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader)
 		:mesh(_mesh), texture(_texture), shader(_shader)
 	{
 
-	}
-
-	Model::~Model()
-	{
 	}
 
 	Resource::ModelData Model::GetModelData() const
