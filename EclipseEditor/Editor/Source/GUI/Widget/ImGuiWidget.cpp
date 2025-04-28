@@ -32,7 +32,7 @@ namespace GUI
 		std::string invisibleLabel = "##";
 		invisibleLabel.append(_invisibleLabel);
 		ImGui::PushID(invisibleLabel.c_str());
-		ImGui::Columns(2);
+		ImGui::Columns(2, 0, false);
 		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
 			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
 		else
@@ -60,7 +60,7 @@ namespace GUI
 
 		// Draw widget label
 		ImGui::PushID(_label);
-		ImGui::Columns(2);
+		ImGui::Columns(2, 0, false);
 		if((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
 			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth()/4.f);
 		else
@@ -128,85 +128,6 @@ namespace GUI
 		return changed;
 	}
 
-	bool DragQuatXYZ(const char* _label, Math::Quat& _quat, float _resetValue, float _maxColumnWidth)
-	{
-		bool changed = false;
-
-		ImGuiIO& io = ImGui::GetIO();
-		auto boldFont = io.Fonts->Fonts[0];
-		Math::Vec3 vec = _quat.GetEulerAnglesDegXYZ();
-
-		// Draw widget label
-		ImGui::PushID(_label);
-		ImGui::Columns(2);
-		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
-			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
-		else
-			ImGui::SetColumnWidth(0, _maxColumnWidth);
-		ImGui::TextWrapped(_label);
-		ImGui::NextColumn();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
-		float lineHeight = ImGui::GetFrameHeight();
-		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
-
-		// Draw X
-		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 3.f);
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("X", buttonSize))
-			vec.x = _resetValue;
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		changed |= ImGui::DragFloat("##X", &vec.x, 0.1f, 0.0f, 0.0f, "%.2f");
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-
-		// Draw Y
-		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 3.f);
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Y", buttonSize))
-			vec.y = _resetValue;
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		changed |= ImGui::DragFloat("##Y", &vec.y, 0.1f, 0.0f, 0.0f, "%.2f");
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-		// Draw Z
-		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 3.f);
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Z", buttonSize))
-			vec.z = _resetValue;
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		changed |= ImGui::DragFloat("##Z", &vec.z, 0.1f, 0.0f, 0.0f, "%.2f");
-		ImGui::PopItemWidth();
-
-		ImGui::PopStyleVar();
-		ImGui::Columns(1);
-		ImGui::PopID();
-
-		_quat = Math::Quat::QuaternionEuler(vec.x, vec.y, vec.z);
-
-		return changed;
-	}
-
 	void DrawImage(const char* _imageName, unsigned int _imageID, float _size)
 	{
 		ImVec2 uv_min = ImVec2(0.0f, 1.0f);
@@ -221,7 +142,7 @@ namespace GUI
 		std::string invisibleComboName = "##";
 		invisibleComboName.append(_comboName).append("(w/ filter)");
 		ImGui::PushID(invisibleComboName.c_str());
-		ImGui::Columns(2);
+		ImGui::Columns(2, 0, false);
 		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
 			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
 		else
@@ -263,7 +184,7 @@ namespace GUI
 		std::string invisibleCheckBoxName = "##";
 		invisibleCheckBoxName.append(_invisibleCheckBoxName);
 		ImGui::PushID(invisibleCheckBoxName.c_str());
-		ImGui::Columns(2);
+		ImGui::Columns(2, 0, false);
 		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
 			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
 		else
