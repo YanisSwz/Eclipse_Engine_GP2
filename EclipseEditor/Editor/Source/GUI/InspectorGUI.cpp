@@ -22,7 +22,7 @@ namespace GUI
 
 	void InspectorGUI::Draw(Core::GameObject* _crtGOSelected)
 	{
-		ImGui::SetNextWindowSizeConstraints({ 400.f, 50.f }, ImGui::GetMainViewport()->Size);
+		ImGui::SetNextWindowSizeConstraints({ 500.f, 100.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags inspectorWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Inspector", 0, inspectorWindowFlags);
 
@@ -73,7 +73,7 @@ namespace GUI
 				_transform->SetPositionChanged();
 			if (GUI::DragVec3XYZ("Rotation", _transform->GetLocalEulerAnglesRef()))
 				_transform->SetRotationChanged();
-			if (GUI::DragVec3XYZ("Scale", _transform->GetLocalScaleRef(), 1.f))
+			if (GUI::DragUniformVec3XYZ("Scale", _transform->GetLocalScaleRef(), bIsScaleLocked, m_scaleFactor, 1.f))
 				_transform->SetScaleChanged();
 
 			ImGui::TreePop();
@@ -287,7 +287,7 @@ namespace GUI
 			ImGui::EndPopup();
 		}
 
-		if (bisComponentAlreadyAddedWindowEnable)
+		if (bIsComponentAlreadyAddedWindowEnable)
 			ImGui::OpenPopup("ComponentAlreadyAddedWindowModal");
 
 		if (ImGui::BeginPopupModal("ComponentAlreadyAddedWindowModal", 0, m_alreadyAddComponentWindowFlags))
@@ -295,7 +295,7 @@ namespace GUI
 			ImGui::Text("This component has already been added to this object!");
 			if (ImGui::Button("Close"))
 			{
-				bisComponentAlreadyAddedWindowEnable = false;
+				bIsComponentAlreadyAddedWindowEnable = false;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
@@ -319,7 +319,7 @@ namespace GUI
 				}
 				else
 				{
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				}
 				ImGui::CloseCurrentPopup();
 			}
@@ -337,7 +337,7 @@ namespace GUI
 				if (!boxCollider)
 					boxCollider = _crtGOSelected->AddComponent<Core::BoxCollider>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::Button("Capsule Collider", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
@@ -346,7 +346,7 @@ namespace GUI
 				if (!capsuleCollider)
 					capsuleCollider = _crtGOSelected->AddComponent<Core::CapsuleCollider>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::Button("Mesh Collider", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
@@ -355,7 +355,7 @@ namespace GUI
 				if (!meshCollider)
 					meshCollider = _crtGOSelected->AddComponent<Core::MeshCollider>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::TreePop();
@@ -372,7 +372,7 @@ namespace GUI
 				if (!directionalLight)
 					directionalLight = _crtGOSelected->AddComponent<Core::DirectionalLight>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::Button("Point Light", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
@@ -381,7 +381,7 @@ namespace GUI
 				if (!pointLight)
 					pointLight = _crtGOSelected->AddComponent<Core::PointLight>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::Button("Spot Light", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
@@ -390,7 +390,7 @@ namespace GUI
 				if (!SpotLight)
 					SpotLight = _crtGOSelected->AddComponent<Core::SpotLight>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::TreePop();
