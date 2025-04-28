@@ -4,6 +4,15 @@
 
 namespace Core
 {
+	meta::factory<Transform> Transform::factory = meta::reflect<Transform>(m_hash("Transform"))
+		.func<&Transform::GetLocalPositionRef>(m_hash("GetLocalPosition"))
+		.func<&Transform::GetLocalScaleRef>(m_hash("GetLocalScale"))
+		.func<&Transform::GetLocalEulerAnglesRef>(m_hash("GetLocalRotation"))
+		.func<&Transform::UpdatePosition>(m_hash("UpdatePosition"))
+		.func<&Transform::UpdateScale>(m_hash("UpdateScale"))
+		.func<&Transform::UpdateRotation>(m_hash("UpdateRotation"));
+
+
 	Transform::Transform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)
 	{
 		m_localPosition = _translation, m_position = _translation;

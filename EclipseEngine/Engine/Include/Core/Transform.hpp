@@ -3,12 +3,15 @@
 #include "Component.hpp"
 #include "ProjectExports.hpp"
 #include <vector>
+#include "meta/factory.hpp"
 
 namespace Core
 {
 	class Transform : public Component
 	{
 	public:
+		static meta::factory<Transform> factory;
+
 		ECLIPSE_ENGINE Transform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE ~Transform();
 
@@ -62,6 +65,8 @@ namespace Core
 		ECLIPSE_ENGINE void SetRotationChanged();
 
 	private:
+		static std::hash<std::string_view> m_hash;
+
 		Math::Mat4 GetLocalTransformMatrix() const;
 		void UpdatePosition();
 		void UpdateScale();

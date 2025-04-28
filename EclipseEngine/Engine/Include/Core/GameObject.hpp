@@ -7,12 +7,15 @@
 #include "MonoBehaviour.hpp"
 #include "SystemManager.hpp"
 #include "ProjectExports.hpp"
+#include "meta/factory.hpp"
 
 namespace Core
 {
 	class GameObject : public Object
 	{
 	public:
+		static meta::factory<GameObject> factory;
+
 		ECLIPSE_ENGINE GameObject() = default;
 		ECLIPSE_ENGINE GameObject(SystemManager* _manager, Transform* _t = nullptr, std::string _name = "default");
 		ECLIPSE_ENGINE ~GameObject();
@@ -84,6 +87,8 @@ namespace Core
 		}
 
 	private:
+		static std::hash<std::string_view> m_hash;
+
 		std::vector<Component*> m_components{};
 		SystemManager* m_systemManager = nullptr;
 	};
