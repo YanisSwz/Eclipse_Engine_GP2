@@ -191,6 +191,7 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Avion.img", "Assets/Textures/Avion.jpg");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Bunny.img", "Assets/Textures/Bunny.jpg");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Earth.img", "Assets/Textures/Earth.jpg");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("WhiteTexture.img", "Assets/Textures/WhiteTexture.png");
 
 
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("SkyboxShader.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");

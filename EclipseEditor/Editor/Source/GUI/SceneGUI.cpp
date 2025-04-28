@@ -13,6 +13,27 @@ namespace GUI
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
 
+		if (_camera->MouseSpeedChanged())
+		{
+			ImGui::SetNextWindowSize(m_windowSizeCameraChangedSpeed);
+			ImGui::SetNextWindowPos({ windowPos.x + windowSize.x / 2.f - m_windowSizeCameraChangedSpeed.x / 2.f, windowPos.y + windowSize.y / 2.f - m_windowSizeCameraChangedSpeed.y / 2.f });
+			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground;
+			ImGui::Begin("MouseSpeedChangedWindow", 0, mouseSpeedChangedWindowFlags);
+
+			// Increase font size
+			ImGui::GetFont()->Scale = 3.f;
+			ImGui::PushFont(ImGui::GetFont());
+			ImGui::PopFont();
+
+			ImGui::Text("%.2f", _camera->GetMouseSpeed());
+			
+			// Reset font size
+			ImGui::GetFont()->Scale = 1.f;
+			ImGui::PushFont(ImGui::GetFont());
+			ImGui::PopFont();
+			ImGui::End();
+		}
+
 		_windowWidth = static_cast<int>(windowSize.x);
 		_windowHeight = static_cast<int>(windowSize.y);
 		_windowPosX = static_cast<int>(windowPos.x);

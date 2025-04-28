@@ -18,10 +18,12 @@ namespace Core
 		Math::Mat4 GetProjection() const;
 		Math::Mat4 GetVP() const;
 		Math::Vec3 GetViewPos() const;
+		float GetMouseSpeed() const;
+		bool MouseSpeedChanged() const;
 
 	private:
 		void UpdateInput(Windowing::IWindow* _window, float _deltaTime, Math::Vec2 _sceneWindowPos, Math::Vec2 _sceneWindowSize);
-		void InputChangeSpeed(Windowing::IWindow* _window);
+		void InputChangeSpeed(Windowing::IWindow* _window, float _deltaTime);
 		void InputMove(Windowing::IWindow* _window, float _deltaTime);
 		void InputRotation(Windowing::IWindow* _window, float _deltaTime);
 
@@ -31,7 +33,10 @@ namespace Core
 
 		float m_minSpeed = 0.1f;
 		float m_maxSpeed = 10.f;
-		float m_increaseSpeedValue = 0.1f;
+		float m_increaseSpeedValue = 0.2f;
+		float m_delayBeforeTurnMouseSpeedChangedToOff = 2.f;
+		float m_timerBeforeTurnMouseSpeedChangedToOff = 0.f;
+		bool bisMouseSpeedChanged = false;
 
 		int m_width = 0;
 		int m_height = 0;
