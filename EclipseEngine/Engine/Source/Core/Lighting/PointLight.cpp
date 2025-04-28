@@ -3,13 +3,12 @@
 
 namespace Core
 {
-	PointLight::PointLight()
-	{
-	}
-
-	PointLight::~PointLight()
-	{
-	}
+	meta::factory<PointLight> PointLight::factory = meta::reflect<PointLight>(m_hash("PointLight"))
+		.data<&PointLight::m_active>(m_hash("IsActive"))
+		.data<&PointLight::m_color>(m_hash("Color"))
+		.data<&PointLight::m_constantAttenuation>(m_hash("ConstantAttenuation"))
+		.data<&PointLight::m_linearAttenuation>(m_hash("LinearAttenuation"))
+		.data<&PointLight::m_quadraticAttenuation>(m_hash("QuadraticAttenuation"));
 
 	RHI::PointLightData PointLight::GetData() const
 	{

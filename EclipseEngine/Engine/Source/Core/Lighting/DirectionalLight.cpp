@@ -3,13 +3,9 @@
 
 namespace Core
 {
-	DirectionalLight::DirectionalLight()
-	{
-	}
-
-	DirectionalLight::~DirectionalLight()
-	{
-	}
+	meta::factory<DirectionalLight> DirectionalLight::factory = meta::reflect<DirectionalLight>(m_hash("DirectionalLight"))
+		.data<&DirectionalLight::m_active>(m_hash("IsActive"))
+		.data<&DirectionalLight::m_color>(m_hash("Color"));
 
 	RHI::DirLightData DirectionalLight::GetData() const
 	{

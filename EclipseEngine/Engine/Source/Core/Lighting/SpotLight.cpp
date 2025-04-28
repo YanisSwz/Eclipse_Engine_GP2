@@ -3,13 +3,14 @@
 
 namespace Core
 {
-	SpotLight::SpotLight()
-	{
-	}
-
-	SpotLight::~SpotLight()
-	{
-	}
+	meta::factory<SpotLight> SpotLight::factory = meta::reflect<SpotLight>(m_hash("SpotLight"))
+		.data<&SpotLight::m_active>(m_hash("IsActive"))
+		.data<&SpotLight::m_color>(m_hash("Color"))
+		.data<&SpotLight::m_innerCutOff>(m_hash("InnerCutoff"))
+		.data<&SpotLight::m_outerCutOff>(m_hash("OuterCutoff"))
+		.data<&SpotLight::m_constantAttenuation>(m_hash("ConstantAttenuation"))
+		.data<&SpotLight::m_linearAttenuation>(m_hash("LinearAttenuation"))
+		.data<&SpotLight::m_quadraticAttenuation>(m_hash("QuadraticAttenuation"));
 
 	RHI::SpotLightData SpotLight::GetData() const
 	{

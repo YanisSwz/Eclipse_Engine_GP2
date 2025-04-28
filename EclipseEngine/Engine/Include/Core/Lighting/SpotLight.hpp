@@ -2,18 +2,23 @@
 #include "ProjectExports.hpp"
 #include "Lighting/ILight.hpp"
 #include "RHIInterfaces/Lights.hpp"
+#include "meta/factory.hpp"
 
 namespace Core
 {
 	class SpotLight : public ILight
 	{
 	public:
-		ECLIPSE_ENGINE SpotLight();
-		ECLIPSE_ENGINE ~SpotLight();
+		static meta::factory<SpotLight> factory;
+
+		ECLIPSE_ENGINE SpotLight() = default;
+		ECLIPSE_ENGINE ~SpotLight() = default;
 
 		ECLIPSE_ENGINE RHI::SpotLightData GetData() const;
 
 	private:
+		static std::hash<std::string_view> m_hash;
+
 		float m_innerCutOff = 0.91f;
 		float m_outerCutOff = 0.82f;
 		float m_constantAttenuation = 1.f;
