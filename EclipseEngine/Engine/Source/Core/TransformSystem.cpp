@@ -6,7 +6,6 @@ namespace Core
 	{
 		m_data[m_currentCount].~Transform();
 		new (&m_data[m_currentCount]) Transform();
-		m_data[m_currentCount].SetActive(true);
 		m_root = &m_data[m_currentCount];
 		++m_currentCount;
 	}
@@ -27,7 +26,6 @@ namespace Core
 				{
 					m_data[i].SetParent(m_root);
 				}
-				m_data[i].SetActive(true);
 				return &m_data[i];
 			}
 		}
@@ -39,7 +37,6 @@ namespace Core
 			m_data[m_currentCount].SetParent(m_root);
 			m_root->AddChild(&m_data[m_currentCount]);
 		}
-		m_data[m_currentCount].SetActive(true);
 		++m_currentCount;
 		return &m_data[m_currentCount-1];
 	}
