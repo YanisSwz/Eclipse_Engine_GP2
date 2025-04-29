@@ -20,17 +20,9 @@ namespace GUI
 			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground;
 			ImGui::Begin("MouseSpeedChangedWindow", 0, mouseSpeedChangedWindowFlags);
 
-			// Increase font size
-			ImGui::GetFont()->Scale = 3.f;
-			ImGui::PushFont(ImGui::GetFont());
-			ImGui::PopFont();
-
+			ImGui::SetWindowFontScale(3.f);
 			ImGui::Text("%.2f", _camera->GetMouseSpeed());
 			
-			// Reset font size
-			ImGui::GetFont()->Scale = 1.f;
-			ImGui::PushFont(ImGui::GetFont());
-			ImGui::PopFont();
 			ImGui::End();
 		}
 

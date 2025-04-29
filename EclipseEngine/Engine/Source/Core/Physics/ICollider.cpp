@@ -14,6 +14,7 @@ namespace Core
 		JPH::ObjectLayer objectLayer = b_isDynamic ? JPH::Layers::MOVING : JPH::Layers::NON_MOVING;
 		m_bodyInterface->SetMotionType(m_bodyID, motionType, isActivate);
 		m_bodyInterface->SetObjectLayer(m_bodyID, objectLayer);
+		
 	}
 
 	void ICollider::AddForce(float _forceX, float _forceY, float _forceZ)
@@ -186,7 +187,12 @@ namespace Core
 	{
 		return b_isDynamic;
 	}
-	
+
+	JPH::BodyID ICollider::GetBodyID() const
+	{
+		return m_bodyID;
+	}
+
 	void ICollider::Destroy()
 	{
 		m_active = false;

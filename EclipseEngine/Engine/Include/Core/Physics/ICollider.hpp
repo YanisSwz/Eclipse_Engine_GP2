@@ -51,6 +51,7 @@ namespace Core
 		ECLIPSE_ENGINE Math::Vec3 GetScale() const;
 		ECLIPSE_ENGINE float GetMass() const;
 		ECLIPSE_ENGINE bool GetIsDynamic() const;
+		ECLIPSE_ENGINE JPH::BodyID GetBodyID() const;
 
 		ECLIPSE_ENGINE void Destroy() override;
 		ECLIPSE_ENGINE void Delete();
