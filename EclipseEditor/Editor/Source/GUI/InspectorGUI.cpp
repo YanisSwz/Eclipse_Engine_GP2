@@ -336,7 +336,12 @@ namespace GUI
 			{
 				Core::BoxCollider* boxCollider = _crtGOSelected->GetComponent<Core::BoxCollider>();
 				if (!boxCollider)
+				{
 					boxCollider = _crtGOSelected->AddComponent<Core::BoxCollider>();
+					boxCollider->SetPosition(_crtGOSelected->transform->GetPosition());
+					boxCollider->SetRotation(_crtGOSelected->transform->GetRotation());
+					boxCollider->Scale(_crtGOSelected->transform->GetScale());
+				}
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
@@ -345,7 +350,12 @@ namespace GUI
 			{
 				Core::CapsuleCollider* capsuleCollider = _crtGOSelected->GetComponent<Core::CapsuleCollider>();
 				if (!capsuleCollider)
+				{
 					capsuleCollider = _crtGOSelected->AddComponent<Core::CapsuleCollider>();
+					capsuleCollider->SetPosition(_crtGOSelected->transform->GetPosition());
+					capsuleCollider->SetRotation(_crtGOSelected->transform->GetRotation());
+					capsuleCollider->Scale(_crtGOSelected->transform->GetScale());
+				}
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
@@ -354,7 +364,16 @@ namespace GUI
 			{
 				Core::MeshCollider* meshCollider = _crtGOSelected->GetComponent<Core::MeshCollider>();
 				if (!meshCollider)
+				{
 					meshCollider = _crtGOSelected->AddComponent<Core::MeshCollider>();
+					meshCollider->SetPosition(_crtGOSelected->transform->GetPosition());
+					meshCollider->SetRotation(_crtGOSelected->transform->GetRotation());
+					Core::Model* model = _crtGOSelected->GetComponent<Core::Model>();
+					if(model != nullptr)
+						meshCollider->SetMeshScale(model->mesh, _crtGOSelected->transform->GetScale());
+					else
+						meshCollider->Scale(_crtGOSelected->transform->GetScale());
+				}
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
