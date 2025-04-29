@@ -4,8 +4,10 @@
 namespace Core
 {
 	meta::factory<SpotLight> SpotLight::factory = meta::reflect<SpotLight>(m_hash("SpotLight"))
-		.data<&SpotLight::m_active>(m_hash("IsActive"))
-		.data<&SpotLight::m_color>(m_hash("Color"))
+		.func<&SpotLight::IsActive>(m_hash("GetActive"))
+		.func<&SpotLight::GetColor>(m_hash("GetColor"))
+		.func<&SpotLight::SetActive>(m_hash("SetActive"))
+		.func<&SpotLight::SetColor>(m_hash("SetColor"))
 		.data<&SpotLight::m_innerCutOff>(m_hash("InnerCutoff"))
 		.data<&SpotLight::m_outerCutOff>(m_hash("OuterCutoff"))
 		.data<&SpotLight::m_constantAttenuation>(m_hash("ConstantAttenuation"))

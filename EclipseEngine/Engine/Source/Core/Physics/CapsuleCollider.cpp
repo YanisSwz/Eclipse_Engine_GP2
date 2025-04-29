@@ -13,7 +13,8 @@ using namespace JPH::literals;
 namespace Core
 {
 	meta::factory<CapsuleCollider> CapsuleCollider::factory = meta::reflect<CapsuleCollider>(m_hash("CapsuleCollider"))
-		.data<&CapsuleCollider::m_active>(m_hash("IsActive"))
+		.func<&CapsuleCollider::IsActive>(m_hash("GetActive"))
+		.func<&CapsuleCollider::SetActive>(m_hash("SetActive"))
 		.func<&CapsuleCollider::GetIsDynamic>(m_hash("GetIsDynamic"))
 		.func<&CapsuleCollider::GetMass>(m_hash("GetMass"))
 		.func<&CapsuleCollider::GetOffsetPos>(m_hash("GetPositionOffset"))

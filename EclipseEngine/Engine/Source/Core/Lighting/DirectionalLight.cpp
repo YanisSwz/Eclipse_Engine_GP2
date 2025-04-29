@@ -4,8 +4,10 @@
 namespace Core
 {
 	meta::factory<DirectionalLight> DirectionalLight::factory = meta::reflect<DirectionalLight>(m_hash("DirectionalLight"))
-		.data<&DirectionalLight::m_active>(m_hash("IsActive"))
-		.data<&DirectionalLight::m_color>(m_hash("Color"));
+		.func<&DirectionalLight::IsActive>(m_hash("GetActive"))
+		.func<&DirectionalLight::GetColor>(m_hash("GetColor"))
+		.func<&DirectionalLight::SetActive>(m_hash("SetActive"))
+		.func<&DirectionalLight::SetColor>(m_hash("SetColor"));
 
 	RHI::DirLightData DirectionalLight::GetData() const
 	{

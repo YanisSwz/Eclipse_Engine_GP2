@@ -15,7 +15,8 @@ using namespace JPH::literals;
 namespace Core
 {
 	meta::factory<BoxCollider> BoxCollider::factory = meta::reflect<BoxCollider>(m_hash("BoxCollider"))
-		.data<&BoxCollider::m_active>(m_hash("IsActive"))
+		.func<&BoxCollider::IsActive>(m_hash("GetActive"))
+		.func<&BoxCollider::SetActive>(m_hash("SetActive"))
 		.func<&BoxCollider::GetIsDynamic>(m_hash("GetIsDynamic"))
 		.func<&BoxCollider::GetMass>(m_hash("GetMass"))
 		.func<&BoxCollider::GetOffsetPos>(m_hash("GetPositionOffset"))

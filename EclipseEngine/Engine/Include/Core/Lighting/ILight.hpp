@@ -11,7 +11,8 @@ namespace Core
 		ILight() = default;
 		~ILight() = default;
 
-		inline void SetColor(Math::Vec4 _color) { m_color = _color; };
+		inline Math::Vec4 GetColor() const { return m_color; }
+		inline void SetColor(Math::Vec4 _color) { m_color = _color; }
 		
 	protected:
 		Math::Vec4 m_color;

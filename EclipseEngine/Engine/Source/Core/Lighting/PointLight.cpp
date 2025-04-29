@@ -4,8 +4,10 @@
 namespace Core
 {
 	meta::factory<PointLight> PointLight::factory = meta::reflect<PointLight>(m_hash("PointLight"))
-		.data<&PointLight::m_active>(m_hash("IsActive"))
-		.data<&PointLight::m_color>(m_hash("Color"))
+		.func<&PointLight::IsActive>(m_hash("GetActive"))
+		.func<&PointLight::GetColor>(m_hash("GetColor"))
+		.func<&PointLight::SetActive>(m_hash("SetActive"))
+		.func<&PointLight::SetColor>(m_hash("SetColor"))
 		.data<&PointLight::m_constantAttenuation>(m_hash("ConstantAttenuation"))
 		.data<&PointLight::m_linearAttenuation>(m_hash("LinearAttenuation"))
 		.data<&PointLight::m_quadraticAttenuation>(m_hash("QuadraticAttenuation"));
