@@ -1,6 +1,7 @@
 #include "GUI/SceneGUI.hpp"
 #include "SceneCamera.hpp"
 #include "Scene.hpp"
+#include "ResourceManager.hpp"
 #include <iostream>
 
 namespace GUI
@@ -22,7 +23,7 @@ namespace GUI
 
 			ImGui::SetWindowFontScale(3.f);
 			ImGui::Text("%.2f", _camera->GetMouseSpeed());
-			
+
 			ImGui::End();
 		}
 
@@ -37,6 +38,25 @@ namespace GUI
 			ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
 			ImVec2(0, 1),
 			ImVec2(1, 0));
+
+		Resource::Texture* translateText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("TranslateGizmoIcon.img");
+		Resource::Texture* rotateText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("RotateGizmoIcon.img");
+		Resource::Texture* scaleText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("ScaleGizmoIcon.img");
+
+		ImVec2 uv0{ 0.f, 1.f };
+		ImVec2 uv1{ 1.f, 0.f };
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.f, 2.f));
+		ImGui::PushStyleColor(ImGuiCol_Button, { 1.f, 1.f, 1.f, 0.5f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 1.f, 1.f, 1.f, 1.f });
+		if (ImGui::ImageButton("TranslateImageButton", translateText->GetID(), { 48.f, 30.f }, uv0, uv1, {1.f, 0.f, 0.f, 1.f}))
+			m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		if (ImGui::ImageButton("RotateImageButton", rotateText->GetID(), { 48.f, 30.f }, uv0, uv1))
+			m_crtGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+		if (ImGui::ImageButton("ScaleImageButton", scaleText->GetID(), { 48.f, 30.f }, uv0, uv1))
+			m_crtGizmoOperation = ImGuizmo::OPERATION::SCALE;
+		ImGui::PopStyleColor(2);
+		ImGui::PopStyleVar();
 
 		DrawGizmo(_crtGOSelected, _camera);
 
