@@ -55,9 +55,11 @@ namespace Core
 
 		m_bodyInterface = &m_physicsSystem.GetBodyInterface();
 
+#ifdef DEBUG
 		m_rendererFile.open("testScene.jor", std::ofstream::out | std::ofstream::binary | std::ofstream::trunc);
 		m_rendererStream = new JPH::StreamOutWrapper(m_rendererFile);
 		m_renderer = new JPH::DebugRendererRecorder(*m_rendererStream);
+#endif // DEBUG
 	}
 
 	PhysicsSystem::~PhysicsSystem()
@@ -75,9 +77,12 @@ namespace Core
 
 		delete m_jobSystem;
 		delete m_tempAllocator;
+
+#ifdef DEBUG
 		delete m_renderer;
 		delete m_rendererStream;
 		m_rendererFile.close();
+#endif // DEBUG
 	}
 
 	BoxCollider* PhysicsSystem::AddBoxCollider()
@@ -179,13 +184,21 @@ namespace Core
 		if (!collider2)
 			return;
 
-		Core::MonoBehaviour* colliderScript1 = collider1->GetGameObject()->GetComponent<Core::MonoBehaviour>();
-		if (colliderScript1)
-			colliderScript1->OnCollisionEnter(collider2);
+		Core::GameObject* gameObject1 = collider1->GetGameObject();
+		if (gameObject1)
+		{
+			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript1)
+				colliderScript1->OnCollisionEnter(collider2);
+		}
 
-		Core::MonoBehaviour* colliderScript2 = collider2->GetGameObject()->GetComponent<Core::MonoBehaviour>();
-		if (colliderScript2)
-			colliderScript2->OnCollisionEnter(collider1);
+		Core::GameObject* gameObject2 = collider2->GetGameObject();
+		if (gameObject2)
+		{
+			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript2)
+				colliderScript2->OnCollisionEnter(collider1);
+		}
 	}
 
 	void PhysicsSystem::CallOnCollisionStay(const JPH::Body& _body1, const JPH::Body& _body2)
@@ -197,13 +210,21 @@ namespace Core
 		if (!collider2)
 			return;
 
-		Core::MonoBehaviour* colliderScript1 = collider1->GetGameObject()->GetComponent<Core::MonoBehaviour>();
-		if (colliderScript1)
-			colliderScript1->OnCollisionStay(collider2);
+		Core::GameObject* gameObject1 = collider1->GetGameObject();
+		if (gameObject1)
+		{
+			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript1)
+				colliderScript1->OnCollisionStay(collider2);
+		}
 
-		Core::MonoBehaviour* colliderScript2 = collider2->GetGameObject()->GetComponent<Core::MonoBehaviour>();
-		if (colliderScript2)
-			colliderScript2->OnCollisionStay(collider1);
+		Core::GameObject* gameObject2 = collider2->GetGameObject();
+		if (gameObject2)
+		{
+			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript2)
+				colliderScript2->OnCollisionStay(collider1);
+		}
 	}
 
 	void PhysicsSystem::CallOnCollisionExit(const JPH::BodyID& _body1, const JPH::BodyID& _body2)
@@ -215,13 +236,21 @@ namespace Core
 		if (!collider2)
 			return;
 
-		Core::MonoBehaviour* colliderScript1 = collider1->GetGameObject()->GetComponent<Core::MonoBehaviour>();
-		if (colliderScript1)
-			colliderScript1->OnCollisionExit(collider2);
+		Core::GameObject* gameObject1 = collider1->GetGameObject();
+		if (gameObject1)
+		{
+			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript1)
+				colliderScript1->OnCollisionExit(collider2);
+		}
 
-		Core::MonoBehaviour* colliderScript2 = collider2->GetGameObject()->GetComponent<Core::MonoBehaviour>();
-		if (colliderScript2)
-			colliderScript2->OnCollisionExit(collider1);
+		Core::GameObject* gameObject2 = collider2->GetGameObject();
+		if (gameObject2)
+		{
+			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript2)
+				colliderScript2->OnCollisionExit(collider1);
+		}
 	}
 
 	ICollider* PhysicsSystem::FindCollider(const JPH::BodyID& _bodyID)
@@ -297,10 +326,12 @@ namespace Core
 
 		m_physicsSystem.Update(_deltaTime, 1, m_tempAllocator, m_jobSystem);
 
+#ifdef DEBUG
 		// Draw for JoltViewer
 		JPH::BodyManager::DrawSettings drawSettings;
 		m_physicsSystem.DrawBodies(drawSettings, m_renderer);
 		m_renderer->EndFrame();
+#endif // DEBUG
 
 
 		for (int i = 0; i < m_currentBoxColliderCount; ++i)

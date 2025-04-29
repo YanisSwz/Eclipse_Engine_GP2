@@ -215,10 +215,6 @@ namespace GUI
 		{
 			DrawDeleteComponentPopup(_collider);
 
-			bool isDynamic = _collider->GetIsDynamic();
-			if (GUI::CheckBox("Is Dynamic ", "MeshColliderIsDynamic", &isDynamic))
-				_collider->SetDynamic(isDynamic);
-
 			float mass = _collider->GetMass();
 			if (GUI::DragFloat("Mass ", "MeshColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
 			{
