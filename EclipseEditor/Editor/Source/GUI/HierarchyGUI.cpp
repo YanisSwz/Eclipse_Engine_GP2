@@ -50,7 +50,7 @@ namespace GUI
 		if (!_crtTransform->GetGameObject()->IsActive())
 			treeNodeFlags |= ImGuiTreeNodeFlags_Bullet;
 
-		if (ImGui::TreeNodeEx(_crtTransform->GetGameObject()->GetName().c_str(), treeNodeFlags))
+		if (ImGui::TreeNodeEx(_crtTransform->GetGameObject()->name.c_str(), treeNodeFlags))
 		{
 			if (ImGui::IsItemClicked())
 				newGameObjectSelected = _crtTransform->GetGameObject();

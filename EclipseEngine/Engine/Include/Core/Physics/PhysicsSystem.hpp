@@ -153,10 +153,12 @@ namespace Core
 		
 		MyContactListener m_contactListener;
 
+#ifdef DEBUG
 		// JoltViewer
 		JPH::DebugRendererRecorder* m_renderer = nullptr;
 		JPH::StreamOutWrapper* m_rendererStream = nullptr;
 		std::ofstream m_rendererFile;
+#endif // DEBUG
 
 		bool bFirstUpdate = true;
 	};

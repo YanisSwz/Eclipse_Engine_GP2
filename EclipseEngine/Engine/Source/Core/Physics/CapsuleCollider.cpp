@@ -64,6 +64,9 @@ namespace Core
 		if (_scaleX <= 0.f || _scaleY <= 0.f || _scaleZ <= 0.f)
 			return;
 
+		if (_scaleX != _scaleZ)
+			_scaleZ = _scaleX;
+
 		m_scale = { _scaleX, _scaleY, _scaleZ };
 		Recreate();
 	}
@@ -72,6 +75,9 @@ namespace Core
 	{
 		if (_scale.x <= 0.f || _scale.y <= 0.f || _scale.z <= 0.f)
 			return;
+
+		if (_scale.x != _scale.z)
+			_scale.z = _scale.x;
 
 		m_scale = _scale;
 		Recreate();

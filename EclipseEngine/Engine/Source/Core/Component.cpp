@@ -3,6 +3,11 @@
 
 namespace Core
 {
+	void Component::SetActive(bool _activate)
+	{
+		m_active = _activate;
+	}
+
 	void Component::SetGameObject(GameObject* _obj)
 	{
 		m_gameObject = _obj;

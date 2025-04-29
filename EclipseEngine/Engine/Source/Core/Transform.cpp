@@ -37,7 +37,7 @@ namespace Core
 		std::vector<Transform*> children;
 		for(int i = 0; i < m_children.size(); ++i)
 		{
-			if (m_children[i]->IsActive())
+			if (!m_children[i]->IsDestroyed())
 				children.push_back(m_children[i]);
 		}
 		return children;
@@ -69,7 +69,7 @@ namespace Core
 
 	void Transform::Update(bool _positionChanged, bool _scaleChanged, bool _rotationChanged)
 	{
-		if (!IsActive() || IsDestroyed())
+		if (IsDestroyed())
 			return;
 
 		_positionChanged |= m_positionChanged;

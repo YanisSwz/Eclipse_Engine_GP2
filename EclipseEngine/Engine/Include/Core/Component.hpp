@@ -15,6 +15,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetGameObject(GameObject* _obj);
 		ECLIPSE_ENGINE GameObject* GetGameObject() const { return m_gameObject; };
 		ECLIPSE_ENGINE void Remove();
+		ECLIPSE_ENGINE virtual void SetActive(bool _activate) override;
 
 	protected:
 		GameObject* m_gameObject = nullptr;

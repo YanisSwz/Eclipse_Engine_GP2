@@ -237,7 +237,6 @@ void EditorApp::LoadScene()
 	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
 	vikingRoomMeshCollider->SetPosition(-2.f, 50.f, 0.f);
 	vikingRoomMeshCollider->SetMesh(model);
-	vikingRoomMeshCollider->SetDynamic(true);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
 	obj1->name = "Capsule1";
