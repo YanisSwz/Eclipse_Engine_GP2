@@ -18,11 +18,11 @@ namespace Core
 	{
 	}
 
-	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject, JPH::VertexList _vertexList, JPH::IndexedTriangleList _indexTriangleList)
+	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, float _mass, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject, JPH::VertexList _vertexList, JPH::IndexedTriangleList _indexTriangleList)
 	{
 		b_isBodyDestroyed = false;
 		m_bodyInterface = _bodyInterface;
-		b_isDynamic = _isDynamic;
+		b_isDynamic = false;
 		m_mass = _mass;
 		m_position = _pos;
 		m_rotation = Math::Quat::QuaternionEuler(_rot.x, _rot.y, _rot.z);
@@ -47,8 +47,8 @@ namespace Core
 			shape,
 			JPH::RVec3(m_position.x, m_position.y, m_position.z),
 			JPH::Quat::sEulerAngles({ m_rotation.x, m_rotation.y, m_rotation.z }),
-			b_isDynamic ? JPH::EMotionType::Dynamic : JPH::EMotionType::Static,
-			b_isDynamic ? JPH::Layers::MOVING : JPH::Layers::NON_MOVING);
+			JPH::EMotionType::Static,
+			JPH::Layers::NON_MOVING);
 
 		bodySettings.mAllowDynamicOrKinematic = true;
 		bodySettings.mOverrideMassProperties = JPH::EOverrideMassProperties::MassAndInertiaProvided;
@@ -57,12 +57,18 @@ namespace Core
 
 		JPH::Body* body = m_bodyInterface->CreateBody(bodySettings);
 		m_bodyID = body->GetID();
-		m_bodyInterface->AddBody(m_bodyID, b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate);
+		m_bodyInterface->AddBody(m_bodyID, JPH::EActivation::DontActivate);
 	}
 
 	MeshCollider::~MeshCollider()
 	{
 		Delete();
+	}
+
+	void MeshCollider::SetDynamic(bool _isDynamic)
+	{
+		// Force Mesh Collider to be Static
+		b_isDynamic = false;
 	}
 
 	void MeshCollider::SetMesh(const char* _meshName)
@@ -171,6 +177,6 @@ namespace Core
 		JPH::IndexedTriangleList indexTriangleList = m_indexTriangleList;
 		UpdateData();
 		this->~MeshCollider();
-		new (this) MeshCollider(m_bodyInterface, b_isDynamic, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject, vertexList, indexTriangleList);
+		new (this) MeshCollider(m_bodyInterface, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject, vertexList, indexTriangleList);
 	}
 }

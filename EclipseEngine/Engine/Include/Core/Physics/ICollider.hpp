@@ -18,7 +18,7 @@ namespace Core
 		ICollider() = default;
 		virtual ~ICollider() = default;
 
-		ECLIPSE_ENGINE void SetDynamic(bool _isDynamic);
+		ECLIPSE_ENGINE virtual void SetDynamic(bool _isDynamic);
 		virtual void SetMass(float _mass) = 0;
 		ECLIPSE_ENGINE void AddForce(float _forceX, float _forceY, float _forceZ);
 		ECLIPSE_ENGINE void AddForce(Math::Vec3 _force);
