@@ -55,11 +55,11 @@ namespace Core
 
 		m_bodyInterface = &m_physicsSystem.GetBodyInterface();
 
-#ifdef DEBUG
+#ifdef _DEBUG
 		m_rendererFile.open("testScene.jor", std::ofstream::out | std::ofstream::binary | std::ofstream::trunc);
 		m_rendererStream = new JPH::StreamOutWrapper(m_rendererFile);
 		m_renderer = new JPH::DebugRendererRecorder(*m_rendererStream);
-#endif // DEBUG
+#endif // _DEBUG
 	}
 
 	PhysicsSystem::~PhysicsSystem()
@@ -78,11 +78,11 @@ namespace Core
 		delete m_jobSystem;
 		delete m_tempAllocator;
 
-#ifdef DEBUG
+#ifdef _DEBUG
 		delete m_renderer;
 		delete m_rendererStream;
 		m_rendererFile.close();
-#endif // DEBUG
+#endif // _DEBUG
 	}
 
 	BoxCollider* PhysicsSystem::AddBoxCollider()
@@ -332,12 +332,12 @@ namespace Core
 
 		m_physicsSystem.Update(_deltaTime, 1, m_tempAllocator, m_jobSystem);
 
-#ifdef DEBUG
+#ifdef _DEBUG
 		// Draw for JoltViewer
 		JPH::BodyManager::DrawSettings drawSettings;
 		m_physicsSystem.DrawBodies(drawSettings, m_renderer);
 		m_renderer->EndFrame();
-#endif // DEBUG
+#endif // _DEBUG
 
 
 		for (int i = 0; i < m_currentBoxColliderCount; ++i)

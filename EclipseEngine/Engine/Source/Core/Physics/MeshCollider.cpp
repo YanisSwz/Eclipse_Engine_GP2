@@ -18,7 +18,10 @@ namespace Core
 	{
 	}
 
-	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, float _mass, Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject, JPH::VertexList _vertexList, JPH::IndexedTriangleList _indexTriangleList)
+	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, float _mass,
+		Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject,
+		JPH::VertexList _vertexList, JPH::IndexedTriangleList _indexTriangleList,
+		Math::Vec3 _linearVelocity, Math::Vec3 _angularVelocity)
 	{
 		b_isBodyDestroyed = false;
 		m_bodyInterface = _bodyInterface;
@@ -46,7 +49,7 @@ namespace Core
 		JPH::BodyCreationSettings bodySettings(
 			shape,
 			JPH::RVec3(m_position.x, m_position.y, m_position.z),
-			JPH::Quat::sEulerAngles({ m_rotation.x, m_rotation.y, m_rotation.z }),
+			JPH::Quat(m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w),
 			JPH::EMotionType::Static,
 			JPH::Layers::NON_MOVING);
 
@@ -58,6 +61,8 @@ namespace Core
 		JPH::Body* body = m_bodyInterface->CreateBody(bodySettings);
 		m_bodyID = body->GetID();
 		m_bodyInterface->AddBody(m_bodyID, JPH::EActivation::DontActivate);
+		m_bodyInterface->SetLinearVelocity(m_bodyID, { _linearVelocity.x, _linearVelocity.y, _linearVelocity.z });
+		m_bodyInterface->SetAngularVelocity(m_bodyID, { _angularVelocity.x, _angularVelocity.y, _angularVelocity.z });
 	}
 
 	MeshCollider::~MeshCollider()
@@ -171,12 +176,24 @@ namespace Core
 
 	void MeshCollider::Recreate()
 	{
-		Core::GameObject* gameObject = m_gameObject;
+		UpdateData();
 
+		Core::GameObject* gameObject = m_gameObject;
+		JPH::BodyInterface* bodyInterface = m_bodyInterface;
+		bool isDynamic = b_isDynamic;
+		float mass = m_mass;
+		Math::Vec3 scale = m_scale;
+		Math::Vec3 position = m_position;
+		Math::Vec3 rotationEuler = m_rotation.GetEulerAnglesDegXYZ();
+		JPH::Vec3 jphVelocity = m_bodyInterface->GetLinearVelocity(m_bodyID);
+		Math::Vec3 myVelocity{ jphVelocity.GetX(), jphVelocity.GetY(), jphVelocity.GetZ() };
+		JPH::Vec3 jphAngularVelocity = m_bodyInterface->GetAngularVelocity(m_bodyID);
+		Math::Vec3 myAngularVelocity{ jphVelocity.GetX(), jphVelocity.GetY(), jphVelocity.GetZ() };
 		JPH::VertexList vertexList = m_vertexList;
 		JPH::IndexedTriangleList indexTriangleList = m_indexTriangleList;
-		UpdateData();
+
 		this->~MeshCollider();
-		new (this) MeshCollider(m_bodyInterface, m_mass, m_scale, m_position, m_rotation.GetEulerAnglesRadXYZ(), gameObject, vertexList, indexTriangleList);
+		new (this) MeshCollider(bodyInterface, mass, scale, position, rotationEuler,
+			gameObject, vertexList, indexTriangleList, myVelocity, myAngularVelocity);
 	}
 }
