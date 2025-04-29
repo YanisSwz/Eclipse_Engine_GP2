@@ -87,7 +87,7 @@ namespace Core
 		}
 
 	private:
-		static std::hash<std::string_view> m_hash;
+		inline static std::hash<std::string_view> m_hash{};
 
 		std::vector<Component*> m_components{};
 		SystemManager* m_systemManager = nullptr;

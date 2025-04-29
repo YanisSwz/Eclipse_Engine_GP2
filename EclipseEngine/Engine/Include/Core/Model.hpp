@@ -6,6 +6,7 @@
 #include "ModelData.hpp"
 #include "ProjectExports.hpp"
 #include "meta/factory.hpp"
+#include <string>
 
 namespace Core
 {
@@ -31,6 +32,6 @@ namespace Core
 		Resource::ShaderProgram* shader = nullptr;
 	
 	private:
-		static std::hash<std::string_view> m_hash;
+		inline static std::hash<std::string_view> m_hash{};
 	};
 }

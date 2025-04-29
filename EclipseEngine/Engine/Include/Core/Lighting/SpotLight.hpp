@@ -3,6 +3,7 @@
 #include "Lighting/ILight.hpp"
 #include "RHIInterfaces/Lights.hpp"
 #include "meta/factory.hpp"
+#include <string>
 
 namespace Core
 {
@@ -17,7 +18,7 @@ namespace Core
 		ECLIPSE_ENGINE RHI::SpotLightData GetData() const;
 
 	private:
-		static std::hash<std::string_view> m_hash;
+		inline static std::hash<std::string_view> m_hash{};
 
 		float m_innerCutOff = 0.91f;
 		float m_outerCutOff = 0.82f;

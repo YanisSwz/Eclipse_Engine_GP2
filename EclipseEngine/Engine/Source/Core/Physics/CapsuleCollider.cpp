@@ -23,6 +23,10 @@ namespace Core
 		//.func<&BoxCollider::SetOffsetPos<Math::Vec3>>(m_hash("SetPositionOffset"))
 		//.func<&BoxCollider::Scale>(m_hash("SetScale"));
 
+	CapsuleCollider::CapsuleCollider()
+	{
+	}
+
 	CapsuleCollider::CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic, float _mass, Math::Vec3 _scale, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject)
 	{
 		b_isBodyDestroyed = false;
