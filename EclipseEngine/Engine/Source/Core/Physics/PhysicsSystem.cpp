@@ -47,6 +47,9 @@ namespace Core
 		const JPH::uint cMaxBodyPairs = MAX_COLLIDER_SIZE;
 		const JPH::uint cMaxContactConstraints = MAX_COLLIDER_SIZE;
 
+		m_contactListener.Init(this);
+		m_physicsSystem.SetContactListener(&m_contactListener);
+
 		// Now we can create the actual physics system.
 		m_physicsSystem.Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, m_broadPhaseLayerInterface, m_objectVsBroadphaseLayerFilter, m_objectVsObjectLayerFilter);
 
@@ -167,11 +170,88 @@ namespace Core
 		return &m_meshColliders[m_currentMeshColliderCount - 1];
 	}
 
+	void PhysicsSystem::CallOnCollisionEnter(const JPH::Body& _body1, const JPH::Body& _body2)
+	{
+		ICollider* collider1 = FindCollider(_body1.GetID());
+		if (!collider1)
+			return;
+		ICollider* collider2 = FindCollider(_body2.GetID());
+		if (!collider2)
+			return;
+
+		Core::MonoBehaviour* colliderScript1 = collider1->GetGameObject()->GetComponent<Core::MonoBehaviour>();
+		if (colliderScript1)
+			colliderScript1->OnCollisionEnter(collider2);
+
+		Core::MonoBehaviour* colliderScript2 = collider2->GetGameObject()->GetComponent<Core::MonoBehaviour>();
+		if (colliderScript2)
+			colliderScript2->OnCollisionEnter(collider1);
+	}
+
+	void PhysicsSystem::CallOnCollisionStay(const JPH::Body& _body1, const JPH::Body& _body2)
+	{
+		ICollider* collider1 = FindCollider(_body1.GetID());
+		if (!collider1)
+			return;
+		ICollider* collider2 = FindCollider(_body2.GetID());
+		if (!collider2)
+			return;
+
+		Core::MonoBehaviour* colliderScript1 = collider1->GetGameObject()->GetComponent<Core::MonoBehaviour>();
+		if (colliderScript1)
+			colliderScript1->OnCollisionStay(collider2);
+
+		Core::MonoBehaviour* colliderScript2 = collider2->GetGameObject()->GetComponent<Core::MonoBehaviour>();
+		if (colliderScript2)
+			colliderScript2->OnCollisionStay(collider1);
+	}
+
+	void PhysicsSystem::CallOnCollisionExit(const JPH::BodyID& _body1, const JPH::BodyID& _body2)
+	{
+		ICollider* collider1 = FindCollider(_body1);
+		if (!collider1)
+			return;
+		ICollider* collider2 = FindCollider(_body2);
+		if (!collider2)
+			return;
+
+		Core::MonoBehaviour* colliderScript1 = collider1->GetGameObject()->GetComponent<Core::MonoBehaviour>();
+		if (colliderScript1)
+			colliderScript1->OnCollisionExit(collider2);
+
+		Core::MonoBehaviour* colliderScript2 = collider2->GetGameObject()->GetComponent<Core::MonoBehaviour>();
+		if (colliderScript2)
+			colliderScript2->OnCollisionExit(collider1);
+	}
+
+	ICollider* PhysicsSystem::FindCollider(const JPH::BodyID& _bodyID)
+	{
+		for (int i = 0; i < m_currentBoxColliderCount; ++i)
+		{
+			if (m_boxColliders[i].GetBodyID() == _bodyID)
+				return &m_boxColliders[i];
+		}
+
+		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
+		{
+			if (m_capsuleColliders[i].GetBodyID() == _bodyID)
+				return &m_capsuleColliders[i];
+		}
+
+		for (int i = 0; i < m_currentMeshColliderCount; ++i)
+		{
+			if (m_meshColliders[i].GetBodyID() == _bodyID)
+				return &m_meshColliders[i];
+		}
+
+		return nullptr;
+	}
+
 	void PhysicsSystem::Update(float _deltaTime)
 	{
-		if (bfirstUpdate)
+		if (bFirstUpdate)
 		{
-			bfirstUpdate = false;
+			bFirstUpdate = false;
 			_deltaTime = 0.f;
 		}
 
@@ -213,6 +293,7 @@ namespace Core
 				}
 			}
 		}
+
 
 		m_physicsSystem.Update(_deltaTime, 1, m_tempAllocator, m_jobSystem);
 

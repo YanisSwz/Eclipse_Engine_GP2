@@ -4,6 +4,8 @@
 
 namespace Core 
 {
+	class ICollider;
+
 	class MonoBehaviour : public Component
 	{
 	public:
@@ -16,6 +18,10 @@ namespace Core
 		ECLIPSE_ENGINE virtual void Update();
 		ECLIPSE_ENGINE virtual void OnDisable();
 		ECLIPSE_ENGINE virtual void OnDestroy();
+
+		ECLIPSE_ENGINE virtual void OnCollisionEnter(ICollider* _collider);
+		ECLIPSE_ENGINE virtual void OnCollisionStay(ICollider* _collider);
+		ECLIPSE_ENGINE virtual void OnCollisionExit(ICollider* _collider);
 
 	protected:
 		bool hasStarted = false;

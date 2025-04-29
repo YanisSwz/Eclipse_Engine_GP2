@@ -12,8 +12,6 @@
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
 
-#include "iostream"
-
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
 	m_height(_height)
