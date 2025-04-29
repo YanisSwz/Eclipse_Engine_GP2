@@ -1,4 +1,5 @@
 #pragma once
+#include "Maths.hpp"
 #include <imgui.h>
 
 namespace Core
@@ -47,6 +48,8 @@ namespace GUI
 		
 		ImGuiWindowFlags m_alreadyAddComponentWindowFlags = ImGuiWindowFlags_None;
 		ImVec2 m_alreadyAddComponentWindowSize{ 300.f, 400.f };
-		bool bisComponentAlreadyAddedWindowEnable = false;
+		bool bIsComponentAlreadyAddedWindowEnable = false;
+		bool bIsScaleLocked = false;
+		Math::Vec3 m_scaleFactor{ 1.f, 1.f, 1.f };
 	};
 }

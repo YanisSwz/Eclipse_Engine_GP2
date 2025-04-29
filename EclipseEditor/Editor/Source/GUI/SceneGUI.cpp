@@ -82,7 +82,6 @@ namespace GUI
 
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::SetOrthographic(false);
-		ImGuizmo::SetGizmoSizeClipSpace(0.25f);
 		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
 		Math::Mat4 TRS = _crtGOSelected->transform->GetTransformMatrix();

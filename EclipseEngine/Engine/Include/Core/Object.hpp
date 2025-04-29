@@ -13,6 +13,7 @@ namespace Core
 		ECLIPSE_ENGINE bool IsDestroyed() const;
 		ECLIPSE_ENGINE void SetActive(bool _activate);
 		ECLIPSE_ENGINE bool IsActive() const;
+		ECLIPSE_ENGINE bool& GetActiveRef();
 		ECLIPSE_ENGINE static void Destroy(Object* _obj);
 		ECLIPSE_ENGINE int GetID() const;
 
