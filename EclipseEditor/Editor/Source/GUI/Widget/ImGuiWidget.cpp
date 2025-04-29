@@ -79,7 +79,10 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("X", buttonSize))
+		{
 			_vec3.x = _resetValue;
+			changed = true;
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
@@ -95,7 +98,10 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("Y", buttonSize))
+		{
 			_vec3.y = _resetValue;
+			changed = true;
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
@@ -111,7 +117,10 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("Z", buttonSize))
+		{
 			_vec3.z = _resetValue;
+			changed = true;
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
