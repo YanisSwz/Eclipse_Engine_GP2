@@ -15,14 +15,11 @@ using namespace JPH::literals;
 namespace Core
 {
 	meta::factory<MeshCollider> MeshCollider::factory = meta::reflect<MeshCollider>(m_hash("MeshCollider"))
-		.func<&MeshCollider::IsActive>(m_hash("GetActive"))
-		.func<&MeshCollider::SetActive>(m_hash("SetActive"))
-		.func<&MeshCollider::GetIsDynamic>(m_hash("GetIsDynamic"))
-		.func<&MeshCollider::GetMass>(m_hash("GetMass"))
-		.func<&MeshCollider::GetOffsetPos>(m_hash("GetPositionOffset"))
-		.func<&MeshCollider::GetScale>(m_hash("GetScale"))
-		.func<&MeshCollider::SetDynamic>(m_hash("SetIsDynamic"))
-		.func<&MeshCollider::SetMass>(m_hash("SetMass"));
+		.data<&MeshCollider::SetActive, &MeshCollider::IsActive>(m_hash("IsActive"))
+		.data<&MeshCollider::SetDynamic, &MeshCollider::GetIsDynamic>(m_hash("IsDynamic"))
+		.data<&MeshCollider::SetMass, &MeshCollider::GetMass>(m_hash("Mass"));
+		//.func<&MeshCollider::GetOffsetPos>(m_hash("GetPositionOffset"))
+		//.func<&MeshCollider::GetScale>(m_hash("GetScale"))
 		//.func<&MeshCollider::SetOffsetPos<Math::Vec3>>(m_hash("SetPositionOffset"))
 		//.func<&MeshCollider::Scale>(m_hash("SetScale"));
 

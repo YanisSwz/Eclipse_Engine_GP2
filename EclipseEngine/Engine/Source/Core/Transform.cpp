@@ -5,15 +5,12 @@
 namespace Core
 {
 	meta::factory<Transform> Transform::factory = meta::reflect<Transform>(m_hash("Transform"))
-		.func<&Transform::GetLocalPosition>(m_hash("GetLocalPosition"))
-		.func<&Transform::GetLocalScale>(m_hash("GetLocalScale"))
-		.func<&Transform::GetLocalEulerAngles>(m_hash("GetLocalRotation"))
-		.func<&Transform::SetLocalPosition>(m_hash("SetLocalPosition"))
-		.func<&Transform::SetLocalScale>(m_hash("SetLocalScale"))
-		.func<&Transform::SetLocalEulerAngles>(m_hash("SetLocalRotation"))
-		.func<&Transform::UpdatePosition>(m_hash("UpdatePosition"))
-		.func<&Transform::UpdateScale>(m_hash("UpdateScale"))
-		.func<&Transform::UpdateRotation>(m_hash("UpdateRotation"));
+		.data<&Transform::SetLocalPosition, &Transform::GetLocalPosition>(m_hash("LocalPosition"))
+		.data<&Transform::SetLocalScale, &Transform::GetLocalScale>(m_hash("LocalScale"))
+		.data<&Transform::SetLocalEulerAngles, &Transform::GetLocalEulerAngles>(m_hash("LocalRotation"))
+		.func<&Transform::UpdatePosition>(m_hash("UpdateLocalPosition"))
+		.func<&Transform::UpdateScale>(m_hash("UpdateLocalScale"))
+		.func<&Transform::UpdateRotation>(m_hash("UpdateLocalRotation"));
 
 
 	Transform::Transform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)
