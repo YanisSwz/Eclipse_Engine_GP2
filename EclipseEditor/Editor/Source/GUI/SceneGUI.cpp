@@ -46,15 +46,34 @@ namespace GUI
 		ImVec2 uv0{ 0.f, 1.f };
 		ImVec2 uv1{ 1.f, 0.f };
 
+		// Editor Buttons
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.f, 2.f));
 		ImGui::PushStyleColor(ImGuiCol_Button, { 1.f, 1.f, 1.f, 0.5f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 1.f, 1.f, 1.f, 1.f });
+		
+		// Translation
 		if (ImGui::ImageButton("TranslateImageButton", translateText->GetID(), { 48.f, 30.f }, uv0, uv1, {1.f, 0.f, 0.f, 1.f}))
 			m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Ctrl + R");
+		}
+
+		// Rotation
 		if (ImGui::ImageButton("RotateImageButton", rotateText->GetID(), { 48.f, 30.f }, uv0, uv1))
 			m_crtGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Ctrl + T");
+		}
+
+		// Scale
 		if (ImGui::ImageButton("ScaleImageButton", scaleText->GetID(), { 48.f, 30.f }, uv0, uv1))
 			m_crtGizmoOperation = ImGuizmo::OPERATION::SCALE;
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Ctrl + Y");
+		}
 		ImGui::PopStyleColor(2);
 		ImGui::PopStyleVar();
 
