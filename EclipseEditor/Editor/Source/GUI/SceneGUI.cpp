@@ -16,14 +16,16 @@ namespace GUI
 
 		if (_camera->MouseSpeedChanged())
 		{
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.75f)); 
 			ImGui::SetNextWindowSize(m_windowSizeCameraChangedSpeed);
 			ImGui::SetNextWindowPos({ windowPos.x + windowSize.x / 2.f - m_windowSizeCameraChangedSpeed.x / 2.f, windowPos.y + windowSize.y / 2.f - m_windowSizeCameraChangedSpeed.y / 2.f });
-			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground;
+			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration;
 			ImGui::Begin("MouseSpeedChangedWindow", 0, mouseSpeedChangedWindowFlags);
 
 			ImGui::SetWindowFontScale(3.f);
 			ImGui::Text("%.2f", _camera->GetMouseSpeed());
 
+			ImGui::PopStyleColor();
 			ImGui::End();
 		}
 
@@ -39,6 +41,8 @@ namespace GUI
 			ImVec2(0, 1),
 			ImVec2(1, 0));
 
+
+		// Editor Buttons
 		Resource::Texture* translateText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("TranslateGizmoIcon.img");
 		Resource::Texture* rotateText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("RotateGizmoIcon.img");
 		Resource::Texture* scaleText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("ScaleGizmoIcon.img");
@@ -46,7 +50,6 @@ namespace GUI
 		ImVec2 uv0{ 0.f, 1.f };
 		ImVec2 uv1{ 1.f, 0.f };
 
-		// Editor Buttons
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.f, 2.f));
 		ImGui::PushStyleColor(ImGuiCol_Button, { 1.f, 1.f, 1.f, 0.5f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 1.f, 1.f, 1.f, 1.f });
@@ -74,8 +77,29 @@ namespace GUI
 		{
 			ImGui::SetTooltip("Ctrl + Y");
 		}
+
 		ImGui::PopStyleColor(2);
 		ImGui::PopStyleVar();
+
+		// Local
+		if (ImGui::Button("Local", { 56.f, 30.f }))
+			m_crtGizmoMode = ImGuizmo::MODE::LOCAL;
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Ctrl + U");
+		}
+
+		ImGui::SameLine();
+
+		// Global
+		if (ImGui::Button("Global", { 56.f, 30.f }))
+			m_crtGizmoMode = ImGuizmo::MODE::WORLD;
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Ctrl + I");
+		}
+
+		
 
 		DrawGizmo(_crtGOSelected, _camera);
 
