@@ -50,10 +50,21 @@ namespace GUI
 		ImVec2 uv0{ 0.f, 1.f };
 		ImVec2 uv1{ 1.f, 0.f };
 
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.f, 2.f));
-		ImGui::PushStyleColor(ImGuiCol_Button, { 1.f, 1.f, 1.f, 0.5f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 1.f, 1.f, 1.f, 1.f });
 		
+		ImGui::PushStyleColor(ImGuiCol_Border, { 1.f, 1.f, 1.f, 1.f });
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.35f, 0.35f, 0.35f, 1.f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.5f, 0.5f, 0.5f, 1.f });
+
+		// Local & Global
+		if (ImGui::Button(m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? "Local" : "Global", { 52.f, 34.f}))
+			m_crtGizmoMode = m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? ImGuizmo::MODE::WORLD : ImGuizmo::MODE::LOCAL;
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip(m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? "Ctrl + I" : "Ctrl + U");
+		
+		ImGui::PopStyleColor(1);
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.f, 2.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 1.f, 1.f, 1.f, 1.f });
 		// Translation
 		if (ImGui::ImageButton("TranslateImageButton", translateText->GetID(), { 48.f, 30.f }, uv0, uv1, {1.f, 0.f, 0.f, 1.f}))
 			m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
@@ -78,28 +89,8 @@ namespace GUI
 			ImGui::SetTooltip("Ctrl + Y");
 		}
 
-		ImGui::PopStyleColor(2);
+		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar();
-
-		// Local
-		if (ImGui::Button("Local", { 56.f, 30.f }))
-			m_crtGizmoMode = ImGuizmo::MODE::LOCAL;
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Ctrl + U");
-		}
-
-		ImGui::SameLine();
-
-		// Global
-		if (ImGui::Button("Global", { 56.f, 30.f }))
-			m_crtGizmoMode = ImGuizmo::MODE::WORLD;
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Ctrl + I");
-		}
-
-		
 
 		DrawGizmo(_crtGOSelected, _camera);
 
