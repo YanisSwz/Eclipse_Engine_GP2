@@ -1,4 +1,5 @@
 #include "Core/Physics/ICollider.hpp"
+#include "GameObject.hpp"
 
 namespace Core
 {
@@ -6,9 +7,18 @@ namespace Core
 	{
 		m_active = _activate;
 		if (m_active)
+		{
 			AddBodyToPhysicsEngine();
+			if (m_gameObject != nullptr)
+			{
+				SetPosition(m_gameObject->transform->GetPosition());
+				SetRotation(m_gameObject->transform->GetRotation());
+			}
+		}
 		else
+		{
 			RemoveBodyToPhysicsEngine();
+		}
 	}
 
 	void ICollider::SetDynamic(bool _isDynamic)

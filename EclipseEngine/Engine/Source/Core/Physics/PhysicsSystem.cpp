@@ -291,6 +291,8 @@ namespace Core
 			GO = m_boxColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
 				{
 					m_boxColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_boxColliders[i].GetOffsetPos()));
@@ -303,6 +305,8 @@ namespace Core
 			GO = m_capsuleColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
 				{
 					m_capsuleColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_capsuleColliders[i].GetOffsetPos()));
@@ -315,6 +319,8 @@ namespace Core
 			GO = m_meshColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
 				{
 					m_meshColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_meshColliders[i].GetOffsetPos()));
@@ -339,6 +345,8 @@ namespace Core
 			GO = m_boxColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				GO->transform->SetPosition(m_boxColliders[i].GetPosition() - m_boxColliders[i].GetOffsetPosRotated());
 				rotationQuat = m_boxColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);
@@ -349,6 +357,8 @@ namespace Core
 			GO = m_capsuleColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				GO->transform->SetPosition(m_capsuleColliders[i].GetPosition() - m_capsuleColliders[i].GetOffsetPosRotated());
 				rotationQuat = m_capsuleColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);
@@ -359,6 +369,8 @@ namespace Core
 			GO = m_meshColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				GO->transform->SetPosition(m_meshColliders[i].GetPosition() - m_meshColliders[i].GetOffsetPosRotated());
 				rotationQuat = m_meshColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);

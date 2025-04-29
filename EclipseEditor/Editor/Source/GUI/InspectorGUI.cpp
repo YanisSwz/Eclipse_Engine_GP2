@@ -43,8 +43,10 @@ namespace GUI
 			_crtGOSelected->SetActive(bIsActive);
 
 		ImGui::NewLine();
-
 		DrawTransformComponent(_crtGOSelected->transform);
+
+		if (!_crtGOSelected->IsActive())
+			ImGui::BeginDisabled();
 		DrawModelComponent(_crtGOSelected->GetComponent<Core::Model>());
 		DrawBoxColliderComponent(_crtGOSelected->GetComponent<Core::BoxCollider>());
 		DrawCapsuleColliderComponent(_crtGOSelected->GetComponent<Core::CapsuleCollider>());
@@ -54,6 +56,9 @@ namespace GUI
 		DrawSpotLightComponent(_crtGOSelected->GetComponent<Core::SpotLight>());
 
 		DrawAddComponent(_crtGOSelected);
+
+		if (!_crtGOSelected->IsActive())
+			ImGui::EndDisabled();
 		ImGui::End();
 	}
 
