@@ -173,7 +173,7 @@ namespace GUI
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("X", buttonSize))
 		{
-			if (_vec3.x != _resetValue) 
+			if (_vec3.x != _resetValue)
 			{
 				if (_isLocked)
 				{
@@ -388,6 +388,39 @@ namespace GUI
 			ImGui::EndCombo();
 		}
 		ImGui::PopID();
+		return false;
+	}
+
+	bool ComboBox(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values, float _maxColumnWidth)
+	{
+		std::string invisibleComboName = "##";
+		invisibleComboName.append(_comboName).append("(w/ filter)");
+		ImGui::PushID(invisibleComboName.c_str());
+		ImGui::Columns(2, 0, false);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
+		ImGui::Text(_comboName);
+		ImGui::NextColumn();
+		if (ImGui::BeginCombo(invisibleComboName.c_str(), _crtValue->c_str()))
+		{
+			for (int i = 0; i < _values.size(); ++i)
+			{
+				const bool is_selected = (*_crtValue == _values[i]);
+				if (ImGui::Selectable(_values[i].c_str(), is_selected))
+				{
+					*_crtValue = _values[i];
+					ImGui::EndCombo();
+					ImGui::PopID();
+					ImGui::Columns(1);
+					return true;
+				}
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::PopID();
+		ImGui::Columns(1);
 		return false;
 	}
 

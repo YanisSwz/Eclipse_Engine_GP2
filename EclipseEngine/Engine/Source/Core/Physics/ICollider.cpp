@@ -11,7 +11,7 @@ namespace Core
 			AddBodyToPhysicsEngine();
 			if (m_gameObject != nullptr)
 			{
-				SetPosition(m_gameObject->transform->GetPosition());
+				SetPosition(m_gameObject->transform->GetPosition() + m_gameObject->transform->GetRotation().Rotate(GetOffsetPos()));
 				SetRotation(m_gameObject->transform->GetRotation());
 			}
 		}

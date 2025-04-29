@@ -29,6 +29,7 @@ namespace GUI
 		ImGuizmo::OPERATION m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 		ImGuizmo::MODE m_crtGizmoMode = ImGuizmo::MODE::LOCAL;
 		ImVec2 m_windowSizeCameraChangedSpeed{ 100.f, 100.f };
+		std::vector<std::string> GizmoOperatorsString{ "Translate", "Rotation", "Scale" };
 
 		void DrawGizmo(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera);
 	};

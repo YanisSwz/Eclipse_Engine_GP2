@@ -190,6 +190,9 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Bunny.img", "Assets/Textures/Bunny.jpg");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Earth.img", "Assets/Textures/Earth.jpg");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("WhiteTexture.img", "Assets/Textures/WhiteTexture.png");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("TranslateGizmoIcon.img", "Assets/Icons/TranslateGizmoIcon.png");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("RotateGizmoIcon.img", "Assets/Icons/RotateGizmoIcon.png");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("ScaleGizmoIcon.img", "Assets/Icons/ScaleGizmoIcon.png");
 
 
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("SkyboxShader.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");
