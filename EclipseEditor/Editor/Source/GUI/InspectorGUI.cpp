@@ -262,6 +262,11 @@ namespace GUI
 		{
 			DrawDeleteComponentPopup(_light);
 
+			Math::Vec4 color = _light->GetColor();
+			float col[4]{ color.x, color.y, color.z, color.w };
+			ImGui::ColorEdit4("Color", col);
+			_light->SetColor({ col[0], col[1], col[2], col[3] });
+
 			ImGui::TreePop();
 		}
 	}
@@ -274,6 +279,16 @@ namespace GUI
 		if (ImGui::TreeNodeEx("Spot Light", m_treeNodeComponentFlags))
 		{
 			DrawDeleteComponentPopup(_light);
+
+			Math::Vec4 color = _light->GetColor();
+			float col[4]{ color.x, color.y, color.z, color.w };
+			ImGui::ColorEdit4("Color", col);
+			_light->SetColor({ col[0], col[1], col[2], col[3] });
+
+			GUI::DragFloat("Inner Angle", "##", &_light->GetInnerCutoffRef(), 1.f, 0.f, 180.f);
+			GUI::DragFloat("Outer Angle", "##1", &_light->GetOuterCutoffRef(), 1.f, _light->GetInnerCutoff(), 180.f);
+			/*GUI::DragFloat("Inner Cutoff", "##1", &_light->GetInnerCutoffRef(), 0.1f, _light->GetOuterCutoff(), 180.f);
+			GUI::DragFloat("Outer Cutoff", "##2", &_light->GetOuterCutoffRef(), 0.1f, 0.f, _light->GetInnerCutoff());*/
 
 			ImGui::TreePop();
 		}

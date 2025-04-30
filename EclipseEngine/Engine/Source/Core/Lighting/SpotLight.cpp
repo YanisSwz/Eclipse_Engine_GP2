@@ -16,9 +16,9 @@ namespace Core
 		return RHI::SpotLightData{
 			m_color,
 			GetPosition(),
-			m_innerCutOff,
+			cosf(Math::Tools::ToRad(m_innerCutOff/2.f)),
 			GetDirection(),
-			m_outerCutOff,
+			cosf(Math::Tools::ToRad(m_outerCutOff/2.f)),
 			m_constantAttenuation,
 			m_linearAttenuation,
 			m_quadraticAttenuation,

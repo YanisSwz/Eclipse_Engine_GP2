@@ -12,6 +12,10 @@ namespace Core
 		ECLIPSE_ENGINE ~SpotLight();
 
 		ECLIPSE_ENGINE RHI::SpotLightData GetData() const;
+		ECLIPSE_ENGINE inline float& GetInnerCutoffRef() { return m_innerCutOff; };
+		ECLIPSE_ENGINE inline float& GetOuterCutoffRef() { return m_outerCutOff; };
+		ECLIPSE_ENGINE inline float GetInnerCutoff() { return m_innerCutOff; };
+		ECLIPSE_ENGINE inline float GetOuterCutoff() { return m_outerCutOff; };
 
 	private:
 		float m_innerCutOff = 0.91f;
