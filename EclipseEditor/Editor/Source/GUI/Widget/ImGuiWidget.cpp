@@ -448,6 +448,16 @@ namespace GUI
 		return false;
 	}
 
+	void ColorEdit4(const char* label, Math::Vec4& _color, ImGuiColorEditFlags flags)
+	{
+		float col[4]{ _color.x, _color.y, _color.z, _color.w };
+		ImGui::ColorEdit4(label, col, flags);
+		_color.x = col[0];
+		_color.y = col[1];
+		_color.z = col[2];
+		_color.w = col[3];
+	}
+
 	ImVec4 ColorToVec4(Logging::COLOR _color)
 	{
 		switch (_color)

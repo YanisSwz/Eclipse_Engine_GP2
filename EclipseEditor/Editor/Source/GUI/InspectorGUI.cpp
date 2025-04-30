@@ -249,6 +249,8 @@ namespace GUI
 		{
 			DrawDeleteComponentPopup(_light);
 
+			GUI::ColorEdit4("Color", _light->GetColorRef());
+
 			ImGui::TreePop();
 		}
 	}
@@ -262,10 +264,7 @@ namespace GUI
 		{
 			DrawDeleteComponentPopup(_light);
 
-			Math::Vec4 color = _light->GetColor();
-			float col[4]{ color.x, color.y, color.z, color.w };
-			ImGui::ColorEdit4("Color", col);
-			_light->SetColor({ col[0], col[1], col[2], col[3] });
+			GUI::ColorEdit4("Color", _light->GetColorRef());
 
 			ImGui::TreePop();
 		}
@@ -280,10 +279,7 @@ namespace GUI
 		{
 			DrawDeleteComponentPopup(_light);
 
-			Math::Vec4 color = _light->GetColor();
-			float col[4]{ color.x, color.y, color.z, color.w };
-			ImGui::ColorEdit4("Color", col);
-			_light->SetColor({ col[0], col[1], col[2], col[3] });
+			GUI::ColorEdit4("Color", _light->GetColorRef());
 
 			GUI::DragFloat("Inner Angle", "##", &_light->GetInnerCutoffRef(), 1.f, 1.f, std::min(_light->GetOuterCutoff(), 180.f));
 			GUI::DragFloat("Outer Angle", "##1", &_light->GetOuterCutoffRef(), 1.f, _light->GetInnerCutoff(), 180.f);

@@ -20,6 +20,7 @@ namespace Core
 			m_color.w = _a;
 		};
 		inline Math::Vec4 GetColor() { return m_color; };
+		inline Math::Vec4& GetColorRef() { return m_color; };
 		
 	protected:
 		Math::Vec4 m_color;
