@@ -159,7 +159,7 @@ namespace GUI
 			switch (m_crtGizmoOperation)
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
-				_crtGOSelected->transform->SetPosition(Math::Vec3(position[0], position[1], position[2]));
+				_crtGOSelected->transform->SetPosition(position[0], position[1], position[2]);
 				break;
 
 			case ImGuizmo::OPERATION::ROTATE:
@@ -172,7 +172,7 @@ namespace GUI
 			}
 
 			case ImGuizmo::OPERATION::SCALE:
-				_crtGOSelected->transform->SetScale(Math::Vec3(scale[0] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().x), scale[1] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().y), scale[2] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().z)));
+				_crtGOSelected->transform->SetScale(scale[0] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().x), scale[1] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().y), scale[2] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().z));
 				break;
 			}
 
