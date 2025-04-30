@@ -14,6 +14,11 @@ namespace GUI
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
 
+		_windowWidth = static_cast<int>(windowSize.x);
+		_windowHeight = static_cast<int>(windowSize.y);
+		_windowPosX = static_cast<int>(windowPos.x);
+		_windowPosY = static_cast<int>(windowPos.y);
+
 		if (_camera->MouseSpeedChanged())
 		{
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.75f)); 
@@ -29,10 +34,6 @@ namespace GUI
 			ImGui::End();
 		}
 
-		_windowWidth = static_cast<int>(windowSize.x);
-		_windowHeight = static_cast<int>(windowSize.y);
-		_windowPosX = static_cast<int>(windowPos.x);
-		_windowPosY = static_cast<int>(windowPos.y);
 
 		ImGui::GetWindowDrawList()->AddImage(
 			static_cast<intptr_t>(_textureID),

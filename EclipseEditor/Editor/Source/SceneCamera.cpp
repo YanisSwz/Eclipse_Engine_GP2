@@ -130,10 +130,10 @@ void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 	Math::Vec2 mouseDelta = (newMousePos - m_oldMouse) * m_mouseSensitivity * _deltaTime;
 
 	m_rotation.x -= mouseDelta.x;
-	if (m_rotation.y - mouseDelta.y < Math::Tools::PI / 2.f && m_rotation.y - mouseDelta.y > -Math::Tools::PI / 2.f)
+	if (m_rotation.y - mouseDelta.y < 90.f && m_rotation.y - mouseDelta.y > -90.f)
 		m_rotation.y -= mouseDelta.y;
 
-	Math::Mat4 finalMatrix = Math::Mat4::RotationY(m_rotation.x) * Math::Mat4::RotationX(m_rotation.y);
+	Math::Mat4 finalMatrix = Math::Mat4::RotationY(Math::Tools::ToRad(m_rotation.x)) * Math::Mat4::RotationX(Math::Tools::ToRad(m_rotation.y));
 	Math::Vec4 direction = finalMatrix * Math::Vec4{ 0.f, 0.f, 1.f, 0.f };
 	m_eye.x = m_at.x - direction.x;
 	m_eye.y = m_at.y - direction.y;

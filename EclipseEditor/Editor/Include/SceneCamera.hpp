@@ -45,7 +45,7 @@ namespace Core
 		float m_far = 100.f;
 
 		float m_moveSpeed = 1.f;
-		float m_mouseSensitivity = 1.f;
+		float m_mouseSensitivity = 20.f;
 
 		Math::Vec2 m_rotation{ 0.f, 0.f };
 		Math::Vec2 m_oldMouse{ 0.f, 0.f };
