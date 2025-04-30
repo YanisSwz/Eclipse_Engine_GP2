@@ -1,6 +1,9 @@
 #pragma once
 #include "meta/factory.hpp"
 #include <string_view>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 class ISerializable
 {
