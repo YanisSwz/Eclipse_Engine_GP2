@@ -5,12 +5,12 @@
 namespace Core
 {
 	meta::factory<Transform> Transform::factory = meta::reflect<Transform>(hash("Transform"))
-		.data<&Transform::SetLocalPosition, &Transform::GetLocalPosition>(m_hash("LocalPosition"))
-		.data<&Transform::SetLocalScale, &Transform::GetLocalScale>(m_hash("LocalScale"))
-		.data<&Transform::SetLocalEulerAngles, &Transform::GetLocalEulerAngles>(m_hash("LocalRotation"))
-		.func<&Transform::UpdatePosition>(m_hash("UpdateLocalPosition"))
-		.func<&Transform::UpdateScale>(m_hash("UpdateLocalScale"))
-		.func<&Transform::UpdateRotation>(m_hash("UpdateLocalRotation"));
+		.data<&Transform::SetLocalPosition, &Transform::GetLocalPosition>(hash("LocalPosition"))
+		.data<&Transform::SetLocalScale, &Transform::GetLocalScale>(hash("LocalScale"))
+		.data<&Transform::SetLocalEulerAngles, &Transform::GetLocalEulerAngles>(hash("LocalRotation"))
+		.func<&Transform::UpdatePosition>(hash("UpdateLocalPosition"))
+		.func<&Transform::UpdateScale>(hash("UpdateLocalScale"))
+		.func<&Transform::UpdateRotation>(hash("UpdateLocalRotation"));
 
 
 	Transform::Transform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)

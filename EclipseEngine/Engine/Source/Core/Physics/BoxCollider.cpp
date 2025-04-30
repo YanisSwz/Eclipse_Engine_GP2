@@ -15,13 +15,13 @@ using namespace JPH::literals;
 namespace Core
 {
 	meta::factory<BoxCollider> BoxCollider::factory = meta::reflect<BoxCollider>(hash("BoxCollider"))
-		.data<&BoxCollider::SetActive, &BoxCollider::IsActive>(m_hash("IsActive"))
-		.data<&BoxCollider::SetDynamic, &BoxCollider::GetIsDynamic>(m_hash("IsDynamic"))
-		.data<&BoxCollider::SetMass, &BoxCollider::GetMass>(m_hash("Mass"));
-		//.func<&BoxCollider::GetOffsetPos>(m_hash("GetPositionOffset"))
-		//.func<&BoxCollider::GetScale>(m_hash("GetScale"))
-		//.func<&BoxCollider::SetOffsetPos>(m_hash("SetPositionOffset"));
-		//.func<&BoxCollider::Scale>(m_hash("SetScale"));
+		.data<&BoxCollider::SetActive, &BoxCollider::IsActive>(hash("IsActive"))
+		.data<&BoxCollider::SetDynamic, &BoxCollider::GetIsDynamic>(hash("IsDynamic"))
+		.data<&BoxCollider::SetMass, &BoxCollider::GetMass>(hash("Mass"));
+		//.func<&BoxCollider::GetOffsetPos>(hash("GetPositionOffset"))
+		//.func<&BoxCollider::GetScale>(hash("GetScale"))
+		//.func<&BoxCollider::SetOffsetPos>(hash("SetPositionOffset"));
+		//.func<&BoxCollider::Scale>(hash("SetScale"));
 
 	BoxCollider::BoxCollider()
 	{

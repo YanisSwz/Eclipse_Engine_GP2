@@ -4,10 +4,10 @@
 namespace Core
 {
 	meta::factory<Model> Model::factory = meta::reflect<Model>(hash("Model"))
-		.data<&Model::SetActive, &Model::IsActive>(m_hash("IsActive"))
-		.data<&Model::mesh>(m_hash("Mesh"))
-		.data<&Model::texture>(m_hash("Texture"))
-		.data<&Model::shader>(m_hash("Shader"));
+		.data<&Model::SetActive, &Model::IsActive>(hash("IsActive"))
+		.data<&Model::mesh>(hash("Mesh"))
+		.data<&Model::texture>(hash("Texture"))
+		.data<&Model::shader>(hash("Shader"));
 
 	Model::Model(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader)
 		:mesh(_mesh), texture(_texture), shader(_shader)

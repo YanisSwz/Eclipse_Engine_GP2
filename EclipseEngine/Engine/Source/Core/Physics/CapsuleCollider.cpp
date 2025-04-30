@@ -13,13 +13,13 @@ using namespace JPH::literals;
 namespace Core
 {
 	meta::factory<CapsuleCollider> CapsuleCollider::factory = meta::reflect<CapsuleCollider>(hash("CapsuleCollider"))
-		.data<&CapsuleCollider::SetActive, &CapsuleCollider::IsActive>(m_hash("IsActive"))
-		.data<&CapsuleCollider::SetDynamic, &CapsuleCollider::GetIsDynamic>(m_hash("IsDynamic"))
-		.data<&CapsuleCollider::SetMass, &CapsuleCollider::GetMass>(m_hash("Mass"));
-		//.func<&CapsuleCollider::GetOffsetPos>(m_hash("GetPositionOffset"))
-		//.func<&CapsuleCollider::GetScale>(m_hash("GetScale"))
-		//.func<&BoxCollider::SetOffsetPos<Math::Vec3>>(m_hash("SetPositionOffset"))
-		//.func<&BoxCollider::Scale>(m_hash("SetScale"));
+		.data<&CapsuleCollider::SetActive, &CapsuleCollider::IsActive>(hash("IsActive"))
+		.data<&CapsuleCollider::SetDynamic, &CapsuleCollider::GetIsDynamic>(hash("IsDynamic"))
+		.data<&CapsuleCollider::SetMass, &CapsuleCollider::GetMass>(hash("Mass"));
+		//.func<&CapsuleCollider::GetOffsetPos>(hash("GetPositionOffset"))
+		//.func<&CapsuleCollider::GetScale>(hash("GetScale"))
+		//.func<&BoxCollider::SetOffsetPos<Math::Vec3>>(hash("SetPositionOffset"))
+		//.func<&BoxCollider::Scale>(hash("SetScale"));
 
 	CapsuleCollider::CapsuleCollider()
 	{

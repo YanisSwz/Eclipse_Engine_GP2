@@ -4,10 +4,10 @@
 namespace Core
 {
 	meta::factory<GameObject> GameObject::factory = meta::reflect<GameObject>(hash("GameObject"))
-		.data<&GameObject::SetActive, &GameObject::IsActive>(m_hash("IsActive"))
-		.data<&GameObject::name>(m_hash("Name"))
-		.data<&GameObject::transform>(m_hash("Transform"))
-		.data<&GameObject::m_components>(m_hash("Components"));
+		.data<&GameObject::SetActive, &GameObject::IsActive>(hash("IsActive"))
+		.data<&GameObject::name>(hash("Name"))
+		.data<&GameObject::transform>(hash("Transform"))
+		.data<&GameObject::m_components>(hash("Components"));
 
 	GameObject::GameObject(SystemManager* _manager, Transform* _t, std::string _name)
 	{
