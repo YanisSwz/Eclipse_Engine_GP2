@@ -265,6 +265,7 @@ namespace GUI
 			DrawDeleteComponentPopup(_light);
 
 			GUI::ColorEdit4("Color", _light->GetColorRef());
+			GUI::DragFloat("Range", "##", &_light->GetDistanceRef(), 0.1f, 1.f, 200.f);
 
 			ImGui::TreePop();
 		}
@@ -280,9 +281,10 @@ namespace GUI
 			DrawDeleteComponentPopup(_light);
 
 			GUI::ColorEdit4("Color", _light->GetColorRef());
+			GUI::DragFloat("Range", "##1", &_light->GetDistanceRef(), 0.1f, 1.f, 200.f);
 
-			GUI::DragFloat("Inner Angle", "##", &_light->GetInnerCutoffRef(), 1.f, 1.f, std::min(_light->GetOuterCutoff(), 180.f));
-			GUI::DragFloat("Outer Angle", "##1", &_light->GetOuterCutoffRef(), 1.f, _light->GetInnerCutoff(), 180.f);
+			GUI::DragFloat("Inner Angle", "##2", &_light->GetInnerCutoffRef(), 1.f, 1.f, std::min(_light->GetOuterCutoff(), 180.f));
+			GUI::DragFloat("Outer Angle", "##3", &_light->GetOuterCutoffRef(), 1.f, _light->GetInnerCutoff(), 180.f);
 
 			ImGui::TreePop();
 		}

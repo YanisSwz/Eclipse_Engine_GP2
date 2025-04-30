@@ -308,8 +308,7 @@ void EditorApp::LoadScene()
 	pointLight->transform->SetLocalScale(1.f, 1.f, 1.f);
 	pointLight->name = "PointLight";
 	Core::PointLight* pointLightComp = pointLight->AddComponent<Core::PointLight>();
-	pointLightComp->SetColor({ 0.f, 0.f, 1.f, 1.f });
-	pointLight->SetActive(false);
+	pointLightComp->SetColor(0.f, 0.f, 1.f, 1.f);
 
 	Core::GameObject* spotLight = m_scene.CreateGameObject();
 	spotLight->transform->SetLocalPosition(0.f, 0.f, 0.f);
@@ -318,6 +317,7 @@ void EditorApp::LoadScene()
 	spotLight->name = "SpotLight";
 	Core::SpotLight* spotLightComp = spotLight->AddComponent<Core::SpotLight>();
 	spotLightComp->SetColor(1.f, 0.f, 0.f, 1.f);
+	spotLight->SetActive(false);
 }
 
 void EditorApp::DrawScene()

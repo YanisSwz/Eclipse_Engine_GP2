@@ -17,8 +17,8 @@ namespace Core
 			m_color,
 			GetPosition(),
 			m_constantAttenuation,
-			m_linearAttenuation,
-			m_quadraticAttenuation,
+			1.f/m_distance,
+			1.f/(m_distance * m_distance),
 			0.f,
 			0.f
 		};

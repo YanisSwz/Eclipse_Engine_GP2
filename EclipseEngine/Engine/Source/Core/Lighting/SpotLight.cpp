@@ -20,8 +20,8 @@ namespace Core
 			GetDirection(),
 			cosf(Math::Tools::ToRad(m_outerCutOff/2.f)),
 			m_constantAttenuation,
-			m_linearAttenuation,
-			m_quadraticAttenuation,
+			1.f / m_distance,
+			1.f / (m_distance * m_distance),
 			0.f
 		};
 	}
