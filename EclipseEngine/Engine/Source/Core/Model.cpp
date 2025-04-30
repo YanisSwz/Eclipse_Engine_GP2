@@ -3,7 +3,7 @@
 
 namespace Core
 {
-	meta::factory<Model> Model::factory = meta::reflect<Model>(m_hash("Model"))
+	meta::factory<Model> Model::factory = meta::reflect<Model>(hash("Model"))
 		.data<&Model::SetActive, &Model::IsActive>(m_hash("IsActive"))
 		.data<&Model::mesh>(m_hash("Mesh"))
 		.data<&Model::texture>(m_hash("Texture"))

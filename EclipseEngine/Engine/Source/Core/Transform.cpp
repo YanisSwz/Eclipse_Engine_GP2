@@ -4,7 +4,7 @@
 
 namespace Core
 {
-	meta::factory<Transform> Transform::factory = meta::reflect<Transform>(m_hash("Transform"))
+	meta::factory<Transform> Transform::factory = meta::reflect<Transform>(hash("Transform"))
 		.data<&Transform::SetLocalPosition, &Transform::GetLocalPosition>(m_hash("LocalPosition"))
 		.data<&Transform::SetLocalScale, &Transform::GetLocalScale>(m_hash("LocalScale"))
 		.data<&Transform::SetLocalEulerAngles, &Transform::GetLocalEulerAngles>(m_hash("LocalRotation"))

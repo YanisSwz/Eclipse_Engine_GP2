@@ -7,7 +7,6 @@
 #include "MonoBehaviour.hpp"
 #include "SystemManager.hpp"
 #include "ProjectExports.hpp"
-#include "meta/factory.hpp"
 
 namespace Core
 {
@@ -87,8 +86,6 @@ namespace Core
 		}
 
 	private:
-		inline static std::hash<std::string_view> m_hash{};
-
 		std::vector<Component*> m_components{};
 		SystemManager* m_systemManager = nullptr;
 	};

@@ -1,9 +1,10 @@
 #pragma once
 #include "ProjectExports.hpp"
+#include "ISerializable.hpp"
 
 namespace Core
 {
-	class Object
+	class Object : public ISerializable
 	{
 	public:
 		ECLIPSE_ENGINE Object();

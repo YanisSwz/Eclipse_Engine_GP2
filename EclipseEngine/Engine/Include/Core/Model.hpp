@@ -5,8 +5,6 @@
 #include "Resource/ShaderProgram.hpp"
 #include "ModelData.hpp"
 #include "ProjectExports.hpp"
-#include "meta/factory.hpp"
-#include <string>
 
 namespace Core
 {
@@ -30,8 +28,5 @@ namespace Core
 		Resource::Mesh* mesh = nullptr;
 		Resource::Texture* texture = nullptr;
 		Resource::ShaderProgram* shader = nullptr;
-	
-	private:
-		inline static std::hash<std::string_view> m_hash{};
 	};
 }

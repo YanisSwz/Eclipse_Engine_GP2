@@ -1,8 +1,6 @@
 #pragma once
 #include "ICollider.hpp"
 #include "ProjectExports.hpp"
-#include "meta/factory.hpp"
-#include <string>
 
 namespace Core
 {
@@ -20,8 +18,6 @@ namespace Core
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale) override;
 
 	private:
-		inline static std::hash<std::string_view> m_hash{};
-		
 		void Recreate() override;
 	};
 }

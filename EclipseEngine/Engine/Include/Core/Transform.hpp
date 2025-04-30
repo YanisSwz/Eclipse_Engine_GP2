@@ -3,8 +3,6 @@
 #include "Component.hpp"
 #include "ProjectExports.hpp"
 #include <vector>
-#include "meta/factory.hpp"
-#include <string>
 
 namespace Core
 {
@@ -66,8 +64,6 @@ namespace Core
 		ECLIPSE_ENGINE void SetRotationChanged();
 
 	private:
-		inline static std::hash<std::string_view> m_hash{};
-
 		Math::Mat4 GetLocalTransformMatrix() const;
 		void UpdatePosition();
 		void UpdateScale();

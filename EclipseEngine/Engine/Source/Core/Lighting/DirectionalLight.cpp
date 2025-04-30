@@ -3,7 +3,7 @@
 
 namespace Core
 {
-	meta::factory<DirectionalLight> DirectionalLight::factory = meta::reflect<DirectionalLight>(m_hash("DirectionalLight"))
+	meta::factory<DirectionalLight> DirectionalLight::factory = meta::reflect<DirectionalLight>(hash("DirectionalLight"))
 		.data<&DirectionalLight::SetActive, &DirectionalLight::IsActive>(m_hash("IsActive"))
 		.data<&DirectionalLight::SetColor, &DirectionalLight::GetColor>(m_hash("Color"));
 

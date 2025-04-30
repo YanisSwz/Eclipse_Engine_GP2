@@ -3,7 +3,7 @@
 
 namespace Core
 {
-	meta::factory<SpotLight> SpotLight::factory = meta::reflect<SpotLight>(m_hash("SpotLight"))
+	meta::factory<SpotLight> SpotLight::factory = meta::reflect<SpotLight>(hash("SpotLight"))
 		.data<&SpotLight::SetActive, &SpotLight::IsActive>(m_hash("IsActive"))
 		.data<&SpotLight::SetColor, &SpotLight::GetColor>(m_hash("Color"))
 		.data<&SpotLight::m_innerCutOff>(m_hash("InnerCutoff"))

@@ -12,7 +12,7 @@ using namespace JPH::literals;
 
 namespace Core
 {
-	meta::factory<CapsuleCollider> CapsuleCollider::factory = meta::reflect<CapsuleCollider>(m_hash("CapsuleCollider"))
+	meta::factory<CapsuleCollider> CapsuleCollider::factory = meta::reflect<CapsuleCollider>(hash("CapsuleCollider"))
 		.data<&CapsuleCollider::SetActive, &CapsuleCollider::IsActive>(m_hash("IsActive"))
 		.data<&CapsuleCollider::SetDynamic, &CapsuleCollider::GetIsDynamic>(m_hash("IsDynamic"))
 		.data<&CapsuleCollider::SetMass, &CapsuleCollider::GetMass>(m_hash("Mass"));

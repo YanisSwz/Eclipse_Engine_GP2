@@ -2,8 +2,6 @@
 #include "ProjectExports.hpp"
 #include "Lighting/ILight.hpp"
 #include "RHIInterfaces/Lights.hpp"
-#include "meta/factory.hpp"
-#include <string>
 
 namespace Core
 {
@@ -18,8 +16,6 @@ namespace Core
 		ECLIPSE_ENGINE RHI::PointLightData GetData() const;
 
 	private:
-		inline static std::hash<std::string_view> m_hash{};
-
 		float m_constantAttenuation = 1.f;
 		float m_linearAttenuation = 0.09f;
 		float m_quadraticAttenuation = 0.032f;

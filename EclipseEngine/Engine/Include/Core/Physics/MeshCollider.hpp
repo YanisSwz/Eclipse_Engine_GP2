@@ -1,8 +1,6 @@
 #pragma once
 #include "ICollider.hpp"
 #include "ProjectExports.hpp"
-#include "meta/factory.hpp"
-#include <string>
 #include <Jolt/Jolt.h>
 #include <Jolt/Math/Float3.h>
 #include <Jolt/Geometry/IndexedTriangle.h>
@@ -32,8 +30,6 @@ namespace Core
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale) override;
 
 	private:
-		inline static std::hash<std::string_view> m_hash{};
-
 		JPH::VertexList m_vertexList;
 		JPH::IndexedTriangleList m_indexTriangleList;
 		const char* m_defaultMesh = "Cube.obj";

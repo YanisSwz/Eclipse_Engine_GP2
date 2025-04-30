@@ -2,8 +2,6 @@
 #include "ProjectExports.hpp"
 #include "Lighting/ILight.hpp"
 #include "RHIInterfaces/Lights.hpp"
-#include "meta/factory.hpp"
-#include <string>
 
 namespace Core
 {
@@ -18,8 +16,6 @@ namespace Core
 		ECLIPSE_ENGINE RHI::DirLightData GetData() const;
 
 	private:
-		inline static std::hash<std::string_view> m_hash{};
-
 		Math::Vec3 GetDirection() const;
 	};
 }
