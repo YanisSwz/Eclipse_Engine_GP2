@@ -10,3 +10,6 @@
 [submodule "EclipseEngine/Libs/Meta"]
 	path = EclipseEngine/Libs/Meta
 	url = https://github.com/skypjack/meta
+[submodule "EclipseEngine/Libs/Json"]
+	path = EclipseEngine/Libs/Json
+	url = https://github.com/nlohmann/json
