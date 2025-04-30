@@ -64,9 +64,28 @@ namespace RHI::OpenGL
 		// Lighting Render Pass
 		m_deferredRenderPass->Unbind();
 		
+
 		m_FB->Bind();
 		m_lightingRenderPass->Draw(_viewPos, m_deferredRenderPass->gPosition, m_deferredRenderPass->gNormal, m_deferredRenderPass->gAlbedoSpec, _ambientLight, _dirLights, _pointLights, _spotLights);
 		m_FB->Unbind();
+
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_deferredRenderPass->gBuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FB->GetFrameBufferID());
+
+		glBindRenderbuffer(GL_RENDERBUFFER, m_deferredRenderPass->rboDepth);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_deferredRenderPass->rboDepth);
+		glDrawBuffer(GL_DEPTH_ATTACHMENT);
+
+		glBindRenderbuffer(GL_RENDERBUFFER, m_FB->GetDepthBufferID());
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT + 1, GL_RENDERBUFFER, m_FB->GetDepthBufferID());
+		glReadBuffer(GL_DEPTH_ATTACHMENT + 1);
+
+		glBlitFramebuffer(0, 0, m_deferredRenderPass->GetWidth(), m_deferredRenderPass->GetWidth(),
+			0, 0, m_FB->width, m_FB->height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 
 	unsigned int OpenGLDefaultGraphicPipeline::GetFinalTexture() const

@@ -13,6 +13,8 @@ namespace RHI::OpenGL
 		GLuint gPosition;
 		GLuint gNormal;
 		GLuint gAlbedoSpec;
+		GLuint rboDepth;
+		GLuint gBuffer;
 
 		void Init(int _width, int _height) override;
 		void Rescale(int _width, int _height) override;
@@ -22,7 +24,5 @@ namespace RHI::OpenGL
 		void Unbind();
 
 	private:
-		GLuint m_gBuffer;
-		GLuint m_rboDepth;
 	};
 }

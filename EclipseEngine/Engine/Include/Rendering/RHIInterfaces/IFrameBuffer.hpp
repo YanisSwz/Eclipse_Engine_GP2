@@ -16,6 +16,8 @@ namespace RHI
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 		virtual unsigned int GetTextureID() const = 0;
+		virtual unsigned int GetFrameBufferID() const = 0;
+		virtual unsigned int GetDepthBufferID() const = 0;
 		virtual void Delete() = 0;
 
 	private:

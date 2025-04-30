@@ -66,6 +66,16 @@ unsigned int OpenGLFrameBuffer::GetTextureID() const
 	return m_textID;
 }
 
+unsigned int OpenGLFrameBuffer::GetFrameBufferID() const
+{
+	return m_fboID;
+}
+
+unsigned int OpenGLFrameBuffer::GetDepthBufferID() const
+{
+	return m_rboID;
+}
+
 void OpenGLFrameBuffer::Delete()
 {
 	glDeleteTextures(1, &m_textID);
