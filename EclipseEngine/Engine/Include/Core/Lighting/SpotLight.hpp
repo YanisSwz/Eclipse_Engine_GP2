@@ -18,8 +18,14 @@ namespace Core
 		ECLIPSE_ENGINE inline float GetOuterCutoff() { return m_outerCutOff; };
 
 	private:
-		float m_innerCutOff = 0.91f;
-		float m_outerCutOff = 0.82f;
+		/// <summary>
+		/// Inner cutoff angle in degrees
+		/// </summary>
+		float m_innerCutOff = 25.f;
+		/// <summary>
+		/// Inner cutoff angle in degrees
+		/// </summary>
+		float m_outerCutOff = 35.f;
 		float m_constantAttenuation = 1.f;
 		float m_linearAttenuation = 0.09f;
 		float m_quadraticAttenuation = 0.032f;

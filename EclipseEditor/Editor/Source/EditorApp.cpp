@@ -312,9 +312,9 @@ void EditorApp::LoadScene()
 	pointLight->SetActive(false);
 
 	Core::GameObject* spotLight = m_scene.CreateGameObject();
-	spotLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
-	spotLight->transform->SetLocalScale(Math::Vec3(1.f, 1.f, 1.f));
-	//spotLight->transform->SetLocalEulerAngles(90.f, 0.f, 0.f);
+	spotLight->transform->SetLocalPosition(0.f, 0.f, 0.f);
+	spotLight->transform->SetLocalScale(1.f, 1.f, 1.f);
+	spotLight->transform->SetLocalEulerAngles(90.f, 0.f, 0.f);
 	spotLight->name = "SpotLight";
 	Core::SpotLight* spotLightComp = spotLight->AddComponent<Core::SpotLight>();
 	spotLightComp->SetColor(1.f, 0.f, 0.f, 1.f);

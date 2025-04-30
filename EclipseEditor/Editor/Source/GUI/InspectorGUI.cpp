@@ -285,10 +285,8 @@ namespace GUI
 			ImGui::ColorEdit4("Color", col);
 			_light->SetColor({ col[0], col[1], col[2], col[3] });
 
-			GUI::DragFloat("Inner Angle", "##", &_light->GetInnerCutoffRef(), 1.f, 0.f, 180.f);
+			GUI::DragFloat("Inner Angle", "##", &_light->GetInnerCutoffRef(), 1.f, 1.f, std::min(_light->GetOuterCutoff(), 180.f));
 			GUI::DragFloat("Outer Angle", "##1", &_light->GetOuterCutoffRef(), 1.f, _light->GetInnerCutoff(), 180.f);
-			/*GUI::DragFloat("Inner Cutoff", "##1", &_light->GetInnerCutoffRef(), 0.1f, _light->GetOuterCutoff(), 180.f);
-			GUI::DragFloat("Outer Cutoff", "##2", &_light->GetOuterCutoffRef(), 0.1f, 0.f, _light->GetInnerCutoff());*/
 
 			ImGui::TreePop();
 		}
