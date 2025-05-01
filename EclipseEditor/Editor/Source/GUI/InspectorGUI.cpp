@@ -310,9 +310,22 @@ namespace GUI
 				}
 				ImGui::EndDragDropTarget();
 			}
-			
+			ImGui::Columns(1);
+
+			if (clip == nullptr)
+				ImGui::BeginDisabled();
+			bool isLooping = _source->GetLooping();
+			if (GUI::CheckBox("looping", "##1", &isLooping))
+				_source->SetLooping(isLooping);
+
 			if (ImGui::Button("Play"))
 				_source->Play();
+
+			ImGui::SameLine();
+			if (ImGui::Button("Stop"))
+				_source->Stop();
+			if (clip == nullptr)
+				ImGui::EndDisabled();
 
 			ImGui::Columns(1);
 			ImGui::NewLine();
