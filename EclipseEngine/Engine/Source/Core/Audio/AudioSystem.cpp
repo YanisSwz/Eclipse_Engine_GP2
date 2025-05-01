@@ -7,8 +7,8 @@ namespace Core
 	{
 		m_audioEngine.init();
 
-		m_startupSound.load("Assets/Audio/startup.mp3");
-		m_startupSound.setVolume(2.f);
+		/*m_startupSound.load("Assets/Audio/startup.mp3");
+		m_startupSound.setVolume(2.f);*/
 	}
 
 	void AudioSystem::Destroy()
@@ -18,10 +18,10 @@ namespace Core
 
 	void AudioSystem::PlayStartUp()
 	{
-		m_audioEngine.play(m_startupSound);
+		//m_audioEngine.play(m_startupSound);
 	}
 
-	AudioEmitter* AudioSystem::Add()
+	AudioSource* AudioSystem::Add()
 	{
 		if (m_currentCount >= MAX_SIZE)
 			return nullptr;
@@ -31,14 +31,14 @@ namespace Core
 			if (m_audioEmitters[i].IsDestroyed())
 			{
 				m_audioEmitters[i].Remove();
-				m_audioEmitters[i].~AudioEmitter();
-				new (&m_audioEmitters[i]) AudioEmitter(&m_audioEngine);
+				m_audioEmitters[i].~AudioSource();
+				new (&m_audioEmitters[i]) AudioSource(&m_audioEngine);
 				return &m_audioEmitters[i];
 			}
 		}
 
-		m_audioEmitters[m_currentCount].~AudioEmitter();
-		new (&m_audioEmitters[m_currentCount]) AudioEmitter(&m_audioEngine);
+		m_audioEmitters[m_currentCount].~AudioSource();
+		new (&m_audioEmitters[m_currentCount]) AudioSource(&m_audioEngine);
 		
 		++m_currentCount;
 		return &m_audioEmitters[m_currentCount - 1];

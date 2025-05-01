@@ -7,7 +7,7 @@
 #include "Core/Lighting/DirectionalLight.hpp"
 #include "Core/Lighting/PointLight.hpp"
 #include "Core/Lighting/SpotLight.hpp"
-#include "Core/Audio/AudioEmitter.hpp"
+#include "Core/Audio/AudioSource.hpp"
 #include "GameObject.hpp"
 #include "Model.hpp"
 
@@ -55,6 +55,7 @@ namespace GUI
 		DrawDirectionalLightComponent(_crtGOSelected->GetComponent<Core::DirectionalLight>());
 		DrawPointLightComponent(_crtGOSelected->GetComponent<Core::PointLight>());
 		DrawSpotLightComponent(_crtGOSelected->GetComponent<Core::SpotLight>());
+		DrawAudioSourceComponent(_crtGOSelected->GetComponent<Core::AudioSource>());
 
 		DrawAddComponent(_crtGOSelected);
 
@@ -280,28 +281,43 @@ namespace GUI
 		}
 	}
 
-	void InspectorGUI::DrawAudioEmitterComponent(Core::AudioEmitter _emitter)
+	void InspectorGUI::DrawAudioSourceComponent(Core::AudioSource* _source)
 	{
-		if (ImGui::TreeNodeEx("Model", m_treeNodeComponentFlags))
+		if (!_source)
+			return;
+
+		if (ImGui::TreeNodeEx("Audio Source", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_emitter);
+			DrawDeleteComponentPopup(_source);
 
 			std::vector<std::string> soundNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::AudioClip>();
-			std::string meshName = _model->mesh->name;
-			if (GUI::ComboFilter("Mesh ", &meshName, meshNames))
-				_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(meshName);
+			std::string soundName = "No Clip";
+			Resource::AudioClip* clip = _source->GetClip();
+			if (clip)
+			{
+				soundName = clip->name;
+			}
+			if (GUI::ComboFilter("Audio Clip ", &soundName, soundNames))
+				_source->SetClip(Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>(soundName));
 			if (ImGui::BeginDragDropTarget())
 			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MeshName"))
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ClipName"))
 				{
 					IM_ASSERT(payload->DataSize == sizeof(std::string));
 					std::string payload_n;
 					payload_n = *static_cast<std::string*>(payload->Data);
-					_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(payload_n);
+					_source->SetClip(Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>(payload_n));
 				}
 				ImGui::EndDragDropTarget();
 			}
+			
+			if (ImGui::Button("Play"))
+				_source->Play();
 
+			ImGui::Columns(1);
+			ImGui::NewLine();
+			ImGui::TreePop();
+		}
 	}
 
 	void InspectorGUI::DrawAddComponent(Core::GameObject* _crtGOSelected)
@@ -315,6 +331,7 @@ namespace GUI
 			DrawAddRendererComponent(_crtGOSelected);
 			DrawAddColliderComponent(_crtGOSelected);
 			DrawAddLightComponent(_crtGOSelected);
+			DrawAddAudioComponent(_crtGOSelected);
 			ImGui::EndPopup();
 		}
 
@@ -439,6 +456,23 @@ namespace GUI
 				Core::SpotLight* SpotLight = _crtGOSelected->GetComponent<Core::SpotLight>();
 				if (!SpotLight)
 					SpotLight = _crtGOSelected->AddComponent<Core::SpotLight>();
+				else
+					bIsComponentAlreadyAddedWindowEnable = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::TreePop();
+		}
+	}
+
+	void InspectorGUI::DrawAddAudioComponent(Core::GameObject* _crtGOSelected)
+	{
+		if (ImGui::TreeNodeEx("Audio", m_treeNodeAddComponentFlags))
+		{
+			if (ImGui::Button("Audio Source", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
+			{
+				Core::AudioSource* audioSource = _crtGOSelected->GetComponent<Core::AudioSource>();
+				if (!audioSource)
+					audioSource = _crtGOSelected->AddComponent<Core::AudioSource>();
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();

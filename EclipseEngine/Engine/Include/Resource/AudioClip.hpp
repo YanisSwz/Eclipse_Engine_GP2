@@ -14,7 +14,7 @@ namespace Resource
 
 		ECLIPSE_ENGINE void Delete() override;
 
+		SoLoud::Wav audioFile;
 	private:
-		SoLoud::Wav m_audioFile;
 	};
 }

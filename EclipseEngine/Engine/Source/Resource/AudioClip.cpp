@@ -13,7 +13,7 @@ namespace Resource
 
 	void AudioClip::GetFileContent(std::string _path)
 	{
-		m_audioFile.load(_path.c_str());
+		audioFile.load(_path.c_str());
 	}
 
 	void AudioClip::Delete()

@@ -14,7 +14,7 @@ namespace Core
 	class DirectionalLight;
 	class PointLight;
 	class SpotLight;
-	class AudioEmitter;
+	class AudioSource;
 }
 
 namespace GUI
@@ -37,12 +37,13 @@ namespace GUI
 		void DrawDirectionalLightComponent(Core::DirectionalLight* _light);
 		void DrawPointLightComponent(Core::PointLight* _light);
 		void DrawSpotLightComponent(Core::SpotLight* _light);
-		void DrawAudioEmitterComponent(Core::AudioEmitter _emitter);
+		void DrawAudioSourceComponent(Core::AudioSource* _source);
 
 		void DrawAddComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddRendererComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddColliderComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddLightComponent(Core::GameObject* _crtGOSelected);
+		void DrawAddAudioComponent(Core::GameObject* _crtGOSelected);
 
 		ImGuiTreeNodeFlags m_treeNodeComponentFlags = ImGuiTreeNodeFlags_None;
 		ImGuiTreeNodeFlags m_treeNodeAddComponentFlags = ImGuiTreeNodeFlags_None;

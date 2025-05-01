@@ -208,7 +208,11 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DeferredLighting.frag", "Assets/Shaders/DeferredRendering/DeferredLighting.frag");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DeferredLighting.shd", "DeferredLighting.vert", "DeferredLighting.frag");
 
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("TestAudio.mp3", "Assets/Audio/startup.mp3");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("startup.soloud", "Assets/Audio/startup.mp3");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("potion.soloud", "Assets/Audio/potion.wav");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("fireball.soloud", "Assets/Audio/fireball.wav");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("shoot.soloud", "Assets/Audio/shoot.wav");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("mana.soloud", "Assets/Audio/mana.flac");
 
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
@@ -322,7 +326,7 @@ void EditorApp::LoadScene()
 	Core::GameObject* soundTest = m_scene.CreateGameObject();
 	soundTest->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
 	soundTest->name = "Sound Test";
-	soundTest->AddComponent<Core::AudioEmitter>();
+	soundTest->AddComponent<Core::AudioSource>();
 	
 }
 

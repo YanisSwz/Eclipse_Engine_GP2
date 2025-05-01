@@ -2,7 +2,7 @@
 #include "ProjectExports.hpp"
 #include "soloud.h"
 #include "soloud_wav.h"
-#include "AudioEmitter.hpp"
+#include "AudioSource.hpp"
 
 namespace Core
 {
@@ -16,12 +16,12 @@ namespace Core
 		ECLIPSE_ENGINE void Destroy();
 
 		ECLIPSE_ENGINE void PlayStartUp();
-		ECLIPSE_ENGINE AudioEmitter* Add();
+		ECLIPSE_ENGINE AudioSource* Add();
 
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentCount = 0;
-		AudioEmitter m_audioEmitters[MAX_SIZE];
+		AudioSource m_audioEmitters[MAX_SIZE];
 
 		SoLoud::Soloud m_audioEngine{};
 		SoLoud::Wav m_startupSound{};
