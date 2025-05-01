@@ -1,6 +1,7 @@
 #pragma once
 #include "Resource/ShaderProgram.hpp"
 #include "Resource/Skybox.hpp"
+#include "Resource/AudioClip.hpp"
 #include <type_traits>
 #include <typeinfo>
 #include <iostream>

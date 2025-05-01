@@ -316,6 +316,12 @@ void EditorApp::LoadScene()
 	spotLight->name = "SpotLight";
 	Core::SpotLight* spotLightComp = spotLight->AddComponent<Core::SpotLight>();
 	spotLightComp->SetColor({ 1.f, 0.f, 0.f, 1.f });
+
+	Core::GameObject* soundTest = m_scene.CreateGameObject();
+	soundTest->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
+	soundTest->name = "Sound Test";
+	soundTest->AddComponent<Core::AudioEmitter>();
+	
 }
 
 void EditorApp::DrawScene()

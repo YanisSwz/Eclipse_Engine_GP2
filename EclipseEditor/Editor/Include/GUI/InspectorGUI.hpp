@@ -14,6 +14,7 @@ namespace Core
 	class DirectionalLight;
 	class PointLight;
 	class SpotLight;
+	class AudioEmitter;
 }
 
 namespace GUI
@@ -36,6 +37,7 @@ namespace GUI
 		void DrawDirectionalLightComponent(Core::DirectionalLight* _light);
 		void DrawPointLightComponent(Core::PointLight* _light);
 		void DrawSpotLightComponent(Core::SpotLight* _light);
+		void DrawAudioEmitterComponent(Core::AudioEmitter _emitter);
 
 		void DrawAddComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddRendererComponent(Core::GameObject* _crtGOSelected);

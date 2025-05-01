@@ -77,8 +77,8 @@ namespace RHI::OpenGL
 		glDrawBuffer(GL_DEPTH_ATTACHMENT);
 
 		glBindRenderbuffer(GL_RENDERBUFFER, m_FB->GetDepthBufferID());
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT + 1, GL_RENDERBUFFER, m_FB->GetDepthBufferID());
-		glReadBuffer(GL_DEPTH_ATTACHMENT + 1);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_FB->GetDepthBufferID());
+		glReadBuffer(GL_DEPTH_ATTACHMENT);
 
 		glBlitFramebuffer(0, 0, m_deferredRenderPass->GetWidth(), m_deferredRenderPass->GetWidth(),
 			0, 0, m_FB->width, m_FB->height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);

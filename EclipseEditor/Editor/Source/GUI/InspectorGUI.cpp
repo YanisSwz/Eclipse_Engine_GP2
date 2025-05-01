@@ -7,6 +7,7 @@
 #include "Core/Lighting/DirectionalLight.hpp"
 #include "Core/Lighting/PointLight.hpp"
 #include "Core/Lighting/SpotLight.hpp"
+#include "Core/Audio/AudioEmitter.hpp"
 #include "GameObject.hpp"
 #include "Model.hpp"
 
@@ -277,6 +278,30 @@ namespace GUI
 
 			ImGui::TreePop();
 		}
+	}
+
+	void InspectorGUI::DrawAudioEmitterComponent(Core::AudioEmitter _emitter)
+	{
+		if (ImGui::TreeNodeEx("Model", m_treeNodeComponentFlags))
+		{
+			DrawDeleteComponentPopup(_emitter);
+
+			std::vector<std::string> soundNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::AudioClip>();
+			std::string meshName = _model->mesh->name;
+			if (GUI::ComboFilter("Mesh ", &meshName, meshNames))
+				_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(meshName);
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MeshName"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					std::string payload_n;
+					payload_n = *static_cast<std::string*>(payload->Data);
+					_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(payload_n);
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 	}
 
 	void InspectorGUI::DrawAddComponent(Core::GameObject* _crtGOSelected)

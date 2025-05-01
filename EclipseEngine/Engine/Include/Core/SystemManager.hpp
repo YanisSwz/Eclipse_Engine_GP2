@@ -60,7 +60,12 @@ namespace Core
 				delete basePtr;
 				return dynamic_cast<T*>(m_renderSystem.AddSpotLight());
 			}
-
+			else if (AudioEmitter* audioEmitter_ptr = dynamic_cast<AudioEmitter*>(basePtr))
+			{
+				delete basePtr;
+				audioEmitter_ptr = m_audioSystem.Add();
+				return dynamic_cast<T*>(m_audioSystem.Add());
+			}
 			delete basePtr;
 			return nullptr;
 		}
