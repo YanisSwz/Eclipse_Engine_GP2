@@ -1,5 +1,5 @@
 #pragma once
-#include "IResource.hpp"
+#include "IGraphicsResource.hpp"
 #include "RHIInterfaces/IVertexArray.hpp"
 #include "RHIInterfaces/IVertexBuffer.hpp"
 #include "RHIInterfaces/IIndexBuffer.hpp"
@@ -8,7 +8,7 @@
 
 namespace Resource
 {
-	class Mesh : public IResource
+	class Mesh : public IGraphicsResource
 	{
 	public:
 		ECLIPSE_ENGINE Mesh(std::string _name = "");

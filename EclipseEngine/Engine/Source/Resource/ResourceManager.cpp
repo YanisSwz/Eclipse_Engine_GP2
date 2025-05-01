@@ -34,7 +34,11 @@ namespace Resource
 		for (std::map<std::string, IResource*>::iterator it = m_resourcesToLoad.begin(); it != m_resourcesToLoad.end(); ++it)
 		{
 			it->second->GetFileContent(m_resourcesPath[it->first]);
-			AddResourceToGenerate(it->second, it->first);
+			IGraphicsResource* res = dynamic_cast<IGraphicsResource*>(it->second);
+			if (res != nullptr)
+				AddResourceToGenerate(res, it->first);
+			else
+				AddResourceToReady(it->second, it->first);
 		}
 		m_resourcesToLoad.clear();
 	}
@@ -44,7 +48,7 @@ namespace Resource
 		while (!m_resourcesToGenerate.empty())
 		{
 			std::vector<std::string> resourcesGenerated;
-			for (std::map<std::string, IResource*>::iterator it = m_resourcesToGenerate.begin(); it != m_resourcesToGenerate.end(); ++it)
+			for (std::map<std::string, IGraphicsResource*>::iterator it = m_resourcesToGenerate.begin(); it != m_resourcesToGenerate.end(); ++it)
 			{
 				it->second->Generate(_rendererInterface);
 				AddResourceToReady(it->second, it->first);
@@ -69,7 +73,7 @@ namespace Resource
 		}
 	}
 
-	void ResourceManager::AddResourceToGenerate(IResource* _resource, std::string _resourceName)
+	void ResourceManager::AddResourceToGenerate(IGraphicsResource* _resource, std::string _resourceName)
 	{
 		m_resourcesToGenerate[_resourceName] = _resource;
 	}

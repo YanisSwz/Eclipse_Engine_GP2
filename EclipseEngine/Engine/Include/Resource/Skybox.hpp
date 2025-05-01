@@ -9,7 +9,7 @@
 
 namespace Resource
 {
-	class Skybox : public IResource
+	class Skybox : public IGraphicsResource
 	{
 	public:
 		ECLIPSE_ENGINE Skybox(std::string _name = "");

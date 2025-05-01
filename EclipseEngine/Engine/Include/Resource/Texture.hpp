@@ -1,10 +1,10 @@
 #pragma once
-#include "Resource/IResource.hpp"
+#include "Resource/IGraphicsResource.hpp"
 #include "RHIInterfaces/ITexture2D.hpp"
 
 namespace Resource
 {
-	class Texture : public IResource
+	class Texture : public IGraphicsResource
 	{
 	public:
 		ECLIPSE_ENGINE Texture(std::string _name = "");
