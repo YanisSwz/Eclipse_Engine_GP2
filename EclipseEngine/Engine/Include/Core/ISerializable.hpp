@@ -3,10 +3,13 @@
 #include <string_view>
 #include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
-
-class ISerializable
+namespace Core
 {
-public:
-	inline static std::hash<std::string_view> hash{};
-};
+	using json = nlohmann::json;
+
+	class ISerializable
+	{
+	public:
+		inline static std::hash<std::string_view> hash{};
+	};
+}
