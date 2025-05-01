@@ -1,13 +1,14 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
+#include "Logging/Logger.hpp"
 #include <utility>
 
 namespace Core
 {
 	meta::factory<Transform> Transform::factory = meta::reflect<Transform>(hash("Transform"))
-		.data<&Transform::SetLocalPosition, &Transform::GetLocalPosition>(hash("LocalPosition"))
-		.data<&Transform::SetLocalScale, &Transform::GetLocalScale>(hash("LocalScale"))
-		.data<&Transform::SetLocalEulerAngles, &Transform::GetLocalEulerAngles>(hash("LocalRotation"))
+		//.data<&Transform::SetLocalPosition, &Transform::GetLocalPosition>(hash("LocalPosition"))
+		//.data<&Transform::SetLocalScale, &Transform::GetLocalScale>(hash("LocalScale"))
+		//.data<&Transform::SetLocalEulerAngles, &Transform::GetLocalEulerAngles>(hash("LocalRotation"))
 		.func<&Transform::UpdatePosition>(hash("UpdateLocalPosition"))
 		.func<&Transform::UpdateScale>(hash("UpdateLocalScale"))
 		.func<&Transform::UpdateRotation>(hash("UpdateLocalRotation"));
@@ -46,7 +47,7 @@ namespace Core
 		std::vector<Transform*> children;
 		for(int i = 0; i < m_children.size(); ++i)
 		{
-			if (m_children[i]->IsActive())
+			if (!m_children[i]->IsDestroyed())
 				children.push_back(m_children[i]);
 		}
 		return children;
@@ -78,7 +79,7 @@ namespace Core
 
 	void Transform::Update(bool _positionChanged, bool _scaleChanged, bool _rotationChanged)
 	{
-		if (!IsActive() || IsDestroyed())
+		if (IsDestroyed())
 			return;
 
 		_positionChanged |= m_positionChanged;
@@ -208,7 +209,7 @@ namespace Core
 
 	void Transform::SetRotation(Math::Quat _quat)
 	{
-		m_rotation = _quat;
+		m_rotation = Math::Quat::Normalized(_quat);
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
@@ -248,31 +249,177 @@ namespace Core
 			m_positionChanged = true;
 	}
 
-
-	// TODO: check if local rotation setters are correct
 	void Transform::SetLocalRotation(Math::Quat _quat)
 	{
-		m_localRotation = _quat;
+		m_localRotation = Math::Quat::Normalized(_quat);
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_rotation = m_parent->m_rotation * m_localRotation;
+		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
-		m_right = m_localRotation.Rotate(Math::Vec3::right);
-		m_up = m_localRotation.Rotate(Math::Vec3::up);
-		m_forward = m_localRotation.Rotate(Math::Vec3::forward);
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
 
 		// If we rotate parent, children move in space
 		if (m_children.size() > 0)
 			m_positionChanged = true;
 	}
+
 	void Transform::SetLocalEulerAngles(Math::Vec3 _vec)
 	{
 		m_localEulerAngles = _vec;
+		m_localRotation = Math::Quat::QuaternionEuler(m_localEulerAngles.x, m_localEulerAngles.y, m_localEulerAngles.z);
+		m_rotation = m_parent->m_rotation * m_localRotation;
+		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
-		m_right = m_localRotation.Rotate(Math::Vec3::right);
-		m_up = m_localRotation.Rotate(Math::Vec3::up);
-		m_forward = m_localRotation.Rotate(Math::Vec3::forward);
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
+
+		// If we rotate parent, children move in space
+		if (m_children.size() > 0)
+			m_positionChanged = true;
+	}
+
+	void Transform::SetPosition(float _x, float _y, float _z)
+	{
+		m_position.x = _x;
+		m_position.y = _y;
+		m_position.z = _z;
+
+		// We get the position relative to the parent
+		m_localPosition = m_position - m_parent->m_position;
+
+		// We cancel the rotation of the parent to have the correct local position
+		Math::Quat tempPos{ 0.f, m_localPosition.x, m_localPosition.y, m_localPosition.z };
+		Math::Quat inverseQ = Math::Quat::Inverse(m_parent->m_rotation);
+		Math::Quat tempQ = inverseQ * tempPos;
+		tempPos = tempQ * Math::Quat::Conjugate(inverseQ);
+		m_localPosition = Math::Vec3{ tempPos.x, tempPos.y, tempPos.z };
+
+		m_positionChanged = true;
+	}
+
+	void Transform::SetScale(float _x, float _y, float _z) 
+	{
+		m_scale.x = _x;
+		m_scale.y = _y;
+		m_scale.z = _z;
+
+		// We cancel the scale of the parent
+		m_localScale = m_scale / m_parent->m_scale;
+
+		m_scaleChanged = true;
+	}
+
+	void Transform::SetRotation(float _w, float _x, float _y, float _z) 
+	{
+		m_rotation.w = _w;
+		m_rotation.x = _x;
+		m_rotation.y = _y;
+		m_rotation.z = _z;
+		m_rotation.Normalize();
+
+		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
+		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+
+		//We also update the transform's up, right and forward local vectors
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
+
+		m_rotationChanged = true;
+
+		// If we rotate parent, children move in space
+		if (m_children.size() > 0)
+			m_positionChanged = true;
+	}
+
+	void Transform::SetEulerAngles(float _x, float _y, float _z) 
+	{
+		m_eulerAngles.x = _x;
+		m_eulerAngles.y = _y;
+		m_eulerAngles.z = _z;
+
+		m_rotation = Math::Quat::QuaternionEuler(m_eulerAngles.x, m_eulerAngles.y, m_eulerAngles.z);
+
+		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
+		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+
+		//We also update the transform's up, right and forward local vectors
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
+
+		m_rotationChanged = true;
+
+		// If we rotate parent, children move in space
+		if (m_children.size() > 0)
+			m_positionChanged = true;
+	}
+
+	void Transform::SetLocalPosition(float _x, float _y, float _z) 
+	{
+		m_localPosition.x = _x;
+		m_localPosition.y = _y;
+		m_localPosition.z = _z;
+
+		m_positionChanged = true;
+	}
+
+	void Transform::SetLocalScale(float _x, float _y, float _z) 
+	{
+		m_localScale.x = _x;
+		m_localScale.y = _y;
+		m_localScale.z = _z;
+
+		m_scaleChanged = true;
+	}
+
+	void Transform::SetLocalRotation(float _w, float _x, float _y, float _z) 
+	{
+		m_localRotation.w = _w;
+		m_localRotation.x = _x;
+		m_localRotation.y = _y;
+		m_localRotation.z = _z;
+		m_localRotation.Normalize();
+
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_rotation = m_parent->m_rotation * m_localRotation;
+		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_rotationChanged = true;
+
+		//We also update the transform's up, right and forward local vectors
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
+
+		// If we rotate parent, children move in space
+		if (m_children.size() > 0)
+			m_positionChanged = true;
+	}
+
+	void Transform::SetLocalEulerAngles(float _x, float _y, float _z) 
+	{
+		m_localEulerAngles.x = _x;
+		m_localEulerAngles.y = _y;
+		m_localEulerAngles.z = _z;
+
+		m_localRotation = Math::Quat::QuaternionEuler(m_localEulerAngles.x, m_localEulerAngles.y, m_localEulerAngles.z);
+		m_rotation = m_parent->m_rotation * m_localRotation;
+		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_rotationChanged = true;
+
+		//We also update the transform's up, right and forward local vectors
+		m_right = m_rotation.Rotate(Math::Vec3::right);
+		m_up = m_rotation.Rotate(Math::Vec3::up);
+		m_forward = m_rotation.Rotate(Math::Vec3::forward);
 
 		// If we rotate parent, children move in space
 		if (m_children.size() > 0)

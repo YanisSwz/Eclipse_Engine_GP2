@@ -1,4 +1,5 @@
 #include "MonoBehaviour.hpp"
+#include "Core/Physics/ICollider.hpp"
 #include <iostream>
 
 namespace Core
@@ -19,4 +20,8 @@ namespace Core
 	void MonoBehaviour::OnDestroy() {};
 	void MonoBehaviour::OnEnable() {};
 	void MonoBehaviour::OnDisable() {};
+
+	void MonoBehaviour::OnCollisionEnter(ICollider* _collider) {};
+	void MonoBehaviour::OnCollisionStay(ICollider* _collider) {};
+	void MonoBehaviour::OnCollisionExit(ICollider* _collider) {};
 }

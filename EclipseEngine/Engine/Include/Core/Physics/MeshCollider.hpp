@@ -18,9 +18,15 @@ namespace Core
 		static meta::factory<MeshCollider> factory;
 
 		ECLIPSE_ENGINE MeshCollider();
-		ECLIPSE_ENGINE MeshCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic = false, float _mass = 1.f, Math::Vec3 _size = { 1.f, 1.f, 1.f }, Math::Vec3 _pos = { 0.f, 0.f, 0.f }, Math::Vec3 _rot = { 0.f, 0.f, 0.f }, GameObject* _myGameObject = nullptr, JPH::VertexList _vertexList = JPH::VertexList(), JPH::IndexedTriangleList _indexTriangleList = JPH::IndexedTriangleList());
+		ECLIPSE_ENGINE MeshCollider(JPH::BodyInterface* _bodyInterface, float _mass = 1.f,
+			Math::Vec3 _size = { 1.f, 1.f, 1.f }, Math::Vec3 _pos = { 0.f, 0.f, 0.f },
+			Math::Vec3 _rot = { 0.f, 0.f, 0.f }, GameObject* _myGameObject = nullptr,
+			JPH::VertexList _vertexList = JPH::VertexList(),
+			JPH::IndexedTriangleList _indexTriangleList = JPH::IndexedTriangleList(),
+			Math::Vec3 _linearVelocity = { 0.f, 0.f, 0.f }, Math::Vec3 _angularVelocity = { 0.f, 0.f, 0.f });
 		ECLIPSE_ENGINE ~MeshCollider() override;
 		
+		ECLIPSE_ENGINE void SetDynamic(bool _isDynamic) override;
 		ECLIPSE_ENGINE void SetMesh(const char* _meshName);
 		ECLIPSE_ENGINE void SetMesh(Resource::Mesh* _mesh);
 		ECLIPSE_ENGINE void SetMeshScale(const char* _meshName, Math::Vec3 _scale);

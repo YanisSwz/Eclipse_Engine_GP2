@@ -47,14 +47,19 @@ namespace Core
 		const JPH::uint cMaxBodyPairs = MAX_COLLIDER_SIZE;
 		const JPH::uint cMaxContactConstraints = MAX_COLLIDER_SIZE;
 
+		m_contactListener.Init(this);
+		m_physicsSystem.SetContactListener(&m_contactListener);
+
 		// Now we can create the actual physics system.
 		m_physicsSystem.Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, m_broadPhaseLayerInterface, m_objectVsBroadphaseLayerFilter, m_objectVsObjectLayerFilter);
 
 		m_bodyInterface = &m_physicsSystem.GetBodyInterface();
 
+#ifdef _DEBUG
 		m_rendererFile.open("testScene.jor", std::ofstream::out | std::ofstream::binary | std::ofstream::trunc);
 		m_rendererStream = new JPH::StreamOutWrapper(m_rendererFile);
 		m_renderer = new JPH::DebugRendererRecorder(*m_rendererStream);
+#endif // _DEBUG
 	}
 
 	PhysicsSystem::~PhysicsSystem()
@@ -72,9 +77,12 @@ namespace Core
 
 		delete m_jobSystem;
 		delete m_tempAllocator;
+
+#ifdef _DEBUG
 		delete m_renderer;
 		delete m_rendererStream;
 		m_rendererFile.close();
+#endif // _DEBUG
 	}
 
 	BoxCollider* PhysicsSystem::AddBoxCollider()
@@ -167,11 +175,112 @@ namespace Core
 		return &m_meshColliders[m_currentMeshColliderCount - 1];
 	}
 
+	void PhysicsSystem::CallOnCollisionEnter(const JPH::Body& _body1, const JPH::Body& _body2)
+	{
+		ICollider* collider1 = FindCollider(_body1.GetID());
+		if (!collider1)
+			return;
+		ICollider* collider2 = FindCollider(_body2.GetID());
+		if (!collider2)
+			return;
+
+		Core::GameObject* gameObject1 = collider1->GetGameObject();
+		if (gameObject1)
+		{
+			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript1)
+				colliderScript1->OnCollisionEnter(collider2);
+		}
+
+		Core::GameObject* gameObject2 = collider2->GetGameObject();
+		if (gameObject2)
+		{
+			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript2)
+				colliderScript2->OnCollisionEnter(collider1);
+		}
+	}
+
+	void PhysicsSystem::CallOnCollisionStay(const JPH::Body& _body1, const JPH::Body& _body2)
+	{
+		ICollider* collider1 = FindCollider(_body1.GetID());
+		if (!collider1)
+			return;
+		ICollider* collider2 = FindCollider(_body2.GetID());
+		if (!collider2)
+			return;
+
+		Core::GameObject* gameObject1 = collider1->GetGameObject();
+		if (gameObject1)
+		{
+			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript1)
+				colliderScript1->OnCollisionStay(collider2);
+		}
+
+		Core::GameObject* gameObject2 = collider2->GetGameObject();
+		if (gameObject2)
+		{
+			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript2)
+				colliderScript2->OnCollisionStay(collider1);
+		}
+	}
+
+	void PhysicsSystem::CallOnCollisionExit(const JPH::BodyID& _body1, const JPH::BodyID& _body2)
+	{
+		ICollider* collider1 = FindCollider(_body1);
+		if (!collider1)
+			return;
+		ICollider* collider2 = FindCollider(_body2);
+		if (!collider2)
+			return;
+
+		Core::GameObject* gameObject1 = collider1->GetGameObject();
+		if (gameObject1)
+		{
+			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript1)
+				colliderScript1->OnCollisionExit(collider2);
+		}
+
+		Core::GameObject* gameObject2 = collider2->GetGameObject();
+		if (gameObject2)
+		{
+			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			if (colliderScript2)
+				colliderScript2->OnCollisionExit(collider1);
+		}
+	}
+
+	ICollider* PhysicsSystem::FindCollider(const JPH::BodyID& _bodyID)
+	{
+		for (int i = 0; i < m_currentBoxColliderCount; ++i)
+		{
+			if (m_boxColliders[i].GetBodyID() == _bodyID)
+				return &m_boxColliders[i];
+		}
+
+		for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
+		{
+			if (m_capsuleColliders[i].GetBodyID() == _bodyID)
+				return &m_capsuleColliders[i];
+		}
+
+		for (int i = 0; i < m_currentMeshColliderCount; ++i)
+		{
+			if (m_meshColliders[i].GetBodyID() == _bodyID)
+				return &m_meshColliders[i];
+		}
+
+		return nullptr;
+	}
+
 	void PhysicsSystem::Update(float _deltaTime)
 	{
-		if (bfirstUpdate)
+		if (bFirstUpdate)
 		{
-			bfirstUpdate = false;
+			bFirstUpdate = false;
 			_deltaTime = 0.f;
 		}
 
@@ -182,6 +291,8 @@ namespace Core
 			GO = m_boxColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
 				{
 					m_boxColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_boxColliders[i].GetOffsetPos()));
@@ -194,6 +305,8 @@ namespace Core
 			GO = m_capsuleColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
 				{
 					m_capsuleColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_capsuleColliders[i].GetOffsetPos()));
@@ -206,6 +319,8 @@ namespace Core
 			GO = m_meshColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				if (GO->transform->HasPositionChanged() || GO->transform->HasRotationChanged())
 				{
 					m_meshColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_meshColliders[i].GetOffsetPos()));
@@ -214,12 +329,15 @@ namespace Core
 			}
 		}
 
+
 		m_physicsSystem.Update(_deltaTime, 1, m_tempAllocator, m_jobSystem);
 
+#ifdef _DEBUG
 		// Draw for JoltViewer
 		JPH::BodyManager::DrawSettings drawSettings;
 		m_physicsSystem.DrawBodies(drawSettings, m_renderer);
 		m_renderer->EndFrame();
+#endif // _DEBUG
 
 
 		for (int i = 0; i < m_currentBoxColliderCount; ++i)
@@ -227,6 +345,8 @@ namespace Core
 			GO = m_boxColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				GO->transform->SetPosition(m_boxColliders[i].GetPosition() - m_boxColliders[i].GetOffsetPosRotated());
 				rotationQuat = m_boxColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);
@@ -237,6 +357,8 @@ namespace Core
 			GO = m_capsuleColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				GO->transform->SetPosition(m_capsuleColliders[i].GetPosition() - m_capsuleColliders[i].GetOffsetPosRotated());
 				rotationQuat = m_capsuleColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);
@@ -247,6 +369,8 @@ namespace Core
 			GO = m_meshColliders[i].GetGameObject();
 			if (GO)
 			{
+				if (!GO->IsActive())
+					continue;
 				GO->transform->SetPosition(m_meshColliders[i].GetPosition() - m_meshColliders[i].GetOffsetPosRotated());
 				rotationQuat = m_meshColliders[i].GetRotation();
 				GO->transform->SetRotation(rotationQuat);

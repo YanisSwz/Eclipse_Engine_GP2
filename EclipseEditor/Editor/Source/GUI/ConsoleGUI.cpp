@@ -18,20 +18,35 @@ namespace GUI
 		
 		if (filePath != "")
 		{
+			int lineCount = 0;
 			std::ifstream file;
 			file.open(filePath);
 			while (file.good())
 			{
+				++lineCount;
 				std::string str;
 				getline(file, str);
-				Logging::COLOR color = Logging::COLOR::WHITE;
-				if (str.find("[INFO]") != std::string::npos)
-					color = Logging::COLOR::GREEN;
-				else if (str.find("[WARNING]") != std::string::npos)
-					color = Logging::COLOR::YELLOW;
-				else if (str.find("[ERROR]") != std::string::npos)
-					color = Logging::COLOR::RED;
-				ColoredText(str.c_str(), color);
+			}
+			file.close();
+
+			file.open(filePath);
+			int currLineCount = 0;
+			while (file.good())
+			{
+				std::string str;
+				getline(file, str);
+				if (currLineCount > lineCount - m_maxLineCount)
+				{
+					Logging::COLOR color = Logging::COLOR::WHITE;
+					if (str.find("[INFO]") != std::string::npos)
+						color = Logging::COLOR::GREEN;
+					else if (str.find("[WARNING]") != std::string::npos)
+						color = Logging::COLOR::YELLOW;
+					else if (str.find("[ERROR]") != std::string::npos)
+						color = Logging::COLOR::RED;
+					ColoredText(str.c_str(), color);
+				}
+				++currLineCount;
 			}
 			file.close();
 		}

@@ -3,20 +3,24 @@
 #include "Physics/CapsuleCollider.hpp"
 #include "Physics/MeshCollider.hpp"
 #include "ProjectExports.hpp"
+#include "Logging/Logger.hpp"
 #include <vector>
+#include <map>
 
 // Jolt Include
 #include "Core/Physics/Layers.hpp"
-#include <Jolt/Jolt.h>
+#include "Core/Physics/MyContactListener.hpp"
 #include <Jolt/Core/TempAllocator.h>
 #include <Jolt/Core/JobSystemThreadPool.h>
 #include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/Physics/Body/BodyInterface.h>
+#include <Jolt/Physics/Body/BodyActivationListener.h>
 
 // JoltViewer include
 #include <Jolt/Core/StreamWrapper.h>
 #include <Jolt/Renderer/DebugRendererRecorder.h>
 #include <fstream>
+
 
 /// Class that determines if two object layers can collide
 class ObjectLayerPairFilterImpl : public JPH::ObjectLayerPairFilter
@@ -118,6 +122,11 @@ namespace Core
 		ECLIPSE_ENGINE CapsuleCollider* AddCapsuleCollider();
 		ECLIPSE_ENGINE MeshCollider* AddMeshCollider();
 
+		void CallOnCollisionEnter(const JPH::Body& _body1, const JPH::Body& _body2);
+		void CallOnCollisionStay(const JPH::Body& _body1, const JPH::Body& _body2);
+		void CallOnCollisionExit(const JPH::BodyID& _body1, const JPH::BodyID& _body2);
+		ICollider* FindCollider(const JPH::BodyID& _bodyID);
+
 		ECLIPSE_ENGINE void Update(float _deltaTime);
 
 	private:
@@ -141,12 +150,16 @@ namespace Core
 		ObjectVsBroadPhaseLayerFilterImpl m_objectVsBroadphaseLayerFilter;
 		// Create class that filters object vs object layers
 		ObjectLayerPairFilterImpl m_objectVsObjectLayerFilter;
+		
+		MyContactListener m_contactListener;
 
+#ifdef _DEBUG
 		// JoltViewer
 		JPH::DebugRendererRecorder* m_renderer = nullptr;
 		JPH::StreamOutWrapper* m_rendererStream = nullptr;
 		std::ofstream m_rendererFile;
+#endif // _DEBUG
 
-		bool bfirstUpdate = true;
+		bool bFirstUpdate = true;
 	};
 }

@@ -32,7 +32,7 @@ namespace GUI
 		std::string invisibleLabel = "##";
 		invisibleLabel.append(_invisibleLabel);
 		ImGui::PushID(invisibleLabel.c_str());
-		ImGui::Columns(2);
+		ImGui::Columns(2, 0, false);
 		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
 			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
 		else
@@ -60,9 +60,9 @@ namespace GUI
 
 		// Draw widget label
 		ImGui::PushID(_label);
-		ImGui::Columns(2);
-		if((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
-			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth()/4.f);
+		ImGui::Columns(2, 0, false);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
 		else
 			ImGui::SetColumnWidth(0, _maxColumnWidth);
 		ImGui::Text(_label);
@@ -79,7 +79,10 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("X", buttonSize))
+		{
 			_vec3.x = _resetValue;
+			changed = true;
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
@@ -95,7 +98,10 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("Y", buttonSize))
+		{
 			_vec3.y = _resetValue;
+			changed = true;
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
@@ -111,7 +117,10 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("Z", buttonSize))
+		{
 			_vec3.z = _resetValue;
+			changed = true;
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
@@ -128,22 +137,28 @@ namespace GUI
 		return changed;
 	}
 
-	bool DragQuatXYZ(const char* _label, Math::Quat& _quat, float _resetValue, float _maxColumnWidth)
+	bool DragUniformVec3XYZ(const char* _label, Math::Vec3& _vec3, bool& _isLocked, Math::Vec3& _scaleFactor, float _resetValue, float _maxColumnWidth)
 	{
 		bool changed = false;
 
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
-		Math::Vec3 vec = _quat.GetEulerAnglesDegXYZ();
 
 		// Draw widget label
 		ImGui::PushID(_label);
-		ImGui::Columns(2);
+		ImGui::Columns(3, 0, false);
 		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
-			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 8.f);
 		else
-			ImGui::SetColumnWidth(0, _maxColumnWidth);
-		ImGui::TextWrapped(_label);
+			ImGui::SetColumnWidth(0, _maxColumnWidth / 2.f);
+		ImGui::Text(_label);
+		ImGui::NextColumn();
+
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(1, ImGui::GetWindowWidth() / 8.f);
+		else
+			ImGui::SetColumnWidth(1, _maxColumnWidth / 2.f);
+		ImGui::Checkbox("##", &_isLocked);
 		ImGui::NextColumn();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
@@ -157,15 +172,54 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("X", buttonSize))
-			vec.x = _resetValue;
+		{
+			if (_vec3.x != _resetValue)
+			{
+				if (_isLocked)
+				{
+					if (_vec3.x == 0.f)
+					{
+						_vec3.y = _resetValue * _scaleFactor.y;
+						_vec3.z = _resetValue * _scaleFactor.z;
+					}
+					else
+					{
+						_vec3.y = _resetValue * (_vec3.y / _vec3.x);
+						_vec3.z = _resetValue * (_vec3.z / _vec3.x);
+					}
+				}
+				_vec3.x = _resetValue;
+				changed = true;
+			}
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		changed |= ImGui::DragFloat("##X", &vec.x, 0.1f, 0.0f, 0.0f, "%.2f");
+
+		float tempX = _vec3.x;
+		if (ImGui::DragFloat("##X", &_vec3.x, 0.1f, 0.0f, 0.0f, "%.2f"))
+		{
+			if (_isLocked)
+			{
+				if (tempX == 0.f)
+				{
+					_vec3.y = _vec3.x * _scaleFactor.y;
+					_vec3.z = _vec3.x * _scaleFactor.z;
+				}
+				else
+				{
+					_scaleFactor.y = _vec3.y / tempX;
+					_scaleFactor.z = _vec3.z / tempX;
+					float factor = _vec3.x / tempX;
+					_vec3.y *= factor;
+					_vec3.z *= factor;
+				}
+			}
+			changed = true;
+		}
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
-
 
 		// Draw Y
 		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 3.f);
@@ -174,12 +228,51 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("Y", buttonSize))
-			vec.y = _resetValue;
+		{
+			if (_vec3.y != _resetValue)
+			{
+				if (_isLocked)
+				{
+					if (_vec3.y == 0.f)
+					{
+						_vec3.x = _resetValue * _scaleFactor.x;
+						_vec3.z = _resetValue * _scaleFactor.z;
+					}
+					else
+					{
+						_vec3.x = _resetValue * (_vec3.x / _vec3.y);
+						_vec3.z = _resetValue * (_vec3.z / _vec3.y);
+					}
+				}
+				_vec3.y = _resetValue;
+				changed = true;
+			}
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		changed |= ImGui::DragFloat("##Y", &vec.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		float tempY = _vec3.y;
+		if (ImGui::DragFloat("##Y", &_vec3.y, 0.1f, 0.0f, 0.0f, "%.2f"))
+		{
+			if (_isLocked)
+			{
+				if (tempY == 0.f)
+				{
+					_vec3.x = _vec3.y * _scaleFactor.x;
+					_vec3.z = _vec3.y * _scaleFactor.z;
+				}
+				else
+				{
+					_scaleFactor.x = _vec3.x / tempY;
+					_scaleFactor.z = _vec3.z / tempY;
+					float factor = _vec3.y / tempY;
+					_vec3.x *= factor;
+					_vec3.z *= factor;
+				}
+			}
+			changed = true;
+		}
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -190,22 +283,62 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
 		ImGui::PushFont(boldFont);
 		if (ImGui::Button("Z", buttonSize))
-			vec.z = _resetValue;
+		{
+			if (_vec3.z != _resetValue)
+			{
+				if (_isLocked)
+				{
+					if (_vec3.z == 0.f)
+					{
+						_vec3.x = _resetValue * _scaleFactor.x;
+						_vec3.y = _resetValue * _scaleFactor.y;
+					}
+					else
+					{
+						_vec3.x = _resetValue * (_vec3.x / _vec3.z);
+						_vec3.y = _resetValue * (_vec3.y / _vec3.z);
+					}
+				}
+				_vec3.z = _resetValue;
+				changed = true;
+			}
+		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		changed |= ImGui::DragFloat("##Z", &vec.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		float tempZ = _vec3.z;
+		if (ImGui::DragFloat("##Z", &_vec3.z, 0.1f, 0.0f, 0.0f, "%.2f"))
+		{
+			if (_isLocked)
+			{
+				if (tempZ == 0.f)
+				{
+					_vec3.x = _vec3.z * _scaleFactor.x;
+					_vec3.y = _vec3.z * _scaleFactor.y;
+				}
+				else
+				{
+					_scaleFactor.x = _vec3.x / tempZ;
+					_scaleFactor.y = _vec3.y / tempZ;
+					float factor = _vec3.z / tempZ;
+					_vec3.x *= factor;
+					_vec3.y *= factor;
+				}
+			}
+			changed = true;
+		}
 		ImGui::PopItemWidth();
 
 		ImGui::PopStyleVar();
-		ImGui::Columns(1);
-		ImGui::PopID();
 
-		_quat = Math::Quat::QuaternionEuler(vec.x, vec.y, vec.z);
+		ImGui::Columns(1);
+
+		ImGui::PopID();
 
 		return changed;
 	}
+
 
 	void DrawImage(const char* _imageName, unsigned int _imageID, float _size)
 	{
@@ -221,7 +354,7 @@ namespace GUI
 		std::string invisibleComboName = "##";
 		invisibleComboName.append(_comboName).append("(w/ filter)");
 		ImGui::PushID(invisibleComboName.c_str());
-		ImGui::Columns(2);
+		ImGui::Columns(2, 0, false);
 		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
 			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
 		else
@@ -258,12 +391,45 @@ namespace GUI
 		return false;
 	}
 
+	bool ComboBox(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values, float _maxColumnWidth)
+	{
+		std::string invisibleComboName = "##";
+		invisibleComboName.append(_comboName).append("(w/ filter)");
+		ImGui::PushID(invisibleComboName.c_str());
+		ImGui::Columns(2, 0, false);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
+		ImGui::Text(_comboName);
+		ImGui::NextColumn();
+		if (ImGui::BeginCombo(invisibleComboName.c_str(), _crtValue->c_str()))
+		{
+			for (int i = 0; i < _values.size(); ++i)
+			{
+				const bool is_selected = (*_crtValue == _values[i]);
+				if (ImGui::Selectable(_values[i].c_str(), is_selected))
+				{
+					*_crtValue = _values[i];
+					ImGui::EndCombo();
+					ImGui::PopID();
+					ImGui::Columns(1);
+					return true;
+				}
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::PopID();
+		ImGui::Columns(1);
+		return false;
+	}
+
 	bool CheckBox(const char* _checkBoxName, const char* _invisibleCheckBoxName, bool* _boolean, float _maxColumnWidth)
 	{
 		std::string invisibleCheckBoxName = "##";
 		invisibleCheckBoxName.append(_invisibleCheckBoxName);
 		ImGui::PushID(invisibleCheckBoxName.c_str());
-		ImGui::Columns(2);
+		ImGui::Columns(2, 0, false);
 		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
 			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
 		else
@@ -280,6 +446,16 @@ namespace GUI
 		ImGui::Columns(1);
 		ImGui::PopID();
 		return false;
+	}
+
+	void ColorEdit4(const char* label, Math::Vec4& _color, ImGuiColorEditFlags flags)
+	{
+		float col[4]{ _color.x, _color.y, _color.z, _color.w };
+		ImGui::ColorEdit4(label, col, flags);
+		_color.x = col[0];
+		_color.y = col[1];
+		_color.z = col[2];
+		_color.w = col[3];
 	}
 
 	ImVec4 ColorToVec4(Logging::COLOR _color)

@@ -54,13 +54,16 @@ namespace Core
 		_obj->Destroy();
 	}
 
-	std::string GameObject::GetName() const 
+	void GameObject::SetActive(bool _active)
 	{
-		return name;
-	}
+		m_active = _active;
+		
+		//Components 
+		for (int i = 0; i < m_components.size(); ++i)
+			m_components[i]->SetActive(_active);
 
-	std::string GameObject::GetName(GameObject* _obj) 
-	{
-		return _obj->name;
+		//Children
+		for(Transform* child : transform->GetChildren())
+			child->GetGameObject()->SetActive(_active);
 	}
 }

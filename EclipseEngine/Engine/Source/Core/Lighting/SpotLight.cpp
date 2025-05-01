@@ -5,7 +5,7 @@ namespace Core
 {
 	meta::factory<SpotLight> SpotLight::factory = meta::reflect<SpotLight>(hash("SpotLight"))
 		.data<&SpotLight::SetActive, &SpotLight::IsActive>(hash("IsActive"))
-		.data<&SpotLight::SetColor, &SpotLight::GetColor>(hash("Color"))
+		//.data<&SpotLight::SetColor, &SpotLight::GetColor>(hash("Color"))
 		.data<&SpotLight::m_innerCutOff>(hash("InnerCutoff"))
 		.data<&SpotLight::m_outerCutOff>(hash("OuterCutoff"))
 		.data<&SpotLight::m_constantAttenuation>(hash("ConstantAttenuation"))
@@ -17,12 +17,12 @@ namespace Core
 		return RHI::SpotLightData{
 			m_color,
 			GetPosition(),
-			m_innerCutOff,
+			cosf(Math::Tools::ToRad(m_innerCutOff/2.f)),
 			GetDirection(),
-			m_outerCutOff,
+			cosf(Math::Tools::ToRad(m_outerCutOff/2.f)),
 			m_constantAttenuation,
-			m_linearAttenuation,
-			m_quadraticAttenuation,
+			1.f / m_distance,
+			1.f / (m_distance * m_distance),
 			0.f
 		};
 	}

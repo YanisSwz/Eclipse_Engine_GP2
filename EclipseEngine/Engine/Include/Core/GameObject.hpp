@@ -25,9 +25,8 @@ namespace Core
 		ECLIPSE_ENGINE static void Destroy(GameObject* _obj);
 		ECLIPSE_ENGINE void Destroy() override;
 
-		ECLIPSE_ENGINE std::string GetName() const;
-		ECLIPSE_ENGINE static std::string GetName(GameObject* _obj);
-		
+		ECLIPSE_ENGINE void SetActive(bool _active) override;
+
 		template <typename T>
 		T* AddComponent()
 		{

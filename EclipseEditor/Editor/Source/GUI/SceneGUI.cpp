@@ -1,6 +1,7 @@
 #include "GUI/SceneGUI.hpp"
 #include "SceneCamera.hpp"
 #include "Scene.hpp"
+#include "ResourceManager.hpp"
 #include <iostream>
 
 namespace GUI
@@ -15,22 +16,16 @@ namespace GUI
 
 		if (_camera->MouseSpeedChanged())
 		{
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.75f)); 
 			ImGui::SetNextWindowSize(m_windowSizeCameraChangedSpeed);
 			ImGui::SetNextWindowPos({ windowPos.x + windowSize.x / 2.f - m_windowSizeCameraChangedSpeed.x / 2.f, windowPos.y + windowSize.y / 2.f - m_windowSizeCameraChangedSpeed.y / 2.f });
-			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground;
+			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration;
 			ImGui::Begin("MouseSpeedChangedWindow", 0, mouseSpeedChangedWindowFlags);
 
-			// Increase font size
-			ImGui::GetFont()->Scale = 3.f;
-			ImGui::PushFont(ImGui::GetFont());
-			ImGui::PopFont();
-
+			ImGui::SetWindowFontScale(3.f);
 			ImGui::Text("%.2f", _camera->GetMouseSpeed());
-			
-			// Reset font size
-			ImGui::GetFont()->Scale = 1.f;
-			ImGui::PushFont(ImGui::GetFont());
-			ImGui::PopFont();
+
+			ImGui::PopStyleColor();
 			ImGui::End();
 		}
 
@@ -45,6 +40,57 @@ namespace GUI
 			ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
 			ImVec2(0, 1),
 			ImVec2(1, 0));
+
+
+		// Editor Buttons
+		Resource::Texture* translateText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("TranslateGizmoIcon.img");
+		Resource::Texture* rotateText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("RotateGizmoIcon.img");
+		Resource::Texture* scaleText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("ScaleGizmoIcon.img");
+
+		ImVec2 uv0{ 0.f, 1.f };
+		ImVec2 uv1{ 1.f, 0.f };
+
+		
+		ImGui::PushStyleColor(ImGuiCol_Border, { 1.f, 1.f, 1.f, 1.f });
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.35f, 0.35f, 0.35f, 1.f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.5f, 0.5f, 0.5f, 1.f });
+
+		// Local & Global
+		if (ImGui::Button(m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? "Local" : "Global", { 52.f, 34.f}))
+			m_crtGizmoMode = m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? ImGuizmo::MODE::WORLD : ImGuizmo::MODE::LOCAL;
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip(m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? "Ctrl + I" : "Ctrl + U");
+		
+		ImGui::PopStyleColor(1);
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.f, 2.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 1.f, 1.f, 1.f, 1.f });
+		// Translation
+		if (ImGui::ImageButton("TranslateImageButton", translateText->GetID(), { 48.f, 30.f }, uv0, uv1, {1.f, 0.f, 0.f, 1.f}))
+			m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Ctrl + R");
+		}
+
+		// Rotation
+		if (ImGui::ImageButton("RotateImageButton", rotateText->GetID(), { 48.f, 30.f }, uv0, uv1))
+			m_crtGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Ctrl + T");
+		}
+
+		// Scale
+		if (ImGui::ImageButton("ScaleImageButton", scaleText->GetID(), { 48.f, 30.f }, uv0, uv1))
+			m_crtGizmoOperation = ImGuizmo::OPERATION::SCALE;
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Ctrl + Y");
+		}
+
+		ImGui::PopStyleColor(3);
+		ImGui::PopStyleVar();
 
 		DrawGizmo(_crtGOSelected, _camera);
 
@@ -90,7 +136,6 @@ namespace GUI
 
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::SetOrthographic(false);
-		ImGuizmo::SetGizmoSizeClipSpace(0.25f);
 		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
 		Math::Mat4 TRS = _crtGOSelected->transform->GetTransformMatrix();
@@ -114,7 +159,7 @@ namespace GUI
 			switch (m_crtGizmoOperation)
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
-				_crtGOSelected->transform->SetPosition(Math::Vec3(position[0], position[1], position[2]));
+				_crtGOSelected->transform->SetPosition(position[0], position[1], position[2]);
 				break;
 
 			case ImGuizmo::OPERATION::ROTATE:
@@ -127,7 +172,7 @@ namespace GUI
 			}
 
 			case ImGuizmo::OPERATION::SCALE:
-				_crtGOSelected->transform->SetScale(Math::Vec3(scale[0] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().x), scale[1] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().y), scale[2] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().z)));
+				_crtGOSelected->transform->SetScale(scale[0] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().x), scale[1] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().y), scale[2] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().z));
 				break;
 			}
 

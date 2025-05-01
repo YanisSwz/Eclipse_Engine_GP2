@@ -11,6 +11,6 @@ namespace GUI
 		void Draw();
 
 	private:
-
+		int m_maxLineCount = 100;
 	};
 }

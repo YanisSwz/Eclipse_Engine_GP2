@@ -1,7 +1,26 @@
 #include "Core/Physics/ICollider.hpp"
+#include "GameObject.hpp"
 
 namespace Core
 {
+	void ICollider::SetActive(bool _activate)
+	{
+		m_active = _activate;
+		if (m_active)
+		{
+			AddBodyToPhysicsEngine();
+			if (m_gameObject != nullptr)
+			{
+				SetPosition(m_gameObject->transform->GetPosition() + m_gameObject->transform->GetRotation().Rotate(GetOffsetPos()));
+				SetRotation(m_gameObject->transform->GetRotation());
+			}
+		}
+		else
+		{
+			RemoveBodyToPhysicsEngine();
+		}
+	}
+
 	void ICollider::SetDynamic(bool _isDynamic)
 	{
 		if (b_isDynamic == _isDynamic)
@@ -48,12 +67,26 @@ namespace Core
 
 	void ICollider::AddBodyToPhysicsEngine()
 	{
-		m_bodyInterface->AddBody(m_bodyID, b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate);
+		if (b_isBodyDestroyed)
+			return;
+
+		if (m_bodyInterface)
+		{
+			if (!m_bodyInterface->IsAdded(m_bodyID))
+				m_bodyInterface->AddBody(m_bodyID, b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate);
+		}
 	}
 
 	void ICollider::RemoveBodyToPhysicsEngine()
 	{
-		m_bodyInterface->RemoveBody(m_bodyID);
+		if (b_isBodyDestroyed)
+			return;
+
+		if (m_bodyInterface)
+		{
+			if (m_bodyInterface->IsAdded(m_bodyID))
+				m_bodyInterface->RemoveBody(m_bodyID);
+		}
 	}
 
 	void ICollider::SetPosition(float _posX, float _posY, float _posZ)
@@ -88,7 +121,7 @@ namespace Core
 	{
 		m_rotation = _rotation;
 		JPH::EActivation isActivate = b_isDynamic ? JPH::EActivation::Activate : JPH::EActivation::DontActivate;
-		m_bodyInterface->SetRotation(m_bodyID, JPH::Quat( m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w), isActivate);
+		m_bodyInterface->SetRotation(m_bodyID, JPH::Quat(m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w), isActivate);
 	}
 
 	void ICollider::SetPosRot(float _posX, float _posY, float _posZ, float _rotX, float _rotY, float _rotZ)
@@ -186,7 +219,12 @@ namespace Core
 	{
 		return b_isDynamic;
 	}
-	
+
+	JPH::BodyID ICollider::GetBodyID() const
+	{
+		return m_bodyID;
+	}
+
 	void ICollider::Destroy()
 	{
 		m_active = false;

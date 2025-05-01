@@ -47,10 +47,16 @@ namespace GUI
 		if (_crtTransform->GetGameObject() == _crtGOSelected)
 			treeNodeFlags |= ImGuiTreeNodeFlags_Selected;
 
-		if (ImGui::TreeNodeEx(_crtTransform->GetGameObject()->GetName().c_str(), treeNodeFlags))
+		if (!_crtTransform->GetGameObject()->IsActive())
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 0.5f);
+
+		if (ImGui::TreeNodeEx(_crtTransform->GetGameObject()->name.c_str(), treeNodeFlags))
 		{
 			if (ImGui::IsItemClicked())
 				newGameObjectSelected = _crtTransform->GetGameObject();
+
+			if (!_crtTransform->GetGameObject()->IsActive())
+				ImGui::PopStyleVar();
 
 			if (ImGui::BeginPopupContextItem("HierarchyPopUpMenu"))
 			{
@@ -85,6 +91,11 @@ namespace GUI
 			}
 
 			ImGui::TreePop();
+		}
+		else
+		{
+			if (!_crtTransform->GetGameObject()->IsActive())
+				ImGui::PopStyleVar();
 		}
 		return newGameObjectSelected;
 	}

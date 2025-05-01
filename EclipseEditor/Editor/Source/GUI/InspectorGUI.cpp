@@ -22,7 +22,7 @@ namespace GUI
 
 	void InspectorGUI::Draw(Core::GameObject* _crtGOSelected)
 	{
-		ImGui::SetNextWindowSizeConstraints({ 400.f, 50.f }, ImGui::GetMainViewport()->Size);
+		ImGui::SetNextWindowSizeConstraints({ 500.f, 100.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags inspectorWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Inspector", 0, inspectorWindowFlags);
 
@@ -37,9 +37,16 @@ namespace GUI
 			if (_crtGOSelected->name.size() == 0)
 				_crtGOSelected->name = "GameObject" + std::to_string(_crtGOSelected->GetID());
 		}
-		ImGui::NewLine();
 
+		bool bIsActive = _crtGOSelected->IsActive();
+		if(GUI::CheckBox("Active", "##", &bIsActive))
+			_crtGOSelected->SetActive(bIsActive);
+
+		ImGui::NewLine();
 		DrawTransformComponent(_crtGOSelected->transform);
+
+		if (!_crtGOSelected->IsActive())
+			ImGui::BeginDisabled();
 		DrawModelComponent(_crtGOSelected->GetComponent<Core::Model>());
 		DrawBoxColliderComponent(_crtGOSelected->GetComponent<Core::BoxCollider>());
 		DrawCapsuleColliderComponent(_crtGOSelected->GetComponent<Core::CapsuleCollider>());
@@ -49,6 +56,9 @@ namespace GUI
 		DrawSpotLightComponent(_crtGOSelected->GetComponent<Core::SpotLight>());
 
 		DrawAddComponent(_crtGOSelected);
+
+		if (!_crtGOSelected->IsActive())
+			ImGui::EndDisabled();
 		ImGui::End();
 	}
 
@@ -73,7 +83,7 @@ namespace GUI
 				_transform->SetPositionChanged();
 			if (GUI::DragVec3XYZ("Rotation", _transform->GetLocalEulerAnglesRef()))
 				_transform->SetRotationChanged();
-			if (GUI::DragVec3XYZ("Scale", _transform->GetLocalScaleRef(), 1.f))
+			if (GUI::DragUniformVec3XYZ("Scale", _transform->GetLocalScaleRef(), bIsScaleLocked, m_scaleFactor, 1.f))
 				_transform->SetScaleChanged();
 
 			ImGui::TreePop();
@@ -210,10 +220,6 @@ namespace GUI
 		{
 			DrawDeleteComponentPopup(_collider);
 
-			bool isDynamic = _collider->GetIsDynamic();
-			if (GUI::CheckBox("Is Dynamic ", "MeshColliderIsDynamic", &isDynamic))
-				_collider->SetDynamic(isDynamic);
-
 			float mass = _collider->GetMass();
 			if (GUI::DragFloat("Mass ", "MeshColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
 			{
@@ -243,6 +249,8 @@ namespace GUI
 		{
 			DrawDeleteComponentPopup(_light);
 
+			GUI::ColorEdit4("Color", _light->GetColorRef());
+
 			ImGui::TreePop();
 		}
 	}
@@ -256,6 +264,9 @@ namespace GUI
 		{
 			DrawDeleteComponentPopup(_light);
 
+			GUI::ColorEdit4("Color", _light->GetColorRef());
+			GUI::DragFloat("Range", "##", &_light->GetDistanceRef(), 0.1f, 1.f, 200.f);
+
 			ImGui::TreePop();
 		}
 	}
@@ -268,6 +279,12 @@ namespace GUI
 		if (ImGui::TreeNodeEx("Spot Light", m_treeNodeComponentFlags))
 		{
 			DrawDeleteComponentPopup(_light);
+
+			GUI::ColorEdit4("Color", _light->GetColorRef());
+			GUI::DragFloat("Range", "##1", &_light->GetDistanceRef(), 0.1f, 1.f, 200.f);
+
+			GUI::DragFloat("Inner Angle", "##2", &_light->GetInnerCutoffRef(), 1.f, 1.f, std::min(_light->GetOuterCutoff(), 180.f));
+			GUI::DragFloat("Outer Angle", "##3", &_light->GetOuterCutoffRef(), 1.f, _light->GetInnerCutoff(), 180.f);
 
 			ImGui::TreePop();
 		}
@@ -287,7 +304,7 @@ namespace GUI
 			ImGui::EndPopup();
 		}
 
-		if (bisComponentAlreadyAddedWindowEnable)
+		if (bIsComponentAlreadyAddedWindowEnable)
 			ImGui::OpenPopup("ComponentAlreadyAddedWindowModal");
 
 		if (ImGui::BeginPopupModal("ComponentAlreadyAddedWindowModal", 0, m_alreadyAddComponentWindowFlags))
@@ -295,7 +312,7 @@ namespace GUI
 			ImGui::Text("This component has already been added to this object!");
 			if (ImGui::Button("Close"))
 			{
-				bisComponentAlreadyAddedWindowEnable = false;
+				bIsComponentAlreadyAddedWindowEnable = false;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
@@ -319,7 +336,7 @@ namespace GUI
 				}
 				else
 				{
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				}
 				ImGui::CloseCurrentPopup();
 			}
@@ -335,27 +352,46 @@ namespace GUI
 			{
 				Core::BoxCollider* boxCollider = _crtGOSelected->GetComponent<Core::BoxCollider>();
 				if (!boxCollider)
+				{
 					boxCollider = _crtGOSelected->AddComponent<Core::BoxCollider>();
+					boxCollider->SetPosition(_crtGOSelected->transform->GetPosition());
+					boxCollider->SetRotation(_crtGOSelected->transform->GetRotation());
+					boxCollider->Scale(_crtGOSelected->transform->GetScale());
+				}
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::Button("Capsule Collider", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
 			{
 				Core::CapsuleCollider* capsuleCollider = _crtGOSelected->GetComponent<Core::CapsuleCollider>();
 				if (!capsuleCollider)
+				{
 					capsuleCollider = _crtGOSelected->AddComponent<Core::CapsuleCollider>();
+					capsuleCollider->SetPosition(_crtGOSelected->transform->GetPosition());
+					capsuleCollider->SetRotation(_crtGOSelected->transform->GetRotation());
+					capsuleCollider->Scale(_crtGOSelected->transform->GetScale());
+				}
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::Button("Mesh Collider", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
 			{
 				Core::MeshCollider* meshCollider = _crtGOSelected->GetComponent<Core::MeshCollider>();
 				if (!meshCollider)
+				{
 					meshCollider = _crtGOSelected->AddComponent<Core::MeshCollider>();
+					meshCollider->SetPosition(_crtGOSelected->transform->GetPosition());
+					meshCollider->SetRotation(_crtGOSelected->transform->GetRotation());
+					Core::Model* model = _crtGOSelected->GetComponent<Core::Model>();
+					if(model != nullptr)
+						meshCollider->SetMeshScale(model->mesh, _crtGOSelected->transform->GetScale());
+					else
+						meshCollider->Scale(_crtGOSelected->transform->GetScale());
+				}
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::TreePop();
@@ -372,7 +408,7 @@ namespace GUI
 				if (!directionalLight)
 					directionalLight = _crtGOSelected->AddComponent<Core::DirectionalLight>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::Button("Point Light", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
@@ -381,7 +417,7 @@ namespace GUI
 				if (!pointLight)
 					pointLight = _crtGOSelected->AddComponent<Core::PointLight>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::Button("Spot Light", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
@@ -390,7 +426,7 @@ namespace GUI
 				if (!SpotLight)
 					SpotLight = _crtGOSelected->AddComponent<Core::SpotLight>();
 				else
-					bisComponentAlreadyAddedWindowEnable = true;
+					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::TreePop();
