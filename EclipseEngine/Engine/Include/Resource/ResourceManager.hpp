@@ -1,5 +1,6 @@
 #pragma once
 #include "IResource.hpp"
+#include "IGraphicsResource.hpp"
 #include "ProjectExports.hpp"
 #include <map>
 #include <string>
@@ -37,10 +38,10 @@ namespace Resource
 		
 		std::map<std::string, std::string> m_resourcesPath;
 		std::map<std::string, IResource*> m_resourcesToLoad;
-		std::map<std::string, IResource*> m_resourcesToGenerate;
+		std::map<std::string, IGraphicsResource*> m_resourcesToGenerate;
 		std::map<std::string, IResource*> m_resourcesReady;
 
-		void AddResourceToGenerate(IResource* _resource, std::string _resourceName);
+		void AddResourceToGenerate(IGraphicsResource* _resource, std::string _resourceName);
 		void AddResourceToReady(IResource* _resource, std::string _resourceName);
 
 		void DeleteResourceToLoad(std::string _resourceName);

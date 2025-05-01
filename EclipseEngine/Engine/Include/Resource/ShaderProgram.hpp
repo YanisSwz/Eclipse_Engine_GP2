@@ -7,7 +7,7 @@
 
 namespace Resource
 {
-	class ShaderProgram : public IResource
+	class ShaderProgram : public IGraphicsResource
 	{
 	public:
 		ECLIPSE_ENGINE ShaderProgram(std::string _name = "");

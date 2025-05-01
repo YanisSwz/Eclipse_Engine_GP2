@@ -1,9 +1,9 @@
 #pragma once
-#include "IResource.hpp"
+#include "IGraphicsResource.hpp"
 
 namespace Resource
 {
-	class VertShader : public IResource
+	class VertShader : public IGraphicsResource
 	{
 	public:
 		ECLIPSE_ENGINE VertShader(std::string _name = "");
