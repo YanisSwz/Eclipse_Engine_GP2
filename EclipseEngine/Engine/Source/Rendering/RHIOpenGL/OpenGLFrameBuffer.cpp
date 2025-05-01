@@ -40,24 +40,34 @@ void OpenGLFrameBuffer::Rescale(int _width, int _height)
 	width = _width;
 	height = _height;
 
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fboID);
+
 	glBindTexture(GL_TEXTURE_2D, m_textID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textID, 0);
+	unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(1, attachments);
 
 	glBindRenderbuffer(GL_RENDERBUFFER, m_rboID);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_rboID);
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void OpenGLFrameBuffer::Bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fboID);
+	glBindTexture(GL_TEXTURE_2D, m_textID);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_rboID);
 }
 
 void OpenGLFrameBuffer::Unbind()
 {
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

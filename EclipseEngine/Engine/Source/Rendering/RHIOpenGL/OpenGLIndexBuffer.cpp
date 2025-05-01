@@ -21,6 +21,7 @@ void OpenGLIndexBuffer::Draw(IVertexArray* _vertexArray)
 {
 	_vertexArray->Bind();
 	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indexBuffer.size()), GL_UNSIGNED_INT, 0);
+	_vertexArray->Unbind();
 }
 
 void OpenGLIndexBuffer::Bind()

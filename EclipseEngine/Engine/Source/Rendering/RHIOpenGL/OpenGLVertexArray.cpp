@@ -10,14 +10,17 @@ OpenGLVertexArray::~OpenGLVertexArray()
 void OpenGLVertexArray::Init()
 {
 	glGenVertexArrays(1, &m_ID);
+	glBindVertexArray(m_ID);
 }
 
 void RHI::OpenGL::OpenGLVertexArray::LinkVertexBuffer(IVertexBuffer& _vertexBuffer, int _layout, int _numComponents, IFLAGS _type, size_t _stride, void* _offset)
 {
+	glBindVertexArray(m_ID);
 	_vertexBuffer.Bind();
-	glVertexAttribPointer(_layout, _numComponents, CastToOpenGLFlags(_type), GL_FALSE, static_cast<GLsizei>(_stride), _offset);
 	glEnableVertexAttribArray(_layout);
+	glVertexAttribPointer(_layout, _numComponents, CastToOpenGLFlags(_type), GL_FALSE, static_cast<GLsizei>(_stride), _offset);
 	_vertexBuffer.Unbind();
+	glBindVertexArray(0);
 }
 
 void OpenGLVertexArray::Bind()

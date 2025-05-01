@@ -25,7 +25,6 @@ namespace Resource
 			return;
 		}
 
-		// TODO Load the mesh
 		tinyobj::attrib_t attributes;
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
