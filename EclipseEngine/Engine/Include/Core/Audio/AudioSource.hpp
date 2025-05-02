@@ -27,13 +27,15 @@ namespace Core
 		ECLIPSE_ENGINE inline bool GetPause() const { return m_paused; }
 		ECLIPSE_ENGINE float* GetData() const;
 		ECLIPSE_ENGINE int GetSampleCount() const;
-		ECLIPSE_ENGINE double GetTime() const;
-		ECLIPSE_ENGINE double GetLength() const;
+		ECLIPSE_ENGINE float GetTime() const;
+		ECLIPSE_ENGINE float GetLength() const;
 		ECLIPSE_ENGINE void SetTime(float _time);
+		ECLIPSE_ENGINE bool IsPlaying() const;
 
 	private:
 		bool m_looping = false;
 		bool m_paused = false;
+		float m_audioClipLength = 0.f;
 		SoLoud::Soloud* m_audioEngine = nullptr;
 		Resource::AudioClip* m_audioClip = nullptr;
 		SoLoud::handle m_sound;

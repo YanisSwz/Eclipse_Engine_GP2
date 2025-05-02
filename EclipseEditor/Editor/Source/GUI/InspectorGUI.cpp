@@ -320,14 +320,28 @@ namespace GUI
 			{
 				ImGui::PlotHistogram("##clip", data, _source->GetSampleCount());
 
-				float time = static_cast<float>(_source->GetTime());
-				if(ImGui::SliderFloat("##Time", &time, 0.0f, static_cast<float>(_source->GetLength())))
-					_source->SetTime(time);
+				if (_source->IsPlaying())
+				{
+					float time = _source->GetTime();
+					if (ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput))
+						_source->SetTime(time);
+				}
+				else
+				{
+					ImGui::BeginDisabled();
+					float time = 0.0f;
+					ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput);
+					ImGui::EndDisabled();
+				}
 			}
 
+			if (_source->IsPlaying())
+				ImGui::BeginDisabled();
 			bool isLooping = _source->GetLooping();
 			if (GUI::CheckBox("looping", "##1", &isLooping))
 				_source->SetLooping(isLooping);
+			if (_source->IsPlaying())
+				ImGui::EndDisabled();
 
 			if (ImGui::Button("Play"))
 				_source->Play();

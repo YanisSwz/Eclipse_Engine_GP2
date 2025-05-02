@@ -14,6 +14,7 @@ namespace Resource
 	void AudioClip::GetFileContent(std::string _path)
 	{
 		audioFile.load(_path.c_str());
+		m_length = static_cast<float>(audioFile.getLength());
 	}
 
 	void AudioClip::Delete()

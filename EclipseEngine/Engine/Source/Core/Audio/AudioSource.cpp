@@ -54,6 +54,12 @@ namespace Core
 	void AudioSource::SetClip(Resource::AudioClip* _clip)
 	{
 		m_audioClip = _clip;
+		if(m_audioClip == nullptr)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "Failed to set audio clip!");
+			return;
+		}
+		m_audioClipLength = m_audioClip->GetLength();
 	}
 
 	Resource::AudioClip* AudioSource::GetClip() 
@@ -80,19 +86,19 @@ namespace Core
 		return m_audioClip->audioFile.mSampleCount;
 	}
 
-	double AudioSource::GetTime() const
+	float AudioSource::GetTime() const
 	{
 		if (m_audioClip == nullptr)
 			return 0.0;
 		
-		return m_audioEngine->getStreamPosition(m_sound);
+		return static_cast<float>(m_audioEngine->getStreamPosition(m_sound));
 	}
 
-	double AudioSource::GetLength() const
+	float AudioSource::GetLength() const
 	{
 		if (m_audioClip == nullptr)
-			return 0.0;
-		return m_audioClip->audioFile.getLength();
+			return 0.f;
+		return m_audioClipLength;
 	}
 
 	void AudioSource::SetTime(float _time)
@@ -106,12 +112,20 @@ namespace Core
 			return;
 		}
 	
-		if (_time > m_audioClip->audioFile.getLength())
+		if (_time > m_audioClipLength)
 		{
-			m_audioEngine->seek(m_sound, m_audioClip->audioFile.getLength());
+			m_audioEngine->seek(m_sound, m_audioClipLength);
 			return;
 		}
 
 		m_audioEngine->seek(m_sound, _time);
+	}
+
+	bool AudioSource::IsPlaying() const
+	{
+		if (m_audioClip == nullptr)
+			return false;
+
+		return m_audioEngine->isValidVoiceHandle(m_sound);
 	}
 }
