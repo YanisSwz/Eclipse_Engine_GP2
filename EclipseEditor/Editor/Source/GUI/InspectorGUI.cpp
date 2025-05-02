@@ -318,7 +318,12 @@ namespace GUI
 			float* data = _source->GetData();
 			if (data != nullptr)
 			{
-				ImGui::PlotHistogram("##clip", data, _source->GetSampleCount());
+				float range = 1000.f;
+				if (_source->GetVolume() >= 1.f/range)
+					range = 1.f / _source->GetVolume();
+				ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 0.75f, 0.f, 1.f));
+				ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, std::to_string(_source->GetLength()).c_str(), -range, range, ImVec2(0.f, 200.f));
+				ImGui::PopStyleColor();
 
 				if (_source->IsPlaying())
 				{
