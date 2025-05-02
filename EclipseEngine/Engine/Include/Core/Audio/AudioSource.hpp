@@ -13,6 +13,8 @@ namespace Core
 		ECLIPSE_ENGINE AudioSource(SoLoud::Soloud* _audioEngine);
 		ECLIPSE_ENGINE ~AudioSource() = default;
 
+		ECLIPSE_ENGINE void SetActive(bool _activate) override;
+
 		ECLIPSE_ENGINE void Play();
 		/// <summary>
 		/// Pause/Unpause the sound

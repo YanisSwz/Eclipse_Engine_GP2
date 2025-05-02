@@ -352,6 +352,8 @@ namespace GUI
 			if (ImGui::SliderFloat("Sample Rate", &sampleRate, 8000.f, 48000.f, "%.0f"))
 				_source->SetSampleRate(sampleRate);
 
+			
+
 			if (ImGui::Button("Play"))
 				_source->Play();
 
