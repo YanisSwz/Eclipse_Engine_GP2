@@ -31,6 +31,13 @@ public:
 	void Destroy();
 
 private:
+	enum class GAME_STATE
+	{
+		PLAY,
+		PAUSE,
+		STOP
+	};
+
 	int m_width = 0;
 	int m_height = 0;
 
@@ -60,6 +67,7 @@ private:
 	GUI::ContentBrowseGUI m_contentBrowserGUI;
 	GUI::GameGUI m_gameGUI;
 
+	GAME_STATE m_gameState = GAME_STATE::STOP;
 	bool bIsHierarchieWindowEnabled = true;
 	bool bIsInspectorWindowEnabled = true;
 	bool bIsSceneWindowEnabled = true;
