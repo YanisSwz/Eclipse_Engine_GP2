@@ -34,6 +34,7 @@ namespace Core
 		m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
 		m_audioEngine->setLooping(m_sound, m_looping);
 		m_audioEngine->setSamplerate(m_sound, m_sampleRate);
+		m_audioEngine->setPan(m_sound, m_pan);
 	}
 
 	void AudioSource::Pause()
@@ -121,8 +122,7 @@ namespace Core
 
 		if (_time < 0.f)
 			_time = 0.f;
-
-		if (_time > m_audioClipLength)
+		else if (_time > m_audioClipLength)
 			_time = m_audioClipLength;
 
 		m_audioEngine->seek(m_sound, _time);
@@ -143,8 +143,7 @@ namespace Core
 			m_volume = 0.f;
 			return;
 		}
-
-		if (_vol > 1.f)
+		else if (_vol > 1.f)
 		{
 			m_volume = 1.f;
 			return;
@@ -164,8 +163,7 @@ namespace Core
 	{
 		if(_rate < 8000.f)
 			_rate = 8000.f;
-
-		if (_rate > 48000.f)
+		else if (_rate > 48000.f)
 			_rate = 48000.f;
 
 		float ratio = m_sampleRate / _rate;
@@ -173,5 +171,22 @@ namespace Core
 		m_audioClipLength *= ratio;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			m_audioEngine->setSamplerate(m_sound, m_sampleRate);
+	}
+
+	float AudioSource::GetPan() const
+	{
+		return m_pan;
+	}
+
+	void AudioSource::SetPan(float _pan)
+	{
+		if (_pan < -1.f)
+			_pan = -1.f;
+		else if (_pan > 1.f)
+			_pan = 1.f;
+
+		m_pan = _pan;
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+			m_audioEngine->setPan(m_sound, m_pan);
 	}
 }

@@ -22,6 +22,7 @@ namespace GUI
 	bool ComboFilter(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values, float _maxColumnWidth = 100.f);
 	bool ComboBox(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values, float _maxColumnWidth = 100.f);
 	bool CheckBox(const char* _checkBoxName, const char* _invisibleCheckBoxName, bool* _boolean, float _maxColumnWidth = 100.f);
+	bool FloatSlider(const char* _sliderName, float* value, float _min, float _max, const char* _format);
 
 	ImVec4 ColorToVec4(Logging::COLOR _color);
 	void ColoredText(const char* _message, Logging::COLOR _color);

@@ -448,6 +448,11 @@ namespace GUI
 		return false;
 	}
 
+	bool FloatSlider(const char* _sliderName, float* value, float _min, float _max, const char* _format)
+	{
+		return ImGui::SliderFloat(_sliderName, value, _min, _max, _format);
+	}
+
 	ImVec4 ColorToVec4(Logging::COLOR _color)
 	{
 		switch (_color)

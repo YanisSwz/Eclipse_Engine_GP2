@@ -37,6 +37,8 @@ namespace Core
 		ECLIPSE_ENGINE float GetVolume() const;
 		ECLIPSE_ENGINE inline float GetSampleRate() const { return m_sampleRate; };
 		ECLIPSE_ENGINE void SetSampleRate(float _rate);
+		ECLIPSE_ENGINE float GetPan() const;
+		ECLIPSE_ENGINE void SetPan(float _pan);
 
 	private:
 		bool m_looping = false;
@@ -44,6 +46,7 @@ namespace Core
 		float m_audioClipLength = 0.f;
 		float m_volume = 1.f;
 		float m_sampleRate = 0.f;
+		float m_pan = 0.f;
 		SoLoud::Soloud* m_audioEngine = nullptr;
 		Resource::AudioClip* m_audioClip = nullptr;
 		SoLoud::handle m_sound;
