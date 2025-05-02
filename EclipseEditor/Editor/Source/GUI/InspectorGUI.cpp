@@ -335,13 +335,13 @@ namespace GUI
 				}
 			}
 
-			if (_source->IsPlaying())
-				ImGui::BeginDisabled();
 			bool isLooping = _source->GetLooping();
-			if (GUI::CheckBox("looping", "##1", &isLooping))
+			if (GUI::CheckBox("Looping", "##1", &isLooping))
 				_source->SetLooping(isLooping);
-			if (_source->IsPlaying())
-				ImGui::EndDisabled();
+			
+			float volume = _source->GetVolume();
+			if (ImGui::SliderFloat("Volume", &volume, 0.f, 1.f, "%.3f", ImGuiSliderFlags_NoInput))
+				_source->SetVolume(volume);
 
 			if (ImGui::Button("Play"))
 				_source->Play();

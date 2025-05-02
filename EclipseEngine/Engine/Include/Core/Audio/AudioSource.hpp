@@ -31,11 +31,14 @@ namespace Core
 		ECLIPSE_ENGINE float GetLength() const;
 		ECLIPSE_ENGINE void SetTime(float _time);
 		ECLIPSE_ENGINE bool IsPlaying() const;
+		ECLIPSE_ENGINE void SetVolume(float _vol);
+		ECLIPSE_ENGINE float GetVolume() const;
 
 	private:
 		bool m_looping = false;
 		bool m_paused = false;
 		float m_audioClipLength = 0.f;
+		float m_volume = 1.f;
 		SoLoud::Soloud* m_audioEngine = nullptr;
 		Resource::AudioClip* m_audioClip = nullptr;
 		SoLoud::handle m_sound;

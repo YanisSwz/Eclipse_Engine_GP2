@@ -11,7 +11,7 @@ namespace Core
 
 	void AudioSource::Play()
 	{
-		if(m_audioClip == nullptr)
+		if (m_audioClip == nullptr)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to play!");
 			return;
@@ -24,7 +24,7 @@ namespace Core
 			m_audioEngine->stop(m_sound);
 		}
 
-		m_sound = m_audioEngine->play(m_audioClip->audioFile);
+		m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
 		m_audioEngine->setLooping(m_sound, m_looping);
 	}
 
@@ -62,7 +62,7 @@ namespace Core
 		m_audioClipLength = m_audioClip->GetLength();
 	}
 
-	Resource::AudioClip* AudioSource::GetClip() 
+	Resource::AudioClip* AudioSource::GetClip()
 	{
 		return m_audioClip;
 	}
@@ -70,6 +70,8 @@ namespace Core
 	void AudioSource::SetLooping(bool _looping)
 	{
 		m_looping = _looping;
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+			m_audioEngine->setLooping(m_sound, m_looping);
 	}
 
 	float* AudioSource::GetData() const
@@ -89,8 +91,8 @@ namespace Core
 	float AudioSource::GetTime() const
 	{
 		if (m_audioClip == nullptr)
-			return 0.0;
-		
+			return 0.f;
+
 		return static_cast<float>(m_audioEngine->getStreamPosition(m_sound));
 	}
 
@@ -103,20 +105,14 @@ namespace Core
 
 	void AudioSource::SetTime(float _time)
 	{
-		if (m_audioClip == nullptr)
+		if (m_audioClip == nullptr || !m_audioEngine->isValidVoiceHandle(m_sound))
 			return;
 
 		if (_time < 0.f)
-		{
-			m_audioEngine->seek(m_sound, _time);
-			return;
-		}
-	
+			_time = 0.f;
+
 		if (_time > m_audioClipLength)
-		{
-			m_audioEngine->seek(m_sound, m_audioClipLength);
-			return;
-		}
+			_time = m_audioClipLength;
 
 		m_audioEngine->seek(m_sound, _time);
 	}
@@ -127,5 +123,29 @@ namespace Core
 			return false;
 
 		return m_audioEngine->isValidVoiceHandle(m_sound);
+	}
+
+	void AudioSource::SetVolume(float _vol)
+	{
+		if (_vol < 0.f)
+		{
+			m_volume = 0.f;
+			return;
+		}
+
+		if (_vol > 1.f)
+		{
+			m_volume = 1.f;
+			return;
+		}
+
+		m_volume = _vol;
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+			m_audioEngine->setVolume(m_sound, m_volume);
+	}
+
+	float AudioSource::GetVolume() const
+	{
+		return m_volume;
 	}
 }
