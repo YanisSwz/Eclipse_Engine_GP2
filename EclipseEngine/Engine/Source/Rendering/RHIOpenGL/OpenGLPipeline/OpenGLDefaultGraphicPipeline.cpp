@@ -49,6 +49,11 @@ namespace RHI::OpenGL
 		delete m_FB;
 	}
 
+	int OpenGLDefaultGraphicPipeline::PickObjectID(int _mousePosX, int _mousePosY)
+	{
+		return m_deferredRenderPass->PickID(_mousePosX, _mousePosY);
+	}
+
 	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights)
 	{
 		// Deferred Render Pass

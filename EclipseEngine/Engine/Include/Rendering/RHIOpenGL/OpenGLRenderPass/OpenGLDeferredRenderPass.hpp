@@ -10,15 +10,18 @@ namespace RHI::OpenGL
 		OpenGLDeferredRenderPass();
 		~OpenGLDeferredRenderPass() override;
 
+		GLuint gBuffer;
 		GLuint gPosition;
 		GLuint gNormal;
 		GLuint gAlbedoSpec;
+		GLuint gPickID;
 		GLuint rboDepth;
-		GLuint gBuffer;
 
 		void Init(int _width, int _height) override;
 		void Rescale(int _width, int _height) override;
 		void Delete() override;
+
+		int PickID(int _mousePosX, int _mousePosY);
 
 		void Bind();
 		void Unbind();

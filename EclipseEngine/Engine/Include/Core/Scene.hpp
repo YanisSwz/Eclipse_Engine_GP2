@@ -16,6 +16,7 @@ namespace Core
 		ECLIPSE_ENGINE void Update(float _deltaTime);
 		ECLIPSE_ENGINE GameObject* CreateGameObject();
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
+		ECLIPSE_ENGINE GameObject* GetObjectByID(int _id);
 
 	private:
 		static const int MAX_SIZE = 100;

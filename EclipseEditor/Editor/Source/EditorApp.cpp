@@ -1,7 +1,7 @@
 #include "EditorApp.hpp"
 
-#include "Logger.hpp"
 
+#include "Logger.hpp"
 #include "Windowing/GLFWWindow.hpp"
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
 #include "Resource/ResourceManager.hpp"
@@ -42,6 +42,8 @@ void EditorApp::Update()
 
 	if (m_window->GetKey(Windowing::KEY_CODE::KEY_ESCAPE, Windowing::INPUT_ACTION::INPUT_PRESS))
 		m_window->SetWindowShouldClose(true);
+
+	PickObjectID();
 
 	deltaTime = m_window->GetTime() - oldTime;
 	oldTime = m_window->GetTime();
@@ -368,6 +370,20 @@ void EditorApp::LoadScene()
 void EditorApp::DrawScene()
 {
 	m_scene.GetSystemManager()->Render(m_renderInterface, m_defaultPipeline, m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos());
+}
+
+void EditorApp::PickObjectID()
+{
+	if (m_window->GetMouseButton(Windowing::MOUSE_CODE::MIDDLE_BUTTON, Windowing::INPUT_ACTION::INPUT_PRESS))
+	{
+		Math::Vec2 mousePos = m_window->GetCursorPos();
+		int mousePosX = static_cast<int>(mousePos.x) - m_scenePosX;
+		int mousePosY = m_window->height - static_cast<int>(mousePos.y) - m_scenePosY - 1;
+		int pickID = m_defaultPipeline->PickObjectID(mousePosX, mousePosY);
+		Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "%i", pickID);
+
+		m_crtGOSelected = m_scene.GetObjectByID(pickID);
+	}
 }
 
 void EditorApp::DestroyScene()

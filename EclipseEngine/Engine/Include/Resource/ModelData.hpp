@@ -12,5 +12,6 @@ namespace Resource
 		Texture* texture = nullptr;
 		ShaderProgram* shaderProgram = nullptr;
 		Math::Mat4 TRS;
+		int ID;
 	};
 }

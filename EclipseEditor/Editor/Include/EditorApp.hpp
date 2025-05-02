@@ -81,6 +81,7 @@ private:
 	void LoadScene();
 
 	void DrawScene();
+	void PickObjectID();
 
 	void DestroyScene();
 	void DestroyGUI();
