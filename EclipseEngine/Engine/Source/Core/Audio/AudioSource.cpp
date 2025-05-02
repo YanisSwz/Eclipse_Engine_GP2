@@ -26,6 +26,7 @@ namespace Core
 
 		m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
 		m_audioEngine->setLooping(m_sound, m_looping);
+		m_audioEngine->setSamplerate(m_sound, m_sampleRate);
 	}
 
 	void AudioSource::Pause()
@@ -53,6 +54,8 @@ namespace Core
 
 	void AudioSource::SetClip(Resource::AudioClip* _clip)
 	{
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+			Stop();
 		m_audioClip = _clip;
 		if(m_audioClip == nullptr)
 		{
@@ -60,6 +63,7 @@ namespace Core
 			return;
 		}
 		m_audioClipLength = m_audioClip->GetLength();
+		m_sampleRate = m_audioClip->audioFile.mSampleCount / m_audioClip->GetLength();
 	}
 
 	Resource::AudioClip* AudioSource::GetClip()
@@ -147,5 +151,20 @@ namespace Core
 	float AudioSource::GetVolume() const
 	{
 		return m_volume;
+	}
+
+	void AudioSource::SetSampleRate(float _rate)
+	{
+		if(_rate < 8000.f)
+			_rate = 8000.f;
+
+		if (_rate > 48000.f)
+			_rate = 48000.f;
+
+		float ratio = m_sampleRate / _rate;
+		m_sampleRate = _rate;
+		m_audioClipLength *= ratio;
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+			m_audioEngine->setSamplerate(m_sound, m_sampleRate);
 	}
 }
