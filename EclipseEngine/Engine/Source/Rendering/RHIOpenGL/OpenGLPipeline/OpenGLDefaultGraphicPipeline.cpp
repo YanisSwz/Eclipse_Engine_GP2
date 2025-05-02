@@ -60,13 +60,19 @@ namespace RHI::OpenGL
 		m_skyboxRenderPass->Draw(_VP);
 		// Static Mesh Render Pass
 		m_staticModelRenderPass->Draw(_VP, _staticModels);
-
-		// Lighting Render Pass
 		m_deferredRenderPass->Unbind();
 		
 		m_FB->Bind();
+		// Lighting Render Pass
 		m_lightingRenderPass->Draw(_viewPos, m_deferredRenderPass->gPosition, m_deferredRenderPass->gNormal, m_deferredRenderPass->gAlbedoSpec, _ambientLight, _dirLights, _pointLights, _spotLights);
 		m_FB->Unbind();
+
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_deferredRenderPass->gBuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FB->GetFrameBufferID()); // write to default framebuffer
+		glBlitFramebuffer(
+			0, 0, m_deferredRenderPass->GetWidth(), m_deferredRenderPass->GetHeight(), 0, 0, m_FB->width, m_FB->height, GL_DEPTH_BUFFER_BIT, GL_NEAREST
+		);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	unsigned int OpenGLDefaultGraphicPipeline::GetFinalTexture() const

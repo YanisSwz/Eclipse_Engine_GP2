@@ -46,8 +46,9 @@ void EditorApp::Update()
 	deltaTime = m_window->GetTime() - oldTime;
 	oldTime = m_window->GetTime();
 
+	Math::Vec2 windowPos = m_window->GetWindowPos();
 
-	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_scenePosX), static_cast<float>(m_scenePosY) }, { static_cast<float>(m_sceneWidth), static_cast<float>(m_sceneHeight) });
+	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_scenePosX) - windowPos.x, static_cast<float>(m_scenePosY) - windowPos.y }, { static_cast<float>(m_sceneWidth), static_cast<float>(m_sceneHeight) });
 	m_defaultPipeline->Rescale(m_sceneWidth, m_sceneHeight);
 	m_renderInterface->Viewport(0, 0, m_sceneWidth, m_sceneHeight);
 

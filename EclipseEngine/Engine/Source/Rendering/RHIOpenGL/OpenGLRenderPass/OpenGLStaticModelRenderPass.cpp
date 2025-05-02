@@ -24,7 +24,6 @@ namespace RHI::OpenGL
 
 	void OpenGLStaticModelRenderPass::Delete()
 	{
-
 	}
 
 	void OpenGLStaticModelRenderPass::Draw(Math::Mat4 _VP, std::vector<Resource::ModelData> _models) const

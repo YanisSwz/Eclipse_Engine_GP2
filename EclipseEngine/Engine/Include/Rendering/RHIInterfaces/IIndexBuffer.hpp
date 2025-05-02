@@ -19,7 +19,7 @@ namespace RHI
 		virtual void Delete() = 0;
 
 	protected:
-		std::vector<uint32_t> indexBuffer;
+		std::vector<unsigned int> indexBuffer;
 
 	};
 }

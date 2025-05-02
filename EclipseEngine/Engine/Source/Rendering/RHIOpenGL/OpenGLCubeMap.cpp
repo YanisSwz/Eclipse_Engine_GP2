@@ -39,15 +39,14 @@ namespace RHI::OpenGL
 
 	void OpenGLCubeMap::Bind()
 	{
-		glDepthFunc(GL_LEQUAL);
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_textID);
 	}
 
 	void OpenGLCubeMap::Unbind()
 	{
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-		glDepthFunc(GL_LESS);
 	}
 
 	void OpenGLCubeMap::Delete()

@@ -107,7 +107,13 @@ vec3 SpotLightComputation(SpotLight spotLight, vec3 FragPos, vec3 Normal, vec3 D
 
 
 void main()
-{             
+{
+    if (texture(gPosition, TexCoords).w == 1.0)
+    {
+        FragColor = texture(gAlbedoSpec, TexCoords);
+        return;
+    }
+
     // retrieve data from gbuffer
     vec3 FragPos = texture(gPosition, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;

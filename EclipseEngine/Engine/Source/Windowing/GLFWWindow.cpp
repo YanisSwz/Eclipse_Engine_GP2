@@ -171,6 +171,13 @@ namespace Windowing
         return s_mouseScrollDelta;
     }
 
+    Math::Vec2 GLFWWindow::GetWindowPos()
+    {
+        int x, y;
+        glfwGetWindowPos(m_window, &x, &y);
+        return Math::Vec2(static_cast<float>(x), static_cast<float>(y));
+    }
+
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     {
         window = window;

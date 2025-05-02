@@ -18,6 +18,8 @@ namespace RHI
 			ECLIPSE_ENGINE void Bind() override;
 			ECLIPSE_ENGINE void Unbind() override;
 			ECLIPSE_ENGINE unsigned int GetTextureID() const override;
+			ECLIPSE_ENGINE unsigned int GetFrameBufferID() const override;
+			ECLIPSE_ENGINE unsigned int GetDepthBufferID() const override;
 			ECLIPSE_ENGINE void Delete() override;
 
 		private:
