@@ -40,7 +40,7 @@ namespace GUI
 		}
 
 		bool bIsActive = _crtGOSelected->IsActive();
-		if(GUI::CheckBox("Active", "##", &bIsActive))
+		if (GUI::CheckBox("Active", "##", &bIsActive))
 			_crtGOSelected->SetActive(bIsActive);
 
 		ImGui::NewLine();
@@ -314,12 +314,35 @@ namespace GUI
 
 			if (clip == nullptr)
 				ImGui::BeginDisabled();
+
+			float* data = _source->GetData();
+			if (data != nullptr)
+			{
+				ImGui::PlotHistogram("##clip", data, _source->GetSampleCount());
+
+				float time = static_cast<float>(_source->GetTime());
+				if(ImGui::SliderFloat("##Time", &time, 0.0f, static_cast<float>(_source->GetLength())))
+					_source->SetTime(time);
+			}
+
 			bool isLooping = _source->GetLooping();
 			if (GUI::CheckBox("looping", "##1", &isLooping))
 				_source->SetLooping(isLooping);
 
 			if (ImGui::Button("Play"))
 				_source->Play();
+
+			ImGui::SameLine();
+			if (!_source->GetPause())
+			{
+				if (ImGui::Button("Pause"))
+					_source->Pause();
+			}
+			else
+			{
+				if (ImGui::Button("Unpause"))
+					_source->Pause();
+			}
 
 			ImGui::SameLine();
 			if (ImGui::Button("Stop"))
@@ -429,7 +452,7 @@ namespace GUI
 					meshCollider->SetPosition(_crtGOSelected->transform->GetPosition());
 					meshCollider->SetRotation(_crtGOSelected->transform->GetRotation());
 					Core::Model* model = _crtGOSelected->GetComponent<Core::Model>();
-					if(model != nullptr)
+					if (model != nullptr)
 						meshCollider->SetMeshScale(model->mesh, _crtGOSelected->transform->GetScale());
 					else
 						meshCollider->Scale(_crtGOSelected->transform->GetScale());

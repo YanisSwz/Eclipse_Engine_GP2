@@ -6,6 +6,7 @@ namespace Core
 	void AudioSystem::Init()
 	{
 		m_audioEngine.init();
+		m_audioEngine.setVisualizationEnable(true);
 
 		/*m_startupSound.load("Assets/Audio/startup.mp3");
 		m_startupSound.setVolume(2.f);*/

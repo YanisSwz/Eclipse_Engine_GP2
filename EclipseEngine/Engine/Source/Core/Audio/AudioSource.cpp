@@ -1,5 +1,6 @@
 #include "Audio/AudioSource.hpp"
 #include "Logger.hpp"
+#include "Maths.hpp"
 
 namespace Core
 {
@@ -15,10 +16,27 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to play!");
 			return;
 		}
-		// If a sound is already playing, stop it
+		// If a sound is already playing, stop it 
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
+		{
+			if (m_paused)
+				Pause();
 			m_audioEngine->stop(m_sound);
+		}
+
 		m_sound = m_audioEngine->play(m_audioClip->audioFile);
+		m_audioEngine->setLooping(m_sound, m_looping);
+	}
+
+	void AudioSource::Pause()
+	{
+		if (m_audioClip == nullptr)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to pause!");
+			return;
+		}
+		m_paused = !m_paused;
+		m_audioEngine->setPause(m_sound, m_paused);
 	}
 
 	void AudioSource::Stop()
@@ -28,7 +46,9 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "No audio clip to stop!");
 			return;
 		}
-		m_audioClip->audioFile.stop();
+		if (m_paused)
+			Pause();
+		m_audioEngine->stop(m_sound);
 	}
 
 	void AudioSource::SetClip(Resource::AudioClip* _clip)
@@ -43,9 +63,55 @@ namespace Core
 
 	void AudioSource::SetLooping(bool _looping)
 	{
+		m_looping = _looping;
+	}
+
+	float* AudioSource::GetData() const
+	{
+		if (m_audioClip == nullptr)
+			return nullptr;
+		return m_audioClip->audioFile.mData;
+	}
+
+	int AudioSource::GetSampleCount() const
+	{
+		if (m_audioClip == nullptr)
+			return 0;
+		return m_audioClip->audioFile.mSampleCount;
+	}
+
+	double AudioSource::GetTime() const
+	{
+		if (m_audioClip == nullptr)
+			return 0.0;
+		
+		return m_audioEngine->getStreamPosition(m_sound);
+	}
+
+	double AudioSource::GetLength() const
+	{
+		if (m_audioClip == nullptr)
+			return 0.0;
+		return m_audioClip->audioFile.getLength();
+	}
+
+	void AudioSource::SetTime(float _time)
+	{
 		if (m_audioClip == nullptr)
 			return;
-		m_looping = _looping;
-		m_audioClip->audioFile.setLooping(m_looping);
+
+		if (_time < 0.f)
+		{
+			m_audioEngine->seek(m_sound, _time);
+			return;
+		}
+	
+		if (_time > m_audioClip->audioFile.getLength())
+		{
+			m_audioEngine->seek(m_sound, m_audioClip->audioFile.getLength());
+			return;
+		}
+
+		m_audioEngine->seek(m_sound, _time);
 	}
 }
