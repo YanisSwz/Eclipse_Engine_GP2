@@ -60,14 +60,10 @@ void OpenGLFrameBuffer::Rescale(int _width, int _height)
 void OpenGLFrameBuffer::Bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fboID);
-	glBindTexture(GL_TEXTURE_2D, m_textID);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_rboID);
 }
 
 void OpenGLFrameBuffer::Unbind()
 {
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

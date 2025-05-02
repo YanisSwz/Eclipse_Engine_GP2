@@ -57,7 +57,7 @@ namespace Resource
 				vert.pos = position;
 				vert.textUV = texCoord;
 				vert.normal = normal;
-				m_indexBuffer.push_back(static_cast<uint32_t>(m_vertexBuffer.size()));
+				m_indexBuffer.push_back(static_cast<unsigned int>(m_vertexBuffer.size()));
 				m_vertexBuffer.push_back(vert);
 			}
 		}
@@ -71,7 +71,7 @@ namespace Resource
 		return verticesPosition;
 	}
 
-	std::vector<uint32_t> Mesh::GetVerticesIndex() const
+	std::vector<unsigned int> Mesh::GetVerticesIndex() const
 	{
 		return m_indexBuffer;
 	}
@@ -86,8 +86,8 @@ namespace Resource
 
 		m_vertexArrayObject->Init();
 		m_vertexArrayObject->Bind();
-		m_vertexBufferObject->Init(&m_vertexBuffer[0], m_vertexBuffer.size() * sizeof(RHI::Vertex));
-		m_indexBufferObject->Init(&m_indexBuffer[0], m_indexBuffer.size() * sizeof(uint32_t));
+		m_vertexBufferObject->Init(m_vertexBuffer.data(), m_vertexBuffer.size() * sizeof(RHI::Vertex));
+		m_indexBufferObject->Init(m_indexBuffer.data(), m_indexBuffer.size() * sizeof(unsigned int));
 
 		// Vertex position,		/		Normal,		 /	    Texture position
 		m_vertexArrayObject->LinkVertexBuffer(*m_vertexBufferObject, 0, 3, RHI::IFLAGS::TYPE_FLOAT, sizeof(RHI::Vertex), (void*)offsetof(RHI::Vertex, pos));

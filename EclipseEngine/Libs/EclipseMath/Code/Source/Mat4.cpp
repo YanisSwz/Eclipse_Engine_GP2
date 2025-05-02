@@ -651,6 +651,9 @@ Mat4 Mat4::TRS(Vec3 _translate, Quat _rotate, Vec3 _scale)
 
 Mat4 Mat4::PerspectiveMatrix(int _width, int _height, float _fov, float _near, float _far)
 {
+	if (_width == 0 || _height == 0)
+		return Mat4();
+
 	float aspectRatio = static_cast<float>(_width) / static_cast<float>(_height);
 	float fovRad = _fov * Tools::PI / 180.f;
 	return { 1.f / (aspectRatio * tanf(fovRad / 2.f)), 0.f, 0.f, 0.f,

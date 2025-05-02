@@ -28,6 +28,6 @@ namespace RHI::OpenGL
 		OpenGLLightingRenderPass* m_lightingRenderPass = nullptr;
 		OpenGLFrameBuffer* m_FB = nullptr;
 		
-		Math::Vec4 m_backgroundColor{ 1.f, 0.f, 1.f, 1.f };
+		Math::Vec4 m_backgroundColor{ 0.9f, 0.9f, 1.f, 1.f };
 	};
 }
