@@ -4,7 +4,7 @@
 
 namespace Core
 {
-	using json = nlohmann::json;
+	using json = nlohmann::ordered_json;
 
 	class Scene;
 	class GameObject;
@@ -21,6 +21,8 @@ namespace Core
 	class Serializer
 	{
 	public:
+		ECLIPSE_ENGINE void SerializeSceneToFile(Scene* _scene, std::string _filePath);
+
 		ECLIPSE_ENGINE json SerializeScene(Scene* _scene);
 		ECLIPSE_ENGINE json SerializeGameObject(GameObject* _gameObject);
 

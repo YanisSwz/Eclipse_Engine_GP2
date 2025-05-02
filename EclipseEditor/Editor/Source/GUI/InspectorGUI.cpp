@@ -101,9 +101,9 @@ namespace GUI
 			DrawDeleteComponentPopup(_model);
 
 			std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
-			std::string meshName = _model->mesh->name;
+			std::string meshName = _model->GetMesh()->name;
 			if (GUI::ComboFilter("Mesh ", &meshName, meshNames))
-				_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(meshName);
+				_model->SetMesh(Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(meshName));
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MeshName"))
@@ -111,7 +111,7 @@ namespace GUI
 					IM_ASSERT(payload->DataSize == sizeof(std::string));
 					std::string payload_n;
 					payload_n = *static_cast<std::string*>(payload->Data);
-					_model->mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(payload_n);
+					_model->SetMesh(Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(payload_n));
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -119,9 +119,9 @@ namespace GUI
 			ImGui::Columns(1);
 
 			std::vector<std::string> textureNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Texture>();
-			std::string textureName = _model->texture->name;
+			std::string textureName = _model->GetTexture()->name;
 			if (GUI::ComboFilter("Texture ", &textureName, textureNames))
-				_model->texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(textureName);
+				_model->SetTexture(Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(textureName));
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureName"))
@@ -129,7 +129,7 @@ namespace GUI
 					IM_ASSERT(payload->DataSize == sizeof(std::string));
 					std::string payload_n;
 					payload_n = *static_cast<std::string*>(payload->Data);
-					_model->texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(payload_n);
+					_model->SetTexture(Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(payload_n));
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -283,8 +283,8 @@ namespace GUI
 			GUI::ColorEdit4("Color", _light->GetColorRef());
 			GUI::DragFloat("Range", "##1", &_light->GetDistanceRef(), 0.1f, 1.f, 200.f);
 
-			GUI::DragFloat("Inner Angle", "##2", &_light->GetInnerCutoffRef(), 1.f, 1.f, std::min(_light->GetOuterCutoff(), 180.f));
-			GUI::DragFloat("Outer Angle", "##3", &_light->GetOuterCutoffRef(), 1.f, _light->GetInnerCutoff(), 180.f);
+			GUI::DragFloat("Inner Angle", "##2", &_light->GetInnerCutOffRef(), 1.f, 1.f, std::min(_light->GetOuterCutOff(), 180.f));
+			GUI::DragFloat("Outer Angle", "##3", &_light->GetOuterCutOffRef(), 1.f, _light->GetInnerCutOff(), 180.f);
 
 			ImGui::TreePop();
 		}
@@ -386,7 +386,7 @@ namespace GUI
 					meshCollider->SetRotation(_crtGOSelected->transform->GetRotation());
 					Core::Model* model = _crtGOSelected->GetComponent<Core::Model>();
 					if(model != nullptr)
-						meshCollider->SetMeshScale(model->mesh, _crtGOSelected->transform->GetScale());
+						meshCollider->SetMeshScale(model->GetMesh(), _crtGOSelected->transform->GetScale());
 					else
 						meshCollider->Scale(_crtGOSelected->transform->GetScale());
 				}

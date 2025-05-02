@@ -23,7 +23,8 @@ namespace Core
 			Math::Vec3 _rot = { 0.f, 0.f, 0.f }, GameObject* _myGameObject = nullptr,
 			JPH::VertexList _vertexList = JPH::VertexList(),
 			JPH::IndexedTriangleList _indexTriangleList = JPH::IndexedTriangleList(),
-			Math::Vec3 _linearVelocity = { 0.f, 0.f, 0.f }, Math::Vec3 _angularVelocity = { 0.f, 0.f, 0.f });
+			Math::Vec3 _linearVelocity = { 0.f, 0.f, 0.f }, Math::Vec3 _angularVelocity = { 0.f, 0.f, 0.f },
+			Resource::Mesh* _currMesh = nullptr);
 		ECLIPSE_ENGINE ~MeshCollider() override;
 		
 		ECLIPSE_ENGINE void SetDynamic(bool _isDynamic) override;
@@ -35,6 +36,8 @@ namespace Core
 		ECLIPSE_ENGINE void Scale(float _scaleX, float _scaleY, float _scaleZ) override;
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale) override;
 
+		ECLIPSE_ENGINE std::string GetMeshName() const;
+
 	private:
 		JPH::VertexList m_vertexList;
 		JPH::IndexedTriangleList m_indexTriangleList;
@@ -44,4 +47,7 @@ namespace Core
 		void SetDefaultMesh();
 		void Recreate() override;
 	};
+
+	void to_json(json& _j, const MeshCollider& _meshCollider);
+	void from_json(const json& _j, MeshCollider& _meshCollider);
 }

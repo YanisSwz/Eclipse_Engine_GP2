@@ -120,4 +120,31 @@ namespace Core
 		new (this) BoxCollider(bodyInterface, isDynamic, mass, scale, position,
 			rotationEuler, gameObject, myVelocity, myAngularVelocity);
 	}
+
+	void to_json(json& _j, const BoxCollider& _boxCollider)
+	{
+		Math::Vec3 position = _boxCollider.GetPosition();
+		Math::Vec3 offsetPosition = _boxCollider.GetOffsetPos();
+		Math::Vec3 scale = _boxCollider.GetScale();
+		Math::Quat rotation = _boxCollider.GetRotation();
+
+		_j = json{
+			{"IsActive", _boxCollider.IsActive()},
+			{"IsDynamic", _boxCollider.GetIsDynamic()},
+			{"Position", {position.x, position.y, position.z}},
+			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
+			{"Scale", {scale.x, scale.y, scale.z}},
+			{"Rotation", {rotation.w, rotation.x, rotation.y, rotation.z}},
+			{"Mass", _boxCollider.GetMass()}
+		};
+	}
+
+	void from_json(const json& _j, BoxCollider& _boxCollider)
+	{
+		bool bIsActive;
+
+		_j.at("IsActive").get_to(bIsActive);
+
+		_boxCollider.SetActive(bIsActive);
+	}
 }

@@ -23,4 +23,7 @@ namespace Core
 	private:
 		void Recreate() override;
 	};
+
+	void to_json(json& _j, const CapsuleCollider& _capsuleCollider);
+	void from_json(const json& _j, CapsuleCollider& _capsuleCollider);
 }

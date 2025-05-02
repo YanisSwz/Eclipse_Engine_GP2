@@ -15,8 +15,18 @@ namespace Core
 
 		ECLIPSE_ENGINE RHI::PointLightData GetData() const;
 
-		ECLIPSE_ENGINE inline float& GetDistanceRef() { return m_distance; };
-		ECLIPSE_ENGINE inline float GetDistance() { return m_distance; };
+		ECLIPSE_ENGINE inline float& GetDistanceRef() { return m_distance; }
+
+		ECLIPSE_ENGINE inline float GetDistance() const { return m_distance; }
+		ECLIPSE_ENGINE inline float GetConstAtt() const { return m_constantAttenuation; }
+		ECLIPSE_ENGINE inline float GetLinAtt() const { return m_linearAttenuation; }
+		ECLIPSE_ENGINE inline float GetQuadAtt() const { return m_quadraticAttenuation; }
+
+		ECLIPSE_ENGINE inline void SetDistance(float _distance) { m_distance = _distance; }
+		ECLIPSE_ENGINE inline void SetConstAtt(float _constAtt) { m_constantAttenuation = _constAtt; }
+		ECLIPSE_ENGINE inline void SetLinAtt(float _linAtt) { m_linearAttenuation = _linAtt; }
+		ECLIPSE_ENGINE inline void SetQuadAtt(float _quadAtt) { m_quadraticAttenuation = _quadAtt; }
+
 	private:
 		float m_constantAttenuation = 1.f;
 		float m_linearAttenuation = 0.09f;
@@ -25,4 +35,7 @@ namespace Core
 
 		Math::Vec3 GetPosition() const;
 	};
+
+	void to_json(json& _j, const PointLight& _pointLight);
+	void from_json(const json& _j, PointLight& _pointLight);
 }

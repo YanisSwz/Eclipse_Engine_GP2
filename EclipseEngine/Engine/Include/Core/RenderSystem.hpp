@@ -16,6 +16,9 @@ namespace Core
 	public:
 		ECLIPSE_ENGINE RenderSystem() = default;
 		ECLIPSE_ENGINE ~RenderSystem() = default;
+
+		ECLIPSE_ENGINE inline Math::Vec4 GetAmbientLight() const { return m_ambientLight; }
+
 		ECLIPSE_ENGINE Model* AddModel(Resource::Mesh* _mesh = nullptr, Resource::Texture* _texture = nullptr, Resource::ShaderProgram* _shader = nullptr, bool _bIsDynamic = false);
 		ECLIPSE_ENGINE DirectionalLight* AddDirLight();
 		ECLIPSE_ENGINE PointLight* AddPointLight();

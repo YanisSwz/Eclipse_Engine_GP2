@@ -24,4 +24,7 @@ namespace Core
 		void UpdateData();
 		void Recreate() override;
 	};
+
+	void to_json(json& _j, const BoxCollider& _boxCollider);
+	void from_json(const json& _j, BoxCollider& _boxCollider);
 }

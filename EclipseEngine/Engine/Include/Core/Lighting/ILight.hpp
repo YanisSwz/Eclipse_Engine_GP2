@@ -19,7 +19,7 @@ namespace Core
 			m_color.z = _b;
 			m_color.w = _a;
 		};
-		inline Math::Vec4 GetColor() { return m_color; };
+		inline Math::Vec4 GetColor() const { return m_color; };
 		inline Math::Vec4& GetColorRef() { return m_color; };
 		
 	protected:

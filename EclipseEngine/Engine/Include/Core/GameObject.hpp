@@ -27,6 +27,8 @@ namespace Core
 
 		ECLIPSE_ENGINE void SetActive(bool _active) override;
 
+		ECLIPSE_ENGINE inline std::vector<Component*> GetComponents() { return m_components; }
+
 		template <typename T>
 		T* AddComponent()
 		{

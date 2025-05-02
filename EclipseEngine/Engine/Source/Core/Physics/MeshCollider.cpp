@@ -30,7 +30,8 @@ namespace Core
 	MeshCollider::MeshCollider(JPH::BodyInterface* _bodyInterface, float _mass,
 		Math::Vec3 _size, Math::Vec3 _pos, Math::Vec3 _rot, GameObject* _myGameObject,
 		JPH::VertexList _vertexList, JPH::IndexedTriangleList _indexTriangleList,
-		Math::Vec3 _linearVelocity, Math::Vec3 _angularVelocity)
+		Math::Vec3 _linearVelocity, Math::Vec3 _angularVelocity,
+		Resource::Mesh* _currMesh)
 	{
 		b_isBodyDestroyed = false;
 		m_bodyInterface = _bodyInterface;
@@ -42,7 +43,7 @@ namespace Core
 		m_gameObject = _myGameObject;
 		m_vertexList = _vertexList;
 		m_indexTriangleList = _indexTriangleList;
-
+		m_currentMesh = _currMesh;
 
 		if (m_vertexList.size() == 0)
 			SetDefaultMesh();
@@ -183,6 +184,14 @@ namespace Core
 		Recreate();
 	}
 
+	std::string MeshCollider::GetMeshName() const
+	{ 
+		if (m_currentMesh) 
+			return m_currentMesh->name; 
+		else 
+			return ""; 
+	}
+
 	void MeshCollider::Recreate()
 	{
 		UpdateData();
@@ -191,6 +200,7 @@ namespace Core
 		JPH::BodyInterface* bodyInterface = m_bodyInterface;
 		bool isDynamic = b_isDynamic;
 		float mass = m_mass;
+		Resource::Mesh* currMesh = m_currentMesh;
 		Math::Vec3 scale = m_scale;
 		Math::Vec3 position = m_position;
 		Math::Vec3 rotationEuler = m_rotation.GetEulerAnglesDegXYZ();
@@ -203,6 +213,34 @@ namespace Core
 
 		this->~MeshCollider();
 		new (this) MeshCollider(bodyInterface, mass, scale, position, rotationEuler,
-			gameObject, vertexList, indexTriangleList, myVelocity, myAngularVelocity);
+			gameObject, vertexList, indexTriangleList, myVelocity, myAngularVelocity, currMesh);
+	}
+
+	void to_json(json& _j, const MeshCollider& _meshCollider)
+	{
+		Math::Vec3 position = _meshCollider.GetPosition();
+		Math::Vec3 offsetPosition = _meshCollider.GetOffsetPos();
+		Math::Vec3 scale = _meshCollider.GetScale();
+		Math::Quat rotation = _meshCollider.GetRotation();
+
+		_j = json{
+			{"IsActive", _meshCollider.IsActive()},
+			{"IsDynamic", _meshCollider.GetIsDynamic()},
+			{"Position", {position.x, position.y, position.z}},
+			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
+			{"Scale", {scale.x, scale.y, scale.z}},
+			{"Rotation", {rotation.w, rotation.x, rotation.y, rotation.z}},
+			{"Mass", _meshCollider.GetMass()},
+			{"Mesh", _meshCollider.GetMeshName()}
+		};
+	}
+
+	void from_json(const json& _j, MeshCollider& _meshCollider)
+	{
+		bool bIsActive;
+
+		_j.at("IsActive").get_to(bIsActive);
+
+		_meshCollider.SetActive(bIsActive);
 	}
 }

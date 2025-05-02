@@ -8,59 +8,79 @@
 #include "Physics/BoxCollider.hpp"
 #include "Physics/CapsuleCollider.hpp"
 #include "Physics/MeshCollider.hpp"
+#include <fstream>
 
 namespace Core
 {
+	void Serializer::SerializeSceneToFile(Scene* _scene, std::string _filePath)
+	{
+		std::ofstream o(_filePath);
+		o << std::setw(4) << SerializeScene(_scene) << std::endl;
+	}
+
 	json Serializer::SerializeScene(Scene* _scene)
 	{
 		json scene;
+		Math::Vec4 ambientLight = _scene->GetSystemManager()->GetRenderSystem()->GetAmbientLight();
+		scene["AmbientLight"] = { ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3] };
 
+		std::vector<json> gameObjects;
 		for (int i = 0; i < _scene->GetCount(); ++i)
-		{
-			GameObject* gameObject = _scene->GetGameObject(i);
-			scene[gameObject->name] = SerializeGameObject(gameObject);
-		}
+			gameObjects.push_back(SerializeGameObject(_scene->GetGameObject(i)));
+		scene["GameObjects"] = gameObjects;
 
 		return scene;
 	}
 
 	json Serializer::SerializeGameObject(GameObject* _gameObject)
 	{
-		return SerializeTransform(_gameObject->transform);
+		json gameObject;
+		gameObject[_gameObject->name]["IsActive"] = _gameObject->IsActive();
+		gameObject[_gameObject->name]["Transform"] = SerializeTransform(_gameObject->transform);
+
+		std::vector<Component*> components = _gameObject->GetComponents();
+		std::vector<json> componentsJson;
+		for (int i = 0; i < components.size(); ++i)
+			componentsJson.push_back(SerializeComponent(components[i]));
+		gameObject[_gameObject->name]["Components"] = componentsJson;
+
+		return gameObject;
 	}
 
 	json Serializer::SerializeComponent(Component* _component)
 	{
+		json component;
+
 		if (Model* dynamicModel_ptr = dynamic_cast<Model*>(_component))
 		{
-			return SerializeModel(dynamicModel_ptr);
+			component["Model"] = SerializeModel(dynamicModel_ptr);
 		}
 		else if (DirectionalLight* dynamicDirectionalLight_ptr = dynamic_cast<DirectionalLight*>(_component))
 		{
-			return SerializeDirectionalLight(dynamicDirectionalLight_ptr);
+			component["DirectionalLight"] = SerializeDirectionalLight(dynamicDirectionalLight_ptr);
 		}
 		else if (PointLight* dynamicPointLight_ptr = dynamic_cast<PointLight*>(_component))
 		{
-			return SerializePointLight(dynamicPointLight_ptr);
+			component["PointLight"] = SerializePointLight(dynamicPointLight_ptr);
 		}
 		else if (SpotLight* dynamicSpotLight_ptr = dynamic_cast<SpotLight*>(_component))
 		{
-			return SerializeSpotLight(dynamicSpotLight_ptr);
+			component["SpotLight"] = SerializeSpotLight(dynamicSpotLight_ptr);
 		}
 		else if (BoxCollider* dynamicBoxCollider_ptr = dynamic_cast<BoxCollider*>(_component))
 		{
-			return SerializeBoxCollider(dynamicBoxCollider_ptr);
+			component["BoxCollider"] = SerializeBoxCollider(dynamicBoxCollider_ptr);
 		}
 		else if (CapsuleCollider* dynamicCapsuleCollider_ptr = dynamic_cast<CapsuleCollider*>(_component))
 		{
-			return SerializeCapsuleCollider(dynamicCapsuleCollider_ptr);
+			component["CapsuleCollider"] = SerializeCapsuleCollider(dynamicCapsuleCollider_ptr);
 		}
 		else if (MeshCollider* dynamicMeshCollider_ptr = dynamic_cast<MeshCollider*>(_component))
 		{
-			return SerializeMeshCollider(dynamicMeshCollider_ptr);
+			component["MeshCollider"] = SerializeMeshCollider(dynamicMeshCollider_ptr);
 		}
 
-		return json();
+		return component;
 	}
 
 	json Serializer::SerializeTransform(Transform* _transform)
@@ -71,36 +91,43 @@ namespace Core
 
 	json Serializer::SerializeModel(Model* _model)
 	{
-		return json();
+		json j = *_model;
+		return j;
 	}
 
 	json Serializer::SerializeDirectionalLight(DirectionalLight* _dirLight)
 	{
-		return json();
+		json j = *_dirLight;
+		return j;
 	}
 
 	json Serializer::SerializePointLight(PointLight* _pointLight)
 	{
-		return json();
+		json j = *_pointLight;
+		return j;
 	}
 
 	json Serializer::SerializeSpotLight(SpotLight* _spotLight)
 	{
-		return json();
+		json j = *_spotLight;
+		return j;
 	}
 
 	json Serializer::SerializeBoxCollider(BoxCollider* _boxCollider)
 	{
-		return json();
+		json j = *_boxCollider;
+		return j;
 	}
 
 	json Serializer::SerializeCapsuleCollider(CapsuleCollider* _capsuleCollider)
 	{
-		return json();
+		json j = *_capsuleCollider;
+		return j;
 	}
 
 	json Serializer::SerializeMeshCollider(MeshCollider* _meshCollider)
 	{
-		return json();
+		json j = *_meshCollider;
+		return j;
 	}
 }

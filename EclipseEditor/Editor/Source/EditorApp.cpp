@@ -12,6 +12,8 @@
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
 
+#include "Serializer.hpp"
+
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
 	m_height(_height)
@@ -318,6 +320,10 @@ void EditorApp::LoadScene()
 	Core::SpotLight* spotLightComp = spotLight->AddComponent<Core::SpotLight>();
 	spotLightComp->SetColor(1.f, 0.f, 0.f, 1.f);
 	spotLight->SetActive(false);
+
+	Core::Serializer serializer;
+
+	serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
 }
 
 void EditorApp::DrawScene()
