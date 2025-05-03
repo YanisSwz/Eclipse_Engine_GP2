@@ -1,6 +1,7 @@
 #include "Audio/AudioSource.hpp"
 #include "Logger.hpp"
 #include "Maths.hpp"
+#include "GameObject.hpp"
 
 namespace Core
 {
@@ -31,6 +32,11 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to play!");
 			return;
 		}
+		if(m_volume <= Math::Tools::epsilon)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Prevented clip with 0 volume to play");
+			return;
+		}
 		// If a sound is already playing, stop it 
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 		{
@@ -39,10 +45,22 @@ namespace Core
 			m_audioEngine->stop(m_sound);
 		}
 
-		m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
+		if (!m_3D)
+		{
+			m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
+			m_audioEngine->setPan(m_sound, m_pan);
+		}
+		else
+		{
+			Math::Vec3 pos = m_gameObject->transform->GetPosition();
+			m_sound = m_audioEngine->play3d(m_audioClip->audioFile, pos.x, pos.y, pos.z, 0.f, 0.f, 0.f, m_volume, true);
+			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
+			m_audioEngine->set3dSourceAttenuation(m_sound, SoLoud::AudioSource::ATTENUATION_MODELS::LINEAR_DISTANCE, 1.f);
+			m_audioEngine->update3dAudio();
+			m_audioEngine->setPause(m_sound, false);
+		}
 		m_audioEngine->setLooping(m_sound, m_looping);
 		m_audioEngine->setSamplerate(m_sound, m_sampleRate);
-		m_audioEngine->setPan(m_sound, m_pan);
 	}
 
 	void AudioSource::Pause()
@@ -196,5 +214,38 @@ namespace Core
 		m_pan = _pan;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			m_audioEngine->setPan(m_sound, m_pan);
+	}
+
+	void AudioSource::Set3D(bool _is3D)
+	{
+		m_3D = _is3D;
+	}
+
+	void AudioSource::SetMinDistance(float _min)
+	{
+		if (_min < 0.1f)
+			_min = 0.1f;
+		else if (_min > m_maxDistance)
+			_min = m_maxDistance;
+
+		m_minDistance = _min;
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+		{
+			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
+			m_audioEngine->update3dAudio();
+		}
+	}
+
+	void AudioSource::SetMaxDistance(float _max)
+	{
+		if (_max < m_minDistance)
+			_max = m_minDistance;
+
+		m_maxDistance = _max;
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+		{
+			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
+			m_audioEngine->update3dAudio();
+		}
 	}
 }

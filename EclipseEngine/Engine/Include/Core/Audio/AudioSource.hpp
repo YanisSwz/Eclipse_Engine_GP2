@@ -39,14 +39,23 @@ namespace Core
 		ECLIPSE_ENGINE void SetSampleRate(float _rate);
 		ECLIPSE_ENGINE float GetPan() const;
 		ECLIPSE_ENGINE void SetPan(float _pan);
+		ECLIPSE_ENGINE inline bool Get3D() const { return m_3D; }
+		ECLIPSE_ENGINE void Set3D(bool _is3D);
+		ECLIPSE_ENGINE inline float GetMinDistance() const { return m_minDistance; }
+		ECLIPSE_ENGINE inline float GetMaxDistance() const { return m_maxDistance; }
+		ECLIPSE_ENGINE void SetMinDistance(float _min);
+		ECLIPSE_ENGINE void SetMaxDistance(float _max);
 
 	private:
 		bool m_looping = false;
 		bool m_paused = false;
+		bool m_3D = false;
 		float m_audioClipLength = 0.f;
 		float m_volume = 1.f;
 		float m_sampleRate = 0.f;
 		float m_pan = 0.f;
+		float m_minDistance = 1.f;
+		float m_maxDistance = 5.f;
 		SoLoud::Soloud* m_audioEngine = nullptr;
 		Resource::AudioClip* m_audioClip = nullptr;
 		SoLoud::handle m_sound;

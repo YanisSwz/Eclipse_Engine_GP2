@@ -352,9 +352,30 @@ namespace GUI
 			if (GUI::FloatSlider("Sample Rate", &sampleRate, 8000.f, 48000.f, "%.0f"))
 				_source->SetSampleRate(sampleRate);
 
+			bool is3D = _source->Get3D();
+			if (is3D)
+				ImGui::BeginDisabled();
 			float pan = _source->GetPan();
 			if (GUI::FloatSlider("Pan", &pan, -1.f, 1.f, "%.2f"))
 				_source->SetPan(pan);
+			if (is3D)
+				ImGui::EndDisabled();
+
+			if (GUI::CheckBox("3D", "##2", &is3D))
+				_source->Set3D(is3D);
+
+			if (!is3D)
+				ImGui::BeginDisabled();
+			float min = _source->GetMinDistance();
+			float max = _source->GetMaxDistance();
+			if (GUI::DragFloat("MinDistance", "##3", &min, 0.1f, 0.1f, max - 0.1f, "%.1f"))
+				_source->SetMinDistance(min);
+
+			if (GUI::DragFloat("MaxDistance", "##4", &max, 0.1f, min + 0.1f, 1000.f, "%.1f"))
+				_source->SetMaxDistance(max);
+			if (!is3D)
+				ImGui::EndDisabled();
+
 
 			if (ImGui::Button("Play"))
 				_source->Play();
