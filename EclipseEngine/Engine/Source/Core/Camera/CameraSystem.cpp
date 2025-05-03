@@ -6,7 +6,7 @@ namespace Core
 	CameraSystem::CameraSystem()
 	{
 	}
-	
+
 	CameraSystem::~CameraSystem()
 	{
 	}
@@ -44,6 +44,22 @@ namespace Core
 		return &m_cameras[m_currentCameraCount - 1];
 	}
 
+	void CameraSystem::SetCurrentCamera()
+	{
+		if (m_currentCameraCount == 0)
+			return;
+
+		for (int i = 0; i < m_currentCameraCount; ++i)
+		{
+			if (!m_cameras[i].IsDestroyed() && m_cameras[i].IsActive())
+			{
+				m_activeCamera = &m_cameras[i];
+				return;
+			}
+		}
+		m_activeCamera = nullptr;
+	}
+
 	void CameraSystem::SetCurrentCamera(Camera* _camera)
 	{
 		if (!_camera)
@@ -52,4 +68,13 @@ namespace Core
 		m_activeCamera = _camera;
 	}
 
+	Camera* CameraSystem::GetCurrentCamera() const
+	{
+		if (m_activeCamera)
+		{
+			if (!m_activeCamera->IsDestroyed() && m_activeCamera->IsActive())
+				return m_activeCamera;
+		}
+		return nullptr;
+	}
 }

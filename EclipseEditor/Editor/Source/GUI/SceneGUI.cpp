@@ -21,7 +21,7 @@ namespace GUI
 
 		if (_camera->MouseSpeedChanged())
 		{
-			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.75f)); 
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.75f));
 			ImGui::SetNextWindowSize(m_windowSizeCameraChangedSpeed);
 			ImGui::SetNextWindowPos({ windowPos.x + windowSize.x / 2.f - m_windowSizeCameraChangedSpeed.x / 2.f, windowPos.y + windowSize.y / 2.f - m_windowSizeCameraChangedSpeed.y / 2.f });
 			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration;
@@ -34,60 +34,67 @@ namespace GUI
 			ImGui::End();
 		}
 
-
+		ImVec2 uv0{ 0.f, 1.f };
+		ImVec2 uv1{ 1.f, 0.f };
 		ImGui::GetWindowDrawList()->AddImage(
 			static_cast<intptr_t>(_textureID),
 			ImVec2(windowPos.x, windowPos.y),
 			ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
-			ImVec2(0, 1),
-			ImVec2(1, 0));
-
+			uv0, uv1);
 
 		// Editor Buttons
-		Resource::Texture* translateText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("TranslateGizmoIcon.img");
-		Resource::Texture* rotateText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("RotateGizmoIcon.img");
-		Resource::Texture* scaleText = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("ScaleGizmoIcon.img");
+		if (!m_translateBtnTexture)
+			m_translateBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("TranslateGizmoIcon.img");
+		if (!m_rotateBtnTexture)
+			m_rotateBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("RotateGizmoIcon.img");
+		if (!m_scaleBtnTexture)
+			m_scaleBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("ScaleGizmoIcon.img");
 
-		ImVec2 uv0{ 0.f, 1.f };
-		ImVec2 uv1{ 1.f, 0.f };
-
-		
 		ImGui::PushStyleColor(ImGuiCol_Border, { 1.f, 1.f, 1.f, 1.f });
 		ImGui::PushStyleColor(ImGuiCol_Button, { 0.35f, 0.35f, 0.35f, 1.f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.5f, 0.5f, 0.5f, 1.f });
 
 		// Local & Global
-		if (ImGui::Button(m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? "Local" : "Global", { 52.f, 34.f}))
+		if (ImGui::Button(m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? "Local" : "Global", { 52.f, 34.f }))
 			m_crtGizmoMode = m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? ImGuizmo::MODE::WORLD : ImGuizmo::MODE::LOCAL;
 		if (ImGui::IsItemHovered())
 			ImGui::SetTooltip(m_crtGizmoMode == ImGuizmo::MODE::LOCAL ? "Ctrl + I" : "Ctrl + U");
-		
+
 		ImGui::PopStyleColor(1);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.f, 2.f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 1.f, 1.f, 1.f, 1.f });
 		// Translation
-		if (ImGui::ImageButton("TranslateImageButton", translateText->GetID(), { 48.f, 30.f }, uv0, uv1, {1.f, 0.f, 0.f, 1.f}))
-			m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
-		if (ImGui::IsItemHovered())
+		if (m_translateBtnTexture)
 		{
-			ImGui::SetTooltip("Ctrl + R");
+			if (ImGui::ImageButton("TranslateImageButton", m_translateBtnTexture->GetID(), { 48.f, 30.f }, uv0, uv1, { 1.f, 0.f, 0.f, 1.f }))
+				m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("Ctrl + R");
+			}
 		}
 
 		// Rotation
-		if (ImGui::ImageButton("RotateImageButton", rotateText->GetID(), { 48.f, 30.f }, uv0, uv1))
-			m_crtGizmoOperation = ImGuizmo::OPERATION::ROTATE;
-		if (ImGui::IsItemHovered())
+		if (m_rotateBtnTexture)
 		{
-			ImGui::SetTooltip("Ctrl + T");
+			if (ImGui::ImageButton("RotateImageButton", m_translateBtnTexture->GetID(), { 48.f, 30.f }, uv0, uv1))
+				m_crtGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("Ctrl + T");
+			}
 		}
 
 		// Scale
-		if (ImGui::ImageButton("ScaleImageButton", scaleText->GetID(), { 48.f, 30.f }, uv0, uv1))
-			m_crtGizmoOperation = ImGuizmo::OPERATION::SCALE;
-		if (ImGui::IsItemHovered())
+		if (m_scaleBtnTexture)
 		{
-			ImGui::SetTooltip("Ctrl + Y");
+			if (ImGui::ImageButton("ScaleImageButton", m_translateBtnTexture->GetID(), { 48.f, 30.f }, uv0, uv1))
+				m_crtGizmoOperation = ImGuizmo::OPERATION::SCALE;
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("Ctrl + Y");
+			}
 		}
 
 		ImGui::PopStyleColor(3);

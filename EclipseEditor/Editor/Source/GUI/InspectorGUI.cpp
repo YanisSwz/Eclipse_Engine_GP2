@@ -66,14 +66,19 @@ namespace GUI
 		ImGui::End();
 	}
 
-	void InspectorGUI::DrawDeleteComponentPopup(Core::Component* _component)
+	bool InspectorGUI::DrawDeleteComponentPopup(Core::Component* _component)
 	{
+		bool isDelete = false;
 		if (ImGui::BeginPopupContextItem("DeleteComponent"))
 		{
 			if (ImGui::Button("Delete"))
+			{
 				_component->Remove();
+				isDelete = true;
+			}
 			ImGui::EndPopup();
 		}
+		return isDelete;
 	}
 
 	void InspectorGUI::DrawTransformComponent(Core::Transform* _transform)
@@ -102,19 +107,29 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Camera", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_camera);
+			if (DrawDeleteComponentPopup(_camera))
+			{
+				ImGui::TreePop();
+				return;
+			}
+
+			if (!_camera->IsCurrentCamera())
+			{
+				if (ImGui::Button("Set Current Camera"))
+					_camera->SetCurrentCamera();
+			}
 
 			float fov = _camera->GetFOV();
-			GUI::DragFloat("FOV", "CameraFOV", &fov, 0.1f);
-			_camera->SetFOV(fov);
+			if (GUI::DragFloat("FOV", "CameraFOV", &fov, 0.1f, 0.001f, 179.999f))
+				_camera->SetFOV(fov);
 
 			float near = _camera->GetNear();
-			GUI::DragFloat("Near", "CameraNear", &near, 0.1f);
-			_camera->SetNear(near);
-
 			float far = _camera->GetFar();
-			GUI::DragFloat("Far", "CameraFar", &far, 0.1f);
-			_camera->SetFar(far);
+			if (GUI::DragFloat("Near", "CameraNear", &near, 0.1f, 0.1f, far))
+				_camera->SetNear(near);
+
+			if (GUI::DragFloat("Far", "CameraFar", &far, 0.1f, near, 100000.f))
+				_camera->SetFar(far);
 
 			ImGui::TreePop();
 			ImGui::NewLine();
@@ -128,7 +143,11 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Model", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_model);
+			if (DrawDeleteComponentPopup(_model))
+			{
+				ImGui::TreePop();
+				return;
+			}
 
 			std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
 			std::string meshName = _model->mesh->name;
@@ -176,7 +195,11 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Box Collider", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_collider);
+			if (DrawDeleteComponentPopup(_collider))
+			{
+				ImGui::TreePop();
+				return;
+			}
 
 			bool isDynamic = _collider->GetIsDynamic();
 			if (GUI::CheckBox("Is Dynamic ", "BoxColliderIsDynamic", &isDynamic))
@@ -209,7 +232,11 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Capsule Collider", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_collider);
+			if (DrawDeleteComponentPopup(_collider))
+			{
+				ImGui::TreePop();
+				return;
+			}
 
 			bool isDynamic = _collider->GetIsDynamic();
 			if (GUI::CheckBox("Is Dynamic ", "CapsuleColliderIsDynamic", &isDynamic))
@@ -248,7 +275,11 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Mesh Collider", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_collider);
+			if (DrawDeleteComponentPopup(_collider))
+			{
+				ImGui::TreePop();
+				return;
+			}
 
 			float mass = _collider->GetMass();
 			if (GUI::DragFloat("Mass ", "MeshColliderMass", &mass, 0.1f, 0.1f, 1000.f, "%.3f Kg"))
@@ -277,7 +308,11 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Directional Light", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_light);
+			if (DrawDeleteComponentPopup(_light))
+			{
+				ImGui::TreePop();
+				return;
+			}
 
 			GUI::ColorEdit4("Color", _light->GetColorRef());
 
@@ -292,7 +327,11 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Point Light", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_light);
+			if (DrawDeleteComponentPopup(_light))
+			{
+				ImGui::TreePop();
+				return;
+			}
 
 			GUI::ColorEdit4("Color", _light->GetColorRef());
 			GUI::DragFloat("Range", "##", &_light->GetDistanceRef(), 0.1f, 1.f, 200.f);
@@ -308,7 +347,11 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Spot Light", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_light);
+			if (DrawDeleteComponentPopup(_light))
+			{
+				ImGui::TreePop();
+				return;
+			}
 
 			GUI::ColorEdit4("Color", _light->GetColorRef());
 			GUI::DragFloat("Range", "##1", &_light->GetDistanceRef(), 0.1f, 1.f, 200.f);
@@ -327,7 +370,11 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx("Audio Source", m_treeNodeComponentFlags))
 		{
-			DrawDeleteComponentPopup(_source);
+			if (DrawDeleteComponentPopup(_source))
+			{
+				ImGui::TreePop();
+				return;
+			}
 
 			std::vector<std::string> soundNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::AudioClip>();
 			std::string soundName = "No Clip";

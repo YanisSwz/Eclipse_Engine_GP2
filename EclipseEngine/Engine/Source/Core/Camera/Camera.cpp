@@ -44,27 +44,32 @@ namespace Core
 		m_far = _far;		
 	}
 
-	float Camera::GetFOV()
+	float Camera::GetFOV() const
 	{
 		return m_fov;
 	}
 
-	float Camera::GetNear()
+	float Camera::GetNear() const
 	{
 		return m_near;
 	}
 
-	float Camera::GetFar()
+	float Camera::GetFar() const
 	{
 		return m_far;
+	}
+	
+	Math::Vec3 Camera::GetViewPos() const
+	{
+		return m_gameObject->transform->GetPosition();
 	}
 
 	Math::Mat4 Camera::GetViewMatrix() const
 	{
-		Math::Vec3 pos = m_gameObject->transform->GetPosition();
+		Math::Vec3 pos = m_gameObject->transform->GetPosition();	
 		Math::Vec3 dir = m_gameObject->transform->GetForward();
 		Math::Vec3 up = m_gameObject->transform->GetUp();
-		return Math::Mat4::ViewMatrix(pos, pos + dir, up);
+		return Math::Mat4::ViewMatrix(pos + dir, pos, up);
 	}
 
 	Math::Mat4 Camera::GetProjectionMatrix(int _width, int _height) const
@@ -74,11 +79,26 @@ namespace Core
 
 	Math::Mat4 Camera::GetViewProjectionMatrix(int _width, int _height) const
 	{
-		return GetViewMatrix() * GetProjectionMatrix(_width, _height);
+		return GetProjectionMatrix(_width, _height) * GetViewMatrix();
 	}
 
 	void Camera::SetCurrentCamera() 
 	{
 		m_gameObject->GetSystemManager()->GetCameraSystem()->SetCurrentCamera(this);
+	}
+
+	bool Camera::IsCurrentCamera() const
+	{
+		Camera* currentCam = m_gameObject->GetSystemManager()->GetCameraSystem()->GetCurrentCamera();
+		return currentCam == this;
+	}
+
+	void Camera::Destroy()
+	{
+		Camera* currentCam = m_gameObject->GetSystemManager()->GetCameraSystem()->GetCurrentCamera();
+		m_active = false;
+		m_destroyed = true;
+		if (currentCam == this)
+			m_gameObject->GetSystemManager()->GetCameraSystem()->SetCurrentCamera();
 	}
 }

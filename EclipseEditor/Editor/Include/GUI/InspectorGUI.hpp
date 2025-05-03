@@ -29,7 +29,7 @@ namespace GUI
 		void Draw(Core::GameObject* _crtGOSelected);
 
 	private:
-		void DrawDeleteComponentPopup(Core::Component* _component);
+		bool DrawDeleteComponentPopup(Core::Component* _component);
 		void DrawTransformComponent(Core::Transform* _transform);
 		void DrawCameraComponent(Core::Camera* _camera);
 		void DrawModelComponent(Core::Model* _model);

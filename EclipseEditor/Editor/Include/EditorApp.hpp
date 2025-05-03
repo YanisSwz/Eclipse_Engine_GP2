@@ -41,17 +41,21 @@ private:
 	int m_width = 0;
 	int m_height = 0;
 
-	int m_sceneWidth = 0;
-	int m_sceneHeight = 0;
-	int m_scenePosX = 0;
-	int m_scenePosY = 0;
+	int m_sceneWindowWidth = 0;
+	int m_sceneWindowHeight = 0;
+	int m_sceneWindowPosX = 0;
+	int m_sceneWindowPosY = 0;
+
+	int m_gameWindowWidth = 0;
+	int m_gameWindowHeight = 0;
 
 	float deltaTime = 0.f;
 	float oldTime = 0.f;
 
 	Windowing::IWindow* m_window = nullptr;
 	RHI::IRenderInterface* m_renderInterface = nullptr;
-	RHI::IGraphicPipeline* m_defaultPipeline = nullptr;
+	RHI::IGraphicPipeline* m_editorPipeline = nullptr;
+	RHI::IGraphicPipeline* m_gamePipeline = nullptr;
 
 	Core::Scene m_scene;
 	Core::SceneCamera m_sceneCamera{ 60.f, 0.1f, 100.f };

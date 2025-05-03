@@ -10,7 +10,10 @@ namespace Core
 		~CameraSystem();
 
 		ECLIPSE_ENGINE Camera* AddCamera();
+		ECLIPSE_ENGINE void SetCurrentCamera();
 		ECLIPSE_ENGINE void SetCurrentCamera(Camera* _camera);
+		
+		ECLIPSE_ENGINE Camera* GetCurrentCamera() const;
 
 	private:
 		static const int MAX_CAMERA_SIZE = 10;

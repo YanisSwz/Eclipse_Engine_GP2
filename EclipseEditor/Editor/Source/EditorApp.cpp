@@ -50,9 +50,7 @@ void EditorApp::Update()
 
 	Math::Vec2 windowPos = m_window->GetWindowPos();
 
-	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_scenePosX) - windowPos.x, static_cast<float>(m_scenePosY) - windowPos.y }, { static_cast<float>(m_sceneWidth), static_cast<float>(m_sceneHeight) });
-	m_defaultPipeline->Rescale(m_sceneWidth, m_sceneHeight);
-	m_renderInterface->Viewport(0, 0, m_sceneWidth, m_sceneHeight);
+	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_sceneWindowPosX) - windowPos.x, static_cast<float>(m_sceneWindowPosY) - windowPos.y }, { static_cast<float>(m_sceneWindowWidth), static_cast<float>(m_sceneWindowHeight) });
 
 	m_sceneGUI.UpdateGizmoMode(m_window);
 	m_scene.Update(m_gameState == GAME_STATE::PLAY ? deltaTime : 0.f);
@@ -151,10 +149,10 @@ void EditorApp::Render()
 		m_inspectorGUI.Draw(m_crtGOSelected);
 
 	if (bIsSceneWindowEnabled)
-		m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_defaultPipeline->GetFinalTexture(), m_sceneWidth, m_sceneHeight, m_scenePosX, m_scenePosY);
+		m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_editorPipeline->GetFinalTexture(), m_sceneWindowWidth, m_sceneWindowHeight, m_sceneWindowPosX, m_sceneWindowPosY);
 
 	if (bIsGameWindowEnabled)
-		m_gameGUI.Draw();
+		m_gameGUI.Draw(m_scene.GetSystemManager()->GetCameraSystem()->GetCurrentCamera(), m_gamePipeline->GetFinalTexture(), m_gameWindowWidth, m_gameWindowHeight);
 
 	if (bIsConsoleWindowEnabled)
 		m_consoleGUI.Draw();
@@ -176,7 +174,8 @@ void EditorApp::Destroy()
 	DestroyScene();
 	DestroyGUI();
 
-	m_renderInterface->DestroyDefaultGraphicPipeline(m_defaultPipeline);
+	m_renderInterface->DestroyDefaultGraphicPipeline(m_editorPipeline);
+	m_renderInterface->DestroyDefaultGraphicPipeline(m_gamePipeline);
 	delete m_renderInterface;
 	m_window->DestroyWindow();
 	delete m_window;
@@ -265,12 +264,12 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
 
 	m_contentBrowserGUI.Init();
-	m_defaultPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
-	m_defaultPipeline->Init(m_window->width, m_window->height);
-
+	m_editorPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
+	m_editorPipeline->Init(m_window->width, m_window->height);
+	m_gamePipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
+	m_gamePipeline->Init(m_window->width, m_window->height);
 
 	// CORE TESTS
-
 	Core::GameObject* floor = m_scene.CreateGameObject();
 	floor->name = "Floor";
 	floor->transform->SetLocalPosition(0.f, -1.f, 0.f);
@@ -300,8 +299,7 @@ void EditorApp::LoadScene()
 	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
 	cc->SetPosition(0.1f, 50.f, 0.f);
 	cc->SetDynamic(true);
-	obj1->AddComponent<Core::Camera>();
-	
+
 	Core::GameObject* capsule2 = m_scene.CreateGameObject();
 	capsule2->name = "Capsule2";
 	capsule2->transform->SetLocalPosition(-1.f, 0.f, 0.f);
@@ -376,12 +374,20 @@ void EditorApp::LoadScene()
 	soundTest->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
 	soundTest->name = "Sound Test";
 	soundTest->AddComponent<Core::AudioSource>();
-	
+
 }
 
 void EditorApp::DrawScene()
 {
-	m_scene.GetSystemManager()->Render(m_renderInterface, m_defaultPipeline, m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos());
+	m_editorPipeline->Rescale(m_sceneWindowWidth, m_sceneWindowHeight);
+	m_renderInterface->Viewport(0, 0, m_sceneWindowWidth, m_sceneWindowHeight);
+	m_scene.GetSystemManager()->Render(m_renderInterface, m_editorPipeline, m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos());
+	
+	m_gamePipeline->Rescale(m_gameWindowWidth, m_gameWindowHeight);
+	m_renderInterface->Viewport(0, 0, m_gameWindowWidth, m_gameWindowHeight);
+	Core::Camera* gameCamera = m_scene.GetSystemManager()->GetCameraSystem()->GetCurrentCamera();
+	if (gameCamera)
+		m_scene.GetSystemManager()->Render(m_renderInterface, m_gamePipeline, gameCamera->GetViewProjectionMatrix(m_gameWindowWidth, m_gameWindowHeight), gameCamera->GetViewPos());
 }
 
 void EditorApp::PickObjectID()
@@ -389,10 +395,9 @@ void EditorApp::PickObjectID()
 	if (m_window->GetMouseButton(Windowing::MOUSE_CODE::MIDDLE_BUTTON, Windowing::INPUT_ACTION::INPUT_PRESS))
 	{
 		Math::Vec2 mousePos = m_window->GetCursorPos();
-		int mousePosX = static_cast<int>(mousePos.x) - m_scenePosX;
-		int mousePosY = m_window->height - static_cast<int>(mousePos.y) - m_scenePosY - 1;
-		int pickID = m_defaultPipeline->PickObjectID(mousePosX, mousePosY);
-		Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "%i", pickID);
+		int mousePosX = static_cast<int>(mousePos.x) - m_sceneWindowPosX;
+		int mousePosY = m_window->height - static_cast<int>(mousePos.y) - m_sceneWindowPosY - 1;
+		int pickID = m_editorPipeline->PickObjectID(mousePosX, mousePosY);
 
 		m_crtGOSelected = m_scene.GetObjectByID(pickID);
 	}

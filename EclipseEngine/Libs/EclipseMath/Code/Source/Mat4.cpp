@@ -664,7 +664,7 @@ Mat4 Mat4::PerspectiveMatrix(int _width, int _height, float _fov, float _near, f
 
 Mat4 Mat4::ViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up)
 {
-	Vec3 frwd = Vec3{ _at, _eye };
+	Vec3 frwd = _eye - _at;
 	frwd.Normalize();
 	Vec3 right = Vec3::CrossProduct(frwd, _up);
 	right.Normalize();
