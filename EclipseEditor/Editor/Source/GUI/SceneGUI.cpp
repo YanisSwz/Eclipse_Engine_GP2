@@ -78,7 +78,7 @@ namespace GUI
 		// Rotation
 		if (m_rotateBtnTexture)
 		{
-			if (ImGui::ImageButton("RotateImageButton", m_translateBtnTexture->GetID(), { 48.f, 30.f }, uv0, uv1))
+			if (ImGui::ImageButton("RotateImageButton", m_rotateBtnTexture->GetID(), { 48.f, 30.f }, uv0, uv1))
 				m_crtGizmoOperation = ImGuizmo::OPERATION::ROTATE;
 			if (ImGui::IsItemHovered())
 			{
@@ -89,7 +89,7 @@ namespace GUI
 		// Scale
 		if (m_scaleBtnTexture)
 		{
-			if (ImGui::ImageButton("ScaleImageButton", m_translateBtnTexture->GetID(), { 48.f, 30.f }, uv0, uv1))
+			if (ImGui::ImageButton("ScaleImageButton", m_scaleBtnTexture->GetID(), { 48.f, 30.f }, uv0, uv1))
 				m_crtGizmoOperation = ImGuizmo::OPERATION::SCALE;
 			if (ImGui::IsItemHovered())
 			{
