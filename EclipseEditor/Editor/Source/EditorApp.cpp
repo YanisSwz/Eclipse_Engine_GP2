@@ -55,7 +55,7 @@ void EditorApp::Update()
 	m_renderInterface->Viewport(0, 0, m_sceneWidth, m_sceneHeight);
 
 	m_sceneGUI.UpdateGizmoMode(m_window);
-	m_scene.Update(m_gameState == GAME_STATE::PLAY ? deltaTime : 0.f);
+	m_scene.Update(deltaTime);
 
 	m_window->PollEvents();
 }
@@ -89,12 +89,13 @@ void EditorApp::Render()
 		}
 
 		ImGui::SetCursorPosX(ImGui::GetWindowWidth() / 2.f - 55.f);
-		if (m_gameState == GAME_STATE::STOP)
+		GAME_STATE gameState = m_scene.GetState();
+		if (gameState == GAME_STATE::STOP)
 		{
 			// Play Button
 			if (ImGui::Button("Play", { 50.f, 30.f }))
 			{
-				m_gameState = GAME_STATE::PLAY;
+				m_scene.SetState(GAME_STATE::PLAY);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Play!");
 				ImGui::SetWindowFocus("Game");
 			}
@@ -104,28 +105,28 @@ void EditorApp::Render()
 			// Stop Button
 			if (ImGui::Button("Stop", { 50.f, 30.f }))
 			{
-				m_gameState = GAME_STATE::STOP;
+				m_scene.SetState(GAME_STATE::STOP);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Stop!");
 				ImGui::SetWindowFocus("Scene");
 			}
 		}
 
-		if (m_gameState == GAME_STATE::PAUSE)
+		if (gameState == GAME_STATE::PAUSE)
 		{
 			// Resume Button
 			if (ImGui::Button("Resume", { 50.f, 30.f }))
 			{
-				m_gameState = GAME_STATE::PLAY;
+				m_scene.SetState(GAME_STATE::PLAY);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Resume!");
 			}
 		}
 		else
 		{
 			// Pause Button
-			ImGui::BeginDisabled(m_gameState == GAME_STATE::STOP);
+			ImGui::BeginDisabled(gameState == GAME_STATE::STOP);
 			if (ImGui::Button("Pause", { 50.f, 30.f }))
 			{
-				m_gameState = GAME_STATE::PAUSE;
+				m_scene.SetState(GAME_STATE::PAUSE);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Pause!");
 			}
 			ImGui::EndDisabled();
@@ -288,7 +289,7 @@ void EditorApp::LoadScene()
 	Core::Model* vikingRoomModelObject = vikingRoomObject->AddComponent<Core::Model>();
 	vikingRoomModelObject->SetData(model, texture, shaderProgramDeferredRendering);
 	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
-	vikingRoomMeshCollider->SetPosition(-2.f, 50.f, 0.f);
+	vikingRoomMeshCollider->SetPosition(-2.f, 5.f, 0.f);
 	vikingRoomMeshCollider->SetMesh(model);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();

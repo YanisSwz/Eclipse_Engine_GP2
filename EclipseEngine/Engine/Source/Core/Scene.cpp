@@ -4,7 +4,7 @@ namespace Core
 {
 	void Scene::Update(float _deltaTime)
 	{
-		m_systemManager.Update(_deltaTime);
+		m_systemManager.Update(_deltaTime, m_state);
 	}
 
 	GameObject* Scene::CreateGameObject()
@@ -42,5 +42,4 @@ namespace Core
 		}
 		return nullptr;
 	}
-
 }

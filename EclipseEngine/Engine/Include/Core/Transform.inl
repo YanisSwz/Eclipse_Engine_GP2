@@ -42,20 +42,20 @@ namespace Core
 	/// <summary>
 	/// Notifies the transform that its position changed
 	/// </summary>
-	inline void Transform::SetPositionChanged() { m_positionChanged = true; }
+	inline void Transform::SetPositionChanged(bool _changed) { m_positionChanged = _changed; }
 
 	/// <summary>
 	/// Notifies the transform that its scale changed
 	/// </summary>
-	inline void Transform::SetScaleChanged() { m_scaleChanged = true; }
+	inline void Transform::SetScaleChanged(bool _changed) { m_scaleChanged = _changed; }
 
 	/// <summary>
 	/// Notifies the transform that its rotation changed
 	/// </summary>
-	inline void Transform::SetRotationChanged() 
+	inline void Transform::SetRotationChanged(bool _changed)
 	{ 
-		m_rotationChanged = true; 
+		m_rotationChanged = _changed;
 		if (m_children.size() > 0)
-			m_positionChanged = true;
+			m_positionChanged = _changed;
 	}
 }
