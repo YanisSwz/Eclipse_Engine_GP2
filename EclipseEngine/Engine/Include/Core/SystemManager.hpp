@@ -4,6 +4,7 @@
 #include "RenderSystem.hpp"
 #include "Physics/PhysicsSystem.hpp"
 #include "Audio/AudioSystem.hpp"
+#include "Camera/CameraSystem.hpp"
 #include <vector>
 
 namespace Core
@@ -18,6 +19,7 @@ namespace Core
 		ECLIPSE_ENGINE Transform* AddTransform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE Transform* GetTransformsRoot() const;
 		ECLIPSE_ENGINE AudioSystem* GetAudioSystem();
+		ECLIPSE_ENGINE CameraSystem* GetCameraSystem();
 		ECLIPSE_ENGINE void Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos);
 
 		template <typename T>
@@ -25,7 +27,12 @@ namespace Core
 		{
 			T* basePtr = new T();
 
-			if (Model* dynamicModel_ptr = dynamic_cast<Model*>(basePtr))
+			if (Camera* dynamicCamera_ptr = dynamic_cast<Camera*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_cameraSystem.AddCamera());
+			}
+			else if (Model* dynamicModel_ptr = dynamic_cast<Model*>(basePtr))
 			{
 				delete basePtr;
 				return dynamic_cast<T*>(m_renderSystem.AddModel());
@@ -71,6 +78,7 @@ namespace Core
 		}
 
 	private:
+		CameraSystem m_cameraSystem{};
 		TransformSystem m_transformSystem{};
 		RenderSystem m_renderSystem{};
 		PhysicsSystem m_physicsSystem{};

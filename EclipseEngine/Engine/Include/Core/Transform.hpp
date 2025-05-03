@@ -57,6 +57,14 @@ namespace Core
 		ECLIPSE_ENGINE void SetLocalScale(Math::Vec3 _vec) ;
 		ECLIPSE_ENGINE void SetLocalRotation(Math::Quat _quat) ;
 		ECLIPSE_ENGINE void SetLocalEulerAngles(Math::Vec3 _vec) ;
+		ECLIPSE_ENGINE void SetPosition(float _x , float _y, float _z);
+		ECLIPSE_ENGINE void SetScale(float _x, float _y, float _z) ;
+		ECLIPSE_ENGINE void SetRotation(float _w, float _x, float _y, float _z) ;
+		ECLIPSE_ENGINE void SetEulerAngles(float _x, float _y, float _z) ;
+		ECLIPSE_ENGINE void SetLocalPosition(float _x, float _y, float _z) ;
+		ECLIPSE_ENGINE void SetLocalScale(float _x, float _y, float _z) ;
+		ECLIPSE_ENGINE void SetLocalRotation(float _w, float _x, float _y, float _z) ;
+		ECLIPSE_ENGINE void SetLocalEulerAngles(float _x, float _y, float _z) ;
 		ECLIPSE_ENGINE void SetPositionChanged();
 		ECLIPSE_ENGINE void SetScaleChanged();
 		ECLIPSE_ENGINE void SetRotationChanged();

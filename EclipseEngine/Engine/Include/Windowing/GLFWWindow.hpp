@@ -30,6 +30,7 @@ namespace Windowing
 		ECLIPSE_ENGINE void SetCursorMode(CURSOR_MODE _mode) override;
 		ECLIPSE_ENGINE inline GLFWwindow* GetWindow() { return m_window; }
 		ECLIPSE_ENGINE float GetMouseScrollValue() override;
+		ECLIPSE_ENGINE Math::Vec2 GetWindowPos() override;
 
 		inline virtual GLFWWindow* CastGLFW() { return this; }
 	};

@@ -37,4 +37,9 @@ namespace Core
 	{
 		return &m_audioSystem;
 	}
+
+	CameraSystem* SystemManager::GetCameraSystem()
+	{
+		return &m_cameraSystem;
+	}
 }

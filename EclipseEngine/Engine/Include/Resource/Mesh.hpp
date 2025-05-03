@@ -16,7 +16,7 @@ namespace Resource
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
 		ECLIPSE_ENGINE std::vector<Math::Vec3> GetVerticesPosition() const;
-		ECLIPSE_ENGINE std::vector<uint32_t> GetVerticesIndex() const;
+		ECLIPSE_ENGINE std::vector<unsigned int> GetVerticesIndex() const;
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 
 		ECLIPSE_ENGINE void Draw() const;
@@ -27,7 +27,7 @@ namespace Resource
 		RHI::IRenderInterface* m_rdrInter = nullptr;
 
 		std::vector<RHI::Vertex> m_vertexBuffer;
-		std::vector<uint32_t> m_indexBuffer;
+		std::vector<unsigned int> m_indexBuffer;
 
 		RHI::IVertexArray* m_vertexArrayObject = nullptr;
 		RHI::IVertexBuffer* m_vertexBufferObject = nullptr;

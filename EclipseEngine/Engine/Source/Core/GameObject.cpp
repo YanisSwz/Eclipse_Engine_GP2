@@ -60,4 +60,9 @@ namespace Core
 		for(Transform* child : transform->GetChildren())
 			child->GetGameObject()->SetActive(_active);
 	}
+	
+	SystemManager* GameObject::GetSystemManager()
+	{
+		return m_systemManager;
+	}
 }

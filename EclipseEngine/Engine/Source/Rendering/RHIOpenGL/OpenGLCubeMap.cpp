@@ -45,6 +45,7 @@ namespace RHI::OpenGL
 
 	void OpenGLCubeMap::Unbind()
 	{
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}
 

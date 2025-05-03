@@ -1,7 +1,7 @@
 #include "EditorApp.hpp"
 
-#include "Logger.hpp"
 
+#include "Logger.hpp"
 #include "Windowing/GLFWWindow.hpp"
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
 #include "Resource/ResourceManager.hpp"
@@ -43,16 +43,19 @@ void EditorApp::Update()
 	if (m_window->GetKey(Windowing::KEY_CODE::KEY_ESCAPE, Windowing::INPUT_ACTION::INPUT_PRESS))
 		m_window->SetWindowShouldClose(true);
 
+	PickObjectID();
+
 	deltaTime = m_window->GetTime() - oldTime;
 	oldTime = m_window->GetTime();
 
+	Math::Vec2 windowPos = m_window->GetWindowPos();
 
-	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_scenePosX), static_cast<float>(m_scenePosY) }, { static_cast<float>(m_sceneWidth), static_cast<float>(m_sceneHeight) });
+	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_scenePosX) - windowPos.x, static_cast<float>(m_scenePosY) - windowPos.y }, { static_cast<float>(m_sceneWidth), static_cast<float>(m_sceneHeight) });
 	m_defaultPipeline->Rescale(m_sceneWidth, m_sceneHeight);
 	m_renderInterface->Viewport(0, 0, m_sceneWidth, m_sceneHeight);
 
 	m_sceneGUI.UpdateGizmoMode(m_window);
-	m_scene.Update(deltaTime);
+	m_scene.Update(m_gameState == GAME_STATE::PLAY ? deltaTime : 0.f);
 
 	m_window->PollEvents();
 }
@@ -84,6 +87,50 @@ void EditorApp::Render()
 			ImGui::MenuItem("Console", "", &bIsConsoleWindowEnabled);
 			ImGui::EndMenu();
 		}
+
+		ImGui::SetCursorPosX(ImGui::GetWindowWidth() / 2.f - 55.f);
+		if (m_gameState == GAME_STATE::STOP)
+		{
+			// Play Button
+			if (ImGui::Button("Play", { 50.f, 30.f }))
+			{
+				m_gameState = GAME_STATE::PLAY;
+				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Play!");
+				ImGui::SetWindowFocus("Game");
+			}
+		}
+		else
+		{
+			// Stop Button
+			if (ImGui::Button("Stop", { 50.f, 30.f }))
+			{
+				m_gameState = GAME_STATE::STOP;
+				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Stop!");
+				ImGui::SetWindowFocus("Scene");
+			}
+		}
+
+		if (m_gameState == GAME_STATE::PAUSE)
+		{
+			// Resume Button
+			if (ImGui::Button("Resume", { 50.f, 30.f }))
+			{
+				m_gameState = GAME_STATE::PLAY;
+				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Resume!");
+			}
+		}
+		else
+		{
+			// Pause Button
+			ImGui::BeginDisabled(m_gameState == GAME_STATE::STOP);
+			if (ImGui::Button("Pause", { 50.f, 30.f }))
+			{
+				m_gameState = GAME_STATE::PAUSE;
+				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Pause!");
+			}
+			ImGui::EndDisabled();
+		}
+
 		ImGui::EndMainMenuBar();
 	}
 
@@ -226,8 +273,8 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* floor = m_scene.CreateGameObject();
 	floor->name = "Floor";
-	floor->transform->SetLocalPosition(Math::Vec3(0.f, -1.f, 0.f));
-	floor->transform->SetLocalScale(Math::Vec3(100.f, 0.1f, 100.f));
+	floor->transform->SetLocalPosition(0.f, -1.f, 0.f);
+	floor->transform->SetLocalScale(100.f, 0.1f, 100.f);
 	Core::Model* floorModel = floor->AddComponent<Core::Model>();
 	floorModel->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* floorCollider = floor->AddComponent<Core::BoxCollider>();
@@ -236,8 +283,8 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* vikingRoomObject = m_scene.CreateGameObject();
 	vikingRoomObject->name = "VikingRoom";
-	vikingRoomObject->transform->SetLocalPosition({ 0.f, 1.f, 0.f });
-	vikingRoomObject->transform->SetLocalScale({ 1.f, 1.f, 1.f });
+	vikingRoomObject->transform->SetLocalPosition(0.f, 1.f, 0.f);
+	vikingRoomObject->transform->SetLocalScale(1.f, 1.f, 1.f);
 	Core::Model* vikingRoomModelObject = vikingRoomObject->AddComponent<Core::Model>();
 	vikingRoomModelObject->SetData(model, texture, shaderProgramDeferredRendering);
 	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
@@ -246,18 +293,19 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
 	obj1->name = "Capsule1";
-	obj1->transform->SetLocalPosition({ -1.f, 0.f, 0.f });
-	obj1->transform->SetLocalScale({ 1.f, 2.f, 1.f });
+	obj1->transform->SetLocalPosition(-1.f, 0.f, 0.f);
+	obj1->transform->SetLocalScale(1.f, 2.f, 1.f);
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
 	model2->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
 	cc->SetPosition(0.1f, 50.f, 0.f);
 	cc->SetDynamic(true);
-
+	obj1->AddComponent<Core::Camera>();
+	
 	Core::GameObject* capsule2 = m_scene.CreateGameObject();
 	capsule2->name = "Capsule2";
-	capsule2->transform->SetLocalPosition({ -1.f, 0.f, 0.f });
-	capsule2->transform->SetLocalScale({ 1.f, 2.f, 1.f });
+	capsule2->transform->SetLocalPosition(-1.f, 0.f, 0.f);
+	capsule2->transform->SetLocalScale(1.f, 2.f, 1.f);
 	Core::Model* capsuleModel2 = capsule2->AddComponent<Core::Model>();
 	capsuleModel2->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::CapsuleCollider* cc2 = capsule2->AddComponent<Core::CapsuleCollider>();
@@ -267,16 +315,16 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* obj2 = m_scene.CreateGameObject();
 	obj2->name = "BoxCollider Static";
-	obj2->transform->SetLocalPosition({ 0.f, 0.f, 0.f });
-	obj2->transform->SetLocalScale({ 0.5f, 0.5f, 0.5f });
+	obj2->transform->SetLocalPosition(0.f, 0.f, 0.f);
+	obj2->transform->SetLocalScale(0.5f, 0.5f, 0.5f);
 	Core::Model* model3 = obj2->AddComponent<Core::Model>();
 	model3->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	obj2->AddComponent<Core::BoxCollider>();
 
 	Core::GameObject* obj3 = m_scene.CreateGameObject();
 	obj3->name = "BoxCollider Dynamic";
-	obj3->transform->SetLocalPosition({ 1.f, 0.f, 0.f });
-	obj3->transform->SetLocalScale({ 1.f, 1.f, 1.f });
+	obj3->transform->SetLocalPosition(1.f, 0.f, 0.f);
+	obj3->transform->SetLocalScale(1.f, 1.f, 1.f);
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
 	model4->SetData(cubeModel, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
@@ -287,38 +335,39 @@ void EditorApp::LoadScene()
 
 	Core::GameObject* parent = m_scene.CreateGameObject();
 	parent->name = "Parent";
-	parent->transform->SetLocalPosition({ -1.f, 1.5f, 0.f });
-	parent->transform->SetLocalScale({ 1.f, 1.f, 1.f });
+	parent->transform->SetLocalPosition(-1.f, 1.5f, 0.f);
+	parent->transform->SetLocalScale(1.f, 1.f, 1.f);
 	Core::Model* model5 = parent->AddComponent<Core::Model>();
 	model5->SetData(model, texture, shaderProgramDeferredRendering);
 
 	Core::GameObject* child = m_scene.CreateGameObject();
 	child->name = "Child";
-	child->transform->SetLocalPosition({ 1.f, 1.f, 0.f });
-	child->transform->SetLocalScale({ 0.5f, 0.5f, 0.5f });
+	child->transform->SetLocalPosition(1.f, 1.f, 0.f);
+	child->transform->SetLocalScale(0.5f, 0.5f, 0.5f);
 	Core::Model* model6 = child->AddComponent<Core::Model>();
 	model6->SetData(model, texture, shaderProgramDeferredRendering);
 	parent->transform->AddChild(child->transform);
 
 	// LIGHTS
 	Core::GameObject* dirLight = m_scene.CreateGameObject();
-	dirLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
-	dirLight->transform->SetLocalScale(Math::Vec3(1.f, 1.f, 1.f));
-	dirLight->transform->SetLocalEulerAngles(Math::Vec3(-180.f, 0.f, 0.f));
+	dirLight->transform->SetLocalPosition(0.f, 0.f, 0.f);
+	dirLight->transform->SetLocalScale(1.f, 1.f, 1.f);
+	dirLight->transform->SetLocalEulerAngles(-180.f, 0.f, 0.f);
 	dirLight->name = "DirectionalLight";
 	Core::DirectionalLight* dirLightComp = dirLight->AddComponent<Core::DirectionalLight>();
-	dirLightComp->SetColor({ 1.f, 0.9f, 0.76f, 1.f });
+	dirLightComp->SetColor(1.f, 0.9f, 0.76f, 1.f);
 
 	Core::GameObject* pointLight = m_scene.CreateGameObject();
-	pointLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
-	pointLight->transform->SetLocalScale(Math::Vec3(1.f, 1.f, 1.f));
+	pointLight->transform->SetLocalPosition(0.f, 0.f, 0.f);
+	pointLight->transform->SetLocalScale(1.f, 1.f, 1.f);
 	pointLight->name = "PointLight";
 	Core::PointLight* pointLightComp = pointLight->AddComponent<Core::PointLight>();
-	pointLightComp->SetColor({ 0.f, 0.f, 1.f, 1.f });
+	pointLightComp->SetColor(0.f, 0.f, 1.f, 1.f);
 
 	Core::GameObject* spotLight = m_scene.CreateGameObject();
-	spotLight->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
-	spotLight->transform->SetLocalScale(Math::Vec3(1.f, 1.f, 1.f));
+	spotLight->transform->SetLocalPosition(0.f, 0.f, 0.f);
+	spotLight->transform->SetLocalScale(1.f, 1.f, 1.f);
+	spotLight->transform->SetLocalEulerAngles(90.f, 0.f, 0.f);
 	spotLight->name = "SpotLight";
 	Core::SpotLight* spotLightComp = spotLight->AddComponent<Core::SpotLight>();
 	spotLightComp->SetColor({ 1.f, 0.f, 0.f, 1.f });
@@ -333,6 +382,20 @@ void EditorApp::LoadScene()
 void EditorApp::DrawScene()
 {
 	m_scene.GetSystemManager()->Render(m_renderInterface, m_defaultPipeline, m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos());
+}
+
+void EditorApp::PickObjectID()
+{
+	if (m_window->GetMouseButton(Windowing::MOUSE_CODE::MIDDLE_BUTTON, Windowing::INPUT_ACTION::INPUT_PRESS))
+	{
+		Math::Vec2 mousePos = m_window->GetCursorPos();
+		int mousePosX = static_cast<int>(mousePos.x) - m_scenePosX;
+		int mousePosY = m_window->height - static_cast<int>(mousePos.y) - m_scenePosY - 1;
+		int pickID = m_defaultPipeline->PickObjectID(mousePosX, mousePosY);
+		Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "%i", pickID);
+
+		m_crtGOSelected = m_scene.GetObjectByID(pickID);
+	}
 }
 
 void EditorApp::DestroyScene()

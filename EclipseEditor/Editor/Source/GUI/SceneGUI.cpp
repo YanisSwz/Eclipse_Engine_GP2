@@ -14,6 +14,11 @@ namespace GUI
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
 
+		_windowWidth = static_cast<int>(windowSize.x);
+		_windowHeight = static_cast<int>(windowSize.y);
+		_windowPosX = static_cast<int>(windowPos.x);
+		_windowPosY = static_cast<int>(windowPos.y);
+
 		if (_camera->MouseSpeedChanged())
 		{
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.75f)); 
@@ -29,10 +34,6 @@ namespace GUI
 			ImGui::End();
 		}
 
-		_windowWidth = static_cast<int>(windowSize.x);
-		_windowHeight = static_cast<int>(windowSize.y);
-		_windowPosX = static_cast<int>(windowPos.x);
-		_windowPosY = static_cast<int>(windowPos.y);
 
 		ImGui::GetWindowDrawList()->AddImage(
 			static_cast<intptr_t>(_textureID),
@@ -159,7 +160,7 @@ namespace GUI
 			switch (m_crtGizmoOperation)
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
-				_crtGOSelected->transform->SetPosition(Math::Vec3(position[0], position[1], position[2]));
+				_crtGOSelected->transform->SetPosition(position[0], position[1], position[2]);
 				break;
 
 			case ImGuizmo::OPERATION::ROTATE:
@@ -172,7 +173,7 @@ namespace GUI
 			}
 
 			case ImGuizmo::OPERATION::SCALE:
-				_crtGOSelected->transform->SetScale(Math::Vec3(scale[0] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().x), scale[1] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().y), scale[2] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().z)));
+				_crtGOSelected->transform->SetScale(scale[0] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().x), scale[1] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().y), scale[2] * Math::Tools::Sign(_crtGOSelected->transform->GetScale().z));
 				break;
 			}
 

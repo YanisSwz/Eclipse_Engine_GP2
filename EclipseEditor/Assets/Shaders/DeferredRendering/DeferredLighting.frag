@@ -93,8 +93,8 @@ vec3 SpotLightComputation(SpotLight spotLight, vec3 FragPos, vec3 Normal, vec3 D
         diffuse *= intensity;
         specular *= intensity;
         // attenuation
-        float distance = length(spotLight.Position - FragPos);
-        float attenuation = 1.0 / (spotLight.ConstantAttenuation + spotLight.LinearAttenuation * distance + spotLight.QuadraticAttenuation * distance * distance);
+        float dist = length(spotLight.Position - FragPos);
+        float attenuation = 1.0 / (spotLight.ConstantAttenuation + spotLight.LinearAttenuation * dist + spotLight.QuadraticAttenuation * dist * dist);
         diffuse *= attenuation;
         specular *= attenuation;
         return diffuse + specular;

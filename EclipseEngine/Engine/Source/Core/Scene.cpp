@@ -33,4 +33,14 @@ namespace Core
 		return &m_systemManager;
 	}
 
+	GameObject* Scene::GetObjectByID(int _id)
+	{
+		for (int i = 0; i < m_currentGameObjectCount; ++i)
+		{
+			if (m_gameObjects[i].GetID() == _id)
+				return &m_gameObjects[i];
+		}
+		return nullptr;
+	}
+
 }

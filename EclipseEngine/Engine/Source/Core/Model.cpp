@@ -24,6 +24,7 @@ namespace Core
 		modelData.texture = texture;
 		modelData.shaderProgram = shader;
 		modelData.TRS = GetGameObject()->transform->GetTransformMatrix();
+		modelData.ID = GetGameObject()->GetID();
 		return modelData;
 	}
 

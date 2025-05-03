@@ -30,36 +30,37 @@ namespace Core
 {
 	PhysicsSystem::PhysicsSystem()
 	{
-		JPH::RegisterDefaultAllocator();
+		if (JPH::Factory::sInstance == nullptr)
+		{
+			JPH::RegisterDefaultAllocator();
+			JPH::Trace = TraceImpl;
+			JPH::Factory::sInstance = new JPH::Factory();
 
-		JPH::Trace = TraceImpl;
+			JPH::RegisterTypes();
+			m_tempAllocator = new JPH::TempAllocatorImpl{ 10 * 1024 * 1024 }; // Pre-allocating 10 MB for the physics update
 
-		JPH::Factory::sInstance = new JPH::Factory();
+			m_jobSystem = new JPH::JobSystemThreadPool(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
 
-		JPH::RegisterTypes();
-		m_tempAllocator = new JPH::TempAllocatorImpl{ 10 * 1024 * 1024 }; // Pre-allocating 10 MB for the physics update
+			const JPH::uint cMaxBodies = MAX_COLLIDER_SIZE;
+			// This determines how many mutexes to allocate to protect rigid bodies from concurrent access. Set it to 0 for the default settings.
+			const JPH::uint cNumBodyMutexes = 0;
+			const JPH::uint cMaxBodyPairs = MAX_COLLIDER_SIZE;
+			const JPH::uint cMaxContactConstraints = MAX_COLLIDER_SIZE;
 
-		m_jobSystem = new JPH::JobSystemThreadPool(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
+			m_contactListener.Init(this);
+			m_physicsSystem.SetContactListener(&m_contactListener);
 
-		const JPH::uint cMaxBodies = MAX_COLLIDER_SIZE;
-		// This determines how many mutexes to allocate to protect rigid bodies from concurrent access. Set it to 0 for the default settings.
-		const JPH::uint cNumBodyMutexes = 0;
-		const JPH::uint cMaxBodyPairs = MAX_COLLIDER_SIZE;
-		const JPH::uint cMaxContactConstraints = MAX_COLLIDER_SIZE;
+			// Now we can create the actual physics system.
+			m_physicsSystem.Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, m_broadPhaseLayerInterface, m_objectVsBroadphaseLayerFilter, m_objectVsObjectLayerFilter);
 
-		m_contactListener.Init(this);
-		m_physicsSystem.SetContactListener(&m_contactListener);
-
-		// Now we can create the actual physics system.
-		m_physicsSystem.Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, m_broadPhaseLayerInterface, m_objectVsBroadphaseLayerFilter, m_objectVsObjectLayerFilter);
-
-		m_bodyInterface = &m_physicsSystem.GetBodyInterface();
+			m_bodyInterface = &m_physicsSystem.GetBodyInterface();
 
 #ifdef _DEBUG
-		m_rendererFile.open("testScene.jor", std::ofstream::out | std::ofstream::binary | std::ofstream::trunc);
-		m_rendererStream = new JPH::StreamOutWrapper(m_rendererFile);
-		m_renderer = new JPH::DebugRendererRecorder(*m_rendererStream);
+			m_rendererFile.open("testScene.jor", std::ofstream::out | std::ofstream::binary | std::ofstream::trunc);
+			m_rendererStream = new JPH::StreamOutWrapper(m_rendererFile);
+			m_renderer = new JPH::DebugRendererRecorder(*m_rendererStream);
 #endif // _DEBUG
+		}
 	}
 
 	PhysicsSystem::~PhysicsSystem()
