@@ -40,15 +40,15 @@ namespace Core
 						return nullptr;
 				}
 			}
-			m_components.push_back(m_systemManager->AddComponent<T>());
-			if (m_components[m_components.size() - 1])
+			T* newComp = m_systemManager->AddComponent<T>();
+			if (newComp)
 			{
-				m_components[m_components.size() - 1]->SetGameObject(this);
-				return dynamic_cast<T*>(m_components[m_components.size() - 1]);
+				m_components.push_back(newComp);
+				newComp->SetGameObject(this);
+				return dynamic_cast<T*>(newComp);
 			}
 			else
 			{
-				m_components.pop_back();
 				return nullptr;
 			}
 		}
