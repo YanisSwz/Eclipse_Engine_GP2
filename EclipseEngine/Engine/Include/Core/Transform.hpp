@@ -19,6 +19,7 @@ namespace Core
 
 		// Updates
 		ECLIPSE_ENGINE void Update(bool _positionChanged = false, bool _scaleChanged = false, bool _rotationChanged = false);
+		ECLIPSE_ENGINE void LateUpdate();
 		ECLIPSE_ENGINE void StartOverride();
 		ECLIPSE_ENGINE void UpdateOverride();
 		ECLIPSE_ENGINE void EndOverride();
@@ -65,9 +66,9 @@ namespace Core
 		ECLIPSE_ENGINE void SetLocalScale(float _x, float _y, float _z) ;
 		ECLIPSE_ENGINE void SetLocalRotation(float _w, float _x, float _y, float _z) ;
 		ECLIPSE_ENGINE void SetLocalEulerAngles(float _x, float _y, float _z) ;
-		ECLIPSE_ENGINE void SetPositionChanged();
-		ECLIPSE_ENGINE void SetScaleChanged();
-		ECLIPSE_ENGINE void SetRotationChanged();
+		ECLIPSE_ENGINE void SetPositionChanged(bool _changed);
+		ECLIPSE_ENGINE void SetScaleChanged(bool _changed);
+		ECLIPSE_ENGINE void SetRotationChanged(bool _changed);
 
 	private:
 		Math::Mat4 GetLocalTransformMatrix() const;

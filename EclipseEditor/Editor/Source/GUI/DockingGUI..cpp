@@ -26,22 +26,6 @@ namespace GUI
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
-
-		if (ImGui::BeginMenuBar()) 
-		{
-			if (ImGui::BeginMenu("File")) 
-			{
-				ImGui::MenuItem("Save");
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Edit")) 
-			{
-				ImGui::MenuItem("Settings");
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-
 		ImGui::End();
 	}
 

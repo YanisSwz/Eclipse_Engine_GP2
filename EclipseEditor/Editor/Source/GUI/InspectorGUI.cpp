@@ -89,11 +89,11 @@ namespace GUI
 		if (ImGui::TreeNodeEx("Transform", m_treeNodeComponentFlags))
 		{
 			if (GUI::DragVec3XYZ("Position", _transform->GetLocalPositionRef()))
-				_transform->SetPositionChanged();
+				_transform->SetPositionChanged(true);
 			if (GUI::DragVec3XYZ("Rotation", _transform->GetLocalEulerAnglesRef()))
-				_transform->SetRotationChanged();
+				_transform->SetRotationChanged(true);
 			if (GUI::DragUniformVec3XYZ("Scale", _transform->GetLocalScaleRef(), bIsScaleLocked, m_scaleFactor, 1.f))
-				_transform->SetScaleChanged();
+				_transform->SetScaleChanged(true);
 
 			ImGui::TreePop();
 			ImGui::NewLine();

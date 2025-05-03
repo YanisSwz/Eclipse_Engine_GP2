@@ -46,6 +46,11 @@ namespace Core
 		m_root->Update();
 	}
 
+	void TransformSystem::LateUpdate()
+	{
+		m_root->LateUpdate();
+	}
+
 	Transform* TransformSystem::GetRoot() const
 	{
 		return m_root;

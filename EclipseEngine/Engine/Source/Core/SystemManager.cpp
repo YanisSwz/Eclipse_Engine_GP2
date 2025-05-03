@@ -12,10 +12,21 @@ namespace Core
 		m_audioSystem.Destroy();
 	}
 
-	void SystemManager::Update(float _deltaTime)
+	void SystemManager::Update(float _deltaTime, GAME_STATE _state)
 	{
 		m_transformSystem.Update();
-		m_physicsSystem.Update(_deltaTime);
+		switch (_state)
+		{
+		case GAME_STATE::PLAY:
+			m_physicsSystem.Update(_deltaTime);
+			break;
+		case GAME_STATE::PAUSE:
+			m_physicsSystem.Update(0.f);
+			break;
+		case GAME_STATE::STOP:
+			break;
+		}
+		m_transformSystem.LateUpdate();
 	}
 
 	Transform* SystemManager::AddTransform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)

@@ -70,7 +70,7 @@ namespace Core
 
 	void Transform::Update(bool _positionChanged, bool _scaleChanged, bool _rotationChanged)
 	{
-		if (IsDestroyed())
+		if (m_destroyed)
 			return;
 
 		_positionChanged |= m_positionChanged;
@@ -107,8 +107,6 @@ namespace Core
 		{
 			m_position = m_localPosition;
 		}
-
-		m_positionChanged = false;
 	}
 
 	void Transform::UpdateScale()
@@ -117,8 +115,6 @@ namespace Core
 			m_scale = m_parent->m_scale * m_localScale;
 		else
 			m_scale = m_localScale;
-
-		m_scaleChanged = false;
 	}
 
 	void Transform::UpdateRotation()
@@ -140,8 +136,21 @@ namespace Core
 		m_right = m_rotation.Rotate(Math::Vec3::right);
 		m_up = m_rotation.Rotate(Math::Vec3::up);
 		m_forward = m_rotation.Rotate(Math::Vec3::forward);
+	}
 
+	void Transform::LateUpdate()
+	{
+		if (m_destroyed)
+			return;
+
+		m_positionChanged = false;
 		m_rotationChanged = false;
+		m_scaleChanged = false;
+
+		for (int i = 0; i < m_children.size(); ++i)
+		{
+			m_children[i]->LateUpdate();
+		}
 	}
 
 	void Transform::StartOverride()
