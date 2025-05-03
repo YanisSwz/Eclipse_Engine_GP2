@@ -17,6 +17,13 @@ namespace Core
 		m_audioEngine.deinit();
 	}
 
+	void AudioSystem::Update()
+	{
+		for (int i = 0; i < m_currentCount; ++i)
+			m_audioSources[i].Update();
+		m_audioEngine.update3dAudio();
+	}
+
 	void AudioSystem::PlayStartUp()
 	{
 		//m_audioEngine.play(m_startupSound);
@@ -29,19 +36,20 @@ namespace Core
 
 		for (int i = 0; i < m_currentCount; ++i)
 		{
-			if (m_audioEmitters[i].IsDestroyed())
+			if (m_audioSources[i].IsDestroyed())
 			{
-				m_audioEmitters[i].Remove();
-				m_audioEmitters[i].~AudioSource();
-				new (&m_audioEmitters[i]) AudioSource(&m_audioEngine);
-				return &m_audioEmitters[i];
+				m_audioSources[i].Remove();
+				m_audioSources[i].~AudioSource();
+				new (&m_audioSources[i]) AudioSource(&m_audioEngine);
+				m_audioSources[i].SetActive(true);
+				return &m_audioSources[i];
 			}
 		}
 
-		m_audioEmitters[m_currentCount].~AudioSource();
-		new (&m_audioEmitters[m_currentCount]) AudioSource(&m_audioEngine);
-		
+		m_audioSources[m_currentCount].~AudioSource();
+		new (&m_audioSources[m_currentCount]) AudioSource(&m_audioEngine);
+		m_audioSources[m_currentCount].SetActive(true);
 		++m_currentCount;
-		return &m_audioEmitters[m_currentCount - 1];
+		return &m_audioSources[m_currentCount - 1];
 	}
 }

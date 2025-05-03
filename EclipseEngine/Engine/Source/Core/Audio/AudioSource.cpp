@@ -25,6 +25,24 @@ namespace Core
 		}
 	}
 
+	void AudioSource::Update() 
+	{
+		if (m_destroyed || !m_active)
+			return;
+
+		if (!m_3D)
+			return;
+
+		if (!m_audioEngine->isValidVoiceHandle(m_sound))
+			return;
+
+		if (!m_gameObject->transform->HasPositionChanged())
+			return;
+
+		Math::Vec3 newPos = m_gameObject->transform->GetPosition();
+		m_audioEngine->set3dSourcePosition(m_sound, newPos.x, newPos.y, newPos.z);
+	}
+
 	void AudioSource::Play()
 	{
 		if (m_audioClip == nullptr)
@@ -56,7 +74,6 @@ namespace Core
 			m_sound = m_audioEngine->play3d(m_audioClip->audioFile, pos.x, pos.y, pos.z, 0.f, 0.f, 0.f, m_volume, true);
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
 			m_audioEngine->set3dSourceAttenuation(m_sound, SoLoud::AudioSource::ATTENUATION_MODELS::LINEAR_DISTANCE, 1.f);
-			m_audioEngine->update3dAudio();
 			m_audioEngine->setPause(m_sound, false);
 		}
 		m_audioEngine->setLooping(m_sound, m_looping);
@@ -230,10 +247,7 @@ namespace Core
 
 		m_minDistance = _min;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
-		{
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
-			m_audioEngine->update3dAudio();
-		}
 	}
 
 	void AudioSource::SetMaxDistance(float _max)
@@ -243,9 +257,6 @@ namespace Core
 
 		m_maxDistance = _max;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
-		{
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
-			m_audioEngine->update3dAudio();
-		}
 	}
 }

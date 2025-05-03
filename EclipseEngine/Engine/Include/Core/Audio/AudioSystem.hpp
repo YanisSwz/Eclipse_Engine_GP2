@@ -14,6 +14,7 @@ namespace Core
 
 		ECLIPSE_ENGINE void Init();
 		ECLIPSE_ENGINE void Destroy();
+		ECLIPSE_ENGINE void Update();
 
 		ECLIPSE_ENGINE void PlayStartUp();
 		ECLIPSE_ENGINE AudioSource* Add();
@@ -21,7 +22,7 @@ namespace Core
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentCount = 0;
-		AudioSource m_audioEmitters[MAX_SIZE];
+		AudioSource m_audioSources[MAX_SIZE];
 
 		SoLoud::Soloud m_audioEngine{};
 		SoLoud::Wav m_startupSound{};
