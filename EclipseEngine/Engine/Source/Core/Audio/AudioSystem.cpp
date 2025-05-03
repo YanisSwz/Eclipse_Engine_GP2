@@ -24,6 +24,16 @@ namespace Core
 		m_audioEngine.update3dAudio();
 	}
 
+	void AudioSystem::SetPause(bool _pause)
+	{
+		m_audioEngine.setPauseAll(_pause);
+	}
+
+	void AudioSystem::Stop()
+	{
+		m_audioEngine.stopAll();
+	}
+
 	void AudioSystem::PlayStartUp()
 	{
 		//m_audioEngine.play(m_startupSound);

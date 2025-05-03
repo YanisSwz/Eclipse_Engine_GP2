@@ -42,4 +42,16 @@ namespace Core
 		}
 		return nullptr;
 	}
+
+	void Scene::SetState(GAME_STATE _state)
+	{
+		if (_state == GAME_STATE::PAUSE)
+			m_systemManager.GetAudioSystem()->SetPause(true);
+		else if (_state == GAME_STATE::PLAY && m_state == GAME_STATE::PAUSE)
+			m_systemManager.GetAudioSystem()->SetPause(false);
+		else if (_state == GAME_STATE::STOP)
+			m_systemManager.GetAudioSystem()->Stop();
+
+		m_state = _state;
+	}
 }

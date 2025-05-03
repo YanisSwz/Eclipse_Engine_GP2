@@ -15,6 +15,8 @@ namespace Core
 		ECLIPSE_ENGINE void Init();
 		ECLIPSE_ENGINE void Destroy();
 		ECLIPSE_ENGINE void Update();
+		ECLIPSE_ENGINE void SetPause(bool _pause);
+		ECLIPSE_ENGINE void Stop();
 
 		ECLIPSE_ENGINE void PlayStartUp();
 		ECLIPSE_ENGINE AudioSource* Add();
