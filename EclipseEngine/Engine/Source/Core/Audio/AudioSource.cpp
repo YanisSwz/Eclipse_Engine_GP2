@@ -12,8 +12,16 @@ namespace Core
 	void AudioSource::SetActive(bool _active)
 	{
 		m_active = _active;
-		if (m_audioEngine->isValidVoiceHandle(m_sound) && !m_paused)
-			Pause();
+		if (!m_active)
+		{
+			if (m_audioEngine->isValidVoiceHandle(m_sound) && !m_paused)
+				Pause();
+		}
+		else
+		{
+			if (m_audioEngine->isValidVoiceHandle(m_sound) && m_paused)
+				Pause();
+		}
 	}
 
 	void AudioSource::Play()

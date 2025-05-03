@@ -345,7 +345,7 @@ namespace GUI
 				_source->SetLooping(isLooping);
 			
 			float volume = _source->GetVolume();
-			if (GUI::FloatSlider("Volume", &volume, 0.f, 1.f, "%.3f"))
+			if (GUI::FloatSlider("Volume", &volume, 0.f, 1.f, "%.2f"))
 				_source->SetVolume(volume);
 
 			float sampleRate = _source->GetSampleRate();
@@ -353,7 +353,7 @@ namespace GUI
 				_source->SetSampleRate(sampleRate);
 
 			float pan = _source->GetPan();
-			if (GUI::FloatSlider("Pan", &pan, -1.f, 1.f, "%.3f"))
+			if (GUI::FloatSlider("Pan", &pan, -1.f, 1.f, "%.2f"))
 				_source->SetPan(pan);
 
 			if (ImGui::Button("Play"))
