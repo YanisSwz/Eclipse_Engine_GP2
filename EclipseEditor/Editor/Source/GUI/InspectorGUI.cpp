@@ -1,6 +1,7 @@
 #include "GUI/InspectorGUI.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include "Resource/ResourceManager.hpp"
+#include "Core/Camera/Camera.hpp"
 #include "Core/Physics/BoxCollider.hpp"
 #include "Core/Physics/CapsuleCollider.hpp"
 #include "Core/Physics/MeshCollider.hpp"
@@ -47,6 +48,7 @@ namespace GUI
 
 		if (!_crtGOSelected->IsActive())
 			ImGui::BeginDisabled();
+		DrawCameraComponent(_crtGOSelected->GetComponent<Core::Camera>());
 		DrawModelComponent(_crtGOSelected->GetComponent<Core::Model>());
 		DrawBoxColliderComponent(_crtGOSelected->GetComponent<Core::BoxCollider>());
 		DrawCapsuleColliderComponent(_crtGOSelected->GetComponent<Core::CapsuleCollider>());
@@ -85,6 +87,32 @@ namespace GUI
 				_transform->SetRotationChanged();
 			if (GUI::DragUniformVec3XYZ("Scale", _transform->GetLocalScaleRef(), bIsScaleLocked, m_scaleFactor, 1.f))
 				_transform->SetScaleChanged();
+
+			ImGui::TreePop();
+			ImGui::NewLine();
+		}
+	}
+
+	void InspectorGUI::DrawCameraComponent(Core::Camera* _camera)
+	{
+		if (!_camera)
+			return;
+
+		if (ImGui::TreeNodeEx("Camera", m_treeNodeComponentFlags))
+		{
+			DrawDeleteComponentPopup(_camera);
+
+			float fov = _camera->GetFOV();
+			GUI::DragFloat("FOV", "CameraFOV", &fov, 0.1f);
+			_camera->SetFOV(fov);
+
+			float near = _camera->GetNear();
+			GUI::DragFloat("Near", "CameraNear", &near, 0.1f);
+			_camera->SetNear(near);
+
+			float far = _camera->GetFar();
+			GUI::DragFloat("Far", "CameraFar", &far, 0.1f);
+			_camera->SetFar(far);
 
 			ImGui::TreePop();
 			ImGui::NewLine();
@@ -298,6 +326,7 @@ namespace GUI
 		ImGui::SetNextWindowSize(m_alreadyAddComponentWindowSize);
 		if (ImGui::BeginPopupContextWindow("Add Component Popup Window", m_PopupAddComponentFlags))
 		{
+			DrawAddCameraComponent(_crtGOSelected);
 			DrawAddRendererComponent(_crtGOSelected);
 			DrawAddColliderComponent(_crtGOSelected);
 			DrawAddLightComponent(_crtGOSelected);
@@ -316,6 +345,23 @@ namespace GUI
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
+		}
+	}
+
+	void InspectorGUI::DrawAddCameraComponent(Core::GameObject* _crtGOSelected)
+	{
+		if (ImGui::TreeNodeEx("Camera", m_treeNodeAddComponentFlags))
+		{
+			if (ImGui::Button("Camera", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
+			{
+				Core::Camera* camera = _crtGOSelected->GetComponent<Core::Camera>();
+				if (!camera)
+					camera = _crtGOSelected->AddComponent<Core::Camera>();
+				else
+					bIsComponentAlreadyAddedWindowEnable = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::TreePop();
 		}
 	}
 

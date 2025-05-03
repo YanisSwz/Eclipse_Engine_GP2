@@ -7,6 +7,7 @@ namespace Core
 	class GameObject;
 	class Component;
 	class Transform;
+	class Camera;
 	class Model;
 	class BoxCollider;
 	class CapsuleCollider;
@@ -29,6 +30,7 @@ namespace GUI
 	private:
 		void DrawDeleteComponentPopup(Core::Component* _component);
 		void DrawTransformComponent(Core::Transform* _transform);
+		void DrawCameraComponent(Core::Camera* _camera);
 		void DrawModelComponent(Core::Model* _model);
 		void DrawBoxColliderComponent(Core::BoxCollider* _collider);
 		void DrawCapsuleColliderComponent(Core::CapsuleCollider* _collider);
@@ -38,6 +40,7 @@ namespace GUI
 		void DrawSpotLightComponent(Core::SpotLight* _light);
 
 		void DrawAddComponent(Core::GameObject* _crtGOSelected);
+		void DrawAddCameraComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddRendererComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddColliderComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddLightComponent(Core::GameObject* _crtGOSelected);

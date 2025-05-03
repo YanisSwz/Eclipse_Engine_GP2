@@ -294,7 +294,8 @@ void EditorApp::LoadScene()
 	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
 	cc->SetPosition(0.1f, 50.f, 0.f);
 	cc->SetDynamic(true);
-
+	obj1->AddComponent<Core::Camera>();
+	
 	Core::GameObject* capsule2 = m_scene.CreateGameObject();
 	capsule2->name = "Capsule2";
 	capsule2->transform->SetLocalPosition(-1.f, 0.f, 0.f);

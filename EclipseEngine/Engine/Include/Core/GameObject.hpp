@@ -25,6 +25,8 @@ namespace Core
 
 		ECLIPSE_ENGINE void SetActive(bool _active) override;
 
+		ECLIPSE_ENGINE SystemManager* GetSystemManager();
+
 		template <typename T>
 		T* AddComponent()
 		{
@@ -39,8 +41,16 @@ namespace Core
 				}
 			}
 			m_components.push_back(m_systemManager->AddComponent<T>());
-			m_components[m_components.size() - 1]->SetGameObject(this);
-			return dynamic_cast<T*>(m_components[m_components.size() - 1]);
+			if (m_components[m_components.size() - 1])
+			{
+				m_components[m_components.size() - 1]->SetGameObject(this);
+				return dynamic_cast<T*>(m_components[m_components.size() - 1]);
+			}
+			else
+			{
+				m_components.pop_back();
+				return nullptr;
+			}
 		}
 
 		/// <summary>
@@ -48,11 +58,11 @@ namespace Core
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		template <typename T> 
+		template <typename T>
 		T* GetComponent()
 		{
 			//TODO OPTIMIZATION: check if T is a component
-			for(int i = 0; i < m_components.size(); ++i)
+			for (int i = 0; i < m_components.size(); ++i)
 			{
 				T* castedComponent = dynamic_cast<T*>(m_components[i]);
 				if (castedComponent != nullptr)
@@ -74,7 +84,7 @@ namespace Core
 				if (m_components[i] == _compAdress)
 				{
 					// Mark to be destroyed and remove it from components list
-					if(!m_components[i]->IsDestroyed())
+					if (!m_components[i]->IsDestroyed())
 						m_components[i]->Destroy();
 					m_components.erase(m_components.begin() + i);
 					return;
