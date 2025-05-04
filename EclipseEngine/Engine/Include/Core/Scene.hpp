@@ -19,7 +19,7 @@ namespace Core
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
 		ECLIPSE_ENGINE GameObject* GetObjectByID(int _id);
 		ECLIPSE_ENGINE inline GAME_STATE GetState() const { return m_state; }
-		ECLIPSE_ENGINE inline void SetState(GAME_STATE _state) { m_state = _state; }
+		ECLIPSE_ENGINE void SetState(GAME_STATE _state);
 
 	private:
 		static const int MAX_SIZE = 100;

@@ -19,6 +19,7 @@ namespace Core
 		{
 		case GAME_STATE::PLAY:
 			m_physicsSystem.Update(_deltaTime);
+			m_audioSystem.Update();
 			break;
 		case GAME_STATE::PAUSE:
 			m_physicsSystem.Update(0.f);
