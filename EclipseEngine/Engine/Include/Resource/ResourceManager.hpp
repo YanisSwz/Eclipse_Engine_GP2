@@ -17,6 +17,7 @@ namespace Resource
 		ECLIPSE_ENGINE static ResourceManager& GetInstance();
 		ECLIPSE_ENGINE static void DestroyInstance();
 
+		ECLIPSE_ENGINE void LoadAllResourcesInAssetsFolder();
 		ECLIPSE_ENGINE void LoadAllResources();
 		ECLIPSE_ENGINE void GenerateAllResources(RHI::IRenderInterface* _rendererInterface);
 		ECLIPSE_ENGINE void DestroyAllResources();

@@ -96,7 +96,6 @@ namespace GUI
 		float tempNbElemInColumn = ImGui::GetColumnWidth() / 150.f;
 		int nbElemInColumn = fmod(tempNbElemInColumn, 1.f) <= 0.65f ? static_cast<int>(tempNbElemInColumn) - 2 : static_cast<int>(tempNbElemInColumn) - 1;
 
-		Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "%f", ImGui::GetColumnWidth());
 		if (nbElemInColumn == 0)
 			nbElemInColumn = 1;
 

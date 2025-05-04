@@ -19,10 +19,9 @@ namespace GUI
 		ImGui::Begin("Content Browser", 0, contentBrowserWindowFlags);
 
 		ImGui::Columns(2);
-		static bool first = true;
-		if (first)
+		if (m_firstFrameHierarchy)
 		{
-			first = false;
+			m_firstFrameHierarchy = false;
 			ImGui::SetColumnWidth(0, ImGui::GetContentRegionAvail().x / 3.f);
 		}
 

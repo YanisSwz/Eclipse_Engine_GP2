@@ -19,7 +19,6 @@ namespace Resource
 
 	void Skybox::GetFileContent(std::string _path)
 	{
-
 		// FindSkybox extention
 		std::string findPathExtention = _path + m_faces[0];
 		if (std::filesystem::exists(findPathExtention + ".png"))
@@ -65,11 +64,6 @@ namespace Resource
 			stbi_image_free(m_data[i]);
 
 		bIsLoaded = true;
-	}
-
-	void Skybox::SetModelName(std::string _modelName)
-	{
-		m_meshName = _modelName;
 	}
 
 	void Skybox::Draw()
