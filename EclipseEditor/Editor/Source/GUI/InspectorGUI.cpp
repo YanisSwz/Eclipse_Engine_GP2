@@ -503,6 +503,12 @@ namespace GUI
 				ImGui::TreePop();
 				return;
 			}
+
+			if(!_listener->IsCurrentListener())
+			{
+				if (ImGui::Button("Set as current listener"))
+					_listener->SetCurrentListener();
+			}
 			ImGui::TreePop();
 		}
 	}

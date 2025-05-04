@@ -5,6 +5,8 @@
 
 namespace Core
 {
+	bool AudioSource::m_audioEnabled = true;
+
 	AudioSource::AudioSource(SoLoud::Soloud* _audioEngine)
 	{
 		m_audioEngine = _audioEngine;
@@ -45,6 +47,9 @@ namespace Core
 
 	void AudioSource::Play()
 	{
+		if (!m_audioEnabled)
+			return;
+
 		if (m_audioClip == nullptr)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to play!");
@@ -258,5 +263,15 @@ namespace Core
 		m_maxDistance = _max;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
+	}
+
+	void AudioSource::Enable()
+	{
+		m_audioEnabled = true;
+	}
+
+	void AudioSource::Disable()
+	{
+		m_audioEnabled = false;
 	}
 }

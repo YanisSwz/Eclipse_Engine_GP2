@@ -19,11 +19,35 @@ namespace Core
 
 	void AudioSystem::Update()
 	{
-		for (int i = 0; i < m_currentCount; ++i)
-			m_audioSources[i].Update();
 		if (m_currentListener != nullptr)
+		{
+			if (m_currentListener->IsDestroyed() || !m_currentListener->IsActive())
+				SetCurrentListener();
+			if(m_currentListener == nullptr)
+			{
+				Stop();
+				return;
+			}
+
+			if (!m_canPlay)
+			{
+				m_canPlay = true;
+				AudioSource::Enable();
+			}
+
 			m_currentListener->Update();
-		m_audioEngine.update3dAudio();
+			for (int i = 0; i < m_currentCount; ++i)
+				m_audioSources[i].Update();
+			m_audioEngine.update3dAudio();
+		}
+		else
+		{
+			if(m_canPlay)
+			{
+				m_canPlay = false;
+				AudioSource::Disable();
+			}
+		}
 	}
 
 	void AudioSystem::SetPause(bool _pause)
@@ -91,5 +115,40 @@ namespace Core
 			m_currentListener = &m_audioListeners[m_currentListenersCount];
 		++m_currentListenersCount;
 		return &m_audioListeners[m_currentListenersCount - 1];
+	}
+
+	void AudioSystem::SetCurrentListener(AudioListener* _listener)
+	{
+		if (_listener == nullptr)
+			return;
+
+		m_currentListener = _listener;
+	}
+
+	void AudioSystem::SetCurrentListener()
+	{
+		if (m_currentListenersCount == 0)
+			return;
+
+		for (int i = 0; i < m_currentListenersCount; ++i)
+		{
+			if (!m_audioListeners[i].IsDestroyed() && m_audioListeners[i].IsActive())
+			{
+				m_currentListener = &m_audioListeners[i];
+				m_currentListener->Start();
+				return;
+			}
+		}
+		m_currentListener = nullptr;
+	}
+
+	AudioListener* AudioSystem::GetCurrentAudioListener() const
+	{
+		if (m_currentListener != nullptr)
+		{
+			if (!m_currentListener->IsDestroyed() && m_currentListener->IsActive())
+				return m_currentListener;
+		}
+		return nullptr;
 	}
 }

@@ -46,8 +46,11 @@ namespace Core
 		ECLIPSE_ENGINE inline float GetMaxDistance() const { return m_maxDistance; }
 		ECLIPSE_ENGINE void SetMinDistance(float _min);
 		ECLIPSE_ENGINE void SetMaxDistance(float _max);
+		ECLIPSE_ENGINE static void Enable();
+		ECLIPSE_ENGINE static void Disable();
 
 	private:
+		static bool m_audioEnabled;
 		bool m_looping = false;
 		bool m_paused = false;
 		bool m_3D = false;

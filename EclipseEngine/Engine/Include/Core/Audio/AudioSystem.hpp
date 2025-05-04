@@ -22,6 +22,9 @@ namespace Core
 		ECLIPSE_ENGINE void PlayStartUp();
 		ECLIPSE_ENGINE AudioSource* AddAudioSource();
 		ECLIPSE_ENGINE AudioListener* AddAudioListener();
+		ECLIPSE_ENGINE void SetCurrentListener(AudioListener* _listener);
+		ECLIPSE_ENGINE void SetCurrentListener();
+		ECLIPSE_ENGINE AudioListener* GetCurrentAudioListener() const;
 
 	private:
 		static const int MAX_SIZE = 100;
@@ -35,5 +38,7 @@ namespace Core
 
 		SoLoud::Soloud m_audioEngine{};
 		SoLoud::Wav m_startupSound{};
+
+		bool m_canPlay = true;
 	};
 }

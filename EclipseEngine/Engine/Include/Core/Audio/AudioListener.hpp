@@ -12,9 +12,15 @@ namespace Core
 		ECLIPSE_ENGINE AudioListener(SoLoud::Soloud* _audioEngine);
 		ECLIPSE_ENGINE ~AudioListener() = default;
 
+		ECLIPSE_ENGINE void SetActive(bool _active) override;
+
+		ECLIPSE_ENGINE void Start();
 		ECLIPSE_ENGINE void Update();
+		ECLIPSE_ENGINE bool IsCurrentListener() const;
+		ECLIPSE_ENGINE void SetCurrentListener();
 
 	private:
+		bool m_started = false;
 		SoLoud::Soloud* m_audioEngine = nullptr;
 	};
 }
