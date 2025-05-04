@@ -388,7 +388,7 @@ namespace GUI
 				_source->SetClip(Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>(soundName));
 			if (ImGui::BeginDragDropTarget())
 			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ClipName"))
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AudioClipName"))
 				{
 					IM_ASSERT(payload->DataSize == sizeof(std::string));
 					std::string payload_n;
@@ -397,6 +397,7 @@ namespace GUI
 				}
 				ImGui::EndDragDropTarget();
 			}
+
 			ImGui::Columns(1);
 
 			if (clip == nullptr)

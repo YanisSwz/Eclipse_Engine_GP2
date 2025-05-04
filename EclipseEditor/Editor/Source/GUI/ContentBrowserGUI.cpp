@@ -7,7 +7,7 @@ namespace GUI
 {
 	void ContentBrowseGUI::Init()
 	{
-		m_folderRoot = new FolderGUI("Root");
+		m_folderRoot = new FolderGUI("Assets");
 		m_folderRoot->Init();
 		m_crtFolderSelected = m_folderRoot;
 	}

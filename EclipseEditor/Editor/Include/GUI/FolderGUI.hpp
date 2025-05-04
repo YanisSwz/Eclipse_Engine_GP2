@@ -6,6 +6,7 @@ namespace Resource
 {
 	class Texture;
 	class Mesh;
+	class AudioClip;
 }
 
 namespace GUI
@@ -27,6 +28,7 @@ namespace GUI
 		FolderGUI* DrawFolderGUI(int _index);
 		void DrawTextureGUI(int _index);
 		void DrawMeshGUI(int _index);
+		void DrawAudioGUI(int _index);
 		void Delete();
 
 	private:
@@ -34,6 +36,7 @@ namespace GUI
 		std::vector<FolderGUI*> m_folderChildren;
 		std::vector<Resource::Texture*> m_textureFiles;
 		std::vector<Resource::Mesh*> m_meshFiles;
+		std::vector<Resource::AudioClip*> m_audioFiles;
 
 		static Resource::Texture* m_folderIcon;
 		static Resource::Texture* m_meshIcon;

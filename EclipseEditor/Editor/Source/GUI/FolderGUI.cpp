@@ -23,15 +23,20 @@ namespace GUI
 			std::vector<std::string> textureNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Texture>();
 			for (std::string textureName : textureNames)
 				m_textureFiles.push_back(Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(textureName));
-
 			return;
 		}
-		if (name == "Mesh")
+		else if (name == "Mesh")
 		{
 			std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
 			for (std::string meshName : meshNames)
 				m_meshFiles.push_back(Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(meshName));
-
+			return;
+		}
+		else if (name == "Audio")
+		{
+			std::vector<std::string> audioNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::AudioClip>();
+			for (std::string audioName : audioNames)
+				m_audioFiles.push_back(Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>(audioName));
 			return;
 		}
 
@@ -47,6 +52,11 @@ namespace GUI
 		m_folderChildren.push_back(meshFolder);
 		meshFolder->Init();
 		meshFolder->SetParent(this);
+
+		FolderGUI* audioFolder = new FolderGUI("Audio");
+		m_folderChildren.push_back(audioFolder);
+		audioFolder->Init();
+		audioFolder->SetParent(this);
 	}
 
 	void FolderGUI::SetParent(FolderGUI* _parent)
@@ -91,8 +101,9 @@ namespace GUI
 		int folderChildrenSize = static_cast<int>(m_folderChildren.size());
 		int texturesFilesSize = static_cast<int>(m_textureFiles.size());
 		int meshFilesSize = static_cast<int>(m_meshFiles.size());
+		int audioFilesSize = static_cast<int>(m_audioFiles.size());
 
-		int nbElem = folderChildrenSize + texturesFilesSize + meshFilesSize;
+		int nbElem = folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize;
 		float tempNbElemInColumn = ImGui::GetColumnWidth() / 150.f;
 		int nbElemInColumn = fmod(tempNbElemInColumn, 1.f) <= 0.65f ? static_cast<int>(tempNbElemInColumn) - 2 : static_cast<int>(tempNbElemInColumn) - 1;
 
@@ -123,6 +134,10 @@ namespace GUI
 					else if (i < folderChildrenSize + texturesFilesSize + meshFilesSize)
 					{
 						DrawMeshGUI(i);
+					}
+					else if (i < folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize)
+					{
+						DrawAudioGUI(i);
 					}
 				}
 				ImGui::EndTable();
@@ -178,6 +193,23 @@ namespace GUI
 			ImGui::EndDragDropSource();
 		}
 		ImGui::Text(mesh->name.c_str());
+		ImGui::PopID();
+	}
+
+	void FolderGUI::DrawAudioGUI(int _index)
+	{
+		ImGui::PushID(_index);
+		Resource::AudioClip* audio = m_audioFiles[_index - m_folderChildren.size() - m_textureFiles.size() - m_meshFiles.size()];
+		DrawImage(audio->name.c_str(), m_meshIcon->GetID(), 100.f);
+
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("AudioClipName", &audio->name, sizeof(std::string));
+			DrawImage(audio->name.c_str(), m_meshIcon->GetID(), 100.f);
+			ImGui::Text(audio->name.c_str());
+			ImGui::EndDragDropSource();
+		}
+		ImGui::Text(audio->name.c_str());
 		ImGui::PopID();
 	}
 
