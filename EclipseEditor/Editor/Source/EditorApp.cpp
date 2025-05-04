@@ -225,27 +225,14 @@ void EditorApp::InitGUI()
 
 void EditorApp::LoadScene()
 {
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("MeshIcon.img", "Assets/Icons/MeshIcon.jpg");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("FolderIcon.img", "Assets/Icons/FolderIcon.png");
+	Resource::ResourceManager::GetInstance().LoadAllResourcesInAssetsFolder();
 
-	Resource::Mesh* model = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("VikingRoom.obj", "Assets/Models/VikingRoom.obj");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Avion.obj", "Assets/Models/Avion.obj");
-	Resource::Mesh* cubeModel = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Cube.obj", "Assets/Models/Cube.obj");
-	Resource::Texture* texture = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("VikingRoom.img", "Assets/Textures/VikingRoom.png");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("PopCat.img", "Assets/Textures/PopCat.png");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Avion.img", "Assets/Textures/Avion.jpg");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Bunny.img", "Assets/Textures/Bunny.jpg");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Earth.img", "Assets/Textures/Earth.jpg");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("WhiteTexture.img", "Assets/Textures/WhiteTexture.png");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("TranslateGizmoIcon.img", "Assets/Icons/TranslateGizmoIcon.png");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("RotateGizmoIcon.img", "Assets/Icons/RotateGizmoIcon.png");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("ScaleGizmoIcon.img", "Assets/Icons/ScaleGizmoIcon.png");
-
-
+	// ################################################################################
+	// #################################### Shader ####################################
+	// ################################################################################
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("SkyboxShader.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("SkyboxShader.frag", "Assets/Shaders/Skybox/SkyboxShader.frag");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("SkyboxShader.shd", "SkyboxShader.vert", "SkyboxShader.frag");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Skybox>("Skybox.skb", "Assets/Skybox/Default", "Cube.obj");
 
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultDeferredRendering.vert", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.vert");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultDeferredRendering.frag", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.frag");
@@ -255,14 +242,13 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DeferredLighting.frag", "Assets/Shaders/DeferredRendering/DeferredLighting.frag");
 	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DeferredLighting.shd", "DeferredLighting.vert", "DeferredLighting.frag");
 
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("startup.soloud", "Assets/Audio/startup.mp3");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("potion.soloud", "Assets/Audio/potion.wav");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("fireball.soloud", "Assets/Audio/fireball.wav");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("shoot.soloud", "Assets/Audio/shoot.wav");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::AudioClip>("mana.soloud", "Assets/Audio/mana.flac");
-
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
+
+
+	Resource::Mesh* cubeMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("Cube.obj");
+	Resource::Mesh* vikingRoomMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
+	Resource::Texture* texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
 
 	m_contentBrowserGUI.Init();
 	m_editorPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
@@ -276,7 +262,7 @@ void EditorApp::LoadScene()
 	floor->transform->SetLocalPosition(0.f, -1.f, 0.f);
 	floor->transform->SetLocalScale(100.f, 0.1f, 100.f);
 	Core::Model* floorModel = floor->AddComponent<Core::Model>();
-	floorModel->SetData(cubeModel, texture, shaderProgramDeferredRendering);
+	floorModel->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* floorCollider = floor->AddComponent<Core::BoxCollider>();
 	floorCollider->SetPosition(0.f, -1.f, 0.f);
 	floorCollider->Scale(100.f, 0.1f, 100.f);
@@ -286,17 +272,17 @@ void EditorApp::LoadScene()
 	vikingRoomObject->transform->SetLocalPosition(0.f, 1.f, 0.f);
 	vikingRoomObject->transform->SetLocalScale(1.f, 1.f, 1.f);
 	Core::Model* vikingRoomModelObject = vikingRoomObject->AddComponent<Core::Model>();
-	vikingRoomModelObject->SetData(model, texture, shaderProgramDeferredRendering);
+	vikingRoomModelObject->SetData(vikingRoomMesh, texture, shaderProgramDeferredRendering);
 	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
 	vikingRoomMeshCollider->SetPosition(-2.f, 5.f, 0.f);
-	vikingRoomMeshCollider->SetMesh(model);
+	vikingRoomMeshCollider->SetMesh(vikingRoomMesh);
 
 	Core::GameObject* obj1 = m_scene.CreateGameObject();
 	obj1->name = "Capsule1";
 	obj1->transform->SetLocalPosition(-1.f, 0.f, 0.f);
 	obj1->transform->SetLocalScale(1.f, 2.f, 1.f);
 	Core::Model* model2 = obj1->AddComponent<Core::Model>();
-	model2->SetData(cubeModel, texture, shaderProgramDeferredRendering);
+	model2->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
 	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
 	cc->SetPosition(0.1f, 50.f, 0.f);
 	cc->SetDynamic(true);
@@ -306,7 +292,7 @@ void EditorApp::LoadScene()
 	capsule2->transform->SetLocalPosition(-1.f, 0.f, 0.f);
 	capsule2->transform->SetLocalScale(1.f, 2.f, 1.f);
 	Core::Model* capsuleModel2 = capsule2->AddComponent<Core::Model>();
-	capsuleModel2->SetData(cubeModel, texture, shaderProgramDeferredRendering);
+	capsuleModel2->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
 	Core::CapsuleCollider* cc2 = capsule2->AddComponent<Core::CapsuleCollider>();
 	cc2->SetPosition(3.5f, 75.f, 0.1f);
 	cc2->SetRotation(0.f, 0.f, 0.2f);
@@ -317,7 +303,7 @@ void EditorApp::LoadScene()
 	obj2->transform->SetLocalPosition(0.f, 0.f, 0.f);
 	obj2->transform->SetLocalScale(0.5f, 0.5f, 0.5f);
 	Core::Model* model3 = obj2->AddComponent<Core::Model>();
-	model3->SetData(cubeModel, texture, shaderProgramDeferredRendering);
+	model3->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
 	obj2->AddComponent<Core::BoxCollider>();
 
 	Core::GameObject* obj3 = m_scene.CreateGameObject();
@@ -325,7 +311,7 @@ void EditorApp::LoadScene()
 	obj3->transform->SetLocalPosition(1.f, 0.f, 0.f);
 	obj3->transform->SetLocalScale(1.f, 1.f, 1.f);
 	Core::Model* model4 = obj3->AddComponent<Core::Model>();
-	model4->SetData(cubeModel, texture, shaderProgramDeferredRendering);
+	model4->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
 	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
 	bc->SetPosition(1.f, 0.f, 0.f);
 	bc->SetDynamic(true);
@@ -337,14 +323,14 @@ void EditorApp::LoadScene()
 	parent->transform->SetLocalPosition(-1.f, 1.5f, 0.f);
 	parent->transform->SetLocalScale(1.f, 1.f, 1.f);
 	Core::Model* model5 = parent->AddComponent<Core::Model>();
-	model5->SetData(model, texture, shaderProgramDeferredRendering);
+	model5->SetData(vikingRoomMesh, texture, shaderProgramDeferredRendering);
 
 	Core::GameObject* child = m_scene.CreateGameObject();
 	child->name = "Child";
 	child->transform->SetLocalPosition(1.f, 1.f, 0.f);
 	child->transform->SetLocalScale(0.5f, 0.5f, 0.5f);
 	Core::Model* model6 = child->AddComponent<Core::Model>();
-	model6->SetData(model, texture, shaderProgramDeferredRendering);
+	model6->SetData(vikingRoomMesh, texture, shaderProgramDeferredRendering);
 	parent->transform->AddChild(child->transform);
 
 	// LIGHTS
@@ -375,7 +361,6 @@ void EditorApp::LoadScene()
 	soundTest->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
 	soundTest->name = "Sound Test";
 	soundTest->AddComponent<Core::AudioSource>();
-
 }
 
 void EditorApp::DrawScene()

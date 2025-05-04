@@ -16,5 +16,7 @@ namespace GUI
 	private:
 		FolderGUI* m_folderRoot = nullptr;
 		FolderGUI* m_crtFolderSelected = nullptr;
+
+		bool m_firstFrameHierarchy = true;
 	};
 }

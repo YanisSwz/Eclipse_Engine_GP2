@@ -20,6 +20,9 @@ namespace GUI
 
 		void Init();
 		void SetParent(FolderGUI* _parent);
+
+		FolderGUI* DrawHierarchy(const FolderGUI& _currentFolder);
+
 		FolderGUI* Draw();
 		FolderGUI* DrawFolderGUI(int _index);
 		void DrawTextureGUI(int _index);

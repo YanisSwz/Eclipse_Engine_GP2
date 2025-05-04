@@ -22,7 +22,6 @@ namespace Resource
 	{
 		const std::type_info& typeT = typeid(T);
 		const std::type_info& typeShaderProgram = typeid(ShaderProgram);
-		const std::type_info& typeSkybox = typeid(Skybox);
 		if (typeT == typeShaderProgram)
 		{
 			ShaderProgram* shaderResource = new ShaderProgram(_resourceName);
@@ -30,14 +29,6 @@ namespace Resource
 			m_resourcesToGenerate[_resourceName] = shaderResource;
 			return dynamic_cast<T*>(shaderResource);
 		}		
-		if (typeT == typeSkybox)
-		{
-			Skybox* skyboxResource = new Skybox(_resourceName);
-			skyboxResource->SetModelName(_resourcePath2);
-			m_resourcesToLoad[_resourceName] = skyboxResource;
-			m_resourcesPath[_resourceName] = _resourcePath1;
-			return dynamic_cast<T*>(skyboxResource);
-		}
 
 		T* resource = new T(_resourceName);
 		m_resourcesToLoad[_resourceName] = resource;

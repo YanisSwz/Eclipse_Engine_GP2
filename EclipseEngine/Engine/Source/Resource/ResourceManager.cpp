@@ -1,4 +1,6 @@
 #include "Resource/ResourceManager.hpp"
+#include "Texture.hpp"
+#include <filesystem>
 
 namespace Resource
 {
@@ -29,6 +31,70 @@ namespace Resource
 		}
 	}
 
+	void ResourceManager::LoadAllResourcesInAssetsFolder()
+	{
+		std::string resourceName;
+		std::string resourcePath;
+		for (const auto& entry : std::filesystem::directory_iterator("Assets/Models"))
+		{
+			resourceName = entry.path().filename().string();
+			char popedChar;
+			do
+			{
+				popedChar = resourceName[resourceName.size() - 1];
+				resourceName.pop_back();
+			} while (popedChar != '.');
+			resourceName.append(".obj");
+			resourcePath = entry.path().string();
+			AddResourceToLoad<Resource::Mesh>(resourceName, resourcePath);
+		}
+
+		for (const auto& entry : std::filesystem::directory_iterator("Assets/Textures"))
+		{
+			resourceName = entry.path().filename().string();
+			char popedChar;
+			do
+			{
+				popedChar = resourceName[resourceName.size() - 1];
+				resourceName.pop_back();
+			} while (popedChar != '.');
+			resourceName.append(".img");
+			resourcePath = entry.path().string();
+			AddResourceToLoad<Resource::Texture>(resourceName, resourcePath);
+		}
+
+		for (const auto& entry : std::filesystem::directory_iterator("Assets/Icons"))
+		{
+			resourceName = entry.path().filename().string();
+			char popedChar;
+			do
+			{
+				popedChar = resourceName[resourceName.size() - 1];
+				resourceName.pop_back();
+			} while (popedChar != '.');
+			resourceName.append(".img");
+			resourcePath = entry.path().string();
+			AddResourceToLoad<Resource::Texture>(resourceName, resourcePath);
+		}
+
+		for (const auto& entry : std::filesystem::directory_iterator("Assets/Audio"))
+		{
+			resourceName = entry.path().filename().string();
+			resourcePath = entry.path().string();
+			AddResourceToLoad<Resource::AudioClip>(resourceName, resourcePath);
+		}
+
+		for (const auto& entry : std::filesystem::directory_iterator("Assets/Skybox"))
+		{
+			resourceName = entry.path().filename().string().append(".skb");
+			resourcePath = entry.path().string().append("/");
+			AddResourceToLoad<Resource::Skybox>(resourceName, resourcePath);
+		}
+
+		resourceName.clear();
+		resourcePath.clear();
+	}
+
 	void ResourceManager::LoadAllResources()
 	{
 		for (std::map<std::string, IResource*>::iterator it = m_resourcesToLoad.begin(); it != m_resourcesToLoad.end(); ++it)
@@ -41,6 +107,7 @@ namespace Resource
 				AddResourceToReady(it->second, it->first);
 		}
 		m_resourcesToLoad.clear();
+		m_resourcesPath.clear();
 	}
 
 	void ResourceManager::GenerateAllResources(RHI::IRenderInterface* _rendererInterface)
@@ -62,13 +129,13 @@ namespace Resource
 
 	void ResourceManager::DestroyAllResources()
 	{
+		m_resourcesPath;
+		m_resourcesToLoad;
+		m_resourcesToGenerate;
 		if (!m_resourcesReady.empty())
 		{
 			for (std::map<std::string, IResource*>::iterator it = m_resourcesReady.begin(); it != m_resourcesReady.end(); ++it)
-			{
-				//it->second->Delete();
 				delete it->second;
-			}
 			m_resourcesReady.clear();
 		}
 	}
