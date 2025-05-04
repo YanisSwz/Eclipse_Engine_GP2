@@ -25,8 +25,12 @@ namespace Core
 		ECLIPSE_ENGINE void SetCurrentListener(AudioListener* _listener);
 		ECLIPSE_ENGINE void SetCurrentListener();
 		ECLIPSE_ENGINE AudioListener* GetCurrentAudioListener() const;
+		ECLIPSE_ENGINE void EnableAudio();
+		ECLIPSE_ENGINE void DisableAudio();
 
 	private:
+		void HandleAudioState();
+
 		static const int MAX_SIZE = 100;
 		int m_currentCount = 0;
 		AudioSource m_audioSources[MAX_SIZE];

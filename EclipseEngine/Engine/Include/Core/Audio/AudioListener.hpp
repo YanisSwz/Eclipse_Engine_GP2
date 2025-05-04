@@ -20,6 +20,10 @@ namespace Core
 		ECLIPSE_ENGINE void SetCurrentListener();
 
 	private:
+		void UpdateAll();
+		void UpdatePosition();
+		void UpdateRotation();
+
 		bool m_started = false;
 		SoLoud::Soloud* m_audioEngine = nullptr;
 	};

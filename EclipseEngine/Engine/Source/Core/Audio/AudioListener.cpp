@@ -13,7 +13,6 @@ namespace Core
 		m_active = _active;
 		if (m_active)
 		{
-			// TODO
 			if (IsCurrentListener())
 				Start();
 		}
@@ -26,10 +25,7 @@ namespace Core
 		if (!m_gameObject)
 			return;
 
-		Math::Vec3 pos = m_gameObject->transform->GetPosition();
-		Math::Vec3 at = m_gameObject->transform->GetForward();
-		Math::Vec3 up = m_gameObject->transform->GetUp();
-		m_audioEngine->set3dListenerParameters(pos.x, pos.y, pos.z, at.x, at.y, at.z, up.x, up.y, up.z);
+		UpdateAll();
 		m_audioEngine->update3dAudio();
 	}
 
@@ -45,27 +41,19 @@ namespace Core
 			return;
 		}
 
-		// TODO
 		if (m_gameObject->transform->HasPositionChanged() && m_gameObject->transform->HasRotationChanged())
 		{
-			Math::Vec3 pos = m_gameObject->transform->GetPosition();
-			Math::Vec3 at = m_gameObject->transform->GetForward();
-			Math::Vec3 up = m_gameObject->transform->GetUp();
-			m_audioEngine->set3dListenerParameters(pos.x, pos.y, pos.z, at.x, at.y, at.z, up.x, up.y, up.z);
+			UpdateAll();
 			return;
 		}
 		else if(m_gameObject->transform->HasPositionChanged())
 		{
-			Math::Vec3 pos = m_gameObject->transform->GetPosition();
-			m_audioEngine->set3dListenerPosition(pos.x, pos.y, pos.z);
+			UpdatePosition();
 			return;
 		}
 		else if(m_gameObject->transform->HasRotationChanged())
 		{
-			Math::Vec3 at = m_gameObject->transform->GetForward();
-			Math::Vec3 up = m_gameObject->transform->GetUp();
-			m_audioEngine->set3dListenerAt(at.x, at.y, at.z);
-			m_audioEngine->set3dListenerUp(up.x, up.y, up.z);
+			UpdateRotation();
 			return;
 		}
 	}
@@ -85,5 +73,27 @@ namespace Core
 			return;
 
 		m_gameObject->GetSystemManager()->GetAudioSystem()->SetCurrentListener(this);
+	}
+
+	void AudioListener::UpdateAll()
+	{
+		Math::Vec3 pos = m_gameObject->transform->GetPosition();
+		Math::Vec3 at = m_gameObject->transform->GetForward();
+		Math::Vec3 up = m_gameObject->transform->GetUp();
+		m_audioEngine->set3dListenerParameters(pos.x, pos.y, pos.z, at.x, at.y, at.z, up.x, up.y, up.z);
+	}
+
+	void AudioListener::UpdatePosition()
+	{
+		Math::Vec3 pos = m_gameObject->transform->GetPosition();
+		m_audioEngine->set3dListenerPosition(pos.x, pos.y, pos.z);
+	}
+
+	void AudioListener::UpdateRotation()
+	{
+		Math::Vec3 at = m_gameObject->transform->GetForward();
+		Math::Vec3 up = m_gameObject->transform->GetUp();
+		m_audioEngine->set3dListenerAt(at.x, at.y, at.z);
+		m_audioEngine->set3dListenerUp(up.x, up.y, up.z);
 	}
 }
