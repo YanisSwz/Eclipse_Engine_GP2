@@ -27,8 +27,8 @@ namespace Core
 		void InputMove(Windowing::IWindow* _window, float _deltaTime);
 		void InputRotation(Windowing::IWindow* _window, float _deltaTime);
 
-		Math::Vec3 m_eye = { 0.f, 0.f, -1.f };
-		Math::Vec3 m_at = { 0.f, 0.f, -2.f };
+		Math::Vec3 m_eye = { 0.f, 0.f, -2.f };
+		Math::Vec3 m_at = { 0.f, 0.f, -1.f };
 		Math::Vec3 m_up = { 0.f, 1.f, 0.f };
 
 		float m_minSpeed = 0.1f;

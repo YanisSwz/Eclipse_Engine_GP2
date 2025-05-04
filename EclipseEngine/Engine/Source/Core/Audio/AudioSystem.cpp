@@ -19,6 +19,7 @@ namespace Core
 
 	void AudioSystem::Update()
 	{
+		// TODO
 		if (m_currentListener != nullptr)
 		{
 			if (m_currentListener->IsDestroyed() || !m_currentListener->IsActive())
@@ -123,6 +124,7 @@ namespace Core
 			return;
 
 		m_currentListener = _listener;
+		m_currentListener->Start();
 	}
 
 	void AudioSystem::SetCurrentListener()

@@ -13,6 +13,7 @@ namespace Core
 		m_active = _active;
 		if (m_active)
 		{
+			// TODO
 			if (IsCurrentListener())
 				Start();
 		}
@@ -44,6 +45,7 @@ namespace Core
 			return;
 		}
 
+		// TODO
 		if (m_gameObject->transform->HasPositionChanged() && m_gameObject->transform->HasRotationChanged())
 		{
 			Math::Vec3 pos = m_gameObject->transform->GetPosition();
@@ -82,7 +84,6 @@ namespace Core
 		if (m_destroyed || !m_active)
 			return;
 
-		Start();
 		m_gameObject->GetSystemManager()->GetAudioSystem()->SetCurrentListener(this);
 	}
 }

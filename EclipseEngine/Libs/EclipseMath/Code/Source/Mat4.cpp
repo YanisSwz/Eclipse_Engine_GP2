@@ -666,15 +666,15 @@ Mat4 Mat4::ViewMatrix(Vec3 _eye, Vec3 _at, Vec3 _up)
 {
 	Vec3 frwd = _eye - _at;
 	frwd.Normalize();
-	Vec3 right = Vec3::CrossProduct(frwd, _up);
+	Vec3 right = Vec3::CrossProduct(_up, frwd);
 	right.Normalize();
-	Vec3 _newUp = Vec3::CrossProduct(right, frwd);
+	Vec3 _newUp = Vec3::CrossProduct(frwd, right);
 	_newUp.Normalize();
 
 	return {
-	right.x, right.y, right.z, -right.DotProduct(_at),
-	_newUp.x, _newUp.y, _newUp.z, -_newUp.DotProduct(_at),
-	-frwd.x, -frwd.y, -frwd.z, frwd.DotProduct(_at),
+	right.x, right.y, right.z, -right.DotProduct(_eye),
+	_newUp.x, _newUp.y, _newUp.z, -_newUp.DotProduct(_eye),
+	frwd.x, frwd.y, frwd.z, -frwd.DotProduct(_eye),
 	0.0f, 0.0f, 0.0f, 1.0f
 	};
 }

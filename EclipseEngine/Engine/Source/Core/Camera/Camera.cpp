@@ -69,7 +69,7 @@ namespace Core
 		Math::Vec3 pos = m_gameObject->transform->GetPosition();	
 		Math::Vec3 dir = m_gameObject->transform->GetForward();
 		Math::Vec3 up = m_gameObject->transform->GetUp();
-		return Math::Mat4::ViewMatrix(pos + dir, pos, up);
+		return Math::Mat4::ViewMatrix(pos, pos + dir, up);
 	}
 
 	Math::Mat4 Camera::GetProjectionMatrix(int _width, int _height) const

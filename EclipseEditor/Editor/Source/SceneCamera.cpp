@@ -80,31 +80,31 @@ void SceneCamera::InputMove(Windowing::IWindow* _window, float _deltaTime)
 	Math::Vec3 move;
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_W, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		Math::Vec3 direction{ m_at, m_eye };
+		Math::Vec3 direction = m_at - m_eye;
 		direction.Normalize();
 		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_S, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		Math::Vec3 direction{ m_eye, m_at };
+		Math::Vec3 direction = m_eye - m_at;
 		direction.Normalize();
 		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_D, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		Math::Vec3 frwd = { m_at, m_eye };
+		Math::Vec3 frwd = m_at - m_eye ;
 		Math::Vec3 direction = Math::Vec3::Normalized(Math::Vec3::CrossProduct(frwd, m_up));
 		move += direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_A, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		Math::Vec3 frwd = { m_at, m_eye };
+		Math::Vec3 frwd = m_at - m_eye;
 		Math::Vec3 direction = Math::Vec3::Normalized(Math::Vec3::CrossProduct(frwd, m_up));
 		move -= direction * _deltaTime * m_moveSpeed;
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_E, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		Math::Vec3 frwd = Math::Vec3::Normalized({ m_at, m_eye });
+		Math::Vec3 frwd = Math::Vec3::Normalized(m_at - m_eye);
 		Math::Vec3 right = Math::Vec3::Normalized(Math::Vec3::CrossProduct(frwd, m_up));
 		Math::Vec3 _up = Math::Vec3::Normalized(Math::Vec3::CrossProduct(right, frwd));
 
@@ -113,7 +113,7 @@ void SceneCamera::InputMove(Windowing::IWindow* _window, float _deltaTime)
 	}
 	if (_window->GetKey(Windowing::KEY_CODE::KEY_Q, Windowing::INPUT_ACTION::INPUT_DOWN))
 	{
-		Math::Vec3 frwd = Math::Vec3::Normalized({ m_at, m_eye });
+		Math::Vec3 frwd = Math::Vec3::Normalized(m_at - m_eye);
 		Math::Vec3 right = Math::Vec3::Normalized(Math::Vec3::CrossProduct(frwd, m_up));
 		Math::Vec3 _up = Math::Vec3::Normalized(Math::Vec3::CrossProduct(right, frwd));
 
@@ -130,14 +130,15 @@ void SceneCamera::InputRotation(Windowing::IWindow* _window, float _deltaTime)
 	Math::Vec2 mouseDelta = (newMousePos - m_oldMouse) * m_mouseSensitivity * _deltaTime;
 
 	m_rotation.x -= mouseDelta.x;
-	if (m_rotation.y - mouseDelta.y < 90.f && m_rotation.y - mouseDelta.y > -90.f)
-		m_rotation.y -= mouseDelta.y;
+	if (m_rotation.y + mouseDelta.y < 90.f && m_rotation.y + mouseDelta.y > -90.f)
+		m_rotation.y += mouseDelta.y;
 
 	Math::Mat4 finalMatrix = Math::Mat4::RotationY(Math::Tools::ToRad(m_rotation.x)) * Math::Mat4::RotationX(Math::Tools::ToRad(m_rotation.y));
 	Math::Vec4 direction = finalMatrix * Math::Vec4{ 0.f, 0.f, 1.f, 0.f };
-	m_eye.x = m_at.x - direction.x;
-	m_eye.y = m_at.y - direction.y;
-	m_eye.z = m_at.z - direction.z;
+	m_at.x = m_eye.x + direction.x;
+	m_at.y = m_eye.y + direction.y;
+	m_at.z = m_eye.z + direction.z;
+	m_up = finalMatrix * Math::Vec4{ 0.f, 1.f, 0.f, 0.f };
 }
 
 Math::Mat4 SceneCamera::GetView() const
