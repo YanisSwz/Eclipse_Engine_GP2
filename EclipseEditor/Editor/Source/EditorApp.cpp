@@ -225,23 +225,8 @@ void EditorApp::InitGUI()
 
 void EditorApp::LoadScene()
 {
+	// Load All Resources
 	Resource::ResourceManager::GetInstance().LoadAllResourcesInAssetsFolder();
-
-	// ################################################################################
-	// #################################### Shader ####################################
-	// ################################################################################
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("SkyboxShader.vert", "Assets/Shaders/Skybox/SkyboxShader.vert");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("SkyboxShader.frag", "Assets/Shaders/Skybox/SkyboxShader.frag");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("SkyboxShader.shd", "SkyboxShader.vert", "SkyboxShader.frag");
-
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultDeferredRendering.vert", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.vert");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultDeferredRendering.frag", "Assets/Shaders/DeferredRendering/DefaultDeferredRendering.frag");
-	Resource::ShaderProgram* shaderProgramDeferredRendering = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DefaultDeferredRendering.shd", "DefaultDeferredRendering.vert", "DefaultDeferredRendering.frag");
-
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DeferredLighting.vert", "Assets/Shaders/DeferredRendering/DeferredLighting.vert");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DeferredLighting.frag", "Assets/Shaders/DeferredRendering/DeferredLighting.frag");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DeferredLighting.shd", "DeferredLighting.vert", "DeferredLighting.frag");
-
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
 
@@ -249,6 +234,7 @@ void EditorApp::LoadScene()
 	Resource::Mesh* cubeMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("Cube.obj");
 	Resource::Mesh* vikingRoomMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
+	Resource::ShaderProgram* shaderProgramDeferredRendering = Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("DefaultDeferredRendering.shd");
 
 	m_contentBrowserGUI.Init();
 	m_editorPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();

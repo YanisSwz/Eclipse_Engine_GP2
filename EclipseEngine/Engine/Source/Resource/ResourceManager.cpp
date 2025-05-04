@@ -91,6 +91,39 @@ namespace Resource
 			AddResourceToLoad<Resource::Skybox>(resourceName, resourcePath);
 		}
 
+		for (const auto& entry : std::filesystem::directory_iterator("Assets/Shaders"))
+		{
+			// Load Vertex Shader
+			if (entry.path().extension().string() == ".vert")
+			{
+				resourceName = entry.path().filename().string();
+				resourcePath = entry.path().string();
+				AddResourceToLoad<Resource::VertShader>(resourceName, resourcePath);
+			}
+			if (entry.path().extension().string() == ".frag")
+			{
+				// Load Fragment Shader
+				resourceName = entry.path().filename().string();
+				resourcePath = entry.path().string();
+				AddResourceToLoad<Resource::FragShader>(resourceName, resourcePath);
+
+				resourcePath = entry.path().filename().string();
+				// Load Shader Program
+				char popedChar;
+				do
+				{
+					popedChar = resourceName[resourceName.size() - 1];
+					resourceName.pop_back();
+					resourcePath.pop_back();
+				} while (popedChar != '.');
+
+				resourceName.append(".shd");
+				resourcePath.append(".vert");
+
+				AddResourceToLoad<Resource::ShaderProgram>(resourceName, resourcePath, entry.path().filename().string());
+			}
+		}
+
 		resourceName.clear();
 		resourcePath.clear();
 	}

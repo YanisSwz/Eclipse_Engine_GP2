@@ -35,6 +35,15 @@ void OpenGLShaderProgram::LinkVertFragShader(unsigned int _vertShaderID, unsigne
 	glAttachShader(m_shaderProgramID, _vertShaderID);
 	glAttachShader(m_shaderProgramID, _fragShaderID);
 	glLinkProgram(m_shaderProgramID);
+	GLint success;
+	glGetProgramiv(m_shaderProgramID, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		success;
+		GLchar infoLog[512];
+		glGetProgramInfoLog(m_shaderProgramID, 512, NULL, infoLog);
+		std::cout << "error" << std::endl;
+	}
 }
 
 int OpenGLShaderProgram::GetProgram() const
