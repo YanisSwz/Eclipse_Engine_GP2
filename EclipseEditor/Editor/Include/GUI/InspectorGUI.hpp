@@ -16,6 +16,7 @@ namespace Core
 	class PointLight;
 	class SpotLight;
 	class AudioSource;
+	class AudioListener;
 }
 
 namespace GUI
@@ -40,6 +41,7 @@ namespace GUI
 		void DrawPointLightComponent(Core::PointLight* _light);
 		void DrawSpotLightComponent(Core::SpotLight* _light);
 		void DrawAudioSourceComponent(Core::AudioSource* _source);
+		void DrawAudioListenerComponent(Core::AudioListener* _listener);
 
 		void DrawAddComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddCameraComponent(Core::GameObject* _crtGOSelected);

@@ -21,6 +21,8 @@ namespace Core
 	{
 		for (int i = 0; i < m_currentCount; ++i)
 			m_audioSources[i].Update();
+		if (m_currentListener != nullptr)
+			m_currentListener->Update();
 		m_audioEngine.update3dAudio();
 	}
 
@@ -39,7 +41,7 @@ namespace Core
 		//m_audioEngine.play(m_startupSound);
 	}
 
-	AudioSource* AudioSystem::Add()
+	AudioSource* AudioSystem::AddAudioSource()
 	{
 		if (m_currentCount >= MAX_SIZE)
 			return nullptr;
@@ -61,5 +63,33 @@ namespace Core
 		m_audioSources[m_currentCount].SetActive(true);
 		++m_currentCount;
 		return &m_audioSources[m_currentCount - 1];
+	}
+
+	AudioListener* AudioSystem::AddAudioListener()
+	{
+		if (m_currentListenersCount >= MAX_LISTENER_SIZE)
+			return nullptr;
+
+		for (int i = 0; i < m_currentListenersCount; ++i)
+		{
+			if (m_audioListeners[i].IsDestroyed())
+			{
+				m_audioListeners[i].Remove();
+				m_audioListeners[i].~AudioListener();
+				new (&m_audioListeners[i]) AudioListener(&m_audioEngine);
+				m_audioListeners[i].SetActive(true);
+				if (m_currentListener == nullptr)
+					m_currentListener = &m_audioListeners[i];
+				return &m_audioListeners[i];
+			}
+		}
+
+		m_audioListeners[m_currentListenersCount].~AudioListener();
+		new (&m_audioListeners[m_currentListenersCount]) AudioListener(&m_audioEngine);
+		m_audioListeners[m_currentListenersCount].SetActive(true);
+		if (m_currentListener == nullptr)
+			m_currentListener = &m_audioListeners[m_currentListenersCount];
+		++m_currentListenersCount;
+		return &m_audioListeners[m_currentListenersCount - 1];
 	}
 }

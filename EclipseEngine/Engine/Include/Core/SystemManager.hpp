@@ -71,8 +71,12 @@ namespace Core
 			else if (AudioSource* audioSource_ptr = dynamic_cast<AudioSource*>(basePtr))
 			{
 				delete basePtr;
-				audioSource_ptr = m_audioSystem.Add();
-				return dynamic_cast<T*>(m_audioSystem.Add());
+				return dynamic_cast<T*>(m_audioSystem.AddAudioSource());
+			}
+			else if (AudioListener* audioListener_ptr = dynamic_cast<AudioListener*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_audioSystem.AddAudioListener());
 			}
 			delete basePtr;
 			return nullptr;

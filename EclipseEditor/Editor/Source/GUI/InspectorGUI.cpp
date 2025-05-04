@@ -58,6 +58,7 @@ namespace GUI
 		DrawPointLightComponent(_crtGOSelected->GetComponent<Core::PointLight>());
 		DrawSpotLightComponent(_crtGOSelected->GetComponent<Core::SpotLight>());
 		DrawAudioSourceComponent(_crtGOSelected->GetComponent<Core::AudioSource>());
+		DrawAudioListenerComponent(_crtGOSelected->GetComponent<Core::AudioListener>());
 
 		DrawAddComponent(_crtGOSelected);
 
@@ -490,6 +491,22 @@ namespace GUI
 		}
 	}
 
+	void InspectorGUI::DrawAudioListenerComponent(Core::AudioListener* _listener)
+	{
+		if (!_listener)
+			return;
+
+		if (ImGui::TreeNodeEx("Audio Listener", m_treeNodeComponentFlags))
+		{
+			if (DrawDeleteComponentPopup(_listener))
+			{
+				ImGui::TreePop();
+				return;
+			}
+			ImGui::TreePop();
+		}
+	}
+
 	void InspectorGUI::DrawAddComponent(Core::GameObject* _crtGOSelected)
 	{
 		if (ImGui::Button("Add Component"))
@@ -661,6 +678,15 @@ namespace GUI
 				Core::AudioSource* audioSource = _crtGOSelected->GetComponent<Core::AudioSource>();
 				if (!audioSource)
 					audioSource = _crtGOSelected->AddComponent<Core::AudioSource>();
+				else
+					bIsComponentAlreadyAddedWindowEnable = true;
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::Button("Audio Listener", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
+			{
+				Core::AudioListener* audioListener = _crtGOSelected->GetComponent<Core::AudioListener>();
+				if (!audioListener)
+					audioListener = _crtGOSelected->AddComponent<Core::AudioListener>();
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();

@@ -3,6 +3,7 @@
 #include "soloud.h"
 #include "soloud_wav.h"
 #include "AudioSource.hpp"
+#include "AudioListener.hpp"
 
 namespace Core
 {
@@ -19,12 +20,18 @@ namespace Core
 		ECLIPSE_ENGINE void Stop();
 
 		ECLIPSE_ENGINE void PlayStartUp();
-		ECLIPSE_ENGINE AudioSource* Add();
+		ECLIPSE_ENGINE AudioSource* AddAudioSource();
+		ECLIPSE_ENGINE AudioListener* AddAudioListener();
 
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentCount = 0;
 		AudioSource m_audioSources[MAX_SIZE];
+
+		static const int MAX_LISTENER_SIZE = 5;
+		int m_currentListenersCount = 0;
+		AudioListener m_audioListeners[MAX_LISTENER_SIZE];
+		AudioListener* m_currentListener = nullptr;
 
 		SoLoud::Soloud m_audioEngine{};
 		SoLoud::Wav m_startupSound{};
