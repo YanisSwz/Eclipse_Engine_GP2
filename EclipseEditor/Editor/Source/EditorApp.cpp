@@ -322,7 +322,6 @@ void EditorApp::LoadScene()
 	spotLight->SetActive(false);
 
 	Core::Serializer serializer;
-
 	serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
 }
 

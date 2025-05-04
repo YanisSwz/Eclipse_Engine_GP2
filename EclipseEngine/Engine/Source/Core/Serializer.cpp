@@ -18,6 +18,27 @@ namespace Core
 		o << std::setw(4) << SerializeScene(_scene) << std::endl;
 	}
 
+	void Serializer::DeserializeSceneFromFile(Scene* _scene, std::string _filePath)
+	{
+		std::ifstream i(_filePath);
+		json scene;
+		i >> scene;
+
+		float ambientLight[4];
+		scene.at("AmbientLight").get_to(ambientLight);
+		_scene->GetSystemManager()->GetRenderSystem()->SetAmbientLight({ ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3] });
+
+		json gameObjects = scene.at("GameObjects");
+		int gameObjectCount = static_cast<int>(gameObjects.size());
+
+		for (int i = 0; i < gameObjectCount; ++i)
+		{
+			json gameObjectJson = gameObjects[i];
+
+			GameObject* gameObject = _scene->CreateGameObject();
+		}
+	}
+
 	json Serializer::SerializeScene(Scene* _scene)
 	{
 		json scene;
@@ -26,17 +47,18 @@ namespace Core
 
 		std::vector<json> gameObjects;
 		for (int i = 0; i < _scene->GetCount(); ++i)
-			gameObjects.push_back(SerializeGameObject(_scene->GetGameObject(i)));
+			gameObjects.push_back(SerializeGameObject(_scene->GetGameObject(i), _scene->GetGameObjectParentIndex(i)));
+		
 		scene["GameObjects"] = gameObjects;
 
 		return scene;
 	}
 
-	json Serializer::SerializeGameObject(GameObject* _gameObject)
+	json Serializer::SerializeGameObject(GameObject* _gameObject, int _parentIndex)
 	{
 		json gameObject;
 		gameObject[_gameObject->name]["IsActive"] = _gameObject->IsActive();
-		gameObject[_gameObject->name]["Transform"] = SerializeTransform(_gameObject->transform);
+		gameObject[_gameObject->name]["Transform"] = SerializeTransform(_gameObject->transform, _parentIndex);
 
 		std::vector<Component*> components = _gameObject->GetComponents();
 		std::vector<json> componentsJson;
@@ -83,9 +105,10 @@ namespace Core
 		return component;
 	}
 
-	json Serializer::SerializeTransform(Transform* _transform)
+	json Serializer::SerializeTransform(Transform* _transform, int _parentIndex)
 	{
 		json j = *_transform;
+		j["ParentIndex"] = _parentIndex;
 		return j;
 	}
 
@@ -129,5 +152,10 @@ namespace Core
 	{
 		json j = *_meshCollider;
 		return j;
+	}
+
+	void Serializer::DeserializeGameObject(GameObject* _gameObject, json _j)
+	{
+		return;
 	}
 }

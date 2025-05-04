@@ -22,13 +22,14 @@ namespace Core
 	{
 	public:
 		ECLIPSE_ENGINE void SerializeSceneToFile(Scene* _scene, std::string _filePath);
+		ECLIPSE_ENGINE void DeserializeSceneFromFile(Scene* _scene, std::string _filePath);
 
 		ECLIPSE_ENGINE json SerializeScene(Scene* _scene);
-		ECLIPSE_ENGINE json SerializeGameObject(GameObject* _gameObject);
+		ECLIPSE_ENGINE json SerializeGameObject(GameObject* _gameObject, int _parentIndex);
 
 	private:
 		json SerializeComponent(Component* _component);
-		json SerializeTransform(Transform* _transform);
+		json SerializeTransform(Transform* _transform, int _parentIndex);
 		json SerializeModel(Model* _model);
 		json SerializeDirectionalLight(DirectionalLight* _dirLight);
 		json SerializePointLight(PointLight* _pointLight);
@@ -36,5 +37,7 @@ namespace Core
 		json SerializeBoxCollider(BoxCollider* _boxCollider);
 		json SerializeCapsuleCollider(CapsuleCollider* _capsuleCollider);
 		json SerializeMeshCollider(MeshCollider* _meshCollider);
+
+		void DeserializeGameObject(GameObject* _gameObject, json _j);
 	};
 }

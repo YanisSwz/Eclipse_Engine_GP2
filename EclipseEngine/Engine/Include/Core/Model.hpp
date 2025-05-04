@@ -23,9 +23,9 @@ namespace Core
 		ECLIPSE_ENGINE inline Resource::Mesh* GetMesh() { return m_mesh; }
 		ECLIPSE_ENGINE inline Resource::Texture* GetTexture() { return m_texture; }
 		ECLIPSE_ENGINE inline Resource::ShaderProgram* GetShader() { return m_shader; }
-		ECLIPSE_ENGINE inline std::string GetMeshName() const { if (m_mesh) return m_mesh->name; else return ""; }
-		ECLIPSE_ENGINE inline std::string GetTextureName() const { if (m_mesh) return m_texture->name; else return ""; }
-		ECLIPSE_ENGINE inline std::string GetShaderName() const { if (m_mesh) return m_shader->name; else return ""; }
+		ECLIPSE_ENGINE inline std::string GetMeshName() const { return (m_mesh) ? m_mesh->name : ""; }
+		ECLIPSE_ENGINE inline std::string GetTextureName() const { return (m_texture) ? m_texture->name : ""; }
+		ECLIPSE_ENGINE inline std::string GetShaderName() const { return (m_shader) ? m_shader->name : ""; }
 		ECLIPSE_ENGINE void SetData(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader);
 		ECLIPSE_ENGINE inline void SetMesh(Resource::Mesh* _mesh) { m_mesh = _mesh; }
 		ECLIPSE_ENGINE inline void SetTexture(Resource::Texture* _texture) { m_texture = _texture; }

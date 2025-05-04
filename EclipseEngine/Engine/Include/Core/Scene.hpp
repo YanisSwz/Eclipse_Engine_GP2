@@ -17,7 +17,19 @@ namespace Core
 		ECLIPSE_ENGINE GameObject* CreateGameObject();
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
 		ECLIPSE_ENGINE inline int GetCount() { return m_currentGameObjectCount; }
-		ECLIPSE_ENGINE inline GameObject* GetGameObject(int _index) { return (_index < MAX_SIZE)  ? &m_gameObjects[_index] : nullptr; }
+		ECLIPSE_ENGINE inline GameObject* GetGameObject(int _index) { return (_index < MAX_SIZE) ? &m_gameObjects[_index] : nullptr; }
+		/// <summary>
+		/// Returns the index of _gameObject if it exists in the Scene, -1 otherwise
+		/// </summary>
+		/// <param name="_gameObject"></param>
+		/// <returns></returns>
+		ECLIPSE_ENGINE int GetGameObjectIndex(GameObject* _gameObject);
+		/// <summary>
+		/// Returns given gameObject's parent index (through its index) if it exists in the Scene, -1 otherwise
+		/// </summary>
+		/// <param name="_index"> : index of the given GameObject</param>
+		/// <returns></returns>
+		ECLIPSE_ENGINE int GetGameObjectParentIndex(int _index);
 
 	private:
 		static const int MAX_SIZE = 100;
