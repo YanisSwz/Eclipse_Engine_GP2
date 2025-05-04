@@ -17,19 +17,26 @@ namespace GUI
 		ImGui::SetNextWindowSizeConstraints({ 100.f, 200.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags contentBrowserWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Content Browser", 0, contentBrowserWindowFlags);
-		//ImGui::Begin("            Content Browser", 0, contentBrowserWindowFlags);
-		//ImVec2 windowPos = ImGui::GetWindowPos();
-		//ImVec2 windowSize = ImGui::GetWindowSize();
-		//Resource::Texture* folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("FolderIcon.img");
 
-		//ImGui::PushClipRect(windowPos, windowSize, false);
-		//ImGui::SetCursorPos(ImVec2(35.f, 0.f));
-		//ImGui::Image(folderIcon->GetID(), { 30.f, 30.f }, {0, 1}, {1, 0});
-		//ImGui::PopClipRect(); 
+		ImGui::Columns(2);
+		static bool first = true;
+		if (first)
+		{
+			first = false;
+			ImGui::SetColumnWidth(0, ImGui::GetContentRegionAvail().x / 3.f);
+		}
 
-		FolderGUI* newFolderSelected = m_crtFolderSelected->Draw();
-		if (newFolderSelected)
-			m_crtFolderSelected = newFolderSelected;
+		FolderGUI* tempNewFolderSelected = m_folderRoot->DrawHierarchy(*m_crtFolderSelected);
+		if (tempNewFolderSelected)
+			m_crtFolderSelected = tempNewFolderSelected;
+
+		ImGui::NextColumn();
+
+		tempNewFolderSelected = m_crtFolderSelected->Draw();
+		if (tempNewFolderSelected)
+			m_crtFolderSelected = tempNewFolderSelected;
+
+		ImGui::Columns(1);
 
 		ImGui::End();
 	}

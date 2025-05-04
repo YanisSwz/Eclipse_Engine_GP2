@@ -39,9 +39,20 @@ namespace Resource
 
 		bIsLoaded = true;
 	}
+
 	unsigned int Texture::GetID() const
 	{
 		return m_texture->GetID();
+	}
+
+	int Texture::GetWidth() const
+	{
+		return m_width;
+	}
+
+	int Texture::GetHeight() const
+	{
+		return m_height;
 	}
 
 	void Texture::Bind()

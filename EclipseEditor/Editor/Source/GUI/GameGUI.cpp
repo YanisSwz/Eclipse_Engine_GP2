@@ -18,6 +18,7 @@ namespace GUI
 			ImGui::SetCursorPos({ windowSize.x / 2.f - 80.f, windowSize.y / 2.f });
 			ImGui::SetWindowFontScale(2.f);
 			ImGui::Text("No Camera");
+			ImGui::SetWindowFontScale(1.f);
 
 			ImGui::End();
 			return;

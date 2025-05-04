@@ -3,6 +3,7 @@
 #include "Resource/Texture.hpp"
 #include "Resource/Mesh.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
+#include <math.h>
 
 namespace GUI
 {
@@ -24,7 +25,7 @@ namespace GUI
 				m_textureFiles.push_back(Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(textureName));
 
 			return;
-		}	
+		}
 		if (name == "Mesh")
 		{
 			std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
@@ -53,6 +54,31 @@ namespace GUI
 		m_parent = _parent;
 	}
 
+	FolderGUI* FolderGUI::DrawHierarchy(const FolderGUI& _currentFolder)
+	{
+		FolderGUI* newFolderSelected = nullptr;
+
+		ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_LabelSpanAllColumns | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow;
+		if (this == &_currentFolder)
+			treeNodeFlags |= ImGuiTreeNodeFlags_Selected;
+
+		if (ImGui::TreeNodeEx(name.c_str(), treeNodeFlags))
+		{
+			if (ImGui::IsItemClicked())
+				newFolderSelected = this;
+
+			for (FolderGUI* child : m_folderChildren)
+			{
+				FolderGUI* tempFolderSelected = child->DrawHierarchy(_currentFolder);
+				if (tempFolderSelected)
+					newFolderSelected = tempFolderSelected;
+			}
+			ImGui::TreePop();
+		}
+
+		return newFolderSelected;
+	}
+
 	FolderGUI* FolderGUI::Draw()
 	{
 		if (m_parent)
@@ -60,13 +86,17 @@ namespace GUI
 			if (ImGui::Button("Return"))
 				return m_parent;
 		}
+		FolderGUI* newCrtFolder = nullptr;
 
 		int folderChildrenSize = static_cast<int>(m_folderChildren.size());
 		int texturesFilesSize = static_cast<int>(m_textureFiles.size());
 		int meshFilesSize = static_cast<int>(m_meshFiles.size());
 
 		int nbElem = folderChildrenSize + texturesFilesSize + meshFilesSize;
-		int nbElemInColumn = static_cast<int>(ImGui::GetContentRegionAvail().x / 100.f);
+		float tempNbElemInColumn = ImGui::GetColumnWidth() / 150.f;
+		int nbElemInColumn = fmod(tempNbElemInColumn, 1.f) <= 0.65f ? static_cast<int>(tempNbElemInColumn) - 2 : static_cast<int>(tempNbElemInColumn) - 1;
+
+		Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "%f", ImGui::GetColumnWidth());
 		if (nbElemInColumn == 0)
 			nbElemInColumn = 1;
 
@@ -79,12 +109,13 @@ namespace GUI
 					if (i % nbElemInColumn == 0)
 						ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(i % nbElemInColumn);
+					ImGui::SetNextItemWidth(150.f);
 
 					if (i < folderChildrenSize)
 					{
-						FolderGUI* newCrtFolder = DrawFolderGUI(i);
-						if (newCrtFolder)
-							return newCrtFolder;
+						FolderGUI* tempNewCrtFolder = DrawFolderGUI(i);
+						if (tempNewCrtFolder)
+							newCrtFolder = tempNewCrtFolder;
 					}
 					else if (i < folderChildrenSize + texturesFilesSize)
 					{
@@ -98,24 +129,23 @@ namespace GUI
 				ImGui::EndTable();
 			}
 		}
-		return nullptr;
+		return newCrtFolder;
 	}
 
 	FolderGUI* FolderGUI::DrawFolderGUI(int _index)
 	{
-		std::string invisibleFolderName = "##";
+		FolderGUI* newFolderSelected = nullptr;
 
-		invisibleFolderName.append(m_folderChildren[_index]->name).append(" Folder Button");
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
-		if (ImGui::ImageButton(invisibleFolderName.c_str(), m_folderIcon->GetID(), { 100.f, 100.f }, { 0.f, 1.f }, {1.f, 0.f}))
-		{
-			ImGui::PopStyleVar();
-			ImGui::EndTable();
-			return m_folderChildren[_index];
-		}
+		
+		std::string invisibleFolderName = "##";
+		invisibleFolderName.append(m_folderChildren[_index]->name).append(" Folder Button");
+		if (ImGui::ImageButton(invisibleFolderName.c_str(), m_folderIcon->GetID(), { 100.f, 100.f }, { 0.f, 1.f }, { 1.f, 0.f }))
+			newFolderSelected = m_folderChildren[_index];
+		
 		ImGui::PopStyleVar();
 		ImGui::Text(m_folderChildren[_index]->name.c_str());
-		return nullptr;
+		return newFolderSelected;
 	}
 
 	void FolderGUI::DrawTextureGUI(int _index)
