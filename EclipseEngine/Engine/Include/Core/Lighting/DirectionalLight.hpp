@@ -8,12 +8,17 @@ namespace Core
 	class DirectionalLight : public ILight
 	{
 	public:
-		ECLIPSE_ENGINE DirectionalLight();
-		ECLIPSE_ENGINE ~DirectionalLight();
+		static meta::factory<DirectionalLight> factory;
+
+		ECLIPSE_ENGINE DirectionalLight() = default;
+		ECLIPSE_ENGINE ~DirectionalLight() = default;
 
 		ECLIPSE_ENGINE RHI::DirLightData GetData() const;
 
 	private:
 		Math::Vec3 GetDirection() const;
 	};
+
+	void to_json(json& _j, const DirectionalLight& _dirLight);
+	void from_json(const json& _j, DirectionalLight& _dirLight);
 }

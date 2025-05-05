@@ -39,6 +39,8 @@ namespace Resource
 	template <typename T>
 	T* ResourceManager::GetResource(std::string _resourceName)
 	{
+		if (_resourceName == "")
+			return nullptr;
 		auto it = m_resourcesReady.find(_resourceName);
 		if (it == m_resourcesReady.end())
 			return nullptr;

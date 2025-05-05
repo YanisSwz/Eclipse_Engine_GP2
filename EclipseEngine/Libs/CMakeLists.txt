@@ -49,3 +49,14 @@ target_link_libraries(ECLIPSE_ENGINE PUBLIC Jolt)
 # SoLoud
 add_subdirectory(SoLoud)
 target_link_libraries(ECLIPSE_ENGINE PUBLIC SoLoud)
+
+# Meta
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(BUILD_DOCS OFF CACHE BOOL "" FORCE)
+add_subdirectory(Meta)
+target_link_libraries(ECLIPSE_ENGINE PUBLIC meta)
+
+# Json
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+add_subdirectory(Json)
+target_link_libraries(ECLIPSE_ENGINE PUBLIC nlohmann_json::nlohmann_json)

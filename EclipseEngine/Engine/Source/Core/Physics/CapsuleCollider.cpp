@@ -12,6 +12,15 @@ using namespace JPH::literals;
 
 namespace Core
 {
+	meta::factory<CapsuleCollider> CapsuleCollider::factory = meta::reflect<CapsuleCollider>(hash("CapsuleCollider"))
+		.data<&CapsuleCollider::SetActive, &CapsuleCollider::IsActive>(hash("IsActive"))
+		.data<&CapsuleCollider::SetDynamic, &CapsuleCollider::GetIsDynamic>(hash("IsDynamic"))
+		.data<&CapsuleCollider::SetMass, &CapsuleCollider::GetMass>(hash("Mass"));
+		//.func<&CapsuleCollider::GetOffsetPos>(hash("GetPositionOffset"))
+		//.func<&CapsuleCollider::GetScale>(hash("GetScale"))
+		//.func<&BoxCollider::SetOffsetPos<Math::Vec3>>(hash("SetPositionOffset"))
+		//.func<&BoxCollider::Scale>(hash("SetScale"));
+
 	CapsuleCollider::CapsuleCollider()
 	{
 	}
@@ -106,5 +115,32 @@ namespace Core
 		this->~CapsuleCollider();
 		new (this) CapsuleCollider(bodyInterface, isDynamic, mass, scale, position, rotationEuler, gameObject,
 			myVelocity, myAngularVelocity);
+	}
+
+	void to_json(json& _j, const CapsuleCollider& _capsuleCollider)
+	{
+		Math::Vec3 position = _capsuleCollider.GetPosition();
+		Math::Vec3 offsetPosition = _capsuleCollider.GetOffsetPos();
+		Math::Vec3 scale = _capsuleCollider.GetScale();
+		Math::Quat rotation = _capsuleCollider.GetRotation();
+
+		_j = json{
+			{"IsActive", _capsuleCollider.IsActive()},
+			{"IsDynamic", _capsuleCollider.GetIsDynamic()},
+			{"Position", {position.x, position.y, position.z}},
+			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
+			{"Scale", {scale.x, scale.y, scale.z}},
+			{"Rotation", {rotation.w, rotation.x, rotation.y, rotation.z}},
+			{"Mass", _capsuleCollider.GetMass()}
+		};
+	}
+
+	void from_json(const json& _j, CapsuleCollider& _capsuleCollider)
+	{
+		bool bIsActive;
+
+		_j.at("IsActive").get_to(bIsActive);
+
+		_capsuleCollider.SetActive(bIsActive);
 	}
 }

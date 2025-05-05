@@ -12,6 +12,8 @@
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
 
+#include "Serializer.hpp"
+
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
 	m_height(_height)
@@ -347,6 +349,8 @@ void EditorApp::LoadScene()
 	soundTest->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
 	soundTest->name = "Sound Test";
 	soundTest->AddComponent<Core::AudioSource>();
+	Core::Serializer serializer;
+	serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
 }
 
 void EditorApp::DrawScene()

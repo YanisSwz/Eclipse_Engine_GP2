@@ -7,6 +7,8 @@ namespace Core
 	class BoxCollider : public ICollider
 	{
 	public:
+		static meta::factory<BoxCollider> factory;
+
 		ECLIPSE_ENGINE BoxCollider();
 		ECLIPSE_ENGINE BoxCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic = false,
 			float _mass = 1.f, Math::Vec3 _size = { 1.f, 1.f, 1.f }, Math::Vec3 _pos = { 0.f, 0.f, 0.f },
@@ -19,8 +21,10 @@ namespace Core
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale) override;
 
 	private:
-
 		void UpdateData();
 		void Recreate() override;
 	};
+
+	void to_json(json& _j, const BoxCollider& _boxCollider);
+	void from_json(const json& _j, BoxCollider& _boxCollider);
 }

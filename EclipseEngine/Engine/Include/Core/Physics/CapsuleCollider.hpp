@@ -7,6 +7,8 @@ namespace Core
 	class CapsuleCollider : public ICollider
 	{
 	public:
+		static meta::factory<CapsuleCollider> factory;
+
 		ECLIPSE_ENGINE CapsuleCollider();
 		ECLIPSE_ENGINE CapsuleCollider(JPH::BodyInterface* _bodyInterface, bool _isDynamic = false, 
 			float _mass = 1.f, Math::Vec3 _scale = {1.f, 1.f, 1.f}, Math::Vec3 _pos = {0.f, 0.f, 0.f}, 
@@ -19,7 +21,9 @@ namespace Core
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale) override;
 
 	private:
-		
 		void Recreate() override;
 	};
+
+	void to_json(json& _j, const CapsuleCollider& _capsuleCollider);
+	void from_json(const json& _j, CapsuleCollider& _capsuleCollider);
 }

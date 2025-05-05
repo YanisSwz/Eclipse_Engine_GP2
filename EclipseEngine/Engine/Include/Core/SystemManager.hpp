@@ -19,6 +19,7 @@ namespace Core
 		ECLIPSE_ENGINE void Update(float _deltaTime, GAME_STATE _state);
 		ECLIPSE_ENGINE Transform* AddTransform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE Transform* GetTransformsRoot() const;
+		ECLIPSE_ENGINE inline RenderSystem* GetRenderSystem() { return &m_renderSystem; };
 		ECLIPSE_ENGINE AudioSystem* GetAudioSystem();
 		ECLIPSE_ENGINE CameraSystem* GetCameraSystem();
 		ECLIPSE_ENGINE void Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos);

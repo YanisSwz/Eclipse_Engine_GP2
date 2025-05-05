@@ -13,16 +13,30 @@ namespace Core
 	class Model : public Component
 	{
 	public:
-		ECLIPSE_ENGINE Model();
+		static meta::factory<Model> factory;
+
+		ECLIPSE_ENGINE Model() = default;
 		ECLIPSE_ENGINE Model(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader);
-		ECLIPSE_ENGINE ~Model();
+		ECLIPSE_ENGINE ~Model() = default;
 
 		ECLIPSE_ENGINE Resource::ModelData GetModelData() const;
+		ECLIPSE_ENGINE inline Resource::Mesh* GetMesh() { return m_mesh; }
+		ECLIPSE_ENGINE inline Resource::Texture* GetTexture() { return m_texture; }
+		ECLIPSE_ENGINE inline Resource::ShaderProgram* GetShader() { return m_shader; }
+		ECLIPSE_ENGINE inline std::string GetMeshName() const { return (m_mesh) ? m_mesh->name : ""; }
+		ECLIPSE_ENGINE inline std::string GetTextureName() const { return (m_texture) ? m_texture->name : ""; }
+		ECLIPSE_ENGINE inline std::string GetShaderName() const { return (m_shader) ? m_shader->name : ""; }
 		ECLIPSE_ENGINE void SetData(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader);
+		ECLIPSE_ENGINE inline void SetMesh(Resource::Mesh* _mesh) { m_mesh = _mesh; }
+		ECLIPSE_ENGINE inline void SetTexture(Resource::Texture* _texture) { m_texture = _texture; }
+		ECLIPSE_ENGINE inline void SetShader(Resource::ShaderProgram* _shader) { m_shader = _shader; }
 
-		Resource::Mesh* mesh = nullptr;
-		Resource::Texture* texture = nullptr;
-		Resource::ShaderProgram* shader = nullptr;
-	
+	private:
+		Resource::Mesh* m_mesh = nullptr;
+		Resource::Texture* m_texture = nullptr;
+		Resource::ShaderProgram* m_shader = nullptr;
 	};
+
+	void to_json(json& _j, const Model& _model);
+	void from_json(const json& _j, Model& _model);
 }

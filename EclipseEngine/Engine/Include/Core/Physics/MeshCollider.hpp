@@ -1,7 +1,6 @@
 #pragma once
 #include "ICollider.hpp"
 #include "ProjectExports.hpp"
-
 #include <Jolt/Jolt.h>
 #include <Jolt/Math/Float3.h>
 #include <Jolt/Geometry/IndexedTriangle.h>
@@ -16,13 +15,16 @@ namespace Core
 	class MeshCollider : public ICollider
 	{
 	public:
+		static meta::factory<MeshCollider> factory;
+
 		ECLIPSE_ENGINE MeshCollider();
 		ECLIPSE_ENGINE MeshCollider(JPH::BodyInterface* _bodyInterface, float _mass = 1.f,
 			Math::Vec3 _size = { 1.f, 1.f, 1.f }, Math::Vec3 _pos = { 0.f, 0.f, 0.f },
 			Math::Vec3 _rot = { 0.f, 0.f, 0.f }, GameObject* _myGameObject = nullptr,
 			JPH::VertexList _vertexList = JPH::VertexList(),
 			JPH::IndexedTriangleList _indexTriangleList = JPH::IndexedTriangleList(),
-			Math::Vec3 _linearVelocity = { 0.f, 0.f, 0.f }, Math::Vec3 _angularVelocity = { 0.f, 0.f, 0.f });
+			Math::Vec3 _linearVelocity = { 0.f, 0.f, 0.f }, Math::Vec3 _angularVelocity = { 0.f, 0.f, 0.f },
+			Resource::Mesh* _currMesh = nullptr);
 		ECLIPSE_ENGINE ~MeshCollider() override;
 		
 		ECLIPSE_ENGINE void SetDynamic(bool _isDynamic) override;
@@ -34,8 +36,9 @@ namespace Core
 		ECLIPSE_ENGINE void Scale(float _scaleX, float _scaleY, float _scaleZ) override;
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale) override;
 
-	private:
+		ECLIPSE_ENGINE std::string GetMeshName() const;
 
+	private:
 		JPH::VertexList m_vertexList;
 		JPH::IndexedTriangleList m_indexTriangleList;
 		const char* m_defaultMesh = "Cube.obj";
@@ -44,4 +47,7 @@ namespace Core
 		void SetDefaultMesh();
 		void Recreate() override;
 	};
+
+	void to_json(json& _j, const MeshCollider& _meshCollider);
+	void from_json(const json& _j, MeshCollider& _meshCollider);
 }

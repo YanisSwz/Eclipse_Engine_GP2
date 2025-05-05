@@ -54,4 +54,35 @@ namespace Core
 
 		m_state = _state;
 	}
+	
+	int Scene::GetGameObjectIndex(GameObject* _gameObject)
+	{
+		if (!_gameObject)
+			return -1;
+		
+		int id = _gameObject->GetID();
+		for (int i = 0; i < m_currentGameObjectCount; ++i)
+		{
+			if (m_gameObjects[i].GetID() == id)
+				return i;
+		}
+
+		return -1;
+	}
+
+	int Scene::GetGameObjectParentIndex(int _index)
+	{
+		if (_index < 0 || _index > MAX_SIZE)
+			return -1;
+
+		GameObject* parent = nullptr;
+		Transform* parentTransform = m_gameObjects[_index].transform->GetParent();
+		if (parentTransform)
+		{
+			parent = parentTransform->GetGameObject();
+			return GetGameObjectIndex(parent);
+		}
+
+		return -1;
+	}
 }

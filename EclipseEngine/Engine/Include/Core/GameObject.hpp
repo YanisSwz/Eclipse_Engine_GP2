@@ -13,6 +13,8 @@ namespace Core
 	class GameObject : public Object
 	{
 	public:
+		static meta::factory<GameObject> factory;
+
 		ECLIPSE_ENGINE GameObject() = default;
 		ECLIPSE_ENGINE GameObject(SystemManager* _manager, Transform* _t = nullptr, std::string _name = "default");
 		ECLIPSE_ENGINE ~GameObject();
@@ -26,6 +28,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetActive(bool _active) override;
 
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
+		ECLIPSE_ENGINE inline std::vector<Component*> GetComponents() { return m_components; }
 
 		template <typename T>
 		T* AddComponent()
