@@ -37,6 +37,8 @@ namespace Windowing
 		virtual void SetCursorMode(CURSOR_MODE _mode) = 0;
 		virtual float GetMouseScrollValue() = 0;
 		virtual Math::Vec2 GetWindowPos() = 0;
+		virtual void MakeContextCurrent() = 0;
+		virtual void UpdateWindowSize() = 0;
 
 		inline virtual GLFWWindow* CastGLFW() { return nullptr; }
 	};

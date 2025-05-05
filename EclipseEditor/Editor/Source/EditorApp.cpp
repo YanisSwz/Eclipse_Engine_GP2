@@ -40,6 +40,7 @@ bool EditorApp::ShouldClose()
 
 void EditorApp::Update()
 {
+	m_window->UpdateWindowSize();
 	m_window->UpdateInputs();
 
 	if (m_window->GetKey(Windowing::KEY_CODE::KEY_ESCAPE, Windowing::INPUT_ACTION::INPUT_PRESS))
@@ -168,7 +169,7 @@ void EditorApp::Render()
 	DrawScene();
 
 	GUI::RenderGUI();
-	m_dockingGUI.End();
+	m_dockingGUI.End(m_window);
 	m_window->SwapBuffers();
 }
 
@@ -375,9 +376,9 @@ void EditorApp::PickObjectID()
 	{
 		Math::Vec2 mousePos = m_window->GetCursorPos();
 		int mousePosX = static_cast<int>(mousePos.x) - m_sceneWindowPosX;
-		int mousePosY = m_window->height - static_cast<int>(mousePos.y) - m_sceneWindowPosY - 1;
+		int mousePosY = m_sceneWindowHeight - static_cast<int>(mousePos.y) - m_sceneWindowPosY - 30; // -30 for the size of the ImGui window titlebar
 		int pickID = m_editorPipeline->PickObjectID(mousePosX, mousePosY);
-
+		
 		m_crtGOSelected = m_scene.GetObjectByID(pickID);
 	}
 }

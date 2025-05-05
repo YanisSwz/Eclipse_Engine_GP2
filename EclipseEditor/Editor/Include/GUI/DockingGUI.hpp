@@ -1,5 +1,10 @@
 #pragma once
 
+namespace Windowing
+{
+	class IWindow;
+}
+
 namespace GUI
 {
 	class DockingGUI
@@ -9,7 +14,7 @@ namespace GUI
 		~DockingGUI() = default;
 
 		void Start();
-		void End();
+		void End(Windowing::IWindow* _window);
 
 	private:
 

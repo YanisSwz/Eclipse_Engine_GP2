@@ -31,6 +31,8 @@ namespace Windowing
 		ECLIPSE_ENGINE inline GLFWwindow* GetWindow() { return m_window; }
 		ECLIPSE_ENGINE float GetMouseScrollValue() override;
 		ECLIPSE_ENGINE Math::Vec2 GetWindowPos() override;
+		ECLIPSE_ENGINE void MakeContextCurrent() override;
+		ECLIPSE_ENGINE void UpdateWindowSize() override;
 
 		inline virtual GLFWWindow* CastGLFW() { return this; }
 	};
