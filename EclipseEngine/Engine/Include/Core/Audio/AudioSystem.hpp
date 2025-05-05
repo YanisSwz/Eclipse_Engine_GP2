@@ -4,6 +4,7 @@
 #include "soloud_wav.h"
 #include "AudioSource.hpp"
 #include "AudioListener.hpp"
+#include <vector>
 
 namespace Core
 {
@@ -32,9 +33,12 @@ namespace Core
 		ECLIPSE_ENGINE inline bool IsAudioEnabled() const { return m_canPlay; }
 
 	private:
+		void ResetAudioSourcesPause();
+
 		static const int MAX_SIZE = 100;
 		int m_currentCount = 0;
 		AudioSource m_audioSources[MAX_SIZE];
+		std::vector<AudioSource*> m_audioSourcesToUnpause{};
 
 		static const int MAX_LISTENER_SIZE = 5;
 		int m_currentListenersCount = 0;

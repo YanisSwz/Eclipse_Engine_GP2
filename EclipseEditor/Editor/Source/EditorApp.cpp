@@ -351,6 +351,11 @@ void EditorApp::LoadScene()
 	soundTest->AddComponent<Core::AudioSource>();
 	Core::Serializer serializer;
 	serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
+
+	Core::GameObject* listener = m_scene.CreateGameObject();
+	listener->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
+	listener->name = "Listener";
+	listener->AddComponent<Core::AudioListener>();
 }
 
 void EditorApp::DrawScene()

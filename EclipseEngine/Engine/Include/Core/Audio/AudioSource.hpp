@@ -26,7 +26,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetClip(Resource::AudioClip* _clip);
 		ECLIPSE_ENGINE Resource::AudioClip* GetClip();
 		ECLIPSE_ENGINE void SetLooping(bool _looping);
-		ECLIPSE_ENGINE inline bool GetLooping() const { return m_looping; };
+		ECLIPSE_ENGINE inline bool GetLooping() const { return m_looping; }
 		ECLIPSE_ENGINE inline bool GetPause() const { return m_paused; }
 		ECLIPSE_ENGINE float* GetData() const;
 		ECLIPSE_ENGINE int GetSampleCount() const;
@@ -34,9 +34,10 @@ namespace Core
 		ECLIPSE_ENGINE float GetLength() const;
 		ECLIPSE_ENGINE void SetTime(float _time);
 		ECLIPSE_ENGINE bool IsPlaying() const;
+		ECLIPSE_ENGINE inline bool IsPaused() const { return m_paused; }
 		ECLIPSE_ENGINE void SetVolume(float _vol);
 		ECLIPSE_ENGINE float GetVolume() const;
-		ECLIPSE_ENGINE inline float GetSampleRate() const { return m_sampleRate; };
+		ECLIPSE_ENGINE inline float GetSampleRate() const { return m_sampleRate; }
 		ECLIPSE_ENGINE void SetSampleRate(float _rate);
 		ECLIPSE_ENGINE float GetPan() const;
 		ECLIPSE_ENGINE void SetPan(float _pan);

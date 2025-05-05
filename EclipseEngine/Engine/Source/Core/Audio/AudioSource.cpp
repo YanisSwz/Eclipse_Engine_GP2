@@ -93,7 +93,8 @@ namespace Core
 			return;
 		}
 		m_paused = !m_paused;
-		m_audioEngine->setPause(m_sound, m_paused);
+		if(m_audioEngine->isValidVoiceHandle(m_sound))
+			m_audioEngine->setPause(m_sound, m_paused);
 	}
 
 	void AudioSource::Stop()

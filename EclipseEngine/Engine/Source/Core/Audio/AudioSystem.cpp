@@ -15,6 +15,7 @@ namespace Core
 
 	void AudioSystem::Start()
 	{
+		ResetAudioSourcesPause();
 		if (m_currentListener == nullptr)
 		{
 			DisableAudio();
@@ -72,12 +73,32 @@ namespace Core
 
 	void AudioSystem::SetPause(bool _pause)
 	{
-		m_audioEngine.setPauseAll(_pause);
+		if (_pause)
+		{
+			for (int i = 0; i < m_currentCount; ++i)
+			{
+				if(!m_audioSources[i].IsPaused())
+				{
+					m_audioSources[i].Pause();
+					m_audioSourcesToUnpause.push_back(&m_audioSources[i]);
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < m_audioSourcesToUnpause.size(); ++i)
+			{
+				if (m_audioSourcesToUnpause[i]->IsPaused())
+					m_audioSourcesToUnpause[i]->Pause();
+			}
+			m_audioSourcesToUnpause.clear();
+		}
 	}
 
 	void AudioSystem::Stop()
 	{
 		m_audioEngine.stopAll();
+		ResetAudioSourcesPause();
 	}
 
 	void AudioSystem::PlayStartUp()
@@ -186,6 +207,15 @@ namespace Core
 				return m_currentListener;
 		}
 		return nullptr;
+	}
+
+	void AudioSystem::ResetAudioSourcesPause()
+	{
+		for (int i = 0; i < m_currentCount; ++i)
+		{
+			if (m_audioSources[i].IsPaused())
+				m_audioSources[i].Pause();
+		}
 	}
 
 	void AudioSystem::EnableAudio()
