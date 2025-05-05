@@ -1,6 +1,6 @@
 #include "GUI/DockingGUI.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
-#include "GLFW/glfw3.h"
+#include "Windowing/IWindow.hpp"
 
 namespace GUI
 {
@@ -29,14 +29,13 @@ namespace GUI
 		ImGui::End();
 	}
 
-	void DockingGUI::End()
+	void DockingGUI::End(Windowing::IWindow* _window)
 	{
 		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
-			GLFWwindow* backup_current_context = glfwGetCurrentContext(); // TODO Replace with window wrapper
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context); // TODO Replace with window wrapper
+			_window->MakeContextCurrent();
 		}
 	}
 }

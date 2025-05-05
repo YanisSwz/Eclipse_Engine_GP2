@@ -39,6 +39,7 @@ namespace Windowing
 
         // Set mouse scroll callback
         glfwSetScrollCallback(m_window, scroll_callback);
+        glfwGetWindowSize(m_window, &width, &height);
     }
 
     float GLFWWindow::GetTime()
@@ -176,6 +177,16 @@ namespace Windowing
         int x, y;
         glfwGetWindowPos(m_window, &x, &y);
         return Math::Vec2(static_cast<float>(x), static_cast<float>(y));
+    }
+
+    void GLFWWindow::MakeContextCurrent()
+    {
+        glfwMakeContextCurrent(m_window);
+    }
+
+    void GLFWWindow::UpdateWindowSize()
+    {
+        glfwGetWindowSize(m_window, &width, &height);
     }
 
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
