@@ -109,7 +109,10 @@ namespace Core
 	AudioSource* AudioSystem::AddAudioSource()
 	{
 		if (m_currentCount >= MAX_SIZE)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Max audio source capacity reached, cannot add more!");
 			return nullptr;
+		}
 
 		for (int i = 0; i < m_currentCount; ++i)
 		{
@@ -133,7 +136,10 @@ namespace Core
 	AudioListener* AudioSystem::AddAudioListener()
 	{
 		if (m_currentListenersCount >= MAX_LISTENER_SIZE)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Max audio listener capacity reached, cannot add more!");
 			return nullptr;
+		}
 
 		for (int i = 0; i < m_currentListenersCount; ++i)
 		{
