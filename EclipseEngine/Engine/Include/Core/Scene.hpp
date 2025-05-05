@@ -36,6 +36,8 @@ namespace Core
 		ECLIPSE_ENGINE inline GAME_STATE GetState() const { return m_state; }
 		ECLIPSE_ENGINE void SetState(GAME_STATE _state);
 
+		ECLIPSE_ENGINE void Reset();
+
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentGameObjectCount = 0;

@@ -34,17 +34,17 @@ namespace Core
 		m_shader = _shader;
 	}
 
-	void to_json(json& _j, const Model& _model)
+	void Model::Serialize(json& _j)
 	{
 		_j = json{
-			{"IsActive", _model.IsActive()},
-			{"Mesh", _model.GetMeshName()},
-			{"Texture", _model.GetTextureName()},
-			{"Shader", _model.GetShaderName()}
+			{"IsActive", IsActive()},
+			{"Mesh", GetMeshName()},
+			{"Texture", GetTextureName()},
+			{"Shader", GetShaderName()}
 		};
 	}
 
-	void from_json(const json& _j, Model& _model)
+	void Model::Deserialize(const json& _j)
 	{
 		bool bIsActive;
 		std::string meshName;
@@ -58,7 +58,7 @@ namespace Core
 
 		Resource::ResourceManager resourceManager = Resource::ResourceManager::GetInstance();
 
-		_model.SetActive(bIsActive);
-		_model.SetData(resourceManager.GetResource<Resource::Mesh>(meshName), resourceManager.GetResource<Resource::Texture>(textureName), resourceManager.GetResource<Resource::ShaderProgram>(shaderName));
+		SetActive(bIsActive);
+		SetData(resourceManager.GetResource<Resource::Mesh>(meshName), resourceManager.GetResource<Resource::Texture>(textureName), resourceManager.GetResource<Resource::ShaderProgram>(shaderName));
 	}
 }

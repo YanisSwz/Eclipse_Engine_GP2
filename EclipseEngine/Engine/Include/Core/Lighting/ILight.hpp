@@ -21,6 +21,9 @@ namespace Core
 		};
 		inline Math::Vec4 GetColor() const { return m_color; };
 		inline Math::Vec4& GetColorRef() { return m_color; };
+
+		virtual void Serialize(json& _j) override = 0;
+		virtual void Deserialize(const json& _j) override = 0;
 		
 	protected:
 		Math::Vec4 m_color;

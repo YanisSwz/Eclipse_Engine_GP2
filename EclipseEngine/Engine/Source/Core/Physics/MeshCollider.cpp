@@ -216,31 +216,31 @@ namespace Core
 			gameObject, vertexList, indexTriangleList, myVelocity, myAngularVelocity, currMesh);
 	}
 
-	void to_json(json& _j, const MeshCollider& _meshCollider)
+	void MeshCollider::Serialize(json& _j)
 	{
-		Math::Vec3 position = _meshCollider.GetPosition();
-		Math::Vec3 offsetPosition = _meshCollider.GetOffsetPos();
-		Math::Vec3 scale = _meshCollider.GetScale();
-		Math::Quat rotation = _meshCollider.GetRotation();
+		Math::Vec3 position = GetPosition();
+		Math::Vec3 offsetPosition = GetOffsetPos();
+		Math::Vec3 scale = GetScale();
+		Math::Quat rotation = GetRotation();
 
 		_j = json{
-			{"IsActive", _meshCollider.IsActive()},
-			{"IsDynamic", _meshCollider.GetIsDynamic()},
+			{"IsActive", IsActive()},
+			{"IsDynamic", GetIsDynamic()},
 			{"Position", {position.x, position.y, position.z}},
 			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
 			{"Scale", {scale.x, scale.y, scale.z}},
 			{"Rotation", {rotation.w, rotation.x, rotation.y, rotation.z}},
-			{"Mass", _meshCollider.GetMass()},
-			{"Mesh", _meshCollider.GetMeshName()}
+			{"Mass", GetMass()},
+			{"Mesh", GetMeshName()}
 		};
 	}
 
-	void from_json(const json& _j, MeshCollider& _meshCollider)
+	void MeshCollider::Deserialize(const json& _j)
 	{
 		bool bIsActive;
 
 		_j.at("IsActive").get_to(bIsActive);
 
-		_meshCollider.SetActive(bIsActive);
+		SetActive(bIsActive);
 	}
 }

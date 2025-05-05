@@ -19,6 +19,9 @@ namespace Core
 		ECLIPSE_ENGINE bool IsCurrentListener() const;
 		ECLIPSE_ENGINE void SetCurrentListener();
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		void UpdateAll();
 		void UpdatePosition();

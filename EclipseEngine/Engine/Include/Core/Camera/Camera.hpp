@@ -33,6 +33,9 @@ namespace Core
 		
 		ECLIPSE_ENGINE void Destroy() override;
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		float m_fov;
 		float m_near;

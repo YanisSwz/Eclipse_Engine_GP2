@@ -400,7 +400,7 @@ namespace Core
 		m_localRotation.Normalize();
 
 		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
-		m_rotation = m_parent->m_rotation * m_localRotation;
+		m_rotation = m_parent ? (m_parent->m_rotation * m_localRotation) : m_localRotation;
 		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
 		m_rotationChanged = true;
 
@@ -421,7 +421,7 @@ namespace Core
 		m_localEulerAngles.z = _z;
 
 		m_localRotation = Math::Quat::QuaternionEuler(m_localEulerAngles.x, m_localEulerAngles.y, m_localEulerAngles.z);
-		m_rotation = m_parent->m_rotation * m_localRotation;
+		m_rotation = m_parent ? (m_parent->m_rotation * m_localRotation) : m_localRotation;
 		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
 		m_rotationChanged = true;
 
@@ -435,12 +435,12 @@ namespace Core
 			m_positionChanged = true;
 	}
 
-	void to_json(json& _j, const Transform& _transform)
+	void Transform::Serialize(json& _j)
 	{
-		Math::Vec3 localPosition = _transform.GetLocalPosition();
-		Math::Vec3 localScale = _transform.GetLocalScale();
-		Math::Quat localRotation = _transform.GetLocalRotation();
-		Math::Vec3 localEulerAngles = _transform.GetLocalEulerAngles();
+		Math::Vec3 localPosition = GetLocalPosition();
+		Math::Vec3 localScale = GetLocalScale();
+		Math::Quat localRotation = GetLocalRotation();
+		Math::Vec3 localEulerAngles = GetLocalEulerAngles();
 
 		_j = json{
 			{"LocalPosition", { localPosition.x, localPosition.y, localPosition.z }},
@@ -450,7 +450,7 @@ namespace Core
 		};
 	}
 
-	void from_json(const json& _j, Transform& _transform)
+	void Transform::Deserialize(const json& _j)
 	{
 		float localPosition[3];
 		float localScale[3];
@@ -462,13 +462,13 @@ namespace Core
 		_j.at("LocalRotation").get_to(localRotation);
 		_j.at("LocalEulerAngles").get_to(localEulerAngles);
 		
-		_transform.SetLocalPosition(localPosition[0], localPosition[1], localPosition[2]);
-		_transform.SetLocalScale(localScale[0], localScale[1], localScale[2]);
-		_transform.SetLocalRotation(localRotation[0], localRotation[1], localRotation[2], localRotation[3]);
-		_transform.SetLocalEulerAngles(localEulerAngles[0], localEulerAngles[1], localEulerAngles[2]);
+		SetLocalPosition(localPosition[0], localPosition[1], localPosition[2]);
+		SetLocalScale(localScale[0], localScale[1], localScale[2]);
+		SetLocalRotation(localRotation[0], localRotation[1], localRotation[2], localRotation[3]);
+		SetLocalEulerAngles(localEulerAngles[0], localEulerAngles[1], localEulerAngles[2]);
 
-		_transform.SetPositionChanged(true);
-		_transform.SetScaleChanged(true);
-		_transform.SetRotationChanged(true);
+		SetPositionChanged(true);
+		SetScaleChanged(true);
+		SetRotationChanged(true);
 	}
 }

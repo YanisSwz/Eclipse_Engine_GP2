@@ -117,30 +117,30 @@ namespace Core
 			myVelocity, myAngularVelocity);
 	}
 
-	void to_json(json& _j, const CapsuleCollider& _capsuleCollider)
+	void CapsuleCollider::Serialize(json& _j)
 	{
-		Math::Vec3 position = _capsuleCollider.GetPosition();
-		Math::Vec3 offsetPosition = _capsuleCollider.GetOffsetPos();
-		Math::Vec3 scale = _capsuleCollider.GetScale();
-		Math::Quat rotation = _capsuleCollider.GetRotation();
+		Math::Vec3 position = GetPosition();
+		Math::Vec3 offsetPosition = GetOffsetPos();
+		Math::Vec3 scale = GetScale();
+		Math::Quat rotation = GetRotation();
 
 		_j = json{
-			{"IsActive", _capsuleCollider.IsActive()},
-			{"IsDynamic", _capsuleCollider.GetIsDynamic()},
+			{"IsActive", IsActive()},
+			{"IsDynamic", GetIsDynamic()},
 			{"Position", {position.x, position.y, position.z}},
 			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
 			{"Scale", {scale.x, scale.y, scale.z}},
 			{"Rotation", {rotation.w, rotation.x, rotation.y, rotation.z}},
-			{"Mass", _capsuleCollider.GetMass()}
+			{"Mass", GetMass()}
 		};
 	}
 
-	void from_json(const json& _j, CapsuleCollider& _capsuleCollider)
+	void CapsuleCollider::Deserialize(const json& _j)
 	{
 		bool bIsActive;
 
 		_j.at("IsActive").get_to(bIsActive);
 
-		_capsuleCollider.SetActive(bIsActive);
+		SetActive(bIsActive);
 	}
 }

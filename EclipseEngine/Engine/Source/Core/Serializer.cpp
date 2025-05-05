@@ -8,34 +8,45 @@
 #include "Physics/BoxCollider.hpp"
 #include "Physics/CapsuleCollider.hpp"
 #include "Physics/MeshCollider.hpp"
+#include "Camera/Camera.hpp"
+#include "Audio/AudioSource.hpp"
+#include "Audio/AudioListener.hpp"
 #include <fstream>
 
 namespace Core
 {
 	void Serializer::SerializeSceneToFile(Scene* _scene, std::string _filePath)
 	{
-		std::ofstream o(_filePath);
-		o << std::setw(4) << SerializeScene(_scene) << std::endl;
+		std::ofstream fileStream(_filePath);
+		fileStream << std::setw(4) << SerializeScene(_scene) << std::endl;
 	}
 
 	void Serializer::DeserializeSceneFromFile(Scene* _scene, std::string _filePath)
 	{
-		std::ifstream i(_filePath);
+		std::ifstream fileStream(_filePath);
 		json scene;
-		i >> scene;
+		fileStream >> scene;
+		
+		DeserializeScene(_scene, scene);
+	}
 
+	void Serializer::DeserializeScene(Scene* _scene, const json& _j)
+	{
 		float ambientLight[4];
-		scene.at("AmbientLight").get_to(ambientLight);
+		_j.at("AmbientLight").get_to(ambientLight);
 		_scene->GetSystemManager()->GetRenderSystem()->SetAmbientLight({ ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3] });
 
-		json gameObjects = scene.at("GameObjects");
+		json gameObjects = _j.at("GameObjects");
 		int gameObjectCount = static_cast<int>(gameObjects.size());
+
+		std::vector<int> parents;
 
 		for (int i = 0; i < gameObjectCount; ++i)
 		{
 			json gameObjectJson = gameObjects[i];
 
 			GameObject* gameObject = _scene->CreateGameObject();
+			parents.push_back(DeserializeGameObject(gameObject, gameObjectJson));
 		}
 	}
 
@@ -101,61 +112,103 @@ namespace Core
 		{
 			component["MeshCollider"] = SerializeMeshCollider(dynamicMeshCollider_ptr);
 		}
+		else if (Camera* dynamicCamera_ptr = dynamic_cast<Camera*>(_component))
+		{
+			component["Camera"] = SerializeCamera(dynamicCamera_ptr);
+		}
+		else if (AudioSource* dynamicAudioSource_ptr = dynamic_cast<AudioSource*>(_component))
+		{
+			component["AudioSource"] = SerializeAudioSource(dynamicAudioSource_ptr);
+		}
+		else if (AudioListener* dynamicAudioListener_ptr = dynamic_cast<AudioListener*>(_component))
+		{
+			component["AudioListener"] = SerializeAudioListener(dynamicAudioListener_ptr);
+		}
 
 		return component;
 	}
 
 	json Serializer::SerializeTransform(Transform* _transform, int _parentIndex)
 	{
-		json j = *_transform;
+		json j ;
+		_transform->Serialize(j);
 		j["ParentIndex"] = _parentIndex;
 		return j;
 	}
 
 	json Serializer::SerializeModel(Model* _model)
 	{
-		json j = *_model;
+		json j;
+		_model->Serialize(j);;
 		return j;
 	}
 
 	json Serializer::SerializeDirectionalLight(DirectionalLight* _dirLight)
 	{
-		json j = *_dirLight;
+		json j;
+		_dirLight->Serialize(j);
 		return j;
 	}
 
 	json Serializer::SerializePointLight(PointLight* _pointLight)
 	{
-		json j = *_pointLight;
+		json j;
+		_pointLight->Serialize(j);
 		return j;
 	}
 
 	json Serializer::SerializeSpotLight(SpotLight* _spotLight)
 	{
-		json j = *_spotLight;
+		json j;
+		_spotLight->Serialize(j);
 		return j;
 	}
 
 	json Serializer::SerializeBoxCollider(BoxCollider* _boxCollider)
 	{
-		json j = *_boxCollider;
+		json j;
+		_boxCollider->Serialize(j);
 		return j;
 	}
 
 	json Serializer::SerializeCapsuleCollider(CapsuleCollider* _capsuleCollider)
 	{
-		json j = *_capsuleCollider;
+		json j;
+		_capsuleCollider->Serialize(j);
 		return j;
 	}
 
 	json Serializer::SerializeMeshCollider(MeshCollider* _meshCollider)
 	{
-		json j = *_meshCollider;
+		json j;
+		_meshCollider->Serialize(j);
 		return j;
 	}
 
-	void Serializer::DeserializeGameObject(GameObject* _gameObject, json _j)
+	json Serializer::SerializeCamera(Camera* _camera)
 	{
-		return;
+		json j;
+		_camera->Serialize(j);
+		return j;
+	}
+
+	json Serializer::SerializeAudioSource(AudioSource* _audioSource)
+	{
+		json j;
+		_audioSource->Serialize(j);
+		return j;
+	}
+
+	json Serializer::SerializeAudioListener(AudioListener* _audioListener)
+	{
+		json j;
+		_audioListener->Serialize(j);
+		return j;
+	}
+
+	int Serializer::DeserializeGameObject(GameObject* _gameObject, const json& _j)
+	{
+		_gameObject->Deserialize(_j);
+		return _j.front()["Transform"]["ParentIndex"];
 	}
 }

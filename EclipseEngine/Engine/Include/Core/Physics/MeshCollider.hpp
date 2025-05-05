@@ -38,6 +38,9 @@ namespace Core
 
 		ECLIPSE_ENGINE std::string GetMeshName() const;
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		JPH::VertexList m_vertexList;
 		JPH::IndexedTriangleList m_indexTriangleList;
@@ -47,7 +50,4 @@ namespace Core
 		void SetDefaultMesh();
 		void Recreate() override;
 	};
-
-	void to_json(json& _j, const MeshCollider& _meshCollider);
-	void from_json(const json& _j, MeshCollider& _meshCollider);
 }

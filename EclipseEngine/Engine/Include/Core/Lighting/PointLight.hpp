@@ -27,6 +27,9 @@ namespace Core
 		ECLIPSE_ENGINE inline void SetLinAtt(float _linAtt) { m_linearAttenuation = _linAtt; }
 		ECLIPSE_ENGINE inline void SetQuadAtt(float _quadAtt) { m_quadraticAttenuation = _quadAtt; }
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		float m_constantAttenuation = 1.f;
 		float m_linearAttenuation = 0.09f;
@@ -35,7 +38,4 @@ namespace Core
 
 		Math::Vec3 GetPosition() const;
 	};
-
-	void to_json(json& _j, const PointLight& _pointLight);
-	void from_json(const json& _j, PointLight& _pointLight);
 }

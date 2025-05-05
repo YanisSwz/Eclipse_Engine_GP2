@@ -95,6 +95,9 @@ namespace Core
 			}
 		}
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		std::vector<Component*> m_components{};
 		SystemManager* m_systemManager = nullptr;

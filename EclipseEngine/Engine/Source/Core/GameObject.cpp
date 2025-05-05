@@ -71,4 +71,14 @@ namespace Core
 	{
 		return m_systemManager;
 	}
+
+	void GameObject::Serialize(json& _j)
+	{
+		name = _j.begin().key();
+		json gameObject = _j.front();
+	}
+
+	void GameObject::Deserialize(const json& _j)
+	{
+	}
 }

@@ -17,6 +17,9 @@ namespace Core
 	class BoxCollider;
 	class CapsuleCollider;
 	class MeshCollider;
+	class Camera;
+	class AudioSource;
+	class AudioListener;
 
 	class Serializer
 	{
@@ -25,9 +28,11 @@ namespace Core
 		ECLIPSE_ENGINE void DeserializeSceneFromFile(Scene* _scene, std::string _filePath);
 
 		ECLIPSE_ENGINE json SerializeScene(Scene* _scene);
-		ECLIPSE_ENGINE json SerializeGameObject(GameObject* _gameObject, int _parentIndex);
+		ECLIPSE_ENGINE void DeserializeScene(Scene* _scene, const json& _j);
+
 
 	private:
+		json SerializeGameObject(GameObject* _gameObject, int _parentIndex);
 		json SerializeComponent(Component* _component);
 		json SerializeTransform(Transform* _transform, int _parentIndex);
 		json SerializeModel(Model* _model);
@@ -37,7 +42,10 @@ namespace Core
 		json SerializeBoxCollider(BoxCollider* _boxCollider);
 		json SerializeCapsuleCollider(CapsuleCollider* _capsuleCollider);
 		json SerializeMeshCollider(MeshCollider* _meshCollider);
+		json SerializeCamera(Camera* _camera);
+		json SerializeAudioSource(AudioSource* _audioSource);
+		json SerializeAudioListener(AudioListener* _audioListener);
 
-		void DeserializeGameObject(GameObject* _gameObject, json _j);
+		int DeserializeGameObject(GameObject* _gameObject, const json& _j);
 	};
 }

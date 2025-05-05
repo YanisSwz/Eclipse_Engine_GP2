@@ -349,8 +349,11 @@ void EditorApp::LoadScene()
 	soundTest->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
 	soundTest->name = "Sound Test";
 	soundTest->AddComponent<Core::AudioSource>();
+
+
 	Core::Serializer serializer;
 	serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
+	//serializer.DeserializeSceneFromFile(&m_scene, "Assets/Scenes/Scene.json");
 }
 
 void EditorApp::DrawScene()

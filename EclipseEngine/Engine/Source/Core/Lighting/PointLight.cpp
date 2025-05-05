@@ -30,21 +30,21 @@ namespace Core
 		return m_gameObject->transform->GetPosition();
 	}
 
-	void to_json(json& _j, const PointLight& _pointLight)
+	void PointLight::Serialize(json& _j)
 	{
-		Math::Vec4 color = _pointLight.GetColor();
+		Math::Vec4 color = GetColor();
 
 		_j = json{
-			{"IsActive", _pointLight.IsActive()},
+			{"IsActive", IsActive()},
 			{"Color", { color.w, color.x, color.y, color.z }},
-			{"Distance", _pointLight.GetDistance()},
-			{"ConstantAttenuation", _pointLight.GetConstAtt()},
-			{"LinearAttenuation", _pointLight.GetLinAtt()},
-			{"QuadraticAttenuation", _pointLight.GetQuadAtt()}
+			{"Distance", GetDistance()},
+			{"ConstantAttenuation", GetConstAtt()},
+			{"LinearAttenuation", GetLinAtt()},
+			{"QuadraticAttenuation", GetQuadAtt()}
 		};
 	}
 
-	void from_json(const json& _j, PointLight& _pointLight)
+	void PointLight::Deserialize(const json& _j)
 	{
 		bool bIsActive;
 		float color[4];
@@ -60,11 +60,11 @@ namespace Core
 		_j.at("LinearAttenuation").get_to(linAtt);
 		_j.at("QuadraticAttenuation").get_to(quadAtt);
 
-		_pointLight.SetActive(bIsActive);
-		_pointLight.SetColor(color[0], color[1], color[2], color[3]);
-		_pointLight.SetDistance(distance);
-		_pointLight.SetConstAtt(constAtt);
-		_pointLight.SetLinAtt(linAtt);
-		_pointLight.SetQuadAtt(quadAtt);
+		SetActive(bIsActive);
+		SetColor(color[0], color[1], color[2], color[3]);
+		SetDistance(distance);
+		SetConstAtt(constAtt);
+		SetLinAtt(linAtt);
+		SetQuadAtt(quadAtt);
 	}
 }

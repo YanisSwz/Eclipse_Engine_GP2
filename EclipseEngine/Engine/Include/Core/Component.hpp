@@ -17,6 +17,9 @@ namespace Core
 		ECLIPSE_ENGINE void Remove();
 		ECLIPSE_ENGINE virtual void SetActive(bool _activate) override;
 
+		virtual void Serialize(json& _j) override = 0;
+		virtual void Deserialize(const json& _j) override = 0;
+
 	protected:
 		GameObject* m_gameObject = nullptr;
 	};

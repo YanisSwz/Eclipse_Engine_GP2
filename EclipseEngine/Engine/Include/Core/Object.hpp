@@ -18,6 +18,9 @@ namespace Core
 		ECLIPSE_ENGINE static void Destroy(Object* _obj);
 		ECLIPSE_ENGINE int GetID() const;
 
+		virtual void Serialize(json& _j) override = 0;
+		virtual void Deserialize(const json& _j) override = 0;
+
 	protected:
 		static int idCount;
 		int m_id = -1;

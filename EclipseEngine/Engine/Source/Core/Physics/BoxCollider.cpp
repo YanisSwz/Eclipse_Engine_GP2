@@ -121,30 +121,44 @@ namespace Core
 			rotationEuler, gameObject, myVelocity, myAngularVelocity);
 	}
 
-	void to_json(json& _j, const BoxCollider& _boxCollider)
+	void BoxCollider::Serialize(json& _j)
 	{
-		Math::Vec3 position = _boxCollider.GetPosition();
-		Math::Vec3 offsetPosition = _boxCollider.GetOffsetPos();
-		Math::Vec3 scale = _boxCollider.GetScale();
-		Math::Quat rotation = _boxCollider.GetRotation();
+		Math::Vec3 position = GetPosition();
+		Math::Vec3 offsetPosition = GetOffsetPos();
+		Math::Vec3 scale = GetScale();
+		Math::Quat rotation = GetRotation();
 
 		_j = json{
-			{"IsActive", _boxCollider.IsActive()},
-			{"IsDynamic", _boxCollider.GetIsDynamic()},
+			{"IsActive", IsActive()},
+			{"IsDynamic", GetIsDynamic()},
 			{"Position", {position.x, position.y, position.z}},
 			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
 			{"Scale", {scale.x, scale.y, scale.z}},
 			{"Rotation", {rotation.w, rotation.x, rotation.y, rotation.z}},
-			{"Mass", _boxCollider.GetMass()}
+			{"Mass", GetMass()}
 		};
 	}
 
-	void from_json(const json& _j, BoxCollider& _boxCollider)
+	void BoxCollider::Deserialize(const json& _j)
 	{
 		bool bIsActive;
+		bool bIsDynamic;
+		float position[3];
+		float offsetPosition[3];
+		float scale[3];
+		float rotation[4];
+		float mass;
 
 		_j.at("IsActive").get_to(bIsActive);
+		_j.at("IsDynamic").get_to(bIsDynamic);
+		_j.at("Position").get_to(position);
+		_j.at("OffsetPosition").get_to(offsetPosition);
+		_j.at("Scale").get_to(scale);
+		_j.at("Rotation").get_to(rotation);
+		_j.at("Mass").get_to(mass);
 
-		_boxCollider.SetActive(bIsActive);
+		SetActive(bIsActive);
+		SetDynamic(bIsDynamic);
+		//SetPosRotScale(Math::Vec3(position[0], position[1], position[2]), Math::Quat(rotation[0], rotation[1], rotation[2], rotation[3]), Math::Vec3(scale[0], scale[1], scale[2]));
 	}
 }
