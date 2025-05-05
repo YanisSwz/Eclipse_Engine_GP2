@@ -428,16 +428,21 @@ namespace GUI
 				}
 			}
 
+			
 			bool isLooping = _source->GetLooping();
 			if (GUI::CheckBox("Looping", "##1", &isLooping))
 				_source->SetLooping(isLooping);
-			
+
+			bool isPlayingOnAwake = _source->IsPlayingOnAwake();
+			if (GUI::CheckBox("Play on \nAwake", "##2", &isPlayingOnAwake))
+				_source->SetPlayOnAwake(isPlayingOnAwake);
+
 			float volume = _source->GetVolume();
 			if (GUI::FloatSlider("Volume", &volume, 0.f, 1.f, "%.2f"))
 				_source->SetVolume(volume);
 
 			float sampleRate = _source->GetSampleRate();
-			if (GUI::FloatSlider("Sample Rate", &sampleRate, 8000.f, 48000.f, "%.0f"))
+			if (GUI::FloatSlider("Sample Rate", &sampleRate, 8000.f, 96000.f, "%.0f"))
 				_source->SetSampleRate(sampleRate);
 
 			bool is3D = _source->Get3D();
@@ -449,17 +454,17 @@ namespace GUI
 			if (is3D)
 				ImGui::EndDisabled();
 
-			if (GUI::CheckBox("3D", "##2", &is3D))
+			if (GUI::CheckBox("3D", "##3", &is3D))
 				_source->Set3D(is3D);
 
 			if (!is3D)
 				ImGui::BeginDisabled();
 			float min = _source->GetMinDistance();
 			float max = _source->GetMaxDistance();
-			if (GUI::DragFloat("MinDistance", "##3", &min, 0.1f, 0.1f, max - 0.1f, "%.1f"))
+			if (GUI::DragFloat("MinDistance", "##4", &min, 0.1f, 0.1f, max - 0.1f, "%.1f"))
 				_source->SetMinDistance(min);
 
-			if (GUI::DragFloat("MaxDistance", "##4", &max, 0.1f, min + 0.1f, 1000.f, "%.1f"))
+			if (GUI::DragFloat("MaxDistance", "##5", &max, 0.1f, min + 0.1f, 1000.f, "%.1f"))
 				_source->SetMaxDistance(max);
 			if (!is3D)
 				ImGui::EndDisabled();

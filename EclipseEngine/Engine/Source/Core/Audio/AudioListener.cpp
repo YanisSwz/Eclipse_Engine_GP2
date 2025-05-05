@@ -26,7 +26,6 @@ namespace Core
 			return;
 
 		UpdateAll();
-		m_audioEngine->update3dAudio();
 	}
 
 	void AudioListener::Update()

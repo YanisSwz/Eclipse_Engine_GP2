@@ -14,6 +14,7 @@ namespace Core
 		ECLIPSE_ENGINE ~AudioSystem() = default;
 
 		ECLIPSE_ENGINE void Init();
+		ECLIPSE_ENGINE void Start();
 		ECLIPSE_ENGINE void Destroy();
 		ECLIPSE_ENGINE void Update();
 		ECLIPSE_ENGINE void SetPause(bool _pause);
@@ -24,13 +25,13 @@ namespace Core
 		ECLIPSE_ENGINE AudioListener* AddAudioListener();
 		ECLIPSE_ENGINE void SetCurrentListener(AudioListener* _listener);
 		ECLIPSE_ENGINE void SetCurrentListener();
+		ECLIPSE_ENGINE void EditorUpdate();
 		ECLIPSE_ENGINE AudioListener* GetCurrentAudioListener() const;
 		ECLIPSE_ENGINE void EnableAudio();
 		ECLIPSE_ENGINE void DisableAudio();
+		ECLIPSE_ENGINE inline bool IsAudioEnabled() const { return m_canPlay; }
 
 	private:
-		void HandleAudioState();
-
 		static const int MAX_SIZE = 100;
 		int m_currentCount = 0;
 		AudioSource m_audioSources[MAX_SIZE];

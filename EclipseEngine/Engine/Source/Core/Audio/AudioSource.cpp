@@ -211,8 +211,8 @@ namespace Core
 	{
 		if(_rate < 8000.f)
 			_rate = 8000.f;
-		else if (_rate > 48000.f)
-			_rate = 48000.f;
+		else if (_rate > 96000.f)
+			_rate = 96000.f;
 
 		float ratio = m_sampleRate / _rate;
 		m_sampleRate = _rate;
@@ -263,6 +263,11 @@ namespace Core
 		m_maxDistance = _max;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
+	}
+
+	void AudioSource::SetPlayOnAwake(bool _play)
+	{
+		m_playOnAwake = _play;
 	}
 
 	void AudioSource::Enable()

@@ -7,9 +7,27 @@ namespace Core
 	{
 		m_audioEngine.init();
 		m_audioEngine.setVisualizationEnable(true);
+		EnableAudio();
 
 		/*m_startupSound.load("Assets/Audio/startup.mp3");
 		m_startupSound.setVolume(2.f);*/
+	}
+
+	void AudioSystem::Start()
+	{
+		if (m_currentListener == nullptr)
+		{
+			DisableAudio();
+			return;
+		}
+		else
+		{
+			for(int i = 0; i < m_currentCount; ++i)
+			{
+				if (m_audioSources[i].IsPlayingOnAwake())
+					m_audioSources[i].Play();
+			}
+		}
 	}
 
 	void AudioSystem::Destroy()
@@ -145,6 +163,21 @@ namespace Core
 		m_currentListener = nullptr;
 	}
 
+	void AudioSystem::EditorUpdate()
+	{
+		if (m_currentListener != nullptr) 
+		{
+			if (m_currentListener->IsActive())
+				m_currentListener->Update();
+			else
+				m_audioEngine.set3dListenerParameters(0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f);
+		}
+		
+		for (int i = 0; i < m_currentCount; ++i)
+			m_audioSources[i].Update();
+		m_audioEngine.update3dAudio();
+	}
+
 	AudioListener* AudioSystem::GetCurrentAudioListener() const
 	{
 		if (m_currentListener != nullptr)
@@ -158,7 +191,12 @@ namespace Core
 	void AudioSystem::EnableAudio()
 	{
 		m_canPlay = true;
+		if (m_currentListener != nullptr)
+			m_currentListener->Start();
+		else
+			m_audioEngine.set3dListenerParameters(0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f);
 		AudioSource::Enable();
+		m_audioEngine.update3dAudio();
 	}
 
 	void AudioSystem::DisableAudio()

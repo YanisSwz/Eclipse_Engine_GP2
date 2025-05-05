@@ -45,12 +45,22 @@ namespace Core
 
 	void Scene::SetState(GAME_STATE _state)
 	{
+		AudioSystem* audioSystem = m_systemManager.GetAudioSystem();
 		if (_state == GAME_STATE::PAUSE)
-			m_systemManager.GetAudioSystem()->SetPause(true);
+			audioSystem->SetPause(true);
+		else if (_state == GAME_STATE::PLAY && m_state == GAME_STATE::STOP)
+		{
+			audioSystem->Stop();
+			audioSystem->Start();
+		}
 		else if (_state == GAME_STATE::PLAY && m_state == GAME_STATE::PAUSE)
-			m_systemManager.GetAudioSystem()->SetPause(false);
+			audioSystem->SetPause(false);
 		else if (_state == GAME_STATE::STOP)
-			m_systemManager.GetAudioSystem()->Stop();
+		{
+			audioSystem->Stop();
+			if (!audioSystem->IsAudioEnabled())
+				audioSystem->EnableAudio();
+		}
 
 		m_state = _state;
 	}
