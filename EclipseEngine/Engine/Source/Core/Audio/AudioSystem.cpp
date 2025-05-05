@@ -19,23 +19,27 @@ namespace Core
 
 	void AudioSystem::Update()
 	{
-		// TODO
 		if (m_currentListener != nullptr)
 		{
-			if (m_currentListener->IsDestroyed() || !m_currentListener->IsActive())
-				SetCurrentListener();
-			if(m_currentListener == nullptr)
+			if(!m_currentListener->IsActive() && !m_currentListener->IsDestroyed())
 			{
-				Stop();
+				if (m_canPlay)
+					DisableAudio();
 				return;
 			}
 
-			if (!m_canPlay)
+			if (m_currentListener->IsDestroyed())
 			{
-				m_canPlay = true;
-				AudioSource::Enable();
+				SetCurrentListener();
+				if (m_currentListener == nullptr)
+				{
+					Stop();
+					return;
+				}
 			}
 
+			if (!m_canPlay)
+				EnableAudio();
 			m_currentListener->Update();
 			for (int i = 0; i < m_currentCount; ++i)
 				m_audioSources[i].Update();
@@ -44,10 +48,7 @@ namespace Core
 		else
 		{
 			if(m_canPlay)
-			{
-				m_canPlay = false;
-				AudioSource::Disable();
-			}
+				DisableAudio();
 		}
 	}
 
@@ -152,5 +153,18 @@ namespace Core
 				return m_currentListener;
 		}
 		return nullptr;
+	}
+
+	void AudioSystem::EnableAudio()
+	{
+		m_canPlay = true;
+		AudioSource::Enable();
+	}
+
+	void AudioSystem::DisableAudio()
+	{
+		Stop();
+		m_canPlay = false;
+		AudioSource::Disable();
 	}
 }
