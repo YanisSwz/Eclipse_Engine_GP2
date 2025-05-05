@@ -429,7 +429,7 @@ namespace GUI
 			}
 
 			
-			bool isLooping = _source->GetLooping();
+			bool isLooping = _source->IsLooping();
 			if (GUI::CheckBox("Looping", "##1", &isLooping))
 				_source->SetLooping(isLooping);
 
@@ -445,7 +445,7 @@ namespace GUI
 			if (GUI::FloatSlider("Sample Rate", &sampleRate, 8000.f, 96000.f, "%.0f"))
 				_source->SetSampleRate(sampleRate);
 
-			bool is3D = _source->Get3D();
+			bool is3D = _source->Is3D();
 			if (is3D)
 				ImGui::BeginDisabled();
 			float pan = _source->GetPan();
@@ -474,7 +474,7 @@ namespace GUI
 				_source->Play();
 
 			ImGui::SameLine();
-			if (!_source->GetPause())
+			if (!_source->IsPaused())
 			{
 				if (ImGui::Button("Pause"))
 					_source->Pause();

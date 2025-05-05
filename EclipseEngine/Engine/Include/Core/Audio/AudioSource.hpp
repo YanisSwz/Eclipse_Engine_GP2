@@ -26,29 +26,28 @@ namespace Core
 		ECLIPSE_ENGINE void SetClip(Resource::AudioClip* _clip);
 		ECLIPSE_ENGINE Resource::AudioClip* GetClip();
 		ECLIPSE_ENGINE void SetLooping(bool _looping);
-		ECLIPSE_ENGINE inline bool GetLooping() const { return m_looping; }
-		ECLIPSE_ENGINE inline bool GetPause() const { return m_paused; }
+		ECLIPSE_ENGINE bool IsLooping() const;
 		ECLIPSE_ENGINE float* GetData() const;
 		ECLIPSE_ENGINE int GetSampleCount() const;
 		ECLIPSE_ENGINE float GetTime() const;
 		ECLIPSE_ENGINE float GetLength() const;
 		ECLIPSE_ENGINE void SetTime(float _time);
 		ECLIPSE_ENGINE bool IsPlaying() const;
-		ECLIPSE_ENGINE inline bool IsPaused() const { return m_paused; }
+		ECLIPSE_ENGINE bool IsPaused() const;
 		ECLIPSE_ENGINE void SetVolume(float _vol);
 		ECLIPSE_ENGINE float GetVolume() const;
-		ECLIPSE_ENGINE inline float GetSampleRate() const { return m_sampleRate; }
+		ECLIPSE_ENGINE float GetSampleRate() const;
 		ECLIPSE_ENGINE void SetSampleRate(float _rate);
 		ECLIPSE_ENGINE float GetPan() const;
 		ECLIPSE_ENGINE void SetPan(float _pan);
-		ECLIPSE_ENGINE inline bool Get3D() const { return m_3D; }
+		ECLIPSE_ENGINE bool Is3D() const;
 		ECLIPSE_ENGINE void Set3D(bool _is3D);
-		ECLIPSE_ENGINE inline float GetMinDistance() const { return m_minDistance; }
-		ECLIPSE_ENGINE inline float GetMaxDistance() const { return m_maxDistance; }
+		ECLIPSE_ENGINE float GetMinDistance() const;
+		ECLIPSE_ENGINE float GetMaxDistance() const;
 		ECLIPSE_ENGINE void SetMinDistance(float _min);
 		ECLIPSE_ENGINE void SetMaxDistance(float _max);
 		ECLIPSE_ENGINE void SetPlayOnAwake(bool _play);
-		ECLIPSE_ENGINE inline bool IsPlayingOnAwake() const { return m_playOnAwake; }
+		ECLIPSE_ENGINE bool IsPlayingOnAwake() const;
 
 		ECLIPSE_ENGINE static void Enable();
 		ECLIPSE_ENGINE static void Disable();
@@ -70,3 +69,5 @@ namespace Core
 		SoLoud::handle m_sound;
 	};
 }
+
+#include "AudioSource.inl"
