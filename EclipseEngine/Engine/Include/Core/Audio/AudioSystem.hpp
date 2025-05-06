@@ -31,6 +31,10 @@ namespace Core
 		ECLIPSE_ENGINE void EnableAudio();
 		ECLIPSE_ENGINE void DisableAudio();
 		ECLIPSE_ENGINE inline bool IsAudioEnabled() const { return m_canPlay; }
+		ECLIPSE_ENGINE inline float* GetStereoVolume() { return m_stereoVolume; }
+		ECLIPSE_ENGINE float GetVolume() const;
+		ECLIPSE_ENGINE inline float GetMaxVolume() { return m_audioEngine.getGlobalVolume(); }
+		ECLIPSE_ENGINE void SetMaxVolume(float _volume);
 
 	private:
 		void ResetAudioSourcesPause();
@@ -49,5 +53,6 @@ namespace Core
 		SoLoud::Wav m_startupSound{};
 
 		bool m_canPlay = true;
+		float m_stereoVolume[2] = { 0.f, 0.f };
 	};
 }

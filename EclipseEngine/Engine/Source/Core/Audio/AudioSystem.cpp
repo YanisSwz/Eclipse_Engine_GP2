@@ -38,6 +38,8 @@ namespace Core
 
 	void AudioSystem::Update()
 	{
+		m_stereoVolume[0] = m_audioEngine.getApproximateVolume(0);
+		m_stereoVolume[1] = m_audioEngine.getApproximateVolume(1);
 		if (m_currentListener != nullptr)
 		{
 			if(!m_currentListener->IsActive() && !m_currentListener->IsDestroyed())
@@ -192,6 +194,8 @@ namespace Core
 
 	void AudioSystem::EditorUpdate()
 	{
+		m_stereoVolume[0] = m_audioEngine.getApproximateVolume(0);
+		m_stereoVolume[1] = m_audioEngine.getApproximateVolume(1);
 		if (m_currentListener != nullptr) 
 		{
 			if (m_currentListener->IsActive())
@@ -240,5 +244,23 @@ namespace Core
 		Stop();
 		m_canPlay = false;
 		AudioSource::Disable();
+	}
+	
+	float AudioSystem::GetVolume() const
+	{
+		if (m_stereoVolume[0] > m_stereoVolume[1])
+			return m_stereoVolume[0];
+		else
+			return m_stereoVolume[1];
+	}
+
+	void AudioSystem::SetMaxVolume(float _volume)
+	{
+		if (_volume < 0.f)
+			_volume = 0.f;
+		else if (_volume > 1.f)
+			_volume = 1.f;
+
+		m_audioEngine.setGlobalVolume(_volume);
 	}
 }

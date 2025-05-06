@@ -85,6 +85,7 @@ void EditorApp::Render()
 			ImGui::MenuItem("Game", "", &bIsGameWindowEnabled);
 			ImGui::MenuItem("Content Browser", "", &bIsContentBrowserWindowEnabled);
 			ImGui::MenuItem("Console", "", &bIsConsoleWindowEnabled);
+			ImGui::MenuItem("Audio Mixer", "", &bIsAudioMixerWindowEnabled);
 			ImGui::EndMenu();
 		}
 
@@ -162,6 +163,9 @@ void EditorApp::Render()
 
 	if (bIsContentBrowserWindowEnabled)
 		m_contentBrowserGUI.Draw();
+
+	if (bIsAudioMixerWindowEnabled)
+		m_audioMixerGUI.Draw(m_scene.GetSystemManager()->GetAudioSystem());
 
 	GUI::EndFrame();
 

@@ -453,14 +453,56 @@ namespace GUI
 		return ImGui::SliderFloat(_sliderName, value, _min, _max, _format);
 	}
 
-	void ColorEdit4(const char* label, Math::Vec4& _color, ImGuiColorEditFlags flags)
+	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags)
 	{
 		float col[4]{ _color.x, _color.y, _color.z, _color.w };
-		ImGui::ColorEdit4(label, col, flags);
+		ImGui::ColorEdit4(_label, col, flags);
 		_color.x = col[0];
 		_color.y = col[1];
 		_color.z = col[2];
 		_color.w = col[3];
+	}
+
+	bool AudioChannel(const char* _label, float* _stereoVolume, float* _sliderValue, ImVec2 _size)
+	{
+		ImGui::BeginDisabled();
+		ImGui::GetStyle().Alpha = 1.f;
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.25f, 0.25f, 0.25f, 0.0f));
+		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 1.f, 1.f, 1.f));
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2);
+		ImGui::PlotHistogram("##StereoVolume", _stereoVolume, 2, 0, NULL, 0.0f, 1.0f, _size);
+
+		float vol = 0.f;
+		if (_stereoVolume[0] > _stereoVolume[1])
+			vol = _stereoVolume[0];
+		else
+			vol = _stereoVolume[1];
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(8.f);
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(1.f, 1.f, 1.f, 1.f));
+		ImGui::VSliderFloat("##MaxVolume", _size, &vol, 0.0f, 1.0f, "");
+		ImGui::EndDisabled();
+		ImGui::PopStyleColor(4);
+		ImGui::PopStyleVar();
+
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
+		ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 40);
+		bool changed = ImGui::VSliderFloat("##Volume", ImVec2(25, ImGui::GetWindowHeight() / 1.5f), _sliderValue, 0.0f, 1.0f, "");
+		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
+			ImGui::SetTooltip("%.3f", _sliderValue);
+		ImGui::PopStyleColor(5);
+		ImGui::PopStyleVar();
+
+		ImGui::Text(_label);
+
+		return changed;
 	}
 
 	ImVec4 ColorToVec4(Logging::COLOR _color)

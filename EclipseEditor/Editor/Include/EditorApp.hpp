@@ -8,6 +8,7 @@
 #include "GUI/ConsoleGUI.hpp"
 #include "GUI/ContentBrowserGUI.hpp"
 #include "GUI/GameGUI.hpp"
+#include "GUI/AudioMixerGUI.hpp"
 
 namespace Windowing
 {
@@ -63,6 +64,7 @@ private:
 	GUI::ConsoleGUI m_consoleGUI;
 	GUI::ContentBrowseGUI m_contentBrowserGUI;
 	GUI::GameGUI m_gameGUI;
+	GUI::AudioMixerGUI m_audioMixerGUI;
 
 	bool bIsHierarchieWindowEnabled = true;
 	bool bIsInspectorWindowEnabled = true;
@@ -70,6 +72,7 @@ private:
 	bool bIsConsoleWindowEnabled = true;
 	bool bIsContentBrowserWindowEnabled = true;
 	bool bIsGameWindowEnabled = true;
+	bool bIsAudioMixerWindowEnabled = true;
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();
