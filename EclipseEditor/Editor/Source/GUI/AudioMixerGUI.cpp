@@ -17,6 +17,12 @@ namespace GUI
 		if (GUI::AudioChannel("Master", _audioSystem->GetStereoVolume(), &volume, ImVec2(50, ImGui::GetWindowHeight() / 1.5f)))
 			_audioSystem->SetMaxVolume(volume);
 
+		std::vector<Core::AudioSource*> channels = _audioSystem->GetAudioSources();
+		for(int i = 0; i < channels.size(); ++i)
+		{
+			GUI::AudioChannel(std::to_string(i).c_str(), channels[i]->GetStereoVolume(), &volume, ImVec2(35, ImGui::GetWindowHeight() / 1.75f));
+		}
+
 		ImGui::End();
 	}
 }

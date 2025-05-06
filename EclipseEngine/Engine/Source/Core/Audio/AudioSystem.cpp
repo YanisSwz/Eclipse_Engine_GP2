@@ -263,4 +263,15 @@ namespace Core
 
 		m_audioEngine.setGlobalVolume(_volume);
 	}
+
+	std::vector<AudioSource*> AudioSystem::GetAudioSources()
+	{
+		std::vector<AudioSource*> sources{};
+		for(int i = 0; i < m_currentCount; ++i)
+		{
+			if(m_audioSources[i].IsActive() && !m_audioSources->IsDestroyed())
+				sources.push_back(&m_audioSources[i]);
+		}
+		return sources;
+	}
 }

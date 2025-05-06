@@ -35,6 +35,7 @@ namespace Core
 		ECLIPSE_ENGINE float GetVolume() const;
 		ECLIPSE_ENGINE inline float GetMaxVolume() { return m_audioEngine.getGlobalVolume(); }
 		ECLIPSE_ENGINE void SetMaxVolume(float _volume);
+		ECLIPSE_ENGINE std::vector<AudioSource*> GetAudioSources();
 
 	private:
 		void ResetAudioSourcesPause();

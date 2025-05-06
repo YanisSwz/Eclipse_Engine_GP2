@@ -407,8 +407,8 @@ namespace GUI
 			if (data != nullptr)
 			{
 				float range = 1000.f;
-				if (_source->GetVolume() >= 1.f/range)
-					range = 1.f / _source->GetVolume();
+				if (_source->GetMaxVolume() >= 1.f/range)
+					range = 1.f / _source->GetMaxVolume();
 				ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 0.75f, 0.f, 1.f));
 				ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, std::to_string(_source->GetLength()).c_str(), -range, range, ImVec2(0.f, 200.f));
 				ImGui::PopStyleColor();
@@ -437,9 +437,9 @@ namespace GUI
 			if (GUI::CheckBox("Play on \nAwake", "##2", &isPlayingOnAwake))
 				_source->SetPlayOnAwake(isPlayingOnAwake);
 
-			float volume = _source->GetVolume();
+			float volume = _source->GetMaxVolume();
 			if (GUI::FloatSlider("Volume", &volume, 0.f, 1.f, "%.2f"))
-				_source->SetVolume(volume);
+				_source->SetMaxVolume(volume);
 
 			float sampleRate = _source->GetSampleRate();
 			if (GUI::FloatSlider("Sample Rate", &sampleRate, 8000.f, 96000.f, "%.0f"))

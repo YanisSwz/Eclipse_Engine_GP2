@@ -180,7 +180,7 @@ namespace Core
 		return m_audioEngine->isValidVoiceHandle(m_sound);
 	}
 
-	void AudioSource::SetVolume(float _vol)
+	void AudioSource::SetMaxVolume(float _vol)
 	{
 		if (_vol < 0.f)
 		{
@@ -254,5 +254,53 @@ namespace Core
 	void AudioSource::Disable()
 	{
 		m_audioEnabled = false;
+	}
+
+	float* AudioSource::GetStereoVolume()
+	{
+		if (m_audioClip == nullptr || !m_audioEngine->isValidVoiceHandle(m_sound))
+		{
+			m_stereoVolume[0] = 0.f;
+			m_stereoVolume[1] = 0.f;
+			return m_stereoVolume;
+		}
+
+		int sign = Math::Tools::Sign(m_pan);
+		float volume = 0.f;
+		float pan = 0.f;
+		if (!m_3D)
+		{
+			volume = m_audioEngine->getVolume(m_sound);
+			pan = m_pan;
+		}
+		else
+		{
+			volume = m_audioEngine->getOverallVolume(m_sound);
+			pan = m_audioEngine->getPan(m_sound);
+		}
+		if(sign == 0)
+		{
+			m_stereoVolume[0] = volume;
+			m_stereoVolume[1] = volume;
+		}
+		else if (sign == 1)
+		{
+			m_stereoVolume[0] = volume * (1.f - pan);
+			m_stereoVolume[1] = volume + pan * volume;
+		}
+		else if (sign == -1)
+		{
+			m_stereoVolume[0] = volume + (-pan) * volume;
+			m_stereoVolume[1] = volume * (1.f + pan);
+		}
+		return m_stereoVolume;
+	}
+
+	float AudioSource::GetVolume() const 
+	{
+		if (m_stereoVolume[0] > m_stereoVolume[1])
+			return m_stereoVolume[0];
+		else
+			return m_stereoVolume[1];
 	}
 }

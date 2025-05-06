@@ -34,8 +34,8 @@ namespace Core
 		ECLIPSE_ENGINE void SetTime(float _time);
 		ECLIPSE_ENGINE bool IsPlaying() const;
 		ECLIPSE_ENGINE bool IsPaused() const;
-		ECLIPSE_ENGINE void SetVolume(float _vol);
-		ECLIPSE_ENGINE float GetVolume() const;
+		ECLIPSE_ENGINE void SetMaxVolume(float _vol);
+		ECLIPSE_ENGINE float GetMaxVolume() const;
 		ECLIPSE_ENGINE float GetSampleRate() const;
 		ECLIPSE_ENGINE void SetSampleRate(float _rate);
 		ECLIPSE_ENGINE float GetPan() const;
@@ -48,6 +48,8 @@ namespace Core
 		ECLIPSE_ENGINE void SetMaxDistance(float _max);
 		ECLIPSE_ENGINE void SetPlayOnAwake(bool _play);
 		ECLIPSE_ENGINE bool IsPlayingOnAwake() const;
+		ECLIPSE_ENGINE float* GetStereoVolume();
+		ECLIPSE_ENGINE float GetVolume() const;
 
 		ECLIPSE_ENGINE static void Enable();
 		ECLIPSE_ENGINE static void Disable();
@@ -64,6 +66,7 @@ namespace Core
 		float m_pan = 0.f;
 		float m_minDistance = 1.f;
 		float m_maxDistance = 5.f;
+		float m_stereoVolume[2] = { 1.f, 1.f };
 		SoLoud::Soloud* m_audioEngine = nullptr;
 		Resource::AudioClip* m_audioClip = nullptr;
 		SoLoud::handle m_sound;

@@ -471,7 +471,10 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 1.f, 1.f, 1.f));
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2);
-		ImGui::PlotHistogram("##StereoVolume", _stereoVolume, 2, 0, NULL, 0.0f, 1.0f, _size);
+		std::string label = "##";
+		label += _label;
+		label += "StereoVolume";
+		ImGui::PlotHistogram(label.c_str(), _stereoVolume, 2, 0, NULL, 0.0f, 1.0f, _size);
 
 		float vol = 0.f;
 		if (_stereoVolume[0] > _stereoVolume[1])
@@ -481,7 +484,10 @@ namespace GUI
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(8.f);
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(1.f, 1.f, 1.f, 1.f));
-		ImGui::VSliderFloat("##MaxVolume", _size, &vol, 0.0f, 1.0f, "");
+		label = "##";
+		label += _label;
+		label += "MaxVolume";
+		ImGui::VSliderFloat(label.c_str(), _size, &vol, 0.0f, 1.0f, "");
 		ImGui::EndDisabled();
 		ImGui::PopStyleColor(4);
 		ImGui::PopStyleVar();
@@ -494,7 +500,10 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
 		ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 40);
-		bool changed = ImGui::VSliderFloat("##Volume", ImVec2(25, ImGui::GetWindowHeight() / 1.5f), _sliderValue, 0.0f, 1.0f, "");
+		label = "##";
+		label += _label;
+		label += "Volume";
+		bool changed = ImGui::VSliderFloat(label.c_str(), _size, _sliderValue, 0.0f, 1.0f, "");
 		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
 			ImGui::SetTooltip("%.3f", _sliderValue);
 		ImGui::PopStyleColor(5);

@@ -13,6 +13,6 @@ namespace Core
 	inline void AudioSource::SetPlayOnAwake(bool _play) { m_playOnAwake = _play; }
 	inline void AudioSource::Set3D(bool _is3D) { m_3D = _is3D; }
 	inline float AudioSource::GetPan() const { return m_pan; }
-	inline float AudioSource::GetVolume() const { return m_volume; }
+	inline float AudioSource::GetMaxVolume() const { return m_volume; }
 	inline Resource::AudioClip* AudioSource::GetClip() { return m_audioClip; }
 }
