@@ -1,16 +1,5 @@
 #include "Serializer.hpp"
 #include "Scene.hpp"
-#include "Transform.hpp"
-#include "Model.hpp"
-#include "Lighting/DirectionalLight.hpp"
-#include "Lighting/PointLight.hpp"
-#include "Lighting/SpotLight.hpp"
-#include "Physics/BoxCollider.hpp"
-#include "Physics/CapsuleCollider.hpp"
-#include "Physics/MeshCollider.hpp"
-#include "Camera/Camera.hpp"
-#include "Audio/AudioSource.hpp"
-#include "Audio/AudioListener.hpp"
 #include <fstream>
 
 namespace Core
@@ -40,8 +29,8 @@ namespace Core
 		for (int i = 0; i < _scene->GetCount(); ++i)
 		{
 			json gameObject;
-			_scene->GetGameObject(i)->Serialize(gameObject);
-			gameObject[_scene->GetGameObject(i)->name]["Transform"]["ParentIndex"] = _scene->GetGameObjectParentIndex(i);
+			_scene->GetGameObjectByIndex(i)->Serialize(gameObject);
+			gameObject[_scene->GetGameObjectByIndex(i)->name]["Transform"]["ParentIndex"] = _scene->GetGameObjectParentIndex(i);
 			gameObjects.push_back(gameObject);
 		}
 		scene["GameObjects"] = gameObjects;
@@ -69,11 +58,11 @@ namespace Core
 		// Recreate Scene graph via Transforms
 		for (int i = 0; i < gameObjectCount; ++i)
 		{
-			GameObject* gameObject = _scene->GetGameObject(i);
+			GameObject* gameObject = _scene->GetGameObjectByIndex(i);
 			int parentIndex = gameObjects[i][gameObject->name]["Transform"]["ParentIndex"];
 			if (parentIndex > 0)
 			{
-				GameObject* parent = _scene->GetGameObject(parentIndex);
+				GameObject* parent = _scene->GetGameObjectByIndex(parentIndex);
 				if (parent)
 					gameObject->transform->SetParent(parent->transform);
 			}

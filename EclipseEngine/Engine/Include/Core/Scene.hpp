@@ -19,7 +19,7 @@ namespace Core
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
 		ECLIPSE_ENGINE GameObject* GetObjectByID(int _id);
 		ECLIPSE_ENGINE inline int GetCount() { return m_currentGameObjectCount; }
-		ECLIPSE_ENGINE inline GameObject* GetGameObject(int _index) { return (_index < MAX_SIZE) ? &m_gameObjects[_index] : nullptr; }
+		ECLIPSE_ENGINE inline GameObject* GetGameObjectByIndex(int _index) { return (_index < MAX_SIZE) ? &m_gameObjects[_index] : nullptr; }
 		/// <summary>
 		/// Returns the index of _gameObject if it exists in the Scene, -1 otherwise
 		/// </summary>
