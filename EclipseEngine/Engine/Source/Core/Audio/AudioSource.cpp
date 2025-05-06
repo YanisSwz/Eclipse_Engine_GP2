@@ -123,11 +123,6 @@ namespace Core
 		m_sampleRate = m_audioClip->audioFile.mSampleCount / m_audioClip->GetLength();
 	}
 
-	Resource::AudioClip* AudioSource::GetClip()
-	{
-		return m_audioClip;
-	}
-
 	void AudioSource::SetLooping(bool _looping)
 	{
 		m_looping = _looping;
@@ -203,11 +198,6 @@ namespace Core
 			m_audioEngine->setVolume(m_sound, m_volume);
 	}
 
-	float AudioSource::GetVolume() const
-	{
-		return m_volume;
-	}
-
 	void AudioSource::SetSampleRate(float _rate)
 	{
 		if(_rate < 8000.f)
@@ -222,11 +212,6 @@ namespace Core
 			m_audioEngine->setSamplerate(m_sound, m_sampleRate);
 	}
 
-	float AudioSource::GetPan() const
-	{
-		return m_pan;
-	}
-
 	void AudioSource::SetPan(float _pan)
 	{
 		if (_pan < -1.f)
@@ -237,11 +222,6 @@ namespace Core
 		m_pan = _pan;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			m_audioEngine->setPan(m_sound, m_pan);
-	}
-
-	void AudioSource::Set3D(bool _is3D)
-	{
-		m_3D = _is3D;
 	}
 
 	void AudioSource::SetMinDistance(float _min)
@@ -264,11 +244,6 @@ namespace Core
 		m_maxDistance = _max;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
-	}
-
-	void AudioSource::SetPlayOnAwake(bool _play)
-	{
-		m_playOnAwake = _play;
 	}
 
 	void AudioSource::Enable()

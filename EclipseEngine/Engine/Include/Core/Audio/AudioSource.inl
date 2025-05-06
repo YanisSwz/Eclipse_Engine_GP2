@@ -10,4 +10,9 @@ namespace Core
 	inline float AudioSource::GetMinDistance() const { return m_minDistance; }
 	inline float AudioSource::GetMaxDistance() const { return m_maxDistance; }
 	inline bool AudioSource::IsPlayingOnAwake() const { return m_playOnAwake; }
+	inline void AudioSource::SetPlayOnAwake(bool _play) { m_playOnAwake = _play; }
+	inline void AudioSource::Set3D(bool _is3D) { m_3D = _is3D; }
+	inline float AudioSource::GetPan() const { return m_pan; }
+	inline float AudioSource::GetVolume() const { return m_volume; }
+	inline Resource::AudioClip* AudioSource::GetClip() { return m_audioClip; }
 }
