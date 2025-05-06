@@ -36,7 +36,7 @@ namespace Core
 
 	void Model::Serialize(json& _j)
 	{
-		_j = json{
+		_j["Model"] = json{
 			{"IsActive", IsActive()},
 			{"Mesh", GetMeshName()},
 			{"Texture", GetTextureName()},

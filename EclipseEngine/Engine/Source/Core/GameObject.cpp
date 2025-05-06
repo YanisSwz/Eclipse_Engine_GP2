@@ -72,13 +72,51 @@ namespace Core
 		return m_systemManager;
 	}
 
+	Component* GameObject::AddComponent(std::string _componentType)
+	{
+		Component* newComp = m_systemManager->AddComponent(_componentType);
+		if (newComp)
+		{
+			m_components.push_back(newComp);
+			newComp->SetGameObject(this);	
+		}
+
+		return newComp;
+	}
+
 	void GameObject::Serialize(json& _j)
 	{
-		name = _j.begin().key();
-		json gameObject = _j.front();
+		_j[name]["IsActive"] = IsActive();
+
+		json transformJson;
+		transform->Serialize(transformJson);
+		_j[name]["Transform"] = transformJson;
+
+		std::vector<json> componentsJson;
+		for (int i = 0; i < m_components.size(); ++i)
+		{
+			json component;
+			m_components[i]->Serialize(component);
+			componentsJson.push_back(component);
+		}
+		_j[name]["Components"] = componentsJson;
 	}
 
 	void GameObject::Deserialize(const json& _j)
 	{
+		name = _j.begin().key();
+		json gameObject = _j.front();
+
+		m_active = gameObject["IsActive"];
+
+		transform->Deserialize(gameObject["Transform"]);
+
+		json components = gameObject["Components"];
+
+		for (int i = 0; i < components.size(); ++i)
+		{
+			Component* component = AddComponent(components[i].begin().key());
+			component->Deserialize(components[i].begin().value());
+		}
 	}
 }

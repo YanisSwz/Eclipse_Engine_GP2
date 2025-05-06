@@ -104,7 +104,7 @@ namespace Core
 
 	void Camera::Serialize(json& _j)
 	{
-		_j = json{
+		_j["Camera"] = json{
 			{"IsActive", IsActive()},
 			{"FOV", GetFOV()},
 			{"Near", GetNear()},

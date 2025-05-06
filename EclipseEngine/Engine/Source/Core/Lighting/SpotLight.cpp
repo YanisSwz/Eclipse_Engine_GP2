@@ -45,7 +45,7 @@ namespace Core
 	{
 		Math::Vec4 color = GetColor();
 
-		_j = json{
+		_j["SpotLight"] = json{
 			{"IsActive", IsActive()},
 			{"Color", { color.w, color.x, color.y, color.z }},
 			{"InnerCutOff", GetInnerCutOff()},
@@ -78,7 +78,7 @@ namespace Core
 		_j.at("QuadraticAttenuation").get_to(quadAtt);
 
 		SetActive(bIsActive);
-		SetColor(color[0], color[1], color[2], color[3]);
+		SetColor(color[1], color[2], color[3], color[0]);
 		SetInnerCutOff(innerCutOff);
 		SetOuterCutOff(outerCutOff);
 		SetDistance(distance);

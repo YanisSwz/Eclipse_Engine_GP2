@@ -99,7 +99,7 @@ namespace Core
 
 	void AudioListener::Serialize(json& _j)
 	{
-		_j = json{
+		_j["AudioListener"] = json{
 			{"IsActive", IsActive()}
 		};
 	}

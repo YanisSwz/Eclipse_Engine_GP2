@@ -83,6 +83,8 @@ namespace Core
 			return nullptr;
 		}
 
+		ECLIPSE_ENGINE Component* AddComponent(std::string _componentType);
+
 	private:
 		CameraSystem m_cameraSystem{};
 		TransformSystem m_transformSystem{};

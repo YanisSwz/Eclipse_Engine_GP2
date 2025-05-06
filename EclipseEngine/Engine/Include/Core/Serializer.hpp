@@ -32,7 +32,6 @@ namespace Core
 
 
 	private:
-		json SerializeGameObject(GameObject* _gameObject, int _parentIndex);
 		json SerializeComponent(Component* _component);
 		json SerializeTransform(Transform* _transform, int _parentIndex);
 		json SerializeModel(Model* _model);

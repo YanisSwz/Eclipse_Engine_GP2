@@ -128,7 +128,7 @@ namespace Core
 		Math::Vec3 scale = GetScale();
 		Math::Quat rotation = GetRotation();
 
-		_j = json{
+		_j["BoxCollider"] = json{
 			{"IsActive", IsActive()},
 			{"IsDynamic", GetIsDynamic()},
 			{"Position", {position.x, position.y, position.z}},
@@ -159,6 +159,10 @@ namespace Core
 
 		SetActive(bIsActive);
 		SetDynamic(bIsDynamic);
-		//SetPosRotScale(Math::Vec3(position[0], position[1], position[2]), Math::Quat(rotation[0], rotation[1], rotation[2], rotation[3]), Math::Vec3(scale[0], scale[1], scale[2]));
+		SetPosition(Math::Vec3(position[0], position[1], position[2]));
+		SetOffsetPos(Math::Vec3(offsetPosition[0], offsetPosition[1], offsetPosition[2]));
+		Scale(Math::Vec3(scale[0], scale[1], scale[2]));
+		SetRotation(Math::Quat(rotation[0], rotation[1], rotation[2], rotation[3]));
+		SetMass(mass);
 	}
 }

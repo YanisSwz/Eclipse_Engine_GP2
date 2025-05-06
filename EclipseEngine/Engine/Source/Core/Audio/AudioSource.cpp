@@ -278,15 +278,15 @@ namespace Core
 
 	void AudioSource::Serialize(json& _j)
 	{
-		_j = json{
-			{"IsActive", IsActive()},
-			{"IsLooping", GetLooping()},
-			{"Is3D", Get3D()},
-			{"Volume", GetVolume()},
-			{"Pan", GetPan()},
-			{"MinDistance", GetMinDistance()},
-			{"MaxDistance", GetMaxDistance()},
-			{"AudioClip", GetClipName()}
+		_j["AudioSource"] = json{
+				{"IsActive", IsActive()},
+				{"IsLooping", GetLooping()},
+				{"Is3D", Get3D()},
+				{"Volume", GetVolume()},
+				{"Pan", GetPan()},
+				{"MinDistance", GetMinDistance()},
+				{"MaxDistance", GetMaxDistance()},
+				{"AudioClip", GetClipName()}
 		};
 	}
 
