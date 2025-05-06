@@ -5,6 +5,7 @@
 #include "Windowing/GLFWWindow.hpp"
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
 #include "Resource/ResourceManager.hpp"
+#include "Resource/GeoShader.hpp"
 #include "Resource/ModelData.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include "Core/Physics/BoxCollider.hpp"
@@ -228,6 +229,8 @@ void EditorApp::InitGUI()
 
 void EditorApp::LoadScene()
 {
+	//Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::GeoShader>("GeometryShader.geom", "Assets/Shaders/GeometryShader.geom");
+
 	// Load All Resources
 	Resource::ResourceManager::GetInstance().LoadAllResourcesInAssetsFolder();
 	Resource::ResourceManager::GetInstance().LoadAllResources();
@@ -238,7 +241,7 @@ void EditorApp::LoadScene()
 	Resource::Mesh* vikingRoomMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
 	Resource::ShaderProgram* shaderProgramDeferredRendering = Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("DefaultDeferredRendering.shd");
-
+	
 	m_contentBrowserGUI.Init();
 	m_editorPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_editorPipeline->Init(m_window->width, m_window->height);

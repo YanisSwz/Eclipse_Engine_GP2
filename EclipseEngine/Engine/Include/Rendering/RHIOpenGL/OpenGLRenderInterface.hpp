@@ -17,6 +17,7 @@ namespace RHI
 			ECLIPSE_ENGINE IIndexBuffer* InstantiateIndexBuffer() const override;
 			ECLIPSE_ENGINE IShaderProgram* InstantiateShaderProgram() const override;
 			ECLIPSE_ENGINE IVertexShader* InstantiateVertexShader() const override;
+			ECLIPSE_ENGINE IGeometryShader* InstantiateGeometryShader() const override;
 			ECLIPSE_ENGINE IFragmentShader* InstantiateFragmentShader() const override;
 			ECLIPSE_ENGINE ITexture2D* InstantiateTexture2D() const override;
 			ECLIPSE_ENGINE ICubeMap* InstantiateCubeMap() const override;
@@ -29,6 +30,7 @@ namespace RHI
 			ECLIPSE_ENGINE void DestroyIndexBuffer(IIndexBuffer* _indexBuffer) const override;
 			ECLIPSE_ENGINE void DestroyShaderProgram(IShaderProgram* _shaderProgram) const override;
 			ECLIPSE_ENGINE void DestroyVertexShader(IVertexShader* _vertexShader) const override;
+			ECLIPSE_ENGINE void DestroyGeometryShader(IGeometryShader* _geometryShader) const override;
 			ECLIPSE_ENGINE void DestroyFragmentShader(IFragmentShader* _fragmentShader) const override;
 			ECLIPSE_ENGINE void DestroyTexture2D(ITexture2D* _texture2D) const override;
 			ECLIPSE_ENGINE void DestroyCubeMap(ICubeMap* _cubeMap) const override;

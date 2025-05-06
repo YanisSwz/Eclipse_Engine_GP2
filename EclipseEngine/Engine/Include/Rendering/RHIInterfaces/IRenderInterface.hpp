@@ -6,6 +6,7 @@
 #include "RHIInterfaces/IIndexBuffer.hpp"
 #include "RHIInterfaces/IShaderProgram.hpp"
 #include "RHIInterfaces/IVertexShader.hpp"
+#include "RHIInterfaces/IGeometryShader.hpp"
 #include "RHIInterfaces/IFragmentShader.hpp"
 #include "RHIInterfaces/ITexture2D.hpp"
 #include "RHIInterfaces/ICubeMap.hpp"
@@ -26,6 +27,7 @@ namespace RHI
 		virtual IIndexBuffer* InstantiateIndexBuffer() const = 0;
 		virtual IShaderProgram* InstantiateShaderProgram() const = 0;
 		virtual IVertexShader* InstantiateVertexShader() const = 0;
+		virtual IGeometryShader* InstantiateGeometryShader() const = 0;
 		virtual IFragmentShader* InstantiateFragmentShader() const = 0;
 		virtual ITexture2D* InstantiateTexture2D() const = 0;
 		virtual ICubeMap* InstantiateCubeMap() const = 0;
@@ -38,6 +40,7 @@ namespace RHI
 		virtual void DestroyIndexBuffer(IIndexBuffer* _indexBuffer) const = 0;
 		virtual void DestroyShaderProgram(IShaderProgram* _shaderProgram) const = 0;
 		virtual void DestroyVertexShader(IVertexShader* _vertexShader) const = 0;
+		virtual void DestroyGeometryShader(IGeometryShader* _geometryShader) const = 0;
 		virtual void DestroyFragmentShader(IFragmentShader* _fragmentShader) const = 0;
 		virtual void DestroyTexture2D(ITexture2D* _texture2D) const = 0;
 		virtual void DestroyCubeMap(ICubeMap* _cubeMap) const = 0;

@@ -17,6 +17,7 @@ namespace RHI
 		virtual void SetFragShader(unsigned int _fragShaderID) = 0;
 		virtual void Link() = 0;
 		virtual void LinkVertFragShader(unsigned int _vertShaderID, unsigned int _fragShaderID) = 0;
+		virtual void LinkVertGeoFragShader(unsigned int _vertShaderID, unsigned int _fragShaderID, unsigned int _geoShaderID) = 0;
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 		virtual int GetProgram() const = 0;

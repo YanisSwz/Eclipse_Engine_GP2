@@ -25,6 +25,13 @@ namespace Resource
 		m_fragShaderName = _fragShaderName;
 	}
 
+	void ShaderProgram::SetVertGeoFragShader(std::string _vertShaderName, std::string _fragShaderName, std::string _geoShaderName)
+	{
+		m_vertShaderName = _vertShaderName;
+		m_fragShaderName = _fragShaderName;
+		m_geoShaderName = _geoShaderName;
+	}
+
 	void ShaderProgram::Generate(RHI::IRenderInterface* _rdrInterface)
 	{
 		m_rdrInter = _rdrInterface;
@@ -32,13 +39,18 @@ namespace Resource
 			m_vertShader = ResourceManager::GetInstance().GetResource<VertShader>(m_vertShaderName);
 		if (!m_fragShader)
 			m_fragShader = ResourceManager::GetInstance().GetResource<FragShader>(m_fragShaderName);
+		if (!m_geoShader)
+			m_geoShader = ResourceManager::GetInstance().GetResource<GeoShader>(m_geoShaderName);
 
 		if (!m_vertShader || !m_fragShader)
 			return;
 
 		m_shaderProgram = m_rdrInter->InstantiateShaderProgram();
 		m_shaderProgram->CreateProgram();
-		m_shaderProgram->LinkVertFragShader(m_vertShader->GetID(), m_fragShader->GetID());
+		if (m_geoShader)
+			m_shaderProgram->LinkVertGeoFragShader(m_vertShader->GetID(), m_fragShader->GetID(), m_geoShader->GetID());
+		else
+			m_shaderProgram->LinkVertFragShader(m_vertShader->GetID(), m_fragShader->GetID());
 
 		bIsLoaded = true;
 	}

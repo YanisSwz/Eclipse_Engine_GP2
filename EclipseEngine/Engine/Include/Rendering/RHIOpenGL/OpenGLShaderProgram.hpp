@@ -19,6 +19,7 @@ namespace RHI
 			ECLIPSE_ENGINE void SetFragShader(unsigned int _fragShaderID) override;
 			ECLIPSE_ENGINE void Link() override;
 			ECLIPSE_ENGINE void LinkVertFragShader(unsigned int _vertShaderID, unsigned int _fragShaderID) override;
+			ECLIPSE_ENGINE void LinkVertGeoFragShader(unsigned int _vertShaderID, unsigned int _fragShaderID, unsigned int _geoShaderID) override;
 			ECLIPSE_ENGINE int GetProgram() const override;
 			ECLIPSE_ENGINE void Bind() override;
 			ECLIPSE_ENGINE void Unbind() override;

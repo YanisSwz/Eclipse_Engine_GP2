@@ -3,13 +3,13 @@
 
 namespace RHI
 {
-	class IVertexShader
+	class IGeometryShader
 	{
 	public:
-		IVertexShader() = default;
-		virtual ~IVertexShader() = default;
+		IGeometryShader() = default;
+		virtual ~IGeometryShader() = default;
 
-		virtual void Generate(std::string _data) = 0;
+		virtual void Generate(std::string _path) = 0;
 		virtual unsigned int GetID() const = 0;
 		virtual void Delete() = 0;
 

@@ -29,6 +29,9 @@ namespace Resource
 		T* AddResourceToLoad(std::string _resourceName, std::string _resourcePath1, std::string _resourcePath2);
 		
 		template <typename T>
+		T* AddResourceToLoad(std::string _resourceName, std::string _resourcePath1, std::string _resourcePath2, std::string _resourcePath3);
+		
+		template <typename T>
 		T* GetResource(std::string _resourceName);
 
 		template <typename T>

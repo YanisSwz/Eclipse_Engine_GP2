@@ -46,6 +46,23 @@ void OpenGLShaderProgram::LinkVertFragShader(unsigned int _vertShaderID, unsigne
 	}
 }
 
+void OpenGLShaderProgram::LinkVertGeoFragShader(unsigned int _vertShaderID, unsigned int _fragShaderID, unsigned int _geoShaderID)
+{
+	glAttachShader(m_shaderProgramID, _vertShaderID);
+	glAttachShader(m_shaderProgramID, _geoShaderID);
+	glAttachShader(m_shaderProgramID, _fragShaderID);
+	glLinkProgram(m_shaderProgramID);
+	GLint success;
+	glGetProgramiv(m_shaderProgramID, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		success;
+		GLchar infoLog[512];
+		glGetProgramInfoLog(m_shaderProgramID, 512, NULL, infoLog);
+		std::cout << "Error during the generation of shader program" << std::endl;
+	}
+}
+
 int OpenGLShaderProgram::GetProgram() const
 {
 	return m_shaderProgramID;

@@ -28,7 +28,26 @@ namespace Resource
 			shaderResource->SetVertFragShader(_resourcePath1, _resourcePath2);
 			m_resourcesToGenerate[_resourceName] = shaderResource;
 			return dynamic_cast<T*>(shaderResource);
-		}		
+		}
+
+		T* resource = new T(_resourceName);
+		m_resourcesToLoad[_resourceName] = resource;
+		m_resourcesPath[_resourceName] = _resourcePath1;
+		return resource;
+	}
+
+	template <typename T>
+	T* ResourceManager::AddResourceToLoad(std::string _resourceName, std::string _resourcePath1, std::string _resourcePath2, std::string _resourcePath3)
+	{
+		const std::type_info& typeT = typeid(T);
+		const std::type_info& typeShaderProgram = typeid(ShaderProgram);
+		if (typeT == typeShaderProgram)
+		{
+			ShaderProgram* shaderResource = new ShaderProgram(_resourceName);
+			shaderResource->SetVertGeoFragShader(_resourcePath1, _resourcePath2, _resourcePath3);
+			m_resourcesToGenerate[_resourceName] = shaderResource;
+			return dynamic_cast<T*>(shaderResource);
+		}
 
 		T* resource = new T(_resourceName);
 		m_resourcesToLoad[_resourceName] = resource;

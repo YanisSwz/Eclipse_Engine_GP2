@@ -4,6 +4,7 @@
 #include "RHIOpenGL/OpenGLIndexBuffer.hpp"
 #include "RHIOpenGL/OpenGLShaderProgram.hpp"
 #include "RHIOpenGL/OpenGLVertexShader.hpp"
+#include "RHIOpenGL/OpenGLGeometryShader.hpp"
 #include "RHIOpenGL/OpenGLFragmentShader.hpp"
 #include "RHIOpenGL/OpenGLTexture2D.hpp"
 #include "RHIOpenGL/OpenGLCubeMap.hpp"
@@ -37,6 +38,11 @@ RHI::IShaderProgram* OpenGLRenderInterface::InstantiateShaderProgram() const
 RHI::IVertexShader* OpenGLRenderInterface::InstantiateVertexShader() const
 {
 	return new OpenGLVertexShader;
+}
+
+RHI::IGeometryShader* OpenGLRenderInterface::InstantiateGeometryShader() const
+{
+	return new OpenGLGeometryShader;
 }
 
 RHI::IFragmentShader* OpenGLRenderInterface::InstantiateFragmentShader() const
@@ -102,6 +108,13 @@ void OpenGLRenderInterface::DestroyVertexShader(IVertexShader* _vertexShader) co
 	if (!_vertexShader)
 		return;
 	delete _vertexShader;
+}
+
+void OpenGLRenderInterface::DestroyGeometryShader(IGeometryShader* _geometryShader) const
+{
+	if (!_geometryShader)
+		return;
+	delete _geometryShader;
 }
 
 void OpenGLRenderInterface::DestroyFragmentShader(IFragmentShader* _fragmentShader) const
