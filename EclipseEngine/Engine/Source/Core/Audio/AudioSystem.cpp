@@ -23,7 +23,7 @@ namespace Core
 		}
 		else
 		{
-			for(int i = 0; i < m_currentCount; ++i)
+			for(int i = 0; i < m_currentSourcesCount; ++i)
 			{
 				if (m_audioSources[i].IsPlayingOnAwake())
 					m_audioSources[i].Play();
@@ -62,7 +62,7 @@ namespace Core
 			if (!m_canPlay)
 				EnableAudio();
 			m_currentListener->Update();
-			for (int i = 0; i < m_currentCount; ++i)
+			for (int i = 0; i < m_currentSourcesCount; ++i)
 				m_audioSources[i].Update();
 			m_audioEngine.update3dAudio();
 		}
@@ -77,7 +77,7 @@ namespace Core
 	{
 		if (_pause)
 		{
-			for (int i = 0; i < m_currentCount; ++i)
+			for (int i = 0; i < m_currentSourcesCount; ++i)
 			{
 				if(!m_audioSources[i].IsPaused())
 				{
@@ -110,13 +110,13 @@ namespace Core
 
 	AudioSource* AudioSystem::AddAudioSource()
 	{
-		if (m_currentCount >= MAX_SIZE)
+		if (m_currentSourcesCount >= MAX_SIZE)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Max audio source capacity reached, cannot add more!");
 			return nullptr;
 		}
 
-		for (int i = 0; i < m_currentCount; ++i)
+		for (int i = 0; i < m_currentSourcesCount; ++i)
 		{
 			if (m_audioSources[i].IsDestroyed())
 			{
@@ -128,11 +128,11 @@ namespace Core
 			}
 		}
 
-		m_audioSources[m_currentCount].~AudioSource();
-		new (&m_audioSources[m_currentCount]) AudioSource(&m_audioEngine);
-		m_audioSources[m_currentCount].SetActive(true);
-		++m_currentCount;
-		return &m_audioSources[m_currentCount - 1];
+		m_audioSources[m_currentSourcesCount].~AudioSource();
+		new (&m_audioSources[m_currentSourcesCount]) AudioSource(&m_audioEngine);
+		m_audioSources[m_currentSourcesCount].SetActive(true);
+		++m_currentSourcesCount;
+		return &m_audioSources[m_currentSourcesCount - 1];
 	}
 
 	AudioListener* AudioSystem::AddAudioListener()
@@ -204,7 +204,7 @@ namespace Core
 				m_audioEngine.set3dListenerParameters(0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f);
 		}
 		
-		for (int i = 0; i < m_currentCount; ++i)
+		for (int i = 0; i < m_currentSourcesCount; ++i)
 			m_audioSources[i].Update();
 		m_audioEngine.update3dAudio();
 	}
@@ -221,7 +221,7 @@ namespace Core
 
 	void AudioSystem::ResetAudioSourcesPause()
 	{
-		for (int i = 0; i < m_currentCount; ++i)
+		for (int i = 0; i < m_currentSourcesCount; ++i)
 		{
 			if (m_audioSources[i].IsPaused())
 				m_audioSources[i].Pause();
@@ -267,7 +267,7 @@ namespace Core
 	std::vector<AudioSource*> AudioSystem::GetAudioSources()
 	{
 		std::vector<AudioSource*> sources{};
-		for(int i = 0; i < m_currentCount; ++i)
+		for(int i = 0; i < m_currentSourcesCount; ++i)
 		{
 			if(m_audioSources[i].IsActive() && !m_audioSources->IsDestroyed())
 				sources.push_back(&m_audioSources[i]);

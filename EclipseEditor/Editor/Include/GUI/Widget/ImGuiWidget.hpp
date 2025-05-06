@@ -24,7 +24,7 @@ namespace GUI
 	bool CheckBox(const char* _checkBoxName, const char* _invisibleCheckBoxName, bool* _boolean, float _maxColumnWidth = 100.f);
 	bool FloatSlider(const char* _sliderName, float* value, float _min, float _max, const char* _format);
 	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags = 0);
-	bool AudioChannel(const char* _label, float* _stereoVolume, float* _sliderValue, ImVec2 _size);
+	bool AudioChannel(const char* _label, float* _stereoVolume, float* _sliderValue, ImVec2 _size, float _offset = 0.f);
 
 	ImVec4 ColorToVec4(Logging::COLOR _color);
 	void ColoredText(const char* _message, Logging::COLOR _color);

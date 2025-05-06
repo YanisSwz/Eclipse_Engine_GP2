@@ -463,8 +463,9 @@ namespace GUI
 		_color.w = col[3];
 	}
 
-	bool AudioChannel(const char* _label, float* _stereoVolume, float* _sliderValue, ImVec2 _size)
+	bool AudioChannel(const char* _label, float* _stereoVolume, float* _sliderValue, ImVec2 _size, float _offset)
 	{
+		ImGui::SetCursorPosX(8.f + _offset);
 		ImGui::BeginDisabled();
 		ImGui::GetStyle().Alpha = 1.f;
 		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.25f, 0.25f, 0.25f, 0.0f));
@@ -482,7 +483,7 @@ namespace GUI
 		else
 			vol = _stereoVolume[1];
 		ImGui::SameLine();
-		ImGui::SetCursorPosX(8.f);
+		ImGui::SetCursorPosX(8.f + _offset);
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(1.f, 1.f, 1.f, 1.f));
 		label = "##";
 		label += _label;
@@ -509,7 +510,13 @@ namespace GUI
 		ImGui::PopStyleColor(5);
 		ImGui::PopStyleVar();
 
-		ImGui::Text(_label);
+		ImGui::SameLine();
+		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize())); 
+		// We wrap the text to not overflow on other audio channels
+		label = _label;
+		for(int i = 12; i < label.size(); i += 12)
+			label.insert(i, "\n"); 
+		ImGui::Text(label.c_str());
 
 		return changed;
 	}

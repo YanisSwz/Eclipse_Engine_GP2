@@ -21,6 +21,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetPause(bool _pause);
 		ECLIPSE_ENGINE void Stop();
 
+		//TODO Update
 		ECLIPSE_ENGINE void PlayStartUp();
 		ECLIPSE_ENGINE AudioSource* AddAudioSource();
 		ECLIPSE_ENGINE AudioListener* AddAudioListener();
@@ -41,7 +42,7 @@ namespace Core
 		void ResetAudioSourcesPause();
 
 		static const int MAX_SIZE = 100;
-		int m_currentCount = 0;
+		int m_currentSourcesCount = 0;
 		AudioSource m_audioSources[MAX_SIZE];
 		std::vector<AudioSource*> m_audioSourcesToUnpause{};
 
