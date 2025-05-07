@@ -123,7 +123,6 @@ namespace Core
 
 	void BoxCollider::Serialize(json& _j)
 	{
-		Math::Vec3 position = GetPosition();
 		Math::Vec3 offsetPosition = GetOffsetPos();
 		Math::Vec3 scale = GetScale();
 		Math::Quat rotation = GetRotation();
@@ -131,7 +130,6 @@ namespace Core
 		_j["BoxCollider"] = json{
 			{"IsActive", IsActive()},
 			{"IsDynamic", GetIsDynamic()},
-			{"Position", {position.x, position.y, position.z}},
 			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
 			{"Scale", {scale.x, scale.y, scale.z}},
 			{"Rotation", {rotation.w, rotation.x, rotation.y, rotation.z}},
@@ -143,7 +141,6 @@ namespace Core
 	{
 		bool bIsActive;
 		bool bIsDynamic;
-		float position[3];
 		float offsetPosition[3];
 		float scale[3];
 		float rotation[4];
@@ -151,18 +148,16 @@ namespace Core
 
 		_j.at("IsActive").get_to(bIsActive);
 		_j.at("IsDynamic").get_to(bIsDynamic);
-		_j.at("Position").get_to(position);
 		_j.at("OffsetPosition").get_to(offsetPosition);
 		_j.at("Scale").get_to(scale);
 		_j.at("Rotation").get_to(rotation);
 		_j.at("Mass").get_to(mass);
 
-		SetActive(bIsActive);
 		SetDynamic(bIsDynamic);
-		SetPosition(Math::Vec3(position[0], position[1], position[2]));
 		SetOffsetPos(Math::Vec3(offsetPosition[0], offsetPosition[1], offsetPosition[2]));
 		Scale(Math::Vec3(scale[0], scale[1], scale[2]));
 		SetRotation(Math::Quat(rotation[0], rotation[1], rotation[2], rotation[3]));
 		SetMass(mass);
+		SetActive(bIsActive);
 	}
 }

@@ -12,8 +12,10 @@ namespace GUI
 		m_crtFolderSelected = m_folderRoot;
 	}
 
-	void ContentBrowseGUI::Draw()
+	std::string ContentBrowseGUI::Draw()
 	{
+		std::string selectedScene;
+
 		ImGui::SetNextWindowSizeConstraints({ 100.f, 200.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags contentBrowserWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Content Browser", 0, contentBrowserWindowFlags);
@@ -31,13 +33,15 @@ namespace GUI
 
 		ImGui::NextColumn();
 
-		tempNewFolderSelected = m_crtFolderSelected->Draw();
+		tempNewFolderSelected = m_crtFolderSelected->Draw(selectedScene);
 		if (tempNewFolderSelected)
 			m_crtFolderSelected = tempNewFolderSelected;
 
 		ImGui::Columns(1);
 
 		ImGui::End();
+
+		return selectedScene;
 	}
 
 	void ContentBrowseGUI::Delete()

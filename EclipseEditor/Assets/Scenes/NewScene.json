@@ -1,0 +1,111 @@
+{
+    "AmbientLight": [
+        1.0,
+        1.0,
+        1.0,
+        0.25
+    ],
+    "GameObjects": [
+        {
+            "GameObject3660": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        16.200000762939453,
+                        0.20000000298023224,
+                        4.699999809265137
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Avion.obj",
+                            "Texture": "Earth.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "GameObject3774": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Camera": {
+                            "IsActive": true,
+                            "FOV": 60.0,
+                            "Near": 0.10000000149011612,
+                            "Far": 1000.0
+                        }
+                    },
+                    {
+                        "BoxCollider": {
+                            "IsActive": false,
+                            "IsDynamic": false,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "Rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

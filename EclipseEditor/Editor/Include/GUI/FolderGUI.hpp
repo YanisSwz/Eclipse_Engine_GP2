@@ -24,11 +24,12 @@ namespace GUI
 
 		FolderGUI* DrawHierarchy(const FolderGUI& _currentFolder);
 
-		FolderGUI* Draw();
+		FolderGUI* Draw(std::string& _selectedScene);
 		FolderGUI* DrawFolderGUI(int _index);
 		void DrawTextureGUI(int _index);
 		void DrawMeshGUI(int _index);
 		void DrawAudioGUI(int _index);
+		void DrawSceneGUI(int _index, std::string& _selectedScene);
 		void Delete();
 
 	private:
@@ -37,6 +38,7 @@ namespace GUI
 		std::vector<Resource::Texture*> m_textureFiles;
 		std::vector<Resource::Mesh*> m_meshFiles;
 		std::vector<Resource::AudioClip*> m_audioFiles;
+		std::vector<std::string> m_sceneFiles;
 
 		static Resource::Texture* m_folderIcon;
 		static Resource::Texture* m_meshIcon;

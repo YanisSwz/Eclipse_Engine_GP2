@@ -1,6 +1,5 @@
 #include "EditorApp.hpp"
 
-
 #include "Logger.hpp"
 #include "Windowing/GLFWWindow.hpp"
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
@@ -12,17 +11,17 @@
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
 
-#include "Serializer.hpp"
-
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
 	m_height(_height)
 {
+
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "EditorApp initialization!");
 	InitWindowing(_windowName);
 	InitGUI();
 	InitRHI();
-	LoadScene();
+	LoadResources();
+	LoadScene("Scene");
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "EditorApp is created!");
 
 	m_scene.GetSystemManager()->GetAudioSystem()->PlayStartUp();
@@ -74,11 +73,13 @@ void EditorApp::Render()
 			if (ImGui::MenuItem("Save"))
 			{
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Save");
-				Core::Serializer serializer;
-				serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
+				SaveScene();
 			}
 			if (ImGui::MenuItem("Load"))
+			{
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Load");
+				ReloadScene();
+			}
 			ImGui::EndMenu();
 		}
 
@@ -103,6 +104,7 @@ void EditorApp::Render()
 				m_scene.SetState(GAME_STATE::PLAY);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Play!");
 				ImGui::SetWindowFocus("Game");
+				SaveScene();
 			}
 		}
 		else
@@ -113,6 +115,7 @@ void EditorApp::Render()
 				m_scene.SetState(GAME_STATE::STOP);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Stop!");
 				ImGui::SetWindowFocus("Scene");
+				ReloadScene();
 			}
 		}
 
@@ -165,8 +168,15 @@ void EditorApp::Render()
 	if (bIsConsoleWindowEnabled)
 		m_consoleGUI.Draw();
 
+	std::string selectedScene;
 	if (bIsContentBrowserWindowEnabled)
-		m_contentBrowserGUI.Draw();
+		selectedScene = m_contentBrowserGUI.Draw();
+	if (selectedScene != "")
+	{
+		SaveScene();
+		m_scene.Reset();
+		LoadScene(selectedScene);
+	}
 
 	GUI::EndFrame();
 
@@ -230,7 +240,7 @@ void EditorApp::InitGUI()
 #endif // ImGuiImplementOpenGL
 }
 
-void EditorApp::LoadScene()
+void EditorApp::LoadResources()
 {
 	// Load All Resources
 	Resource::ResourceManager::GetInstance().LoadAllResourcesInAssetsFolder();
@@ -242,9 +252,27 @@ void EditorApp::LoadScene()
 	m_editorPipeline->Init(m_window->width, m_window->height);
 	m_gamePipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_gamePipeline->Init(m_window->width, m_window->height);
+}
 
-	Core::Serializer serializer;
-	serializer.DeserializeSceneFromFile(&m_scene, "Assets/Scenes/Scene.json");
+void EditorApp::LoadScene(std::string _sceneName)
+{
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Loading Scene: %s", _sceneName.c_str());
+	std::string directoryPath = "Assets/Scenes/";
+	m_scene.SetName(_sceneName);
+	m_serializer.DeserializeSceneFromFile(&m_scene, directoryPath + _sceneName + ".json");
+}
+
+void EditorApp::ReloadScene()
+{
+	m_scene.Reset();
+	LoadScene(m_scene.GetName());
+}
+
+void EditorApp::SaveScene()
+{
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Saving Scene: %s", m_scene.GetName().c_str());
+	std::string directoryPath = "Assets/Scenes/";
+	m_serializer.SerializeSceneToFile(&m_scene, directoryPath + m_scene.GetName() + ".json");
 }
 
 void EditorApp::DrawScene()

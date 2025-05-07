@@ -46,11 +46,6 @@
                         "BoxCollider": {
                             "IsActive": false,
                             "IsDynamic": false,
-                            "Position": [
-                                0.0,
-                                -1.0,
-                                0.0
-                            ],
                             "OffsetPosition": [
                                 0.0,
                                 0.0,
@@ -113,11 +108,6 @@
                         "MeshCollider": {
                             "IsActive": false,
                             "IsDynamic": false,
-                            "Position": [
-                                -2.0,
-                                5.0,
-                                0.0
-                            ],
                             "OffsetPosition": [
                                 0.0,
                                 0.0,
@@ -181,11 +171,6 @@
                         "CapsuleCollider": {
                             "IsActive": true,
                             "IsDynamic": true,
-                            "Position": [
-                                0.10000000149011612,
-                                50.0,
-                                0.0
-                            ],
                             "OffsetPosition": [
                                 0.0,
                                 0.0,
@@ -248,11 +233,6 @@
                         "CapsuleCollider": {
                             "IsActive": true,
                             "IsDynamic": true,
-                            "Position": [
-                                3.5,
-                                75.0,
-                                0.10000000149011612
-                            ],
                             "OffsetPosition": [
                                 0.0,
                                 0.0,
@@ -264,10 +244,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                0.9999996423721313,
+                                1.0,
                                 0.0,
                                 0.0,
-                                0.0008726640371605754
+                                0.0
                             ],
                             "Mass": 1.0
                         }
@@ -315,11 +295,6 @@
                         "BoxCollider": {
                             "IsActive": true,
                             "IsDynamic": false,
-                            "Position": [
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
                             "OffsetPosition": [
                                 0.0,
                                 0.0,
@@ -382,11 +357,6 @@
                         "BoxCollider": {
                             "IsActive": true,
                             "IsDynamic": true,
-                            "Position": [
-                                1.0,
-                                0.0,
-                                0.0
-                            ],
                             "OffsetPosition": [
                                 0.0,
                                 0.0,
@@ -416,7 +386,7 @@
                     "LocalPosition": [
                         -1.0,
                         1.5,
-                        0.0
+                        -1.6946799755096436
                     ],
                     "LocalScale": [
                         1.0,

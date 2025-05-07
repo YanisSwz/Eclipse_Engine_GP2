@@ -10,7 +10,7 @@ namespace GUI
 		~ContentBrowseGUI() = default;
 
 		void Init();
-		void Draw();
+		std::string Draw();
 		void Delete();
 
 	private:

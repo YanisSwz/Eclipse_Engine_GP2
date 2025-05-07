@@ -3,6 +3,7 @@
 #include "Resource/Texture.hpp"
 #include "Resource/Mesh.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
+#include <filesystem>
 #include <math.h>
 
 namespace GUI
@@ -13,7 +14,6 @@ namespace GUI
 	FolderGUI::FolderGUI(std::string _name)
 		: name(_name)
 	{
-
 	}
 
 	void FolderGUI::Init()
@@ -39,6 +39,16 @@ namespace GUI
 				m_audioFiles.push_back(Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>(audioName));
 			return;
 		}
+		else if (name == "Scene")
+		{
+			for (const auto& entry : std::filesystem::directory_iterator("Assets/Scenes"))
+			{
+				if (entry.path().extension() == ".json")
+				m_sceneFiles.push_back(entry.path().stem().string());
+			}
+
+			return;
+		}
 
 		m_folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("FolderIcon.img");
 		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("MeshIcon.img");
@@ -57,6 +67,11 @@ namespace GUI
 		m_folderChildren.push_back(audioFolder);
 		audioFolder->Init();
 		audioFolder->SetParent(this);
+
+		FolderGUI* sceneFolder = new FolderGUI("Scene");
+		m_folderChildren.push_back(sceneFolder);
+		sceneFolder->Init();
+		sceneFolder->SetParent(this);
 	}
 
 	void FolderGUI::SetParent(FolderGUI* _parent)
@@ -89,7 +104,7 @@ namespace GUI
 		return newFolderSelected;
 	}
 
-	FolderGUI* FolderGUI::Draw()
+	FolderGUI* FolderGUI::Draw(std::string& _selectedScene)
 	{
 		if (m_parent)
 		{
@@ -102,8 +117,9 @@ namespace GUI
 		int texturesFilesSize = static_cast<int>(m_textureFiles.size());
 		int meshFilesSize = static_cast<int>(m_meshFiles.size());
 		int audioFilesSize = static_cast<int>(m_audioFiles.size());
+		int sceneFilesSize = static_cast<int>(m_sceneFiles.size());
 
-		int nbElem = folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize;
+		int nbElem = folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize + sceneFilesSize;
 		float tempNbElemInColumn = ImGui::GetColumnWidth() / 150.f;
 		int nbElemInColumn = fmod(tempNbElemInColumn, 1.f) <= 0.65f ? static_cast<int>(tempNbElemInColumn) - 2 : static_cast<int>(tempNbElemInColumn) - 1;
 
@@ -138,6 +154,10 @@ namespace GUI
 					else if (i < folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize)
 					{
 						DrawAudioGUI(i);
+					}
+					else if (i < folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize + sceneFilesSize)
+					{
+						DrawSceneGUI(i, _selectedScene);
 					}
 				}
 				ImGui::EndTable();
@@ -210,6 +230,23 @@ namespace GUI
 			ImGui::EndDragDropSource();
 		}
 		ImGui::Text(audio->name.c_str());
+		ImGui::PopID();
+	}
+
+	void FolderGUI::DrawSceneGUI(int _index, std::string& _selectedScene)
+	{
+		ImGui::PushID(_index);
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
+
+		std::string invisibleSceneName = "##";
+		invisibleSceneName.append(m_sceneFiles[_index]).append(" Scene Button");
+		if (ImGui::ImageButton(invisibleSceneName.c_str(), m_meshIcon->GetID(), { 100.f, 100.f }, { 0.f, 1.f }, { 1.f, 0.f }))
+			_selectedScene = m_sceneFiles[_index];
+
+		ImGui::PopStyleVar();
+		ImGui::Text(m_sceneFiles[_index].c_str());
+
 		ImGui::PopID();
 	}
 

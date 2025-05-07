@@ -28,6 +28,8 @@ namespace Core
 		ECLIPSE_ENGINE void EnableAudio();
 		ECLIPSE_ENGINE void DisableAudio();
 
+		ECLIPSE_ENGINE void Reset();
+
 	private:
 		void HandleAudioState();
 

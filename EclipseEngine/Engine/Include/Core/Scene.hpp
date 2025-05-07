@@ -37,6 +37,8 @@ namespace Core
 		ECLIPSE_ENGINE void SetState(GAME_STATE _state);
 
 		ECLIPSE_ENGINE void Reset();
+		ECLIPSE_ENGINE inline std::string GetName() const { return m_name; }
+		ECLIPSE_ENGINE inline void SetName(std::string _name) { m_name = _name; }
 
 	private:
 		static const int MAX_SIZE = 100;
@@ -45,5 +47,6 @@ namespace Core
 
 		SystemManager m_systemManager{};
 		GAME_STATE m_state = GAME_STATE::STOP;
+		std::string m_name = "";
 	};
 }

@@ -90,5 +90,7 @@ namespace Core
 	{
 		for (int i = 0; i < m_currentGameObjectCount; ++i)
 			m_gameObjects[i].Destroy();
+		m_currentGameObjectCount = 0;
+		m_systemManager.Reset();
 	}
 }

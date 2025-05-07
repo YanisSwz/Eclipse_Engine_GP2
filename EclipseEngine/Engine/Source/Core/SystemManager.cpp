@@ -101,4 +101,13 @@ namespace Core
 		Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s is not a Component type", _componentType);
 		return nullptr;
 	}
+
+	void SystemManager::Reset()
+	{
+		m_audioSystem.Reset();
+		m_physicsSystem.Reset();
+		m_transformSystem.Reset();
+		m_renderSystem.Reset();
+		m_cameraSystem.Reset();
+	}
 }

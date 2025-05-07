@@ -26,7 +26,7 @@
 class ObjectLayerPairFilterImpl : public JPH::ObjectLayerPairFilter
 {
 public:
-	virtual bool					ShouldCollide(JPH::ObjectLayer inObject1, JPH::ObjectLayer inObject2) const override
+	virtual bool ShouldCollide(JPH::ObjectLayer inObject1, JPH::ObjectLayer inObject2) const override
 	{
 		switch (inObject1)
 		{
@@ -128,6 +128,10 @@ namespace Core
 		ICollider* FindCollider(const JPH::BodyID& _bodyID);
 
 		ECLIPSE_ENGINE void Update(float _deltaTime);
+
+		ECLIPSE_ENGINE inline void SetIsFirstUpdate(bool _bIsFirstUpdate) { bFirstUpdate = _bIsFirstUpdate; }
+
+		ECLIPSE_ENGINE void Reset();
 
 	private:
 		static const int MAX_COLLIDER_SIZE = 1000;

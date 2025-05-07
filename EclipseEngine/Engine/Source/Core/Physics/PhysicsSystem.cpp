@@ -283,6 +283,42 @@ namespace Core
 		{
 			bFirstUpdate = false;
 			_deltaTime = 0.f;
+
+			GameObject* GO;
+			Math::Quat rotationQuat{ 0.f, 0.f, 0.f, 0.f };
+			for (int i = 0; i < m_currentBoxColliderCount; ++i)
+			{
+				GO = m_boxColliders[i].GetGameObject();
+				if (GO)
+				{
+					if (!GO->IsActive())
+						continue;
+					m_boxColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_boxColliders[i].GetOffsetPos()));
+					m_boxColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+				}
+			}
+			for (int i = 0; i < m_currentCapsuleColliderCount; ++i)
+			{
+				GO = m_capsuleColliders[i].GetGameObject();
+				if (GO)
+				{
+					if (!GO->IsActive())
+						continue;
+					m_capsuleColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_capsuleColliders[i].GetOffsetPos()));
+					m_capsuleColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+				}
+			}
+			for (int i = 0; i < m_currentMeshColliderCount; ++i)
+			{
+				GO = m_meshColliders[i].GetGameObject();
+				if (GO)
+				{
+					if (!GO->IsActive())
+						continue;
+					m_meshColliders[i].SetPosition(GO->transform->GetPosition() + GO->transform->GetRotation().Rotate(m_meshColliders[i].GetOffsetPos()));
+					m_meshColliders[i].SetRotation(Math::Quat::Normalized(GO->transform->GetRotation()));
+				}
+			}
 		}
 
 		GameObject* GO;
@@ -377,5 +413,14 @@ namespace Core
 				GO->transform->SetRotation(rotationQuat);
 			}
 		}
+	}
+
+	void PhysicsSystem::Reset()
+	{
+		m_currentColliderCount = 0;
+		m_currentBoxColliderCount = 0;
+		m_currentCapsuleColliderCount = 0;
+		m_currentMeshColliderCount = 0;
+		bFirstUpdate = true;
 	}
 }

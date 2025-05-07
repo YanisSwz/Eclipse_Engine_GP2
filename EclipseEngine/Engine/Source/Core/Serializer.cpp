@@ -13,6 +13,13 @@ namespace Core
 	void Serializer::DeserializeSceneFromFile(Scene* _scene, std::string _filePath)
 	{
 		std::ifstream fileStream(_filePath);
+
+		if (!fileStream.is_open() || fileStream.peek() == std::ifstream::traits_type::eof())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Scene %s is empty or can't be loaded", _filePath.c_str());
+			return;
+		}
+
 		json scene;
 		fileStream >> scene;
 		

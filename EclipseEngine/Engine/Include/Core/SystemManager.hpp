@@ -85,6 +85,8 @@ namespace Core
 
 		ECLIPSE_ENGINE Component* AddComponent(std::string _componentType);
 
+		ECLIPSE_ENGINE void Reset();
+
 	private:
 		CameraSystem m_cameraSystem{};
 		TransformSystem m_transformSystem{};
