@@ -12,28 +12,26 @@ namespace Core
 	class ParticleEmitter : public Component
 	{
 	public:
-		ParticleEmitter() = default;
-		ParticleEmitter(ParticleEmitterProps _particleEmitterProps, ParticleProps _particleProps);
-		~ParticleEmitter() = default;
+		ECLIPSE_ENGINE ParticleEmitter();
+		ECLIPSE_ENGINE ParticleEmitter(ParticleEmitterProps _particleEmitterProps, ParticleProps _particleProps);
+		ECLIPSE_ENGINE ~ParticleEmitter() = default;
+
+		static const int MAX_PARTICLE_COUNT = 2000;
+		ParticleEmitterProps particleEmitterProps;
+		ParticleProps particleProps;
 
 		ECLIPSE_ENGINE Particle* AddParticle();
-		ECLIPSE_ENGINE void SetParticleEmitterProps(ParticleEmitterProps _particleEmitterProps);
-		ECLIPSE_ENGINE void SetParticleProps(ParticleProps _particleProps);
 
 		ECLIPSE_ENGINE void Update(float _deltaTime);
 		ECLIPSE_ENGINE std::vector<ParticleRenderData> GetRenderData();
 
 	private:
-		ParticleEmitterProps m_particleEmitterProps;
-		ParticleProps m_particleProps;
-
-		static const int MAX_PARTICLE_COUNT = 2000;
-		int m_particlesCount;
+		int m_particlesCount = 0;
 		std::vector<Particle> m_particles;
 
 		float m_spawnRateRemaining = 0.f;
 
 		void SpawnParticle();
-		void UpdateParticle(float _deltaTime);
+		void UpdateParticles(float _deltaTime);
 	};
 }

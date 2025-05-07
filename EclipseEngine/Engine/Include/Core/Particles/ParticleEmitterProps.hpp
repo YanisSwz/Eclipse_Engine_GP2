@@ -4,8 +4,8 @@ namespace Core
 {
 	struct ParticleEmitterProps
 	{
-		unsigned int maxNbParticles = 100;
-		float particleSpawnRateVariation = 1.f;
-		float particleSpawnRate = 1.f;
+		int maxNbParticles = 500;
+		float particleSpawnRateVariation = 0.f;
+		float particleSpawnRate = 0.01f;
 	};
 }

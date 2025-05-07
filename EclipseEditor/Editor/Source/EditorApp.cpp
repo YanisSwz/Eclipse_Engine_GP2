@@ -242,7 +242,7 @@ void EditorApp::LoadScene()
 	Resource::Mesh* vikingRoomMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
 	Resource::Texture* texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
 	Resource::ShaderProgram* shaderProgramDeferredRendering = Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("DefaultDeferredRendering.shd");
-	
+
 	m_contentBrowserGUI.Init();
 	m_editorPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_editorPipeline->Init(m_window->width, m_window->height);
@@ -359,23 +359,24 @@ void EditorApp::LoadScene()
 	particle->transform->SetLocalPosition(Math::Vec3(0.f, 2.f, 0.f));
 	particle->name = "Particle Test";
 	Core::ParticleEmitter* particleEmiter = particle->AddComponent<Core::ParticleEmitter>();
-	Core::ParticleEmitterProps emiterProps;
-	emiterProps.maxNbParticles = 2000;
-	emiterProps.particleSpawnRate = 0.01f;
-	emiterProps.particleSpawnRateVariation = 0.f;
-	Core::ParticleProps partProps;
-	partProps.lifeTime = 10.f;
-	partProps.positionOffset = { 0.f, 0.f, 0.f };
-	partProps.positionVariation = { 1.f, 0.f, 1.f };
-	partProps.sizeBegin = 50.f;
-	partProps.sizeEnd = 25.f;
-	partProps.sizeVariation = 10.f;
-	partProps.colorBegin = { 0.f, 0.f, 1.f, 1.f };
-	partProps.colorEnd = { 1.f, 0.f, 0.f, 1.f };
-	partProps.velocity = { 0.f, -2.f, 0.f };
-	partProps.velocityVariation = { 0.5f, 0.f, 0.f };
-	particleEmiter->SetParticleEmitterProps(emiterProps);
-	particleEmiter->SetParticleProps(partProps);
+	if (particleEmiter)
+	{
+		// Emitter Properties
+		particleEmiter->particleEmitterProps.maxNbParticles = 10;
+		particleEmiter->particleEmitterProps.particleSpawnRate = 0.01f;
+		particleEmiter->particleEmitterProps.particleSpawnRateVariation = 0.f;
+		// Particle Properties
+		particleEmiter->particleProps.lifeTime = 1.f;
+		particleEmiter->particleProps.positionOffset = { 0.f, 0.f, 0.f };
+		particleEmiter->particleProps.positionVariation = { 1.f, 0.f, 0.f };
+		particleEmiter->particleProps.sizeBegin = 50.f;
+		particleEmiter->particleProps.sizeEnd = 25.f;
+		particleEmiter->particleProps.sizeVariation = 10.f;
+		particleEmiter->particleProps.colorBegin = { 0.f, 0.f, 1.f, 1.f };
+		particleEmiter->particleProps.colorEnd = { 1.f, 0.f, 0.f, 1.f };
+		particleEmiter->particleProps.velocity = { 0.f, -2.f, 0.f };
+		particleEmiter->particleProps.velocityVariation = { 0.5f, 0.f, 0.f };
+	}
 
 	Core::Serializer serializer;
 	serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
@@ -386,7 +387,7 @@ void EditorApp::DrawScene()
 	m_editorPipeline->Rescale(m_sceneWindowWidth, m_sceneWindowHeight);
 	m_renderInterface->Viewport(0, 0, m_sceneWindowWidth, m_sceneWindowHeight);
 	m_scene.GetSystemManager()->Render(m_renderInterface, m_editorPipeline, m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos());
-	
+
 	m_gamePipeline->Rescale(m_gameWindowWidth, m_gameWindowHeight);
 	m_renderInterface->Viewport(0, 0, m_gameWindowWidth, m_gameWindowHeight);
 	Core::Camera* gameCamera = m_scene.GetSystemManager()->GetCameraSystem()->GetCurrentCamera();
@@ -402,7 +403,7 @@ void EditorApp::PickObjectID()
 		int mousePosX = static_cast<int>(mousePos.x) - m_sceneWindowPosX;
 		int mousePosY = m_sceneWindowHeight - static_cast<int>(mousePos.y) - m_sceneWindowPosY - 30; // -30 for the size of the ImGui window titlebar
 		int pickID = m_editorPipeline->PickObjectID(mousePosX, mousePosY);
-		
+
 		m_crtGOSelected = m_scene.GetObjectByID(pickID);
 	}
 }

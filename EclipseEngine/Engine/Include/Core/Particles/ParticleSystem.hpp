@@ -15,7 +15,7 @@ namespace Core
 		ECLIPSE_ENGINE std::vector<std::vector<ParticleRenderData>> GetRenderData();
 
 	private:
-		static const int MAX_PARTICLE_EMITTER_COUNT = 1;
+		static const int MAX_PARTICLE_EMITTER_COUNT = 100;
 		int m_particleEmitterCount = 0;
 		ParticleEmitter m_particleEmitter[MAX_PARTICLE_EMITTER_COUNT];
 	};

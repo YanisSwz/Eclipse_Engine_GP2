@@ -15,6 +15,7 @@ namespace GUI
 	void BeginNewFrame();
 	void EndFrame();
 	void RenderGUI();
+	bool DragInt(const char* _label, const char* _invisibleLabel, int* _int, float _speed = 0.1f, int _minValue = 0.f, int _maxValue = 0.f, const char* _format = "%.3f", float _maxColumnWidth = 100.f);
 	bool DragFloat(const char* _label, const char* _invisibleLabel, float* _float, float _speed = 0.1f, float _minValue = 0.f, float _maxValue = 0.f, const char* _format = "%.3f", float _maxColumnWidth = 100.f);
 	bool DragVec3XYZ(const char* _label, Math::Vec3& _vec3, float _resetValue = 0.0f, float _maxColumnWidth = 100.f);
 	bool DragUniformVec3XYZ(const char* _label, Math::Vec3& _vec3, bool& _isLocked, Math::Vec3& _scaleFactor, float _resetValue = 0.0f, float _maxColumnWidth = 100.f);

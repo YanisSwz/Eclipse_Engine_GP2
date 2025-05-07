@@ -17,6 +17,7 @@ namespace Core
 	class SpotLight;
 	class AudioSource;
 	class AudioListener;
+	class ParticleEmitter;
 }
 
 namespace GUI
@@ -42,6 +43,7 @@ namespace GUI
 		void DrawSpotLightComponent(Core::SpotLight* _light);
 		void DrawAudioSourceComponent(Core::AudioSource* _source);
 		void DrawAudioListenerComponent(Core::AudioListener* _listener);
+		void DrawParticleEmitterComponent(Core::ParticleEmitter* _particleEmitter);
 
 		void DrawAddComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddCameraComponent(Core::GameObject* _crtGOSelected);
@@ -49,6 +51,7 @@ namespace GUI
 		void DrawAddColliderComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddLightComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddAudioComponent(Core::GameObject* _crtGOSelected);
+		void DrawAddParticlesComponent(Core::GameObject* _crtGOSelected);
 
 		ImGuiTreeNodeFlags m_treeNodeComponentFlags = ImGuiTreeNodeFlags_None;
 		ImGuiTreeNodeFlags m_treeNodeAddComponentFlags = ImGuiTreeNodeFlags_None;

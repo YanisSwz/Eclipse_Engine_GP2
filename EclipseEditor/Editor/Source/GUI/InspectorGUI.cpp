@@ -59,6 +59,7 @@ namespace GUI
 		DrawSpotLightComponent(_crtGOSelected->GetComponent<Core::SpotLight>());
 		DrawAudioSourceComponent(_crtGOSelected->GetComponent<Core::AudioSource>());
 		DrawAudioListenerComponent(_crtGOSelected->GetComponent<Core::AudioListener>());
+		DrawParticleEmitterComponent(_crtGOSelected->GetComponent<Core::ParticleEmitter>());
 
 		DrawAddComponent(_crtGOSelected);
 
@@ -505,11 +506,52 @@ namespace GUI
 				return;
 			}
 
-			if(!_listener->IsCurrentListener())
+			if (!_listener->IsCurrentListener())
 			{
 				if (ImGui::Button("Set as current listener"))
 					_listener->SetCurrentListener();
 			}
+			ImGui::TreePop();
+		}
+	}
+
+	void InspectorGUI::DrawParticleEmitterComponent(Core::ParticleEmitter* _particleEmitter)
+	{
+		if (!_particleEmitter)
+			return;
+
+		if (ImGui::TreeNodeEx("Particle Emitter", m_treeNodeComponentFlags))
+		{
+			if (DrawDeleteComponentPopup(_particleEmitter))
+			{
+				ImGui::TreePop();
+				return;
+			}
+
+			ImGui::SeparatorText("Emitter Properties");
+			
+			if (GUI::DragInt("Max Particle", "MaxParticleDragInt", &_particleEmitter->particleEmitterProps.maxNbParticles, 0.1f, 0, Core::ParticleEmitter::MAX_PARTICLE_COUNT))
+			{
+				if (_particleEmitter->particleEmitterProps.maxNbParticles > Core::ParticleEmitter::MAX_PARTICLE_COUNT)
+					_particleEmitter->particleEmitterProps.maxNbParticles = Core::ParticleEmitter::MAX_PARTICLE_COUNT;
+				else if (_particleEmitter->particleEmitterProps.maxNbParticles < 0)
+					_particleEmitter->particleEmitterProps.maxNbParticles = 0;
+			}
+
+			if (GUI::DragFloat("Spawn Rate", "ParticleSpawnRateDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRate, 0.1f, 0.f, FLT_MAX))
+			{
+				if (_particleEmitter->particleEmitterProps.particleSpawnRate < 0.f)
+					_particleEmitter->particleEmitterProps.particleSpawnRate = 0.f;
+			}
+
+			if (GUI::DragFloat("Spawn Rate \nVariation", "ParticleSpawnRateVariationDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRateVariation, 0.1f, 0.f, FLT_MAX))
+			{
+				if (_particleEmitter->particleEmitterProps.particleSpawnRateVariation < 0.f)
+					_particleEmitter->particleEmitterProps.particleSpawnRateVariation = 0.f;
+			}
+
+			ImGui::SeparatorText("Particle Properties");
+
 			ImGui::TreePop();
 		}
 	}
@@ -527,6 +569,7 @@ namespace GUI
 			DrawAddColliderComponent(_crtGOSelected);
 			DrawAddLightComponent(_crtGOSelected);
 			DrawAddAudioComponent(_crtGOSelected);
+			DrawAddParticlesComponent(_crtGOSelected);
 			ImGui::EndPopup();
 		}
 
@@ -649,7 +692,7 @@ namespace GUI
 			{
 				Core::DirectionalLight* directionalLight = _crtGOSelected->GetComponent<Core::DirectionalLight>();
 				if (!directionalLight)
-					directionalLight = _crtGOSelected->AddComponent<Core::DirectionalLight>();
+					_crtGOSelected->AddComponent<Core::DirectionalLight>();
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
@@ -658,7 +701,7 @@ namespace GUI
 			{
 				Core::PointLight* pointLight = _crtGOSelected->GetComponent<Core::PointLight>();
 				if (!pointLight)
-					pointLight = _crtGOSelected->AddComponent<Core::PointLight>();
+					_crtGOSelected->AddComponent<Core::PointLight>();
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
@@ -667,7 +710,7 @@ namespace GUI
 			{
 				Core::SpotLight* SpotLight = _crtGOSelected->GetComponent<Core::SpotLight>();
 				if (!SpotLight)
-					SpotLight = _crtGOSelected->AddComponent<Core::SpotLight>();
+					_crtGOSelected->AddComponent<Core::SpotLight>();
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
@@ -684,7 +727,7 @@ namespace GUI
 			{
 				Core::AudioSource* audioSource = _crtGOSelected->GetComponent<Core::AudioSource>();
 				if (!audioSource)
-					audioSource = _crtGOSelected->AddComponent<Core::AudioSource>();
+					_crtGOSelected->AddComponent<Core::AudioSource>();
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();
@@ -693,7 +736,25 @@ namespace GUI
 			{
 				Core::AudioListener* audioListener = _crtGOSelected->GetComponent<Core::AudioListener>();
 				if (!audioListener)
-					audioListener = _crtGOSelected->AddComponent<Core::AudioListener>();
+					_crtGOSelected->AddComponent<Core::AudioListener>();
+				else
+					bIsComponentAlreadyAddedWindowEnable = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::TreePop();
+		}
+	}
+
+	void InspectorGUI::DrawAddParticlesComponent(Core::GameObject* _crtGOSelected)
+	{
+		_crtGOSelected;
+		if (ImGui::TreeNodeEx("Particles", m_treeNodeAddComponentFlags))
+		{
+			if (ImGui::Button("Particle Emitter", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
+			{
+				Core::ParticleEmitter* particleEmitter= _crtGOSelected->GetComponent<Core::ParticleEmitter>();
+				if (!particleEmitter)
+					_crtGOSelected->AddComponent<Core::ParticleEmitter>();
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
 				ImGui::CloseCurrentPopup();

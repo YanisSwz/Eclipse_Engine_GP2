@@ -27,6 +27,32 @@ namespace GUI
 #endif // ImGuiImplementOpenGL
 	}
 
+	bool DragInt(const char* _label, const char* _invisibleLabel, int* _int, float _speed, int _minValue, int _maxValue, const char* _format, float _maxColumnWidth)
+	{
+		std::string invisibleLabel = "##";
+		invisibleLabel.append(_invisibleLabel);
+		ImGui::PushID(invisibleLabel.c_str());
+		ImGui::Columns(2, 0, false);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
+		ImGui::Text(_label);
+		ImGui::NextColumn();
+
+		_speed; _minValue; _maxValue; _format;
+
+		if (ImGui::DragInt(invisibleLabel.c_str(), _int, _speed, _minValue, _maxValue))
+		{
+			ImGui::Columns(1);
+			ImGui::PopID();
+			return true;
+		}
+		ImGui::Columns(1);
+		ImGui::PopID();
+		return false;
+	}
+
 	bool DragFloat(const char* _label, const char* _invisibleLabel, float* _float, float _speed, float _minValue, float _maxValue, const char* _format, float _maxColumnWidth)
 	{
 		std::string invisibleLabel = "##";
