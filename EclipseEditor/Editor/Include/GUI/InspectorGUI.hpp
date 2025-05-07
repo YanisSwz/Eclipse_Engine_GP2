@@ -1,6 +1,7 @@
 #pragma once
 #include "Maths.hpp"
 #include <imgui.h>
+#include <imgui_stdlib.h>
 
 namespace Core
 {
@@ -59,5 +60,6 @@ namespace GUI
 		bool bIsComponentAlreadyAddedWindowEnable = false;
 		bool bIsScaleLocked = false;
 		Math::Vec3 m_scaleFactor{ 1.f, 1.f, 1.f };
+		const int MAX_NAME_SIZE = 50;
 	};
 }

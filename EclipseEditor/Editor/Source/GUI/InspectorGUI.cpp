@@ -33,11 +33,12 @@ namespace GUI
 			ImGui::End();
 			return;
 		}
-		if (ImGui::InputText("##Name", _crtGOSelected->name.data(), 255))
+		if (ImGui::InputText("##Name", &_crtGOSelected->name))
 		{
-			_crtGOSelected->name = _crtGOSelected->name.c_str();
 			if (_crtGOSelected->name.size() == 0)
 				_crtGOSelected->name = "GameObject" + std::to_string(_crtGOSelected->GetID());
+			else if (_crtGOSelected->name.size() > MAX_NAME_SIZE)
+				_crtGOSelected->name = _crtGOSelected->name.substr(0, MAX_NAME_SIZE-1).append("...");
 		}
 
 		bool bIsActive = _crtGOSelected->IsActive();
