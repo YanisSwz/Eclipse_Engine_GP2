@@ -25,7 +25,7 @@ namespace Core
 		{
 			for(int i = 0; i < m_currentSourcesCount; ++i)
 			{
-				if (m_audioSources[i].IsPlayingOnAwake())
+				if (m_audioSources[i].IsPlayingOnAwake() && m_audioSources[i].IsActive())
 					m_audioSources[i].Play();
 			}
 		}
@@ -269,7 +269,7 @@ namespace Core
 		std::vector<AudioSource*> sources{};
 		for(int i = 0; i < m_currentSourcesCount; ++i)
 		{
-			if(m_audioSources[i].IsActive() && !m_audioSources->IsDestroyed())
+			if(!m_audioSources[i].IsDestroyed())
 				sources.push_back(&m_audioSources[i]);
 		}
 		return sources;

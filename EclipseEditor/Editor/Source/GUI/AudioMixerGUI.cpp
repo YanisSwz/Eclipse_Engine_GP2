@@ -5,7 +5,7 @@
 
 namespace GUI
 {
-	AudioMixerGUI::AudioMixerGUI(){}
+	AudioMixerGUI::AudioMixerGUI() {}
 
 	void AudioMixerGUI::Draw(Core::AudioSystem* _audioSystem)
 	{
@@ -18,12 +18,26 @@ namespace GUI
 			_audioSystem->SetMaxVolume(volume);
 
 		std::vector<Core::AudioSource*> channels = _audioSystem->GetAudioSources();
-		for(int i = 0; i < channels.size(); ++i)
+		if (!channels.empty())
 		{
-			ImGui::SameLine();
-			GUI::AudioChannel(channels[i]->GetGameObject()->name.c_str(), channels[i]->GetStereoVolume(), &volume, ImVec2(35, ImGui::GetWindowHeight() / 1.75f), 140.f + i * 100.f);
+			//int skip = 0;
+			for (int i = 0; i < channels.size(); ++i)
+			{
+				ImGui::SameLine();
+				if (!channels[i]->IsActive() || channels[i]->GetClip() == nullptr)
+					ImGui::BeginDisabled();
+				float vol = channels[i]->GetMaxVolume();
+				float pan = channels[i]->GetPan();
+				if (GUI::AudioChannel(channels[i]->GetGameObject()->name.c_str(), channels[i]->IsPlaying(), &pan, &vol, ImVec2(35, ImGui::GetWindowHeight() / 1.75f), 140.f + i * 140.f, i))
+				{
+					channels[i]->SetPan(pan);
+					channels[i]->SetMaxVolume(vol);
+				}
+				if (!channels[i]->IsActive() || channels[i]->GetClip() == nullptr)
+					ImGui::EndDisabled();
+			}
+			channels.clear();
 		}
-		channels.clear();
 
 		ImGui::End();
 	}

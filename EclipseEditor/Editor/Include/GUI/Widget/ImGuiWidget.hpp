@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "imgui-knobs.h"
 #include "Logger.hpp"
 #include <vector>
 #include <string>
@@ -25,6 +26,7 @@ namespace GUI
 	bool FloatSlider(const char* _sliderName, float* value, float _min, float _max, const char* _format);
 	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags = 0);
 	bool AudioChannel(const char* _label, float* _stereoVolume, float* _sliderValue, ImVec2 _size, float _offset = 0.f);
+	bool AudioChannel(const char* _label, bool _isPlaying, float* _pan, float* _sliderValue, ImVec2 _size, float _offset = 0.f, int ID = 0);
 
 	ImVec4 ColorToVec4(Logging::COLOR _color);
 	void ColoredText(const char* _message, Logging::COLOR _color);
