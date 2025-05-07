@@ -53,7 +53,7 @@ namespace RHI::OpenGL
 			memcpy(p, _particlesData[i].data(), _particlesData[i].size() * sizeof(Core::ParticleRenderData));
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
 
-			unsigned int block_index = glGetUniformBlockIndex(m_particleShader->GetProgramID(), "shader_data");
+			unsigned int block_index = glGetUniformBlockIndex(m_particleShader->GetProgramID(), "particleDataBlock");
 			GLuint binding_point_index = 0;
 			glBindBufferBase(GL_UNIFORM_BUFFER, binding_point_index, m_ubo);
 			glUniformBlockBinding(m_particleShader->GetProgramID(), block_index, binding_point_index);
