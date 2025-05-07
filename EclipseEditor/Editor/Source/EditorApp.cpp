@@ -80,6 +80,10 @@ void EditorApp::Render()
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Load");
 				ReloadScene();
 			}
+			if (ImGui::MenuItem("Create"))
+			{
+				bIsNewSceneWindowOpen = true;
+			}
 			ImGui::EndMenu();
 		}
 
@@ -92,6 +96,30 @@ void EditorApp::Render()
 			ImGui::MenuItem("Content Browser", "", &bIsContentBrowserWindowEnabled);
 			ImGui::MenuItem("Console", "", &bIsConsoleWindowEnabled);
 			ImGui::EndMenu();
+		}
+
+		if (bIsNewSceneWindowOpen)
+		{
+			ImGui::OpenPopup("Create New Scene");
+		}
+
+		
+		if (ImGui::BeginPopupModal("CreateNewSceneWindowModal", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			ImGui::InputText("##NewScene", m_newSceneName.data(), 255);
+
+			if (ImGui::Button("Create"))
+			{
+				m_newSceneName = m_newSceneName.c_str();
+				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Creating new Scene: %s", m_newSceneName.c_str());
+			}
+			if (ImGui::Button("Cancel"))
+			{
+				bIsNewSceneWindowOpen = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
 		}
 
 		ImGui::SetCursorPosX(ImGui::GetWindowWidth() / 2.f - 55.f);

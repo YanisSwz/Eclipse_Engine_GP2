@@ -73,8 +73,11 @@ private:
 	bool bIsConsoleWindowEnabled = true;
 	bool bIsContentBrowserWindowEnabled = true;
 	bool bIsGameWindowEnabled = true;
+	bool bIsNewSceneWindowOpen = false;
 
 	Core::Serializer m_serializer;
+
+	std::string m_newSceneName;
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();

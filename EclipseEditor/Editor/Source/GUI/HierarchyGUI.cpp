@@ -13,6 +13,8 @@ namespace GUI
 		ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
 		
+
+
 		if (ImGui::BeginPopupContextWindow("HierarchyPopUpMenu"))
 		{
 			if (ImGui::Button("Add Node"))
@@ -23,12 +25,17 @@ namespace GUI
 			ImGui::EndPopup();
 		}
 
-		std::vector<Core::Transform*> transforms = _scene->GetSystemManager()->GetTransformsRoot()->GetChildren();
-		for (Core::Transform* transform : transforms)
+		if (ImGui::TreeNodeEx(_scene->GetName().c_str(), ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
-			if (tempNewGOSelected)
-				newGameObjectSelected = tempNewGOSelected;
+			std::vector<Core::Transform*> transforms = _scene->GetSystemManager()->GetTransformsRoot()->GetChildren();
+			for (Core::Transform* transform : transforms)
+			{
+				Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
+				if (tempNewGOSelected)
+					newGameObjectSelected = tempNewGOSelected;
+			}
+
+			ImGui::TreePop();
 		}
 
 		ImGui::End();
