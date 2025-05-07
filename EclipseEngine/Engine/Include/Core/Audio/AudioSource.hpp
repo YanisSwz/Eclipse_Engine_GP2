@@ -14,8 +14,9 @@ namespace Core
 		ECLIPSE_ENGINE ~AudioSource() = default;
 
 		ECLIPSE_ENGINE void SetActive(bool _activate) override;
-		ECLIPSE_ENGINE void Update();
+		ECLIPSE_ENGINE void Destroy() override;
 
+		ECLIPSE_ENGINE void Update();
 		ECLIPSE_ENGINE void Play();
 		/// <summary>
 		/// Pause/Unpause the sound

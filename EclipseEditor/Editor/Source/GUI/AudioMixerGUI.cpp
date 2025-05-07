@@ -14,24 +14,31 @@ namespace GUI
 		ImGui::Begin("Audio Mixer", 0, ImGuiWindowFlags_HorizontalScrollbar);
 
 		float volume = _audioSystem->GetMaxVolume();
-		if (GUI::AudioChannel("Master", _audioSystem->GetStereoVolume(), &volume, ImVec2(50, ImGui::GetWindowHeight() / 1.5f)))
+		if (GUI::AudioChannel("Master", _audioSystem->GetStereoVolume(), volume, ImVec2(50, ImGui::GetWindowHeight() / 1.5f)))
 			_audioSystem->SetMaxVolume(volume);
 
 		std::vector<Core::AudioSource*> channels = _audioSystem->GetAudioSources();
 		if (!channels.empty())
 		{
-			//int skip = 0;
 			for (int i = 0; i < channels.size(); ++i)
 			{
 				ImGui::SameLine();
 				if (!channels[i]->IsActive() || channels[i]->GetClip() == nullptr)
 					ImGui::BeginDisabled();
 				float vol = channels[i]->GetMaxVolume();
-				float pan = channels[i]->GetPan();
-				if (GUI::AudioChannel(channels[i]->GetGameObject()->name.c_str(), channels[i]->IsPlaying(), &pan, &vol, ImVec2(35, ImGui::GetWindowHeight() / 1.75f), 140.f + i * 140.f, i))
+				if (!channels[i]->Is3D())
 				{
-					channels[i]->SetPan(pan);
-					channels[i]->SetMaxVolume(vol);
+					float pan = channels[i]->GetPan();
+					if (GUI::AudioChannel(channels[i]->GetGameObject()->name.c_str(), channels[i]->IsPlaying(), &pan, vol, ImVec2(35, ImGui::GetWindowHeight() / 1.75f), 140.f + i * 140.f, i))
+					{
+						channels[i]->SetPan(pan);
+						channels[i]->SetMaxVolume(vol);
+					}
+				}
+				else
+				{
+					if (GUI::AudioChannel3D(channels[i]->GetGameObject()->name.c_str(), channels[i]->IsPlaying(), vol, ImVec2(35, ImGui::GetWindowHeight() / 1.75f), 140.f + i * 140.f, i))
+						channels[i]->SetMaxVolume(vol);
 				}
 				if (!channels[i]->IsActive() || channels[i]->GetClip() == nullptr)
 					ImGui::EndDisabled();

@@ -27,6 +27,13 @@ namespace Core
 		}
 	}
 
+	void AudioSource::Destroy()
+	{
+		Stop();
+		m_active = false;
+		m_destroyed = true;
+	}
+
 	void AudioSource::Update() 
 	{
 		if (m_destroyed || !m_active)
