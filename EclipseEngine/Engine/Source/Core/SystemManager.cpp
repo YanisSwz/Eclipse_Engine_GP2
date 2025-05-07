@@ -28,6 +28,7 @@ namespace Core
 			break;
 		}
 		m_transformSystem.LateUpdate();
+		m_particleSystem.Update(_deltaTime);
 	}
 
 	Transform* SystemManager::AddTransform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)
@@ -42,7 +43,7 @@ namespace Core
 
 	void SystemManager::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos)
 	{
-		m_renderSystem.Render(_renderInterface, _pipeline, _VP, _viewPos);
+		m_renderSystem.Render(_renderInterface, _pipeline, _VP, _viewPos, m_particleSystem.GetRenderData());
 	}
 
 	AudioSystem* SystemManager::GetAudioSystem()

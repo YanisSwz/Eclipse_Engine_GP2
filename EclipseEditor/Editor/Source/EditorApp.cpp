@@ -12,6 +12,7 @@
 #include "Lighting/DirectionalLight.hpp"
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
+#include "Core/Particles/ParticleEmitter.hpp"
 
 #include "Serializer.hpp"
 
@@ -353,6 +354,29 @@ void EditorApp::LoadScene()
 	soundTest->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
 	soundTest->name = "Sound Test";
 	soundTest->AddComponent<Core::AudioSource>();
+
+	Core::GameObject* particle = m_scene.CreateGameObject();
+	particle->transform->SetLocalPosition(Math::Vec3(0.f, 2.f, 0.f));
+	particle->name = "Particle Test";
+	Core::ParticleEmitter* particleEmiter = particle->AddComponent<Core::ParticleEmitter>();
+	Core::ParticleEmitterProps emiterProps;
+	emiterProps.maxNbParticles = 2000;
+	emiterProps.particleSpawnRate = 0.01f;
+	emiterProps.particleSpawnRateVariation = 0.f;
+	Core::ParticleProps partProps;
+	partProps.lifeTime = 10.f;
+	partProps.positionOffset = { 0.f, 0.f, 0.f };
+	partProps.positionVariation = { 1.f, 0.f, 1.f };
+	partProps.sizeBegin = 50.f;
+	partProps.sizeEnd = 25.f;
+	partProps.sizeVariation = 10.f;
+	partProps.colorBegin = { 0.f, 0.f, 1.f, 1.f };
+	partProps.colorEnd = { 1.f, 0.f, 0.f, 1.f };
+	partProps.velocity = { 0.f, -2.f, 0.f };
+	partProps.velocityVariation = { 0.5f, 0.f, 0.f };
+	particleEmiter->SetParticleEmitterProps(emiterProps);
+	particleEmiter->SetParticleProps(partProps);
+
 	Core::Serializer serializer;
 	serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
 }

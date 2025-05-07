@@ -1,4 +1,5 @@
 #pragma once
+#include <random>
 
 namespace Math
 {
@@ -19,5 +20,10 @@ namespace Math
 			else
 				return 0.f;
 		}
+		/// <summary>
+		/// Return a random value between 0 and 1
+		/// </summary>
+		/// <returns>float</returns>
+		inline float Random() { return static_cast<float>(std::rand()) / RAND_MAX; }
 	}
 }

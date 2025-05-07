@@ -39,7 +39,7 @@ namespace RHI::OpenGL
 			m_shaderProgram = Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("SkyboxShader.shd");
 
 		if (!m_skybox)
-			m_skybox = Resource::ResourceManager::GetInstance().GetResource<Resource::Skybox>("Space.skb");
+			m_skybox = Resource::ResourceManager::GetInstance().GetResource<Resource::Skybox>("Default.skb");
 
 		if (!m_shaderProgram || !m_skybox)
 			return;

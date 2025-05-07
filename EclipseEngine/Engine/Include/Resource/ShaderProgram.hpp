@@ -23,6 +23,7 @@ namespace Resource
 
 		ECLIPSE_ENGINE void Bind();
 		ECLIPSE_ENGINE void Unbind();
+		ECLIPSE_ENGINE int GetProgramID() const;
 		
 
 		ECLIPSE_ENGINE void SetInt(const char* _uniformName, int _value);

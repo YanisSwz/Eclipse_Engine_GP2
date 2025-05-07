@@ -82,6 +82,11 @@ namespace Resource
 		m_shaderProgram->Unbind();
 	}
 
+	int ShaderProgram::GetProgramID() const
+	{
+		return m_shaderProgram->GetProgram();
+	}
+
 	void ShaderProgram::SetInt(const char* _uniformName, int _value)
 	{
 		if (!m_shaderProgram)

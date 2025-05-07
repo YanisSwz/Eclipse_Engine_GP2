@@ -1,5 +1,6 @@
 #pragma once
 #include "Maths.hpp"
+#include "Particles/ParticleRenderData.hpp"
 #include <vector>
 
 namespace Resource
@@ -25,7 +26,7 @@ namespace RHI
 		
 		virtual int PickObjectID(int _mousePosX, int _mousePosY) = 0;
 
-		virtual void Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights) = 0;
+		virtual void Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights, std::vector<std::vector<Core::ParticleRenderData>> _particleData) = 0;
 		virtual unsigned int GetFinalTexture() const = 0;
 
 	protected:

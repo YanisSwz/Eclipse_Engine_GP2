@@ -5,6 +5,7 @@
 #include "Physics/PhysicsSystem.hpp"
 #include "Audio/AudioSystem.hpp"
 #include "Camera/CameraSystem.hpp"
+#include "Particles/ParticleSystem.hpp"
 #include "GameState.hpp"
 #include <vector>
 
@@ -79,6 +80,11 @@ namespace Core
 				delete basePtr;
 				return dynamic_cast<T*>(m_audioSystem.AddAudioListener());
 			}
+			else if (ParticleEmitter* particleEmitter_ptr = dynamic_cast<ParticleEmitter*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_particleSystem.AddParticleEmitter());
+			}
 			delete basePtr;
 			return nullptr;
 		}
@@ -89,5 +95,6 @@ namespace Core
 		RenderSystem m_renderSystem{};
 		PhysicsSystem m_physicsSystem{};
 		AudioSystem m_audioSystem{};
+		ParticleSystem m_particleSystem{};
 	};
 }
