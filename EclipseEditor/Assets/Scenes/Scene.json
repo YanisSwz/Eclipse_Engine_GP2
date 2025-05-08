@@ -505,8 +505,8 @@
                 "Transform": {
                     "LocalPosition": [
                         0.0,
-                        0.0,
-                        0.0
+                        0.3609684705734253,
+                        -3.0698275566101074
                     ],
                     "LocalScale": [
                         1.0,
@@ -536,10 +536,18 @@
                                 1.0,
                                 1.0
                             ],
-                            "Distance": 10.0,
+                            "Distance": 2.700000047683716,
                             "ConstantAttenuation": 1.0,
                             "LinearAttenuation": 0.09000000357627869,
                             "QuadraticAttenuation": 0.03200000151991844
+                        }
+                    },
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Earth.obj",
+                            "Texture": "Earth.img",
+                            "Shader": "DefaultDeferredRendering.shd"
                         }
                     }
                 ]
@@ -644,7 +652,7 @@
                     "LocalPosition": [
                         0.0,
                         0.0,
-                        0.0
+                        -2.995365858078003
                     ],
                     "LocalScale": [
                         1.0,
@@ -713,6 +721,14 @@
                                     5.0
                                 ]
                             }
+                        }
+                    },
+                    {
+                        "Camera": {
+                            "IsActive": true,
+                            "FOV": 60.0,
+                            "Near": 0.10000000149011612,
+                            "Far": 1000.0
                         }
                     }
                 ]
