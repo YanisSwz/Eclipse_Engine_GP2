@@ -384,7 +384,7 @@ void EditorApp::PickObjectID()
 	{
 		Math::Vec2 mousePos = m_window->GetCursorPos();
 		int mousePosX = static_cast<int>(mousePos.x) - m_sceneWindowPosX;
-		int mousePosY = m_sceneWindowHeight - static_cast<int>(mousePos.y) - m_sceneWindowPosY - 30; // -30 for the size of the ImGui window titlebar
+		int mousePosY = m_sceneWindowHeight - (static_cast<int>(mousePos.y) - (m_sceneWindowPosY - 30)); // -30 for the size of the ImGui window titlebar
 		int pickID = m_editorPipeline->PickObjectID(mousePosX, mousePosY);
 
 		m_crtGOSelected = m_scene.GetObjectByID(pickID);
