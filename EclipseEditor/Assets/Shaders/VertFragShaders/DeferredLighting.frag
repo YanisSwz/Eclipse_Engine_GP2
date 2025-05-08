@@ -76,15 +76,15 @@ vec3 PointLightComputation(PointLight pointLight, vec3 FragPos, vec3 Normal, vec
 vec3 SpotLightComputation(SpotLight spotLight, vec3 FragPos, vec3 Normal, vec3 Diffuse, float Specular, vec3 ViewDir)
 {
     // diffuse
-    vec3 norm = normalize(Normal);
+    vec3 Norm = normalize(Normal);
     vec3 lightDir = normalize(spotLight.Position - FragPos);
 
     if (dot(-lightDir, spotLight.Direction) > spotLight.OuterCutoff)
     {
-        vec3 diffuse = max(dot(norm, lightDir), 0.0) * Diffuse * spotLight.Color.rgb * spotLight.Color.a;
+        vec3 diffuse = max(dot(Norm, lightDir), 0.0) * Diffuse * spotLight.Color.rgb * spotLight.Color.a;
         // specular
         vec3 halfwayDir = normalize(lightDir + ViewDir);
-        float spec = pow(max(dot(Normal, halfwayDir), 0.0), 32.0);
+        float spec = pow(max(dot(Norm, halfwayDir), 0.0), 32.0);
         vec3 specular = spotLight.Color.rgb * spotLight.Color.a * spec * Specular;
         // intensity
         float theta = dot(lightDir, normalize(-spotLight.Direction));

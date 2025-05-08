@@ -1,5 +1,5 @@
 @echo OFF
-set BUILD_DIR=EclipseProject
+set BUILD_DIR=Build
 
 call "%~dp0UpdateSubmodules.bat"
 
@@ -13,7 +13,7 @@ mkdir %BUILD_DIR%
 cd %BUILD_DIR%
 
 REM Generates the visual studio solution
-cmake -G "Visual Studio 17 2022" ".."
+cmake --preset "VS_2022" ".."
 
 echo Visual Studio 2022 solution generated
 
