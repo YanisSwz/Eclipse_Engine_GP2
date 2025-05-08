@@ -43,7 +43,10 @@ namespace Core
 	void ParticleSystem::Update(float _deltaTime)
 	{
 		for (int i = 0; i < m_particleEmitterCount; ++i)
-			m_particleEmitter[i].Update(_deltaTime);
+		{
+			if (m_particleEmitter[i].IsActive())
+				m_particleEmitter[i].Update(_deltaTime);
+		}
 	}
 	
 	std::vector<std::vector<ParticleRenderData>> ParticleSystem::GetRenderData()

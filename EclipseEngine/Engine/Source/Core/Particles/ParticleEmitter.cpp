@@ -6,14 +6,12 @@ namespace Core
 {
 	ParticleEmitter::ParticleEmitter()
 	{
-		//m_particles.resize(particleEmitterProps.maxNbParticles);
 	}
 
 	ParticleEmitter::ParticleEmitter(ParticleEmitterProps _particleEmitterProps, ParticleProps _particleProps)
 	{
 		particleEmitterProps = _particleEmitterProps;
 		particleProps = _particleProps;
-		//m_particles.resize(_particleEmitterProps.maxNbParticles);
 	}
 
 	Particle* ParticleEmitter::AddParticle()
@@ -77,6 +75,19 @@ namespace Core
 			}
 		}
 		return renderData;
+	}
+
+	void ParticleEmitter::Destroy()
+	{
+		m_active = false;
+		m_destroyed = true;
+		Delete();
+	}
+
+	void ParticleEmitter::Delete()
+	{
+		m_particles.clear();
+		m_particlesCount = 0;
 	}
 
 	void ParticleEmitter::SpawnParticle()
