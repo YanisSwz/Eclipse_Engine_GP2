@@ -69,12 +69,10 @@ namespace Core
 		}
 		// If a sound is already playing, stop it 
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
-		{
-			if (m_paused)
-				Pause();
 			m_audioEngine->stop(m_sound);
-		}
 
+		if (m_paused)
+			m_paused = false;
 		if (!m_3D)
 		{
 			m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
@@ -99,9 +97,14 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to pause!");
 			return;
 		}
+		if (!m_audioEngine->isValidVoiceHandle(m_sound) && m_paused)
+		{	
+			m_paused = false;
+			return;
+		}
+
 		m_paused = !m_paused;
-		if(m_audioEngine->isValidVoiceHandle(m_sound))
-			m_audioEngine->setPause(m_sound, m_paused);
+		m_audioEngine->setPause(m_sound, m_paused);
 	}
 
 	void AudioSource::Stop()

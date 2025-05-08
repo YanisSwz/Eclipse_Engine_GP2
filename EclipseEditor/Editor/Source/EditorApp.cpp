@@ -94,43 +94,81 @@ void EditorApp::Render()
 		if (gameState == GAME_STATE::STOP)
 		{
 			// Play Button
-			if (ImGui::Button("Play", { 50.f, 30.f }))
+			if(m_playBtnTexture == nullptr)
+				m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
+
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.5f, 0.5f, 0.5f, 1.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.75f, 0.75f, 0.75f, 1.f });
+
+			if (ImGui::ImageButton("Play", m_playBtnTexture->GetID(), { 25.f, 25.f }))
 			{
 				m_scene.SetState(GAME_STATE::PLAY);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Play!");
 				ImGui::SetWindowFocus("Game");
 			}
+
+			ImGui::PopStyleColor(4);
 		}
 		else
 		{
 			// Stop Button
-			if (ImGui::Button("Stop", { 50.f, 30.f }))
+			if (m_stopBtnTexture == nullptr)
+				m_stopBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Stop.img");
+
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.5f, 0.5f, 0.5f, 1.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.75f, 0.75f, 0.75f, 1.f });
+
+			if (ImGui::ImageButton("Stop", m_stopBtnTexture->GetID(), { 25.f, 25.f }))
 			{
 				m_scene.SetState(GAME_STATE::STOP);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Stop!");
 				ImGui::SetWindowFocus("Scene");
 			}
+
+			ImGui::PopStyleColor(4);
 		}
 
 		if (gameState == GAME_STATE::PAUSE)
 		{
 			// Resume Button
-			if (ImGui::Button("Resume", { 50.f, 30.f }))
+			if (m_pauseBtnTexture == nullptr)
+				m_pauseBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Pause.img");
+
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0.5f, 0.5f, 0.5f, 1.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.75f, 0.75f, 0.75f, 1.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.85f, 0.85f, 0.85f, 1.f });
+
+			if(ImGui::ImageButton("Resume", m_pauseBtnTexture->GetID(), { 25.f, 25.f }))
 			{
 				m_scene.SetState(GAME_STATE::PLAY);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Resume!");
 			}
+			ImGui::PopStyleColor(4);
 		}
 		else
 		{
 			// Pause Button
+			if (m_pauseBtnTexture == nullptr)
+				m_pauseBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Pause.img");
+
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.5f, 0.5f, 0.5f, 1.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.75f, 0.75f, 0.75f, 1.f });
+
 			ImGui::BeginDisabled(gameState == GAME_STATE::STOP);
-			if (ImGui::Button("Pause", { 50.f, 30.f }))
+			if (ImGui::ImageButton("Pause", m_pauseBtnTexture->GetID(), { 25.f, 25.f }))
 			{
 				m_scene.SetState(GAME_STATE::PAUSE);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Pause!");
 			}
 			ImGui::EndDisabled();
+			ImGui::PopStyleColor(4);
 		}
 
 		ImGui::EndMainMenuBar();

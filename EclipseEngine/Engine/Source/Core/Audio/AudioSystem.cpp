@@ -70,9 +70,30 @@ namespace Core
 		}
 	}
 
+	void AudioSystem::Play()
+	{
+		if (m_paused)
+			m_paused = false;
+		ResetAudioSourcesPause();
+		if (m_currentListener == nullptr)
+		{
+			DisableAudio();
+			return;
+		}
+		else
+		{
+			for (int i = 0; i < m_currentSourcesCount; ++i)
+			{
+				if (m_audioSources[i].IsActive())
+					m_audioSources[i].Play();
+			}
+		}
+	}
+
 	void AudioSystem::SetPause(bool _pause)
 	{
-		if (_pause)
+		m_paused = _pause;
+		if (m_paused)
 		{
 			for (int i = 0; i < m_currentSourcesCount; ++i)
 			{
@@ -96,6 +117,8 @@ namespace Core
 
 	void AudioSystem::Stop()
 	{
+		if (m_paused)
+			m_paused = false;
 		m_audioEngine.stopAll();
 		ResetAudioSourcesPause();
 	}

@@ -18,7 +18,9 @@ namespace Core
 		ECLIPSE_ENGINE void Start();
 		ECLIPSE_ENGINE void Destroy();
 		ECLIPSE_ENGINE void Update();
+		ECLIPSE_ENGINE void Play();
 		ECLIPSE_ENGINE void SetPause(bool _pause);
+		ECLIPSE_ENGINE inline bool IsPaused() const { return m_paused; }
 		ECLIPSE_ENGINE void Stop();
 
 		//TODO Update
@@ -55,6 +57,7 @@ namespace Core
 		SoLoud::Wav m_startupSound{};
 
 		bool m_canPlay = true;
+		bool m_paused = false;
 		float m_stereoVolume[2] = { 0.f, 0.f };
 	};
 }

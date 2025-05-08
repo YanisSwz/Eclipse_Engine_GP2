@@ -20,6 +20,11 @@ namespace RHI
 	class IRenderInterface;
 }
 
+namespace Resource
+{
+	class Texture;
+}
+
 class EditorApp
 {
 public:
@@ -73,6 +78,10 @@ private:
 	bool bIsContentBrowserWindowEnabled = true;
 	bool bIsGameWindowEnabled = true;
 	bool bIsAudioMixerWindowEnabled = true;
+
+	Resource::Texture* m_playBtnTexture = nullptr;
+	Resource::Texture* m_stopBtnTexture = nullptr;
+	Resource::Texture* m_pauseBtnTexture = nullptr;
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();

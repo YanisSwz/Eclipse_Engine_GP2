@@ -17,6 +17,5 @@ namespace GUI
 		void Draw(Core::AudioSystem* _audioSystem);
 
 	private:
-		
 	};
 }
