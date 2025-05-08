@@ -372,8 +372,8 @@ void EditorApp::LoadScene()
 		particleEmiter->particleProps.sizeBegin = 50.f;
 		particleEmiter->particleProps.sizeEnd = 25.f;
 		particleEmiter->particleProps.sizeVariation = 10.f;
-		particleEmiter->particleProps.colorBegin = { 0.f, 0.f, 1.f, 1.f };
-		particleEmiter->particleProps.colorEnd = { 1.f, 0.f, 0.f, 1.f };
+		particleEmiter->particleProps.colorBegin = { 0.f, 0.f, 255.f, 255.f };
+		particleEmiter->particleProps.colorEnd = { 255.f, 0.f, 0.f, 255.f };
 		particleEmiter->particleProps.velocity = { 0.f, -2.f, 0.f };
 		particleEmiter->particleProps.velocityVariation = { 0.5f, 0.f, 0.f };
 	}

@@ -14,8 +14,8 @@ namespace Core
 		float sizeEnd = 25.f;
 		float sizeVariation = 0.f;
 
-		Math::Vec4 colorBegin{ 1.f, 0.f, 1.f, 1.f };
-		Math::Vec4 colorEnd{ 1.f, 0.f, 1.f, 1.f };
+		Math::Vec4 colorBegin{ 255.f, 0.f, 255.f, 255.f };
+		Math::Vec4 colorEnd{ 255.f, 0.f, 255.f, 255.f };
 
 		Math::Vec3 velocity{ 0.f, 0.f, 0.f };
 		Math::Vec3 velocityVariation{ 2.f, 2.f, 3.f };

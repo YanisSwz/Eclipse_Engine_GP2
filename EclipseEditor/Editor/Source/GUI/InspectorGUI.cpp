@@ -408,7 +408,7 @@ namespace GUI
 			if (data != nullptr)
 			{
 				float range = 1000.f;
-				if (_source->GetVolume() >= 1.f/range)
+				if (_source->GetVolume() >= 1.f / range)
 					range = 1.f / _source->GetVolume();
 				ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 0.75f, 0.f, 1.f));
 				ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, std::to_string(_source->GetLength()).c_str(), -range, range, ImVec2(0.f, 200.f));
@@ -432,7 +432,7 @@ namespace GUI
 			bool isLooping = _source->GetLooping();
 			if (GUI::CheckBox("Looping", "##1", &isLooping))
 				_source->SetLooping(isLooping);
-			
+
 			float volume = _source->GetVolume();
 			if (GUI::FloatSlider("Volume", &volume, 0.f, 1.f, "%.2f"))
 				_source->SetVolume(volume);
@@ -529,29 +529,19 @@ namespace GUI
 			}
 
 			ImGui::SeparatorText("Emitter Properties");
-			
-			if (GUI::DragInt("Max Particle", "MaxParticleDragInt", &_particleEmitter->particleEmitterProps.maxNbParticles, 0.1f, 0, Core::ParticleEmitter::MAX_PARTICLE_COUNT))
-			{
-				if (_particleEmitter->particleEmitterProps.maxNbParticles > Core::ParticleEmitter::MAX_PARTICLE_COUNT)
-					_particleEmitter->particleEmitterProps.maxNbParticles = Core::ParticleEmitter::MAX_PARTICLE_COUNT;
-				else if (_particleEmitter->particleEmitterProps.maxNbParticles < 0)
-					_particleEmitter->particleEmitterProps.maxNbParticles = 0;
-			}
-
-			if (GUI::DragFloat("Spawn Rate", "ParticleSpawnRateDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRate, 0.1f, 0.f, FLT_MAX))
-			{
-				if (_particleEmitter->particleEmitterProps.particleSpawnRate < 0.f)
-					_particleEmitter->particleEmitterProps.particleSpawnRate = 0.f;
-			}
-
-			if (GUI::DragFloat("Spawn Rate \nVariation", "ParticleSpawnRateVariationDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRateVariation, 0.1f, 0.f, FLT_MAX))
-			{
-				if (_particleEmitter->particleEmitterProps.particleSpawnRateVariation < 0.f)
-					_particleEmitter->particleEmitterProps.particleSpawnRateVariation = 0.f;
-			}
+			GUI::DragInt("Max Particle", "MaxParticleDragInt", &_particleEmitter->particleEmitterProps.maxNbParticles, 0.1f, 0, Core::ParticleEmitter::MAX_PARTICLE_COUNT);
+			GUI::DragFloat("Spawn Rate", "ParticleSpawnRateDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRate, 0.1f, 0.f, FLT_MAX);
+			GUI::DragFloat("Spawn Rate \nVariation", "ParticleSpawnRateVariationDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRateVariation, 0.1f, 0.f, FLT_MAX);
 
 			ImGui::SeparatorText("Particle Properties");
-
+			GUI::DragFloat("Life Time", "LifeTimeDragFloat", &_particleEmitter->particleProps.lifeTime, 0.1f, 0.f, FLT_MAX);
+			GUI::DragColorRGBA("Color Begin", _particleEmitter->particleProps.colorBegin, 255.f);
+			GUI::DragColorRGBA("Color End", _particleEmitter->particleProps.colorEnd, 255.f);
+			GUI::DragFloat("Size Begin", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			GUI::DragFloat("Size End", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			GUI::DragFloat("Size Variation", "SizeVariationDragFloat", &_particleEmitter->particleProps.sizeVariation, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			GUI::DragVec3XYZ("Velocity", _particleEmitter->particleProps.velocity, 0.f, 125.f);
+			GUI::DragVec3XYZ("Velocity Variation", _particleEmitter->particleProps.velocityVariation, 0.f, 125.f);
 			ImGui::TreePop();
 		}
 	}
@@ -671,7 +661,7 @@ namespace GUI
 					meshCollider->SetPosition(_crtGOSelected->transform->GetPosition());
 					meshCollider->SetRotation(_crtGOSelected->transform->GetRotation());
 					Core::Model* model = _crtGOSelected->GetComponent<Core::Model>();
-					if(model != nullptr)
+					if (model != nullptr)
 						meshCollider->SetMeshScale(model->GetMesh(), _crtGOSelected->transform->GetScale());
 					else
 						meshCollider->Scale(_crtGOSelected->transform->GetScale());
@@ -752,7 +742,7 @@ namespace GUI
 		{
 			if (ImGui::Button("Particle Emitter", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
 			{
-				Core::ParticleEmitter* particleEmitter= _crtGOSelected->GetComponent<Core::ParticleEmitter>();
+				Core::ParticleEmitter* particleEmitter = _crtGOSelected->GetComponent<Core::ParticleEmitter>();
 				if (!particleEmitter)
 					_crtGOSelected->AddComponent<Core::ParticleEmitter>();
 				else

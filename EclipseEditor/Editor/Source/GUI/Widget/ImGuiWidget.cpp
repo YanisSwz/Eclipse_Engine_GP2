@@ -60,7 +60,7 @@ namespace GUI
 		ImGui::PushID(invisibleLabel.c_str());
 		ImGui::Columns(2, 0, false);
 		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
-			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 3.f);
 		else
 			ImGui::SetColumnWidth(0, _maxColumnWidth);
 		ImGui::Text(_label);
@@ -365,6 +365,147 @@ namespace GUI
 		return changed;
 	}
 
+	bool DragColorRGBA(const char* _label, Math::Vec4& _vec4, float _resetValue, float _maxColumnWidth)
+	{
+		bool changed = false;
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[0];
+
+		// Draw widget label
+		ImGui::PushID(_label);
+		ImGui::Columns(2, 0, false);
+		if ((ImGui::GetWindowWidth() / 5.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
+		ImGui::Text(_label);
+		ImGui::NextColumn();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+		float lineHeight = ImGui::GetFrameHeight();
+		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+		// Draw R
+		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 4.f);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("R", buttonSize))
+		{
+			_vec4.x = _resetValue;
+			changed = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		changed |= ImGui::DragFloat("##R", &_vec4.x, 0.1f, 0.f, 255.f, "%.0f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		// Draw G
+		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 4.f);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("G", buttonSize))
+		{
+			_vec4.y = _resetValue;
+			changed = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		changed |= ImGui::DragFloat("##G", &_vec4.y, 0.1f, 0.f, 255.f, "%.0f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		// Draw B
+		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 4.f);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("B", buttonSize))
+		{
+			_vec4.z = _resetValue;
+			changed = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		changed |= ImGui::DragFloat("##B", &_vec4.z, 0.1f, 0.f, 255.f, "%.0f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		// Draw A
+		ImGui::PushItemWidth(ImGui::CalcItemWidth() / 4.f);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.8f, 0.8f, _vec4.w / 255.f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.9f, 0.9f, _vec4.w / 255.f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.8f, 0.8f, _vec4.w / 255.f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("A", buttonSize))
+		{
+			_vec4.w = _resetValue;
+			changed = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		changed |= ImGui::DragFloat("##A", &_vec4.w, 0.1f, 0.f, 255.f, "%.0f");
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+
+
+		// Color Picker PopUp
+		ImVec4 ImVec4Color{ _vec4.x / 255.f, _vec4.y / 255.f, _vec4.z / 255.f, _vec4.w / 255.f };
+		if (ImGui::ColorButton("Particle Color Begin", ImVec4Color))
+			ImGui::OpenPopup("ColorPickerPopUp");
+
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("Color4", &ImVec4Color.x, sizeof(ImVec4));
+			ImGui::Text(_label);
+			ImGui::SameLine();
+			ImGui::ColorButton("Particle Color Begin", ImVec4Color);
+			ImGui::EndDragDropSource();
+		}
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Color4"))
+			{
+				IM_ASSERT(payload->DataSize == sizeof(ImVec4));
+				ImVec4 payload_n = *static_cast<ImVec4*>(payload->Data);
+				_vec4 = { payload_n.x * 255.f, payload_n.y * 255.f, payload_n.z * 255.f, payload_n.w * 255.f };
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		if (ImGui::BeginPopup("ColorPickerPopUp"))
+		{
+			const float square_sz = ImGui::GetFrameHeight();
+			ImGuiColorEditFlags picker_flags = ImGuiColorEditFlags_DisplayMask_ | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaPreviewHalf;
+			ImGui::SetNextItemWidth(square_sz * 12.0f);
+
+			float colorPick4[4] = { _vec4.x / 255.f, _vec4.y / 255.f, _vec4.z / 255.f, _vec4.w / 255.f };
+			if (ImGui::ColorPicker4("##picker", colorPick4, picker_flags))
+				_vec4 = { colorPick4[0] * 255.f, colorPick4[1] * 255.f, colorPick4[2] * 255.f, colorPick4[3] * 255.f };
+			ImGui::EndPopup();
+		}
+
+		ImGui::PopID();
+
+		return changed;
+	}
 
 	void DrawImage(const char* _imageName, unsigned int _imageID, float _size)
 	{

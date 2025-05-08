@@ -70,7 +70,7 @@ namespace Core
 		{
 			if (m_particles[i].isEnable)
 			{
-				particleRenderData.color = m_particles[i].color;
+				particleRenderData.color = m_particles[i].color / 255.f;
 				particleRenderData.position = m_particles[i].position;
 				particleRenderData.size = m_particles[i].size;
 				renderData.push_back(particleRenderData);
