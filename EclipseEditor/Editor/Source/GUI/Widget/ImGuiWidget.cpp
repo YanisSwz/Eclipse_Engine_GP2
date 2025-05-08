@@ -540,12 +540,15 @@ namespace GUI
 		std::string label = "##";
 		label += _label;
 		label += "IsPlaying" + std::to_string(ID);
+		
+		ImGui::PushStyleColor(ImGuiCol_CheckMark, ImVec4(1.f, 0.75f, 0.f, 1.f));
 		ImGui::RadioButton(label.c_str(), _isPlaying);
 		ImGui::EndDisabled();
+		ImGui::PopStyleColor();
 
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(8.f + _offset);
-		ImGui::SetCursorPosY(_size.y - 80.f);
+		ImGui::SetCursorPosY(_size.y - 85.f);
 		label = "Pan " + std::to_string(ID);
 		if (ImGuiKnobs::Knob(label.c_str(), _pan, -1.0f, 1.0f, 0.01f, "%.2f", ImGuiKnobVariant_Tick, 60.f))
 			changed = true;
@@ -608,28 +611,25 @@ namespace GUI
 		std::string label = "##";
 		label += _label;
 		label += "IsPlaying" + std::to_string(ID);
+		ImGui::PushStyleColor(ImGuiCol_CheckMark, ImVec4(1.f, 0.75f, 0.f, 1.f));
 		ImGui::RadioButton(label.c_str(), _isPlaying);
 		ImGui::EndDisabled();
+		ImGui::PopStyleColor();
 
-		/*ImGui::SameLine();
+		auto* colors = ImGui::GetStyle().Colors;
+		ImVec4 color = ImVec4(colors[ImGuiCol_Button].x, colors[ImGuiCol_Button].y, colors[ImGuiCol_Button].z, alpha);
+		ImGui::SameLine();
 		ImGui::SetCursorPosX(8.f + _offset);
-		ImGui::SetCursorPosY(_size.y - 80.f);
-		label = "Pan " + std::to_string(ID);
-		if (ImGuiKnobs::Knob(label.c_str(), _pan, -1.0f, 1.0f, 0.01f, "%.2f", ImGuiKnobVariant_Tick, 60.f))
-			changed = true;
-		if (ImGui::IsItemActive() && ImGui::IsMouseDoubleClicked(0))
-		{
-			*_pan = 0.f;
-			changed = true;
-		}*/
+		ImGui::SetCursorPosY(_size.y);
+		ImGui::SetWindowFontScale(1.5f);
+		ImGui::TextColored(color, "3D  ");
+		ImGui::SetWindowFontScale(1.f);
 
 		ImGui::PopStyleColor(2);
 		ImGui::PopStyleVar();
 
 		ImGui::SameLine();
 
-		auto* colors = ImGui::GetStyle().Colors;
-		ImVec4 color = ImVec4(colors[ImGuiCol_Button].x, colors[ImGuiCol_Button].y, colors[ImGuiCol_Button].z, alpha);
 		ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
 		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, color);
 		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);

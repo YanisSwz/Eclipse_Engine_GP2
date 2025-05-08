@@ -49,8 +49,6 @@ namespace Core
 		ECLIPSE_ENGINE void SetMaxDistance(float _max);
 		ECLIPSE_ENGINE void SetPlayOnAwake(bool _play);
 		ECLIPSE_ENGINE bool IsPlayingOnAwake() const;
-		ECLIPSE_ENGINE float* GetStereoVolume();
-		ECLIPSE_ENGINE float GetVolume() const;
 
 		ECLIPSE_ENGINE static void Enable();
 		ECLIPSE_ENGINE static void Disable();

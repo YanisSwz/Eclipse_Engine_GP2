@@ -8,9 +8,6 @@ namespace Core
 		m_audioEngine.init();
 		m_audioEngine.setVisualizationEnable(true);
 		EnableAudio();
-
-		/*m_startupSound.load("Assets/Audio/startup.mp3");
-		m_startupSound.setVolume(2.f);*/
 	}
 
 	void AudioSystem::Start()
@@ -105,7 +102,7 @@ namespace Core
 
 	void AudioSystem::PlayStartUp()
 	{
-		//m_audioEngine.play(m_startupSound);
+		
 	}
 
 	AudioSource* AudioSystem::AddAudioSource()
