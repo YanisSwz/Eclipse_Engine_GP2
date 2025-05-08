@@ -55,4 +55,9 @@ namespace Core
 	{
 		return m_root;
 	}
+
+	void TransformSystem::Reset()
+	{
+		m_currentCount = 1;
+	}
 }

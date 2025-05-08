@@ -41,23 +41,23 @@ namespace Core
 		return m_gameObject->transform->GetForward();
 	}
 
-	void to_json(json& _j, const SpotLight& _spotLight)
+	void SpotLight::Serialize(json& _j)
 	{
-		Math::Vec4 color = _spotLight.GetColor();
+		Math::Vec4 color = GetColor();
 
-		_j = json{
-			{"IsActive", _spotLight.IsActive()},
+		_j["SpotLight"] = json{
+			{"IsActive", IsActive()},
 			{"Color", { color.w, color.x, color.y, color.z }},
-			{"InnerCutOff", _spotLight.GetInnerCutOff()},
-			{"OuterCutOff", _spotLight.GetOuterCutOff()},
-			{"Distance", _spotLight.GetDistance()},
-			{"ConstantAttenuation", _spotLight.GetConstAtt()},
-			{"LinearAttenuation", _spotLight.GetLinAtt()},
-			{"QuadraticAttenuation", _spotLight.GetQuadAtt()}
+			{"InnerCutOff", GetInnerCutOff()},
+			{"OuterCutOff", GetOuterCutOff()},
+			{"Distance", GetDistance()},
+			{"ConstantAttenuation", GetConstAtt()},
+			{"LinearAttenuation", GetLinAtt()},
+			{"QuadraticAttenuation", GetQuadAtt()}
 		};
 	}
 
-	void from_json(const json& _j, SpotLight& _spotLight)
+	void SpotLight::Deserialize(const json& _j)
 	{
 		bool bIsActive;
 		float color[4];
@@ -77,13 +77,13 @@ namespace Core
 		_j.at("LinearAttenuation").get_to(linAtt);
 		_j.at("QuadraticAttenuation").get_to(quadAtt);
 
-		_spotLight.SetActive(bIsActive);
-		_spotLight.SetColor(color[0], color[1], color[2], color[3]);
-		_spotLight.SetInnerCutOff(innerCutOff);
-		_spotLight.SetOuterCutOff(outerCutOff);
-		_spotLight.SetDistance(distance);
-		_spotLight.SetConstAtt(constAtt);
-		_spotLight.SetLinAtt(linAtt);
-		_spotLight.SetQuadAtt(quadAtt);
+		SetActive(bIsActive);
+		SetColor(color[1], color[2], color[3], color[0]);
+		SetInnerCutOff(innerCutOff);
+		SetOuterCutOff(outerCutOff);
+		SetDistance(distance);
+		SetConstAtt(constAtt);
+		SetLinAtt(linAtt);
+		SetQuadAtt(quadAtt);
 	}
 }

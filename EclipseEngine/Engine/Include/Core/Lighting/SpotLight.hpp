@@ -33,6 +33,9 @@ namespace Core
 		ECLIPSE_ENGINE inline void SetLinAtt(float _linAtt) { m_linearAttenuation = _linAtt; }
 		ECLIPSE_ENGINE inline void SetQuadAtt(float _quadAtt) { m_quadraticAttenuation = _quadAtt; }
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		/// <summary>
 		/// Inner cutoff angle in degrees
@@ -50,7 +53,4 @@ namespace Core
 		Math::Vec3 GetPosition() const;
 		Math::Vec3 GetDirection() const;
 	};
-
-	void to_json(json& _j, const SpotLight& _spotLight);
-	void from_json(const json& _j, SpotLight& _spotLight);
 }

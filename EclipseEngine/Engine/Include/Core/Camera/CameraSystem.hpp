@@ -15,6 +15,8 @@ namespace Core
 		
 		ECLIPSE_ENGINE Camera* GetCurrentCamera() const;
 
+		ECLIPSE_ENGINE void Reset();
+
 	private:
 		static const int MAX_CAMERA_SIZE = 10;
 		int m_currentCameraCount = 0;

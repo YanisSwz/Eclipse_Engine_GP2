@@ -167,4 +167,11 @@ namespace Core
 		m_canPlay = false;
 		AudioSource::Disable();
 	}
+
+	void AudioSystem::Reset()
+	{
+		m_currentCount = 0;
+		m_currentListenersCount = 0;
+		m_currentListener = nullptr;
+	}
 }

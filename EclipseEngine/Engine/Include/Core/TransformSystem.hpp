@@ -15,6 +15,8 @@ namespace Core
 		ECLIPSE_ENGINE void LateUpdate();
 		ECLIPSE_ENGINE Transform* GetRoot() const;
 
+		ECLIPSE_ENGINE void Reset();
+
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentCount = 0;

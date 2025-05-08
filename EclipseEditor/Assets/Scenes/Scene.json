@@ -1,0 +1,640 @@
+{
+    "AmbientLight": [
+        1.0,
+        1.0,
+        1.0,
+        0.25
+    ],
+    "GameObjects": [
+        {
+            "Floor": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        -1.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        100.0,
+                        0.10000000149011612,
+                        100.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Cube.obj",
+                            "Texture": "VikingRoom.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "BoxCollider": {
+                            "IsActive": false,
+                            "IsDynamic": false,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                100.0,
+                                0.10000000149011612,
+                                100.0
+                            ],
+                            "Rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "VikingRoom": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        1.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "VikingRoom.obj",
+                            "Texture": "VikingRoom.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "MeshCollider": {
+                            "IsActive": false,
+                            "IsDynamic": false,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "Rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0,
+                            "Mesh": "VikingRoom.obj"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Capsule1": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        -1.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        2.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Cube.obj",
+                            "Texture": "VikingRoom.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "CapsuleCollider": {
+                            "IsActive": true,
+                            "IsDynamic": true,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "Rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Capsule2": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        -1.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        2.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Cube.obj",
+                            "Texture": "VikingRoom.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "CapsuleCollider": {
+                            "IsActive": true,
+                            "IsDynamic": true,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "Rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "BoxCollider Static": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Cube.obj",
+                            "Texture": "VikingRoom.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "BoxCollider": {
+                            "IsActive": true,
+                            "IsDynamic": false,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "Rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "BoxCollider Dynamic": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        1.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Cube.obj",
+                            "Texture": "VikingRoom.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "BoxCollider": {
+                            "IsActive": true,
+                            "IsDynamic": true,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "Rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Parent": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        -1.0,
+                        1.5,
+                        -1.6946799755096436
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "VikingRoom.obj",
+                            "Texture": "VikingRoom.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Child": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": 6
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "VikingRoom.obj",
+                            "Texture": "VikingRoom.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "DirectionalLight": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        -4.371138828673793e-08,
+                        -1.0,
+                        0.0,
+                        -0.0
+                    ],
+                    "LocalEulerAngles": [
+                        -180.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "DirectionalLight": {
+                            "IsActive": true,
+                            "Color": [
+                                1.0,
+                                1.0,
+                                0.8999999761581421,
+                                0.7599999904632568
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "PointLight": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "PointLight": {
+                            "IsActive": true,
+                            "Color": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "Distance": 10.0,
+                            "ConstantAttenuation": 1.0,
+                            "LinearAttenuation": 0.09000000357627869,
+                            "QuadraticAttenuation": 0.03200000151991844
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "SpotLight": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.7071067690849304,
+                        0.7071067690849304,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        90.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "SpotLight": {
+                            "IsActive": true,
+                            "Color": [
+                                1.0,
+                                1.0,
+                                0.0,
+                                0.0
+                            ],
+                            "InnerCutOff": 25.0,
+                            "OuterCutOff": 35.0,
+                            "Distance": 10.0,
+                            "ConstantAttenuation": 1.0,
+                            "LinearAttenuation": 0.09000000357627869,
+                            "QuadraticAttenuation": 0.03200000151991844
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Sound Test": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "AudioSource": {
+                            "IsActive": true,
+                            "IsLooping": false,
+                            "Is3D": false,
+                            "Volume": 1.0,
+                            "Pan": 0.0,
+                            "MinDistance": 1.0,
+                            "MaxDistance": 5.0,
+                            "AudioClip": ""
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -101,4 +101,32 @@ namespace Core
 		if (currentCam == this)
 			m_gameObject->GetSystemManager()->GetCameraSystem()->SetCurrentCamera();
 	}
+
+	void Camera::Serialize(json& _j)
+	{
+		_j["Camera"] = json{
+			{"IsActive", IsActive()},
+			{"FOV", GetFOV()},
+			{"Near", GetNear()},
+			{"Far", GetFar()}
+		};
+	}
+
+	void Camera::Deserialize(const json& _j)
+	{
+		bool bIsActive;
+		float fov;
+		float near;
+		float far;
+
+		_j.at("IsActive").get_to(bIsActive);
+		_j.at("FOV").get_to(fov);
+		_j.at("Near").get_to(near);
+		_j.at("Far").get_to(far);
+
+		SetActive(bIsActive);
+		SetFOV(fov);
+		SetNear(near);
+		SetFar(far);
+	}
 }

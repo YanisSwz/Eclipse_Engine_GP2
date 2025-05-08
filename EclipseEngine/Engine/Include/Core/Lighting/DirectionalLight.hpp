@@ -15,10 +15,10 @@ namespace Core
 
 		ECLIPSE_ENGINE RHI::DirLightData GetData() const;
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		Math::Vec3 GetDirection() const;
 	};
-
-	void to_json(json& _j, const DirectionalLight& _dirLight);
-	void from_json(const json& _j, DirectionalLight& _dirLight);
 }

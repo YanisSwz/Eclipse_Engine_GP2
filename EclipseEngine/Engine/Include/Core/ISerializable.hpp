@@ -11,5 +11,8 @@ namespace Core
 	{
 	public:
 		inline static std::hash<std::string_view> hash{};
+
+		virtual void Serialize(json& _j) = 0;
+		virtual void Deserialize(const json& _j) = 0;
 	};
 }

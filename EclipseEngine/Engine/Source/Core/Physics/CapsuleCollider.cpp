@@ -1,4 +1,5 @@
 #include "Physics/CapsuleCollider.hpp"
+#include "GameObject.hpp"
 
 // Jolt Includes
 #include <Jolt/Jolt.h>
@@ -117,30 +118,43 @@ namespace Core
 			myVelocity, myAngularVelocity);
 	}
 
-	void to_json(json& _j, const CapsuleCollider& _capsuleCollider)
+	void CapsuleCollider::Serialize(json& _j)
 	{
-		Math::Vec3 position = _capsuleCollider.GetPosition();
-		Math::Vec3 offsetPosition = _capsuleCollider.GetOffsetPos();
-		Math::Vec3 scale = _capsuleCollider.GetScale();
-		Math::Quat rotation = _capsuleCollider.GetRotation();
+		Math::Vec3 offsetPosition = GetOffsetPos();
+		Math::Vec3 scale = GetScale();
+		Math::Quat rotation = GetRotation();
 
-		_j = json{
-			{"IsActive", _capsuleCollider.IsActive()},
-			{"IsDynamic", _capsuleCollider.GetIsDynamic()},
-			{"Position", {position.x, position.y, position.z}},
+		_j["CapsuleCollider"] = json{
+			{"IsActive", IsActive()},
+			{"IsDynamic", GetIsDynamic()},
 			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
 			{"Scale", {scale.x, scale.y, scale.z}},
 			{"Rotation", {rotation.w, rotation.x, rotation.y, rotation.z}},
-			{"Mass", _capsuleCollider.GetMass()}
+			{"Mass", GetMass()}
 		};
 	}
 
-	void from_json(const json& _j, CapsuleCollider& _capsuleCollider)
+	void CapsuleCollider::Deserialize(const json& _j)
 	{
 		bool bIsActive;
+		bool bIsDynamic;
+		float offsetPosition[3];
+		float scale[3];
+		float rotation[4];
+		float mass;
 
 		_j.at("IsActive").get_to(bIsActive);
+		_j.at("IsDynamic").get_to(bIsDynamic);
+		_j.at("OffsetPosition").get_to(offsetPosition);
+		_j.at("Scale").get_to(scale);
+		_j.at("Rotation").get_to(rotation);
+		_j.at("Mass").get_to(mass);
 
-		_capsuleCollider.SetActive(bIsActive);
+		SetDynamic(bIsDynamic);
+		SetOffsetPos(Math::Vec3(offsetPosition[0], offsetPosition[1], offsetPosition[2]));
+		Scale(Math::Vec3(scale[0], scale[1], scale[2]));
+		SetRotation(Math::Quat(rotation[0], rotation[1], rotation[2], rotation[3]));
+		SetMass(mass);
+		SetActive(bIsActive);
 	}
 }

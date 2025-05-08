@@ -72,6 +72,9 @@ namespace Core
 		ECLIPSE_ENGINE void SetScaleChanged(bool _changed);
 		ECLIPSE_ENGINE void SetRotationChanged(bool _changed);
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		Math::Mat4 GetLocalTransformMatrix() const;
 		void UpdatePosition();
@@ -107,9 +110,6 @@ namespace Core
 		Math::Vec3 m_up{ 0.f, 1.f, 0.f };
 		Math::Vec3 m_forward{ 0.f, 0.f, 1.f };
 	};
-
-	void to_json(json& _j, const Transform& _transform);
-	void from_json(const json& _j, Transform& _transform);
 }
 
 #include "Transform.inl"

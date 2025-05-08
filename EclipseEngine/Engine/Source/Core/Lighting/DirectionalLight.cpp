@@ -23,17 +23,17 @@ namespace Core
 		return m_gameObject->transform->GetForward();
 	}
 
-	void to_json(json& _j, const DirectionalLight& _dirLight)
+	void DirectionalLight::Serialize(json& _j)
 	{
-		Math::Vec4 color = _dirLight.GetColor();
+		Math::Vec4 color = GetColor();
 
-		_j = json{
-			{"IsActive", _dirLight.IsActive()},
-			{"Color", { color.w, color.x, color.y, color.z }}
+		_j["DirectionalLight"] = json{
+				{"IsActive", IsActive()},
+				{"Color", { color.w, color.x, color.y, color.z }}
 		};
 	}
 
-	void from_json(const json& _j, DirectionalLight& _dirLight)
+	void DirectionalLight::Deserialize(const json& _j)
 	{
 		bool bIsActive;
 		float color[4];
@@ -41,7 +41,7 @@ namespace Core
 		_j.at("IsActive").get_to(bIsActive);
 		_j.at("Color").get_to(color);
 
-		_dirLight.SetActive(bIsActive);
-		_dirLight.SetColor(color[0], color[1], color[2], color[3]);
+		SetActive(bIsActive);
+		SetColor(color[1], color[2], color[3], color[0]);
 	}
 }

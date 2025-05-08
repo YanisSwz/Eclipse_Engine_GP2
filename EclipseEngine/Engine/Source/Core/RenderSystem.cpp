@@ -141,6 +141,16 @@ namespace Core
 		}
 	}
 
+	void RenderSystem::Reset()
+	{
+		m_currentStaticCount = 0;
+		m_currentDynamicCount = 0;
+		m_currentDirCount = 0;
+		m_currentPointCount = 0;
+		m_currentSpotCount = 0;
+		m_ambientLight = Math::Vec4(1.f, 1.f, 1.f, 0.25f);
+	}
+
 	std::vector<Resource::ModelData> RenderSystem::GetStaticModels() const
 	{
 		std::vector<Resource::ModelData> data;

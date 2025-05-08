@@ -1,4 +1,5 @@
 #include "Audio/AudioSource.hpp"
+#include "Resource/ResourceManager.hpp"
 #include "Logger.hpp"
 #include "Maths.hpp"
 #include "GameObject.hpp"
@@ -273,5 +274,49 @@ namespace Core
 	void AudioSource::Disable()
 	{
 		m_audioEnabled = false;
+	}
+
+	void AudioSource::Serialize(json& _j)
+	{
+		_j["AudioSource"] = json{
+				{"IsActive", IsActive()},
+				{"IsLooping", GetLooping()},
+				{"Is3D", Get3D()},
+				{"Volume", GetVolume()},
+				{"Pan", GetPan()},
+				{"MinDistance", GetMinDistance()},
+				{"MaxDistance", GetMaxDistance()},
+				{"AudioClip", GetClipName()}
+		};
+	}
+
+	void AudioSource::Deserialize(const json& _j)
+	{
+		bool bIsActive;
+		bool bIsLooping;
+		bool bIs3D;
+		float volume;
+		float pan;
+		float minDistance;
+		float maxDistance;
+		std::string clipName;
+
+		_j.at("IsActive").get_to(bIsActive);
+		_j.at("IsLooping").get_to(bIsLooping);
+		_j.at("Is3D").get_to(bIs3D);
+		_j.at("Volume").get_to(volume);
+		_j.at("Pan").get_to(pan);
+		_j.at("MinDistance").get_to(minDistance);
+		_j.at("MaxDistance").get_to(maxDistance);
+		_j.at("AudioClip").get_to(clipName);
+
+		SetActive(bIsActive);
+		SetLooping(bIsLooping);
+		Set3D(bIs3D);
+		SetVolume(volume);
+		SetPan(pan);
+		SetMinDistance(minDistance);
+		SetMaxDistance(maxDistance);
+		SetClip(Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>(clipName));
 	}
 }

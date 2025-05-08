@@ -31,12 +31,12 @@ namespace Core
 		ECLIPSE_ENGINE inline void SetTexture(Resource::Texture* _texture) { m_texture = _texture; }
 		ECLIPSE_ENGINE inline void SetShader(Resource::ShaderProgram* _shader) { m_shader = _shader; }
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		Resource::Mesh* m_mesh = nullptr;
 		Resource::Texture* m_texture = nullptr;
 		Resource::ShaderProgram* m_shader = nullptr;
 	};
-
-	void to_json(json& _j, const Model& _model);
-	void from_json(const json& _j, Model& _model);
 }

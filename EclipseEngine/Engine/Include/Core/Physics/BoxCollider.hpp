@@ -20,11 +20,11 @@ namespace Core
 		ECLIPSE_ENGINE void Scale(float _scaleX, float _scaleY, float _scaleZ) override;
 		ECLIPSE_ENGINE void Scale(Math::Vec3 _scale) override;
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		void UpdateData();
 		void Recreate() override;
 	};
-
-	void to_json(json& _j, const BoxCollider& _boxCollider);
-	void from_json(const json& _j, BoxCollider& _boxCollider);
 }

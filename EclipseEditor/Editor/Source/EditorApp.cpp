@@ -1,6 +1,5 @@
 #include "EditorApp.hpp"
 
-
 #include "Logger.hpp"
 #include "Windowing/GLFWWindow.hpp"
 #include "RHIOpenGL/OpenGLRenderInterface.hpp"
@@ -14,17 +13,17 @@
 #include "Lighting/SpotLight.hpp"
 #include "Core/Particles/ParticleEmitter.hpp"
 
-#include "Serializer.hpp"
-
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
 	m_height(_height)
 {
+
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "EditorApp initialization!");
 	InitWindowing(_windowName);
 	InitGUI();
 	InitRHI();
-	LoadScene();
+	LoadResources();
+	LoadScene("Scene");
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "EditorApp is created!");
 
 	m_scene.GetSystemManager()->GetAudioSystem()->PlayStartUp();
@@ -74,10 +73,44 @@ void EditorApp::Render()
 		if (ImGui::BeginMenu("File", true))
 		{
 			if (ImGui::MenuItem("Save"))
+			{
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Save");
+				SaveScene();
+			}
 			if (ImGui::MenuItem("Load"))
+			{
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Load");
+				ReloadScene();
+			}
+			if (ImGui::MenuItem("Create"))
+			{
+				bIsNewSceneWindowOpen = true;
+			}
 			ImGui::EndMenu();
+		}
+
+		if (bIsNewSceneWindowOpen)
+		{
+			ImGui::OpenPopup("Create New Scene");
+			ImGui::SetNextWindowSize(ImVec2(250, 150));
+		}
+
+		if (ImGui::BeginPopupModal("Create New Scene", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			ImGui::InputText("##NewScene", m_newSceneName.data(), 255);
+
+			if (ImGui::Button("Create"))
+			{
+				CreateNewScene();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+			{
+				bIsNewSceneWindowOpen = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
 		}
 
 		if (ImGui::BeginMenu("Windows", true))
@@ -91,6 +124,8 @@ void EditorApp::Render()
 			ImGui::EndMenu();
 		}
 
+
+
 		ImGui::SetCursorPosX(ImGui::GetWindowWidth() / 2.f - 55.f);
 		GAME_STATE gameState = m_scene.GetState();
 		if (gameState == GAME_STATE::STOP)
@@ -101,6 +136,7 @@ void EditorApp::Render()
 				m_scene.SetState(GAME_STATE::PLAY);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Play!");
 				ImGui::SetWindowFocus("Game");
+				SaveScene();
 			}
 		}
 		else
@@ -111,6 +147,7 @@ void EditorApp::Render()
 				m_scene.SetState(GAME_STATE::STOP);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Stop!");
 				ImGui::SetWindowFocus("Scene");
+				ReloadScene();
 			}
 		}
 
@@ -163,8 +200,15 @@ void EditorApp::Render()
 	if (bIsConsoleWindowEnabled)
 		m_consoleGUI.Draw();
 
+	std::string selectedScene;
 	if (bIsContentBrowserWindowEnabled)
-		m_contentBrowserGUI.Draw();
+		selectedScene = m_contentBrowserGUI.Draw();
+	if (selectedScene != "")
+	{
+		SaveScene();
+		m_scene.Reset();
+		LoadScene(selectedScene);
+	}
 
 	GUI::EndFrame();
 
@@ -228,7 +272,7 @@ void EditorApp::InitGUI()
 #endif // ImGuiImplementOpenGL
 }
 
-void EditorApp::LoadScene()
+void EditorApp::LoadResources()
 {
 	//Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::GeoShader>("GeometryShader.geom", "Assets/Shaders/GeometryShader.geom");
 
@@ -237,149 +281,49 @@ void EditorApp::LoadScene()
 	Resource::ResourceManager::GetInstance().LoadAllResources();
 	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
 
-
-	Resource::Mesh* cubeMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("Cube.obj");
-	Resource::Mesh* vikingRoomMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>("VikingRoom.obj");
-	Resource::Texture* texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("VikingRoom.img");
-	Resource::ShaderProgram* shaderProgramDeferredRendering = Resource::ResourceManager::GetInstance().GetResource<Resource::ShaderProgram>("DefaultDeferredRendering.shd");
-
 	m_contentBrowserGUI.Init();
 	m_editorPipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_editorPipeline->Init(m_window->width, m_window->height);
 	m_gamePipeline = m_renderInterface->InstantiateDefaultGraphicPipeline();
 	m_gamePipeline->Init(m_window->width, m_window->height);
+}
 
-	// CORE TESTS
-	Core::GameObject* floor = m_scene.CreateGameObject();
-	floor->name = "Floor";
-	floor->transform->SetLocalPosition(0.f, -1.f, 0.f);
-	floor->transform->SetLocalScale(100.f, 0.1f, 100.f);
-	Core::Model* floorModel = floor->AddComponent<Core::Model>();
-	floorModel->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
-	Core::BoxCollider* floorCollider = floor->AddComponent<Core::BoxCollider>();
-	floorCollider->SetPosition(0.f, -1.f, 0.f);
-	floorCollider->Scale(100.f, 0.1f, 100.f);
+void EditorApp::LoadScene(std::string _sceneName)
+{
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Loading Scene: %s", _sceneName.c_str());
+	std::string directoryPath = "Assets/Scenes/";
+	m_scene.SetName(_sceneName);
+	m_serializer.DeserializeSceneFromFile(&m_scene, directoryPath + _sceneName + ".json");
+}
 
-	Core::GameObject* vikingRoomObject = m_scene.CreateGameObject();
-	vikingRoomObject->name = "VikingRoom";
-	vikingRoomObject->transform->SetLocalPosition(0.f, 1.f, 0.f);
-	vikingRoomObject->transform->SetLocalScale(1.f, 1.f, 1.f);
-	Core::Model* vikingRoomModelObject = vikingRoomObject->AddComponent<Core::Model>();
-	vikingRoomModelObject->SetData(vikingRoomMesh, texture, shaderProgramDeferredRendering);
-	Core::MeshCollider* vikingRoomMeshCollider = vikingRoomObject->AddComponent<Core::MeshCollider>();
-	vikingRoomMeshCollider->SetPosition(-2.f, 5.f, 0.f);
-	vikingRoomMeshCollider->SetMesh(vikingRoomMesh);
+void EditorApp::ReloadScene()
+{
+	m_scene.Reset();
+	LoadScene(m_scene.GetName());
+}
 
-	Core::GameObject* obj1 = m_scene.CreateGameObject();
-	obj1->name = "Capsule1";
-	obj1->transform->SetLocalPosition(-1.f, 0.f, 0.f);
-	obj1->transform->SetLocalScale(1.f, 2.f, 1.f);
-	Core::Model* model2 = obj1->AddComponent<Core::Model>();
-	model2->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
-	Core::CapsuleCollider* cc = obj1->AddComponent<Core::CapsuleCollider>();
-	cc->SetPosition(0.1f, 50.f, 0.f);
-	cc->SetDynamic(true);
+void EditorApp::SaveScene()
+{
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Saving Scene: %s", m_scene.GetName().c_str());
+	std::string directoryPath = "Assets/Scenes/";
+	m_serializer.SerializeSceneToFile(&m_scene, directoryPath + m_scene.GetName() + ".json");
+}
 
-	Core::GameObject* capsule2 = m_scene.CreateGameObject();
-	capsule2->name = "Capsule2";
-	capsule2->transform->SetLocalPosition(-1.f, 0.f, 0.f);
-	capsule2->transform->SetLocalScale(1.f, 2.f, 1.f);
-	Core::Model* capsuleModel2 = capsule2->AddComponent<Core::Model>();
-	capsuleModel2->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
-	Core::CapsuleCollider* cc2 = capsule2->AddComponent<Core::CapsuleCollider>();
-	cc2->SetPosition(3.5f, 75.f, 0.1f);
-	cc2->SetRotation(0.f, 0.f, 0.2f);
-	cc2->SetDynamic(true);
+void EditorApp::CreateNewScene()
+{
+	m_newSceneName = m_newSceneName.c_str();
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Creating new Scene: %s", m_newSceneName.c_str());
+	bIsNewSceneWindowOpen = false;
+	ImGui::CloseCurrentPopup();
+	std::ofstream newSceneFile("Assets/Scenes/" + m_newSceneName + ".json");
+	newSceneFile.close();
+	m_contentBrowserGUI.AddScene(m_newSceneName);
 
-	Core::GameObject* obj2 = m_scene.CreateGameObject();
-	obj2->name = "BoxCollider Static";
-	obj2->transform->SetLocalPosition(0.f, 0.f, 0.f);
-	obj2->transform->SetLocalScale(0.5f, 0.5f, 0.5f);
-	Core::Model* model3 = obj2->AddComponent<Core::Model>();
-	model3->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
-	obj2->AddComponent<Core::BoxCollider>();
+	SaveScene();
+	m_scene.Reset();
+	LoadScene(m_newSceneName);
 
-	Core::GameObject* obj3 = m_scene.CreateGameObject();
-	obj3->name = "BoxCollider Dynamic";
-	obj3->transform->SetLocalPosition(1.f, 0.f, 0.f);
-	obj3->transform->SetLocalScale(1.f, 1.f, 1.f);
-	Core::Model* model4 = obj3->AddComponent<Core::Model>();
-	model4->SetData(cubeMesh, texture, shaderProgramDeferredRendering);
-	Core::BoxCollider* bc = obj3->AddComponent<Core::BoxCollider>();
-	bc->SetPosition(1.f, 0.f, 0.f);
-	bc->SetDynamic(true);
-	bc->AddForce(0.f, 0.f, 20.f);
-	bc->AddImpulse(0.f, 5.f, 0.f);
-
-	Core::GameObject* parent = m_scene.CreateGameObject();
-	parent->name = "Parent";
-	parent->transform->SetLocalPosition(-1.f, 1.5f, 0.f);
-	parent->transform->SetLocalScale(1.f, 1.f, 1.f);
-	Core::Model* model5 = parent->AddComponent<Core::Model>();
-	model5->SetData(vikingRoomMesh, texture, shaderProgramDeferredRendering);
-
-	Core::GameObject* child = m_scene.CreateGameObject();
-	child->name = "Child";
-	child->transform->SetLocalPosition(1.f, 1.f, 0.f);
-	child->transform->SetLocalScale(0.5f, 0.5f, 0.5f);
-	Core::Model* model6 = child->AddComponent<Core::Model>();
-	model6->SetData(vikingRoomMesh, texture, shaderProgramDeferredRendering);
-	parent->transform->AddChild(child->transform);
-
-	// LIGHTS
-	Core::GameObject* dirLight = m_scene.CreateGameObject();
-	dirLight->transform->SetLocalPosition(0.f, 0.f, 0.f);
-	dirLight->transform->SetLocalScale(1.f, 1.f, 1.f);
-	dirLight->transform->SetLocalEulerAngles(-180.f, 0.f, 0.f);
-	dirLight->name = "DirectionalLight";
-	Core::DirectionalLight* dirLightComp = dirLight->AddComponent<Core::DirectionalLight>();
-	dirLightComp->SetColor(1.f, 0.9f, 0.76f, 1.f);
-
-	Core::GameObject* pointLight = m_scene.CreateGameObject();
-	pointLight->transform->SetLocalPosition(0.f, 0.f, 0.f);
-	pointLight->transform->SetLocalScale(1.f, 1.f, 1.f);
-	pointLight->name = "PointLight";
-	Core::PointLight* pointLightComp = pointLight->AddComponent<Core::PointLight>();
-	pointLightComp->SetColor(0.f, 0.f, 1.f, 1.f);
-
-	Core::GameObject* spotLight = m_scene.CreateGameObject();
-	spotLight->transform->SetLocalPosition(0.f, 0.f, 0.f);
-	spotLight->transform->SetLocalScale(1.f, 1.f, 1.f);
-	spotLight->transform->SetLocalEulerAngles(90.f, 0.f, 0.f);
-	spotLight->name = "SpotLight";
-	Core::SpotLight* spotLightComp = spotLight->AddComponent<Core::SpotLight>();
-	spotLightComp->SetColor({ 1.f, 0.f, 0.f, 1.f });
-
-	Core::GameObject* soundTest = m_scene.CreateGameObject();
-	soundTest->transform->SetLocalPosition(Math::Vec3(0.f, 0.f, 0.f));
-	soundTest->name = "Sound Test";
-	soundTest->AddComponent<Core::AudioSource>();
-
-	Core::GameObject* particle = m_scene.CreateGameObject();
-	particle->transform->SetLocalPosition(Math::Vec3(0.f, 2.f, 0.f));
-	particle->name = "Particle Test";
-	Core::ParticleEmitter* particleEmiter = particle->AddComponent<Core::ParticleEmitter>();
-	if (particleEmiter)
-	{
-		// Emitter Properties
-		particleEmiter->particleEmitterProps.maxNbParticles = 10;
-		particleEmiter->particleEmitterProps.particleSpawnRate = 0.01f;
-		particleEmiter->particleEmitterProps.particleSpawnRateVariation = 0.f;
-		// Particle Properties
-		particleEmiter->particleProps.lifeTime = 1.f;
-		particleEmiter->particleProps.positionOffset = { 0.f, 0.f, 0.f };
-		particleEmiter->particleProps.positionVariation = { 1.f, 0.f, 0.f };
-		particleEmiter->particleProps.sizeBegin = 50.f;
-		particleEmiter->particleProps.sizeEnd = 25.f;
-		particleEmiter->particleProps.sizeVariation = 10.f;
-		particleEmiter->particleProps.colorBegin = { 0.f, 0.f, 255.f, 255.f };
-		particleEmiter->particleProps.colorEnd = { 255.f, 0.f, 0.f, 255.f };
-		particleEmiter->particleProps.velocity = { 0.f, -2.f, 0.f };
-		particleEmiter->particleProps.velocityVariation = { 0.5f, 0.f, 0.f };
-	}
-
-	Core::Serializer serializer;
-	serializer.SerializeSceneToFile(&m_scene, "Assets/Scenes/Scene.json");
+	m_newSceneName = "";
 }
 
 void EditorApp::DrawScene()

@@ -57,6 +57,9 @@ namespace Core
 		ECLIPSE_ENGINE void Destroy() override;
 		ECLIPSE_ENGINE void Delete();
 
+		virtual void Serialize(json& _j) override = 0;
+		virtual void Deserialize(const json& _j) override = 0;
+
 	protected:
 		Math::Vec3 m_position = { 0.f, 0.f, 0.f };
 		Math::Vec3 m_offsetPos = { 0.f, 0.f, 0.f };

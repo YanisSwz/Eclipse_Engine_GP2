@@ -43,6 +43,8 @@ if (NOT TARGET JoltPhysics)
 endif()
 
 set(PHYSICS_REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/JoltPhysics")
+set(JPH_ENABLE_SSE4_1 ON CACHE BOOL "" FORCE)
+set(JPH_ENABLE_AVX ON CACHE BOOL "" FORCE)
 include("${PHYSICS_REPO_ROOT}/Jolt/Jolt.cmake")
 target_link_libraries(ECLIPSE_ENGINE PUBLIC Jolt)
 

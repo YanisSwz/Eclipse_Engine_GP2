@@ -8,6 +8,7 @@
 #include "GUI/ConsoleGUI.hpp"
 #include "GUI/ContentBrowserGUI.hpp"
 #include "GUI/GameGUI.hpp"
+#include "Serializer.hpp"
 
 namespace Windowing
 {
@@ -29,6 +30,8 @@ public:
 	void Update();
 	void Render();
 	void Destroy();
+
+	void LoadScene(std::string _sceneName);
 
 private:
 	int m_width = 0;
@@ -70,11 +73,19 @@ private:
 	bool bIsConsoleWindowEnabled = true;
 	bool bIsContentBrowserWindowEnabled = true;
 	bool bIsGameWindowEnabled = true;
+	bool bIsNewSceneWindowOpen = false;
+
+	Core::Serializer m_serializer;
+
+	std::string m_newSceneName;
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();
 	void InitGUI();
-	void LoadScene();
+	void LoadResources();
+	void ReloadScene();
+	void SaveScene();
+	void CreateNewScene();
 
 	void DrawScene();
 	void PickObjectID();

@@ -77,4 +77,10 @@ namespace Core
 		}
 		return nullptr;
 	}
+
+	void CameraSystem::Reset()
+	{
+		m_currentCameraCount = 0;
+		m_activeCamera = nullptr;
+	}
 }

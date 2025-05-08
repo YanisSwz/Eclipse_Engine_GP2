@@ -19,7 +19,7 @@ namespace Core
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
 		ECLIPSE_ENGINE GameObject* GetObjectByID(int _id);
 		ECLIPSE_ENGINE inline int GetCount() { return m_currentGameObjectCount; }
-		ECLIPSE_ENGINE inline GameObject* GetGameObject(int _index) { return (_index < MAX_SIZE) ? &m_gameObjects[_index] : nullptr; }
+		ECLIPSE_ENGINE inline GameObject* GetGameObjectByIndex(int _index) { return (_index < MAX_SIZE) ? &m_gameObjects[_index] : nullptr; }
 		/// <summary>
 		/// Returns the index of _gameObject if it exists in the Scene, -1 otherwise
 		/// </summary>
@@ -36,6 +36,10 @@ namespace Core
 		ECLIPSE_ENGINE inline GAME_STATE GetState() const { return m_state; }
 		ECLIPSE_ENGINE void SetState(GAME_STATE _state);
 
+		ECLIPSE_ENGINE void Reset();
+		ECLIPSE_ENGINE inline std::string GetName() const { return m_name; }
+		ECLIPSE_ENGINE inline void SetName(std::string _name) { m_name = _name; }
+
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentGameObjectCount = 0;
@@ -43,5 +47,6 @@ namespace Core
 
 		SystemManager m_systemManager{};
 		GAME_STATE m_state = GAME_STATE::STOP;
+		std::string m_name = "";
 	};
 }

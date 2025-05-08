@@ -28,6 +28,8 @@ namespace Core
 
 		ECLIPSE_ENGINE void Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<std::vector<ParticleRenderData>> _particlesData);
 
+		ECLIPSE_ENGINE void Reset();
+
 	private:
 		static const int MAX_SIZE = 100;
 		int m_currentStaticCount = 0;

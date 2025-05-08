@@ -10,8 +10,10 @@ namespace GUI
 		~ContentBrowseGUI() = default;
 
 		void Init();
-		void Draw();
+		std::string Draw();
 		void Delete();
+
+		void AddScene(std::string _newScene);
 
 	private:
 		FolderGUI* m_folderRoot = nullptr;

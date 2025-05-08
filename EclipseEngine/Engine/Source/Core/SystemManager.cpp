@@ -55,4 +55,60 @@ namespace Core
 	{
 		return &m_cameraSystem;
 	}
+
+	Component* SystemManager::AddComponent(std::string _componentType)
+	{
+		if (_componentType == "Camera")
+		{
+			return m_cameraSystem.AddCamera();
+		}
+		else if (_componentType == "Model")
+		{
+			return m_renderSystem.AddModel();
+		}
+		else if (_componentType == "BoxCollider")
+		{
+			return m_physicsSystem.AddBoxCollider();
+		}
+		else if (_componentType == "CapsuleCollider")
+		{
+			return m_physicsSystem.AddCapsuleCollider();
+		}
+		else if (_componentType == "MeshCollider")
+		{
+			return m_physicsSystem.AddMeshCollider();
+		}
+		else if (_componentType == "DirectionalLight")
+		{
+			return m_renderSystem.AddDirLight();
+		}
+		else if (_componentType == "PointLight")
+		{
+			return m_renderSystem.AddPointLight();
+		}
+		else if (_componentType == "SpotLight")
+		{
+			return m_renderSystem.AddSpotLight();
+		}
+		else if (_componentType == "AudioSource")
+		{
+			return m_audioSystem.AddAudioSource();
+		}
+		else if (_componentType == "AudioListener")
+		{
+			return m_audioSystem.AddAudioListener();
+		}
+
+		Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s is not a Component type", _componentType);
+		return nullptr;
+	}
+
+	void SystemManager::Reset()
+	{
+		m_audioSystem.Reset();
+		m_physicsSystem.Reset();
+		m_transformSystem.Reset();
+		m_renderSystem.Reset();
+		m_cameraSystem.Reset();
+	}
 }

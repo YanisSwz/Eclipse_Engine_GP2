@@ -96,4 +96,20 @@ namespace Core
 		m_audioEngine->set3dListenerAt(at.x, at.y, at.z);
 		m_audioEngine->set3dListenerUp(up.x, up.y, up.z);
 	}
+
+	void AudioListener::Serialize(json& _j)
+	{
+		_j["AudioListener"] = json{
+			{"IsActive", IsActive()}
+		};
+	}
+
+	void AudioListener::Deserialize(const json& _j)
+	{
+		bool bIsActive;
+
+		_j.at("IsActive").get_to(bIsActive);
+
+		SetActive(bIsActive);
+	}
 }
