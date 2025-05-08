@@ -29,7 +29,7 @@ namespace Core
 
 		_j["DirectionalLight"] = json{
 				{"IsActive", IsActive()},
-				{"Color", { color.w, color.x, color.y, color.z }}
+				{"Color", { color.x, color.y, color.z, color.w }} // RGBA
 		};
 	}
 
@@ -42,6 +42,6 @@ namespace Core
 		_j.at("Color").get_to(color);
 
 		SetActive(bIsActive);
-		SetColor(color[1], color[2], color[3], color[0]);
+		SetColor(color[0], color[1], color[2], color[3]);
 	}
 }

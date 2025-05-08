@@ -79,6 +79,72 @@ namespace Core
 		return renderData;
 	}
 
+	void ParticleEmitter::Serialize(json& _j)
+	{
+		Math::Vec3 positionOffset = particleProps.positionOffset;
+		Math::Vec3 positionVariation = particleProps.positionVariation;
+		Math::Vec4 colorBegin = particleProps.colorBegin / 255.f;
+		Math::Vec4 colorEnd = particleProps.colorEnd / 255.f;
+		Math::Vec3 velocity = particleProps.velocity;
+		Math::Vec3 velocityVariation = particleProps.velocityVariation;
+
+		_j["ParticleEmitter"] = json{
+			json{"ParticleEmitterProps", { 
+				{"MaxParticleNumber", particleEmitterProps.maxNbParticles},
+				{"SpawnRate", particleEmitterProps.particleSpawnRate},
+				{"SpawnRateVariation", particleEmitterProps.particleSpawnRateVariation}
+			}},
+			json{"ParticleProps", { 
+				{"LifeTime", particleProps.lifeTime},
+				{"PositionOffset", { positionOffset.x, positionOffset.y, positionOffset.z }},
+				{"PositionVariation", { positionVariation.x, positionVariation.y, positionVariation.z }},
+				{"BeginSize", particleProps.sizeBegin},
+				{"EndSize", particleProps.sizeEnd},
+				{"SizeVariation", particleProps.sizeEnd},
+				{"BeginColor", { colorBegin.x, colorBegin.y, colorBegin.z, colorBegin.w }}, // RGBA
+				{"EndColor", { colorEnd.x, colorEnd.y, colorEnd.z, colorEnd.w }}, // RGBA
+				{"Velocity", { velocity.x, velocity.y, velocity.z }},
+				{"VelocityVariation", { velocityVariation.x, velocityVariation.y, velocityVariation.z }}
+			}},
+		};
+	}
+
+	void ParticleEmitter::Deserialize(const json& _j)
+	{
+		float positionOffset[3];
+		float positionVariation[3];
+		float colorBegin[4];
+		float colorEnd[4];
+		float velocity[3];
+		float velocityVariation[3];
+
+		json particleEmitterPropsJson = _j["ParticleEmitterProps"];
+		json particlePropsJson = _j["ParticleProps"];
+
+		particlePropsJson.at("PositionOffset").get_to(positionOffset);
+		particlePropsJson.at("PositionVariation").get_to(positionVariation);
+		particlePropsJson.at("BeginColor").get_to(colorBegin);
+		particlePropsJson.at("EndColor").get_to(colorEnd);
+		particlePropsJson.at("Velocity").get_to(velocity);
+		particlePropsJson.at("VelocityVariation").get_to(velocityVariation);
+
+		particleEmitterPropsJson.at("MaxParticleNumber").get_to(particleEmitterProps.maxNbParticles);
+		particleEmitterPropsJson.at("SpawnRate").get_to(particleEmitterProps.particleSpawnRate);
+		particleEmitterPropsJson.at("SpawnRateVariation").get_to(particleEmitterProps.particleSpawnRateVariation);
+		
+		particlePropsJson.at("LifeTime").get_to(particleProps.lifeTime);
+		particlePropsJson.at("BeginSize").get_to(particleProps.sizeBegin);
+		particlePropsJson.at("EndSize").get_to(particleProps.sizeEnd);
+		particlePropsJson.at("SizeVariation").get_to(particleProps.sizeVariation);
+
+		particleProps.positionOffset = { positionOffset[0], positionOffset[1], positionOffset[2] };
+		particleProps.positionVariation = { positionVariation[0], positionVariation[1], positionVariation[2] };
+		particleProps.colorBegin = { colorBegin[0] * 255.f, colorBegin[1] * 255.f, colorBegin[2] * 255.f, colorBegin[3] * 255.f };
+		particleProps.colorEnd = { colorEnd[0] * 255.f, colorEnd[1] * 255.f, colorEnd[2] * 255.f, colorEnd[3] * 255.f };
+		particleProps.velocity = { velocity[0], velocity[1], velocity[2] };
+		particleProps.velocityVariation = { velocityVariation[0], velocityVariation[1], velocityVariation[2] };
+	}
+
 	void ParticleEmitter::SpawnParticle()
 	{
 		Particle* spawnedParticle = AddParticle();

@@ -47,7 +47,7 @@ namespace Core
 
 		_j["SpotLight"] = json{
 			{"IsActive", IsActive()},
-			{"Color", { color.w, color.x, color.y, color.z }},
+			{"Color", { color.x, color.y, color.z, color.w }}, // RGBA
 			{"InnerCutOff", GetInnerCutOff()},
 			{"OuterCutOff", GetOuterCutOff()},
 			{"Distance", GetDistance()},
@@ -78,7 +78,7 @@ namespace Core
 		_j.at("QuadraticAttenuation").get_to(quadAtt);
 
 		SetActive(bIsActive);
-		SetColor(color[1], color[2], color[3], color[0]);
+		SetColor(color[0], color[1], color[2], color[3]);
 		SetInnerCutOff(innerCutOff);
 		SetOuterCutOff(outerCutOff);
 		SetDistance(distance);

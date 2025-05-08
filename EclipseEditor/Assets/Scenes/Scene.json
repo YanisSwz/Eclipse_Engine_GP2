@@ -136,8 +136,8 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        -1.0,
-                        0.0,
+                        -3.4973134994506836,
+                        5.268796920776367,
                         0.0
                     ],
                     "LocalScale": [
@@ -198,8 +198,8 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        -1.0,
-                        0.0,
+                        3.580409526824951,
+                        5.986671447753906,
                         0.0
                     ],
                     "LocalScale": [
@@ -260,7 +260,7 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        0.0,
+                        1.8389289379119873,
                         0.0,
                         0.0
                     ],
@@ -322,8 +322,8 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        1.0,
-                        0.0,
+                        1.9659168720245361,
+                        1.4662715196609497,
                         0.0
                     ],
                     "LocalScale": [
@@ -490,9 +490,9 @@
                             "IsActive": true,
                             "Color": [
                                 1.0,
-                                1.0,
-                                0.8999999761581421,
-                                0.7599999904632568
+                                0.9019607901573181,
+                                0.7607843279838562,
+                                1.0
                             ]
                         }
                     }
@@ -531,9 +531,9 @@
                         "PointLight": {
                             "IsActive": true,
                             "Color": [
+                                0.0,
+                                0.0,
                                 1.0,
-                                0.0,
-                                0.0,
                                 1.0
                             ],
                             "Distance": 10.0,
@@ -578,9 +578,9 @@
                             "IsActive": true,
                             "Color": [
                                 1.0,
-                                1.0,
                                 0.0,
-                                0.0
+                                0.0,
+                                1.0
                             ],
                             "InnerCutOff": 25.0,
                             "OuterCutOff": 35.0,
@@ -631,6 +631,84 @@
                             "MinDistance": 1.0,
                             "MaxDistance": 5.0,
                             "AudioClip": ""
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "ParticleEmitter": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "ParticleEmitter": {
+                            "ParticleEmitterProps": {
+                                "MaxParticleNumber": 173,
+                                "SpawnRate": 0.009999999776482582,
+                                "SpawnRateVariation": 0.0
+                            },
+                            "ParticleProps": {
+                                "LifeTime": 1.100000023841858,
+                                "PositionOffset": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "PositionVariation": [
+                                    0.5,
+                                    0.5,
+                                    0.5
+                                ],
+                                "BeginSize": 23.0,
+                                "EndSize": 74.0,
+                                "SizeVariation": 74.0,
+                                "BeginColor": [
+                                    1.0,
+                                    0.9046154022216797,
+                                    0.0,
+                                    1.0
+                                ],
+                                "EndColor": [
+                                    1.0,
+                                    0.0,
+                                    0.0,
+                                    1.0
+                                ],
+                                "Velocity": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "VelocityVariation": [
+                                    5.0,
+                                    0.0,
+                                    5.0
+                                ]
+                            }
                         }
                     }
                 ]
