@@ -19,6 +19,11 @@ namespace Core
 	class AudioListener;
 }
 
+namespace Resource
+{
+	class Texture;
+}
+
 namespace GUI
 {
 	class InspectorGUI
@@ -59,5 +64,9 @@ namespace GUI
 		bool bIsComponentAlreadyAddedWindowEnable = false;
 		bool bIsScaleLocked = false;
 		Math::Vec3 m_scaleFactor{ 1.f, 1.f, 1.f };
+
+		Resource::Texture* m_playBtnTexture = nullptr;
+		Resource::Texture* m_stopBtnTexture = nullptr;
+		Resource::Texture* m_pauseBtnTexture = nullptr;
 	};
 }

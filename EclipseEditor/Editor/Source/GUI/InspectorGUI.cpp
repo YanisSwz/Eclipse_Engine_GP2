@@ -426,8 +426,40 @@ namespace GUI
 					ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput);
 					ImGui::EndDisabled();
 				}
-			}
+				if (m_playBtnTexture == nullptr)
+					m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
+				if (ImGui::ImageButton("Play", m_playBtnTexture->GetID(), ImVec2(25.f, 25.f)))
+					_source->Play();
 
+				ImGui::SameLine();
+				if (m_pauseBtnTexture == nullptr)
+					m_pauseBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Pause.img");
+				if (_source->IsPaused())
+				{
+					ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
+					ImGui::PushStyleColor(ImGuiCol_Button, { 0.5f, 0.5f, 0.5f, 1.f });
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.75f, 0.75f, 0.75f, 1.f });
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.85f, 0.85f, 0.85f, 1.f });
+
+					if (ImGui::ImageButton("Unpause", m_pauseBtnTexture->GetID(), ImVec2(25.f, 25.f)))
+						_source->Pause();
+
+					ImGui::PopStyleColor(4);
+				}
+				else
+				{
+					if (ImGui::ImageButton("Pause", m_pauseBtnTexture->GetID(), ImVec2(25.f, 25.f)))
+						_source->Pause();
+				}
+
+				ImGui::SameLine();
+				if (m_stopBtnTexture == nullptr)
+					m_stopBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Stop.img");
+				if (ImGui::ImageButton("Stop", m_stopBtnTexture->GetID(), ImVec2(25.f, 25.f)))
+					_source->Stop();
+
+				ImGui::NewLine();
+			}
 			
 			bool isLooping = _source->IsLooping();
 			if (GUI::CheckBox("Looping", "##1", &isLooping))
@@ -454,8 +486,12 @@ namespace GUI
 			if (is3D)
 				ImGui::EndDisabled();
 
+			ImGui::NewLine();
 			if (GUI::CheckBox("3D", "##3", &is3D))
+			{
+				_source->Stop();
 				_source->Set3D(is3D);
+			}
 
 			if (!is3D)
 				ImGui::BeginDisabled();
@@ -468,26 +504,7 @@ namespace GUI
 				_source->SetMaxDistance(max);
 			if (!is3D)
 				ImGui::EndDisabled();
-
-
-			if (ImGui::Button("Play"))
-				_source->Play();
-
-			ImGui::SameLine();
-			if (!_source->IsPaused())
-			{
-				if (ImGui::Button("Pause"))
-					_source->Pause();
-			}
-			else
-			{
-				if (ImGui::Button("Unpause"))
-					_source->Pause();
-			}
-
-			ImGui::SameLine();
-			if (ImGui::Button("Stop"))
-				_source->Stop();
+			
 			if (clip == nullptr)
 				ImGui::EndDisabled();
 

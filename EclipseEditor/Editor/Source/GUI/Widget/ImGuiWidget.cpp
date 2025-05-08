@@ -503,9 +503,9 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
-		ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 60);
+		ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 15);
 		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.35f);
-		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.9f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
 
 		label = "##";
 		label += _label;
@@ -572,7 +572,7 @@ namespace GUI
 		if(alpha != 1.f)
 			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0);
 		else
-			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 40);
+			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 10);
 		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.25f);
 		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
 
@@ -638,7 +638,7 @@ namespace GUI
 		if (alpha != 1.f)
 			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0);
 		else
-			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 40);
+			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 10);
 		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.25f);
 		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
 

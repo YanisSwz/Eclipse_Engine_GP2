@@ -2,6 +2,7 @@
 #include "Core/Scene.hpp"
 #include "Core/Audio/AudioSystem.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
+#include "Resource/ResourceManager.hpp"
 
 namespace GUI
 {
@@ -51,22 +52,36 @@ namespace GUI
 			channels.clear();
 		}
 
-		
-		if (ImGui::Button("Play", ImVec2(masterChannelSize.x, 40.f)))
+		if (m_playBtnTexture == nullptr)
+			m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
+		if (ImGui::ImageButton("Play", m_playBtnTexture->GetID(), ImVec2(masterChannelSize.x/3.f, masterChannelSize.x / 3.f)))
 			_audioSystem->Play();
 
+		ImGui::SameLine();
+		if (m_pauseBtnTexture == nullptr)
+			m_pauseBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Pause.img");
 		if(_audioSystem->IsPaused())
 		{
-			if (ImGui::Button("Unpause", ImVec2(masterChannelSize.x, 40.f)))
+			ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0.5f, 0.5f, 0.5f, 1.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.75f, 0.75f, 0.75f, 1.f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.85f, 0.85f, 0.85f, 1.f });
+
+			if (ImGui::ImageButton("Unpause", m_pauseBtnTexture->GetID(), ImVec2(masterChannelSize.x / 3.f, masterChannelSize.x / 3.f)))
 				_audioSystem->SetPause(false);
+
+			ImGui::PopStyleColor(4);
 		}
 		else
 		{
-			if (ImGui::Button("Pause", ImVec2(masterChannelSize.x, 40.f)))
+			if (ImGui::ImageButton("Pause", m_pauseBtnTexture->GetID(), ImVec2(masterChannelSize.x / 3.f, masterChannelSize.x / 3.f)))
 				_audioSystem->SetPause(true);
 		}
 
-		if (ImGui::Button("Stop", ImVec2(masterChannelSize.x, 40.f)))
+		ImGui::SameLine();
+		if (m_stopBtnTexture == nullptr)
+			m_stopBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Stop.img");
+		if (ImGui::ImageButton("Stop", m_stopBtnTexture->GetID(), ImVec2(masterChannelSize.x / 3.f, masterChannelSize.x / 3.f)))
 			_audioSystem->Stop();
 
 		ImGui::End();
