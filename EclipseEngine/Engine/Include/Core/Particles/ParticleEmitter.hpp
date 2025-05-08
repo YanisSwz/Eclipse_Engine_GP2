@@ -25,6 +25,9 @@ namespace Core
 		ECLIPSE_ENGINE void Update(float _deltaTime);
 		ECLIPSE_ENGINE std::vector<ParticleRenderData> GetRenderData();
 
+		ECLIPSE_ENGINE void Serialize(json& _j) override;
+		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
+
 	private:
 		int m_particlesCount = 0;
 		std::vector<Particle> m_particles;

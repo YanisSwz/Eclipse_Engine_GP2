@@ -98,6 +98,10 @@ namespace Core
 		{
 			return m_audioSystem.AddAudioListener();
 		}
+		else if (_componentType == "ParticleEmitter")
+		{
+			return m_particleSystem.AddParticleEmitter();
+		}
 
 		Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s is not a Component type", _componentType);
 		return nullptr;

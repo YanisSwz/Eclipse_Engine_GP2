@@ -36,7 +36,7 @@ namespace Core
 
 		_j["PointLight"] = json{
 			{"IsActive", IsActive()},
-			{"Color", { color.w, color.x, color.y, color.z }},
+			{"Color", { color.x, color.y, color.z, color.w }}, // RGBA
 			{"Distance", GetDistance()},
 			{"ConstantAttenuation", GetConstAtt()},
 			{"LinearAttenuation", GetLinAtt()},
@@ -61,7 +61,7 @@ namespace Core
 		_j.at("QuadraticAttenuation").get_to(quadAtt);
 
 		SetActive(bIsActive);
-		SetColor(color[1], color[2], color[3], color[0]);
+		SetColor(color[0], color[1], color[2], color[3]);
 		SetDistance(distance);
 		SetConstAtt(constAtt);
 		SetLinAtt(linAtt);
