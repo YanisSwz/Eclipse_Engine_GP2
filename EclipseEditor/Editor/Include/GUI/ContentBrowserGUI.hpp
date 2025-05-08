@@ -13,6 +13,8 @@ namespace GUI
 		std::string Draw();
 		void Delete();
 
+		void AddScene(std::string _newScene);
+
 	private:
 		FolderGUI* m_folderRoot = nullptr;
 		FolderGUI* m_crtFolderSelected = nullptr;

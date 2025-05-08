@@ -32,6 +32,9 @@ namespace GUI
 		void DrawSceneGUI(int _index, std::string& _selectedScene);
 		void Delete();
 
+		void AddSceneFile(std::string _newSceneFile);
+		inline std::vector<FolderGUI*> GetChildren() { return m_folderChildren; }
+
 	private:
 		FolderGUI* m_parent = nullptr;
 		std::vector<FolderGUI*> m_folderChildren;

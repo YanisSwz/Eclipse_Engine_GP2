@@ -85,6 +85,7 @@ private:
 	void LoadResources();
 	void ReloadScene();
 	void SaveScene();
+	void CreateNewScene();
 
 	void DrawScene();
 	void PickObjectID();

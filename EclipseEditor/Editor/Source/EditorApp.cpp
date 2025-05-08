@@ -87,6 +87,30 @@ void EditorApp::Render()
 			ImGui::EndMenu();
 		}
 
+		if (bIsNewSceneWindowOpen)
+		{
+			ImGui::OpenPopup("Create New Scene");
+			ImGui::SetNextWindowSize(ImVec2(250, 150));
+		}
+
+		if (ImGui::BeginPopupModal("Create New Scene", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			ImGui::InputText("##NewScene", m_newSceneName.data(), 255);
+
+			if (ImGui::Button("Create"))
+			{
+				CreateNewScene();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+			{
+				bIsNewSceneWindowOpen = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
 		if (ImGui::BeginMenu("Windows", true))
 		{
 			ImGui::MenuItem("Hierarchy", "", &bIsHierarchieWindowEnabled);
@@ -98,29 +122,7 @@ void EditorApp::Render()
 			ImGui::EndMenu();
 		}
 
-		if (bIsNewSceneWindowOpen)
-		{
-			ImGui::OpenPopup("Create New Scene");
-		}
 
-		
-		if (ImGui::BeginPopupModal("CreateNewSceneWindowModal", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
-		{
-			ImGui::InputText("##NewScene", m_newSceneName.data(), 255);
-
-			if (ImGui::Button("Create"))
-			{
-				m_newSceneName = m_newSceneName.c_str();
-				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Creating new Scene: %s", m_newSceneName.c_str());
-			}
-			if (ImGui::Button("Cancel"))
-			{
-				bIsNewSceneWindowOpen = false;
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
-		}
 
 		ImGui::SetCursorPosX(ImGui::GetWindowWidth() / 2.f - 55.f);
 		GAME_STATE gameState = m_scene.GetState();
@@ -301,6 +303,23 @@ void EditorApp::SaveScene()
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Saving Scene: %s", m_scene.GetName().c_str());
 	std::string directoryPath = "Assets/Scenes/";
 	m_serializer.SerializeSceneToFile(&m_scene, directoryPath + m_scene.GetName() + ".json");
+}
+
+void EditorApp::CreateNewScene()
+{
+	m_newSceneName = m_newSceneName.c_str();
+	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Creating new Scene: %s", m_newSceneName.c_str());
+	bIsNewSceneWindowOpen = false;
+	ImGui::CloseCurrentPopup();
+	std::ofstream newSceneFile("Assets/Scenes/" + m_newSceneName + ".json");
+	newSceneFile.close();
+	m_contentBrowserGUI.AddScene(m_newSceneName);
+
+	SaveScene();
+	m_scene.Reset();
+	LoadScene(m_newSceneName);
+
+	m_newSceneName = "";
 }
 
 void EditorApp::DrawScene()

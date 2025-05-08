@@ -48,4 +48,14 @@ namespace GUI
 	{
 		m_folderRoot->Delete();
 	}
+
+	void ContentBrowseGUI::AddScene(std::string _newScene)
+	{
+		std::vector<FolderGUI*> folders = m_folderRoot->GetChildren();
+		for (int i = 0; i < folders.size(); ++i)
+		{
+			if (folders[i]->name == "Scene")
+				folders[i]->AddSceneFile(_newScene);
+		}
+	}
 }

@@ -256,4 +256,9 @@ namespace GUI
 			folder->Delete();
 		delete this;
 	}
+
+	void FolderGUI::AddSceneFile(std::string _newSceneFile)
+	{
+		m_sceneFiles.push_back(_newSceneFile);
+	}
 }
