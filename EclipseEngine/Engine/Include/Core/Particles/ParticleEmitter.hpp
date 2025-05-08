@@ -20,7 +20,11 @@ namespace Core
 		ParticleEmitterProps particleEmitterProps;
 		ParticleProps particleProps;
 
+		ECLIPSE_ENGINE void SetActive(bool _activate) override;
 		ECLIPSE_ENGINE Particle* AddParticle();
+		ECLIPSE_ENGINE void Play();
+		ECLIPSE_ENGINE bool IsPlaying() const;
+		ECLIPSE_ENGINE void Stop();
 
 		ECLIPSE_ENGINE void Update(float _deltaTime);
 		ECLIPSE_ENGINE std::vector<ParticleRenderData> GetRenderData();
@@ -29,12 +33,21 @@ namespace Core
 		ECLIPSE_ENGINE void Delete();
 
 	private:
+		enum class SIMULATION_STATE
+		{
+			PLAY,
+			STOP
+		};
+
+		SIMULATION_STATE m_simulationState = SIMULATION_STATE::PLAY;
 		int m_particlesCount = 0;
 		std::vector<Particle> m_particles;
 
+		float m_simulationTimeRemaining = 0.f;
 		float m_spawnRateRemaining = 0.f;
 
 		void SpawnParticle();
+		void ResetParticles();
 		void UpdateParticles(float _deltaTime);
 	};
 }

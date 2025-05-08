@@ -362,7 +362,7 @@ void EditorApp::LoadScene()
 	if (particleEmiter)
 	{
 		// Emitter Properties
-		particleEmiter->particleEmitterProps.maxNbParticles = 10;
+		particleEmiter->particleEmitterProps.maxNbParticles = 500;
 		particleEmiter->particleEmitterProps.particleSpawnRate = 0.01f;
 		particleEmiter->particleEmitterProps.particleSpawnRateVariation = 0.f;
 		// Particle Properties
