@@ -624,13 +624,14 @@
                     {
                         "AudioSource": {
                             "IsActive": true,
+                            "PlayOnAwake": true,
                             "IsLooping": false,
                             "Is3D": false,
                             "Volume": 1.0,
                             "Pan": 0.0,
                             "MinDistance": 1.0,
                             "MaxDistance": 5.0,
-                            "AudioClip": ""
+                            "AudioClip": "fireball.wav"
                         }
                     }
                 ]

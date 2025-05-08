@@ -25,6 +25,7 @@ namespace Core
 			m_physicsSystem.Update(0.f);
 			break;
 		case GAME_STATE::STOP:
+			m_audioSystem.EditorUpdate();
 			break;
 		}
 		m_transformSystem.LateUpdate();

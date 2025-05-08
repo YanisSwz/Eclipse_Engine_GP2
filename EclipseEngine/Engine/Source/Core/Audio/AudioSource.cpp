@@ -28,6 +28,13 @@ namespace Core
 		}
 	}
 
+	void AudioSource::Destroy()
+	{
+		Stop();
+		m_active = false;
+		m_destroyed = true;
+	}
+
 	void AudioSource::Update() 
 	{
 		if (m_destroyed || !m_active)
@@ -63,12 +70,10 @@ namespace Core
 		}
 		// If a sound is already playing, stop it 
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
-		{
-			if (m_paused)
-				Pause();
 			m_audioEngine->stop(m_sound);
-		}
 
+		if (m_paused)
+			m_paused = false;
 		if (!m_3D)
 		{
 			m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
@@ -93,6 +98,12 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to pause!");
 			return;
 		}
+		if (!m_audioEngine->isValidVoiceHandle(m_sound) && m_paused)
+		{	
+			m_paused = false;
+			return;
+		}
+
 		m_paused = !m_paused;
 		m_audioEngine->setPause(m_sound, m_paused);
 	}
@@ -121,11 +132,6 @@ namespace Core
 		}
 		m_audioClipLength = m_audioClip->GetLength();
 		m_sampleRate = m_audioClip->audioFile.mSampleCount / m_audioClip->GetLength();
-	}
-
-	Resource::AudioClip* AudioSource::GetClip()
-	{
-		return m_audioClip;
 	}
 
 	void AudioSource::SetLooping(bool _looping)
@@ -185,7 +191,7 @@ namespace Core
 		return m_audioEngine->isValidVoiceHandle(m_sound);
 	}
 
-	void AudioSource::SetVolume(float _vol)
+	void AudioSource::SetMaxVolume(float _vol)
 	{
 		if (_vol < 0.f)
 		{
@@ -203,28 +209,18 @@ namespace Core
 			m_audioEngine->setVolume(m_sound, m_volume);
 	}
 
-	float AudioSource::GetVolume() const
-	{
-		return m_volume;
-	}
-
 	void AudioSource::SetSampleRate(float _rate)
 	{
 		if(_rate < 8000.f)
 			_rate = 8000.f;
-		else if (_rate > 48000.f)
-			_rate = 48000.f;
+		else if (_rate > 96000.f)
+			_rate = 96000.f;
 
 		float ratio = m_sampleRate / _rate;
 		m_sampleRate = _rate;
 		m_audioClipLength *= ratio;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			m_audioEngine->setSamplerate(m_sound, m_sampleRate);
-	}
-
-	float AudioSource::GetPan() const
-	{
-		return m_pan;
 	}
 
 	void AudioSource::SetPan(float _pan)
@@ -237,11 +233,6 @@ namespace Core
 		m_pan = _pan;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			m_audioEngine->setPan(m_sound, m_pan);
-	}
-
-	void AudioSource::Set3D(bool _is3D)
-	{
-		m_3D = _is3D;
 	}
 
 	void AudioSource::SetMinDistance(float _min)
@@ -280,9 +271,10 @@ namespace Core
 	{
 		_j["AudioSource"] = json{
 				{"IsActive", IsActive()},
-				{"IsLooping", GetLooping()},
-				{"Is3D", Get3D()},
-				{"Volume", GetVolume()},
+				{"PlayOnAwake", IsPlayingOnAwake()},
+				{"IsLooping", IsLooping()},
+				{"Is3D", Is3D()},
+				{"Volume", GetMaxVolume()},
 				{"Pan", GetPan()},
 				{"MinDistance", GetMinDistance()},
 				{"MaxDistance", GetMaxDistance()},
@@ -293,6 +285,7 @@ namespace Core
 	void AudioSource::Deserialize(const json& _j)
 	{
 		bool bIsActive;
+		bool bIsPlayingOnAwake;
 		bool bIsLooping;
 		bool bIs3D;
 		float volume;
@@ -302,6 +295,7 @@ namespace Core
 		std::string clipName;
 
 		_j.at("IsActive").get_to(bIsActive);
+		_j.at("PlayOnAwake").get_to(bIsPlayingOnAwake);
 		_j.at("IsLooping").get_to(bIsLooping);
 		_j.at("Is3D").get_to(bIs3D);
 		_j.at("Volume").get_to(volume);
@@ -311,9 +305,10 @@ namespace Core
 		_j.at("AudioClip").get_to(clipName);
 
 		SetActive(bIsActive);
+		SetPlayOnAwake(bIsPlayingOnAwake);
 		SetLooping(bIsLooping);
 		Set3D(bIs3D);
-		SetVolume(volume);
+		SetMaxVolume(volume);
 		SetPan(pan);
 		SetMinDistance(minDistance);
 		SetMaxDistance(maxDistance);

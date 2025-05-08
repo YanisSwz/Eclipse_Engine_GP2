@@ -11,14 +11,14 @@ namespace Math
 		inline float ToDeg(float f) { return f * (180.f / PI); }
 		inline float ToRad(float f) { return f * (PI / 180.f); }
 		inline float Lerp(float a, float b, float f) { return a + (b - a) * f; }
-		inline float Sign(float f) 
+		inline int Sign(float f) 
 		{
 			if (f < epsilon)
-				return -1.f;
+				return -1;
 			else if (f > epsilon)
-				return 1.f;
+				return 1;
 			else
-				return 0.f;
+				return 0;
 		}
 		/// <summary>
 		/// Return a random value between 0 and 1

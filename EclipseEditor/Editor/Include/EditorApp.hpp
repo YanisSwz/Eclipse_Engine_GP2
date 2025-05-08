@@ -8,6 +8,7 @@
 #include "GUI/ConsoleGUI.hpp"
 #include "GUI/ContentBrowserGUI.hpp"
 #include "GUI/GameGUI.hpp"
+#include "GUI/AudioMixerGUI.hpp"
 #include "Serializer.hpp"
 
 namespace Windowing
@@ -18,6 +19,11 @@ namespace Windowing
 namespace RHI
 {
 	class IRenderInterface;
+}
+
+namespace Resource
+{
+	class Texture;
 }
 
 class EditorApp
@@ -66,6 +72,7 @@ private:
 	GUI::ConsoleGUI m_consoleGUI;
 	GUI::ContentBrowseGUI m_contentBrowserGUI;
 	GUI::GameGUI m_gameGUI;
+	GUI::AudioMixerGUI m_audioMixerGUI;
 
 	bool bIsHierarchieWindowEnabled = true;
 	bool bIsInspectorWindowEnabled = true;
@@ -73,7 +80,12 @@ private:
 	bool bIsConsoleWindowEnabled = true;
 	bool bIsContentBrowserWindowEnabled = true;
 	bool bIsGameWindowEnabled = true;
+	bool bIsAudioMixerWindowEnabled = true;
 	bool bIsNewSceneWindowOpen = false;
+
+	Resource::Texture* m_playBtnTexture = nullptr;
+	Resource::Texture* m_stopBtnTexture = nullptr;
+	Resource::Texture* m_pauseBtnTexture = nullptr;
 
 	Core::Serializer m_serializer;
 
