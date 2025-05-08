@@ -32,15 +32,20 @@ namespace Core
 		Math::Vec4 ambientLight = _scene->GetSystemManager()->GetRenderSystem()->GetAmbientLight();
 		scene["AmbientLight"] = { ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3] };
 
-		std::vector<json> gameObjects;
+		std::vector<json> jsonGameObjects;
+		GameObject* gameObject;
 		for (int i = 0; i < _scene->GetCount(); ++i)
 		{
-			json gameObject;
-			_scene->GetGameObjectByIndex(i)->Serialize(gameObject);
-			gameObject[_scene->GetGameObjectByIndex(i)->name]["Transform"]["ParentIndex"] = _scene->GetGameObjectParentIndex(i);
-			gameObjects.push_back(gameObject);
+			gameObject = _scene->GetGameObjectByIndex(i);
+			if (gameObject->IsDestroyed())
+				continue;
+
+			json jsonGameObject;
+			gameObject->Serialize(jsonGameObject);
+			jsonGameObject[gameObject->name]["Transform"]["ParentIndex"] = _scene->GetGameObjectParentIndex(i);
+			jsonGameObjects.push_back(jsonGameObject);
 		}
-		scene["GameObjects"] = gameObjects;
+		scene["GameObjects"] = jsonGameObjects;
 
 		return scene;
 	}

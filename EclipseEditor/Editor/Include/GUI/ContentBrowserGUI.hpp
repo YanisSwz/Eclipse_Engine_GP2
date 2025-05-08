@@ -3,11 +3,11 @@
 
 namespace GUI
 {
-	class ContentBrowseGUI
+	class ContentBrowserGUI
 	{
 	public:
-		ContentBrowseGUI() = default;
-		~ContentBrowseGUI() = default;
+		ContentBrowserGUI() = default;
+		~ContentBrowserGUI() = default;
 
 		void Init();
 		std::string Draw();

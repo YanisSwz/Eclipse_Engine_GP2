@@ -5,14 +5,14 @@
 
 namespace GUI
 {
-	void ContentBrowseGUI::Init()
+	void ContentBrowserGUI::Init()
 	{
 		m_folderRoot = new FolderGUI("Assets");
 		m_folderRoot->Init();
 		m_crtFolderSelected = m_folderRoot;
 	}
 
-	std::string ContentBrowseGUI::Draw()
+	std::string ContentBrowserGUI::Draw()
 	{
 		std::string selectedScene;
 
@@ -44,12 +44,12 @@ namespace GUI
 		return selectedScene;
 	}
 
-	void ContentBrowseGUI::Delete()
+	void ContentBrowserGUI::Delete()
 	{
 		m_folderRoot->Delete();
 	}
 
-	void ContentBrowseGUI::AddScene(std::string _newScene)
+	void ContentBrowserGUI::AddScene(std::string _newScene)
 	{
 		std::vector<FolderGUI*> folders = m_folderRoot->GetChildren();
 		for (int i = 0; i < folders.size(); ++i)

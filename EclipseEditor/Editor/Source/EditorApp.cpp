@@ -315,8 +315,6 @@ void EditorApp::InitGUI()
 
 void EditorApp::LoadResources()
 {
-	//Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::GeoShader>("GeometryShader.geom", "Assets/Shaders/GeometryShader.geom");
-
 	// Load All Resources
 	Resource::ResourceManager::GetInstance().LoadAllResourcesInAssetsFolder();
 	Resource::ResourceManager::GetInstance().LoadAllResources();

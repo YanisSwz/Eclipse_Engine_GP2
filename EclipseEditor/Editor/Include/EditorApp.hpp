@@ -70,7 +70,7 @@ private:
 	GUI::InspectorGUI m_inspectorGUI;
 	GUI::SceneGUI m_sceneGUI;
 	GUI::ConsoleGUI m_consoleGUI;
-	GUI::ContentBrowseGUI m_contentBrowserGUI;
+	GUI::ContentBrowserGUI m_contentBrowserGUI;
 	GUI::GameGUI m_gameGUI;
 	GUI::AudioMixerGUI m_audioMixerGUI;
 
