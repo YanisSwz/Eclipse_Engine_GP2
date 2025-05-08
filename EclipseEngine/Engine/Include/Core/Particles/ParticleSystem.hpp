@@ -14,6 +14,8 @@ namespace Core
 		ECLIPSE_ENGINE void Update(float _deltaTime);
 		ECLIPSE_ENGINE std::vector<std::vector<ParticleRenderData>> GetRenderData();
 
+		ECLIPSE_ENGINE void Reset();
+
 	private:
 		static const int MAX_PARTICLE_EMITTER_COUNT = 100;
 		int m_particleEmitterCount = 0;

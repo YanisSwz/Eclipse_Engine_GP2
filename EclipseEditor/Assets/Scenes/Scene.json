@@ -667,10 +667,13 @@
                 "Components": [
                     {
                         "ParticleEmitter": {
+                            "IsActive": true,
                             "ParticleEmitterProps": {
                                 "MaxParticleNumber": 173,
                                 "SpawnRate": 0.009999999776482582,
-                                "SpawnRateVariation": 0.0
+                                "SpawnRateVariation": 0.0,
+                                "SimulationDuration": 5.0,
+                                "IsLooping": true
                             },
                             "ParticleProps": {
                                 "LifeTime": 1.100000023841858,

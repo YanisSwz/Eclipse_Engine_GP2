@@ -76,7 +76,7 @@ namespace Core
 
 	void BoxCollider::Scale(float _scaleX, float _scaleY, float _scaleZ)
 	{
-		if (_scaleX <= 0.f || _scaleY <= 0.f || _scaleZ <= 0.f)
+		if (_scaleX <= 0.1 || _scaleY <= 0.1 || _scaleZ <= 0.1)
 			return;
 
 		m_scale = { _scaleX, _scaleY, _scaleZ };
@@ -86,12 +86,11 @@ namespace Core
 
 	void BoxCollider::Scale(Math::Vec3 _scale)
 	{
-		if (_scale.x <= 0.f || _scale.y <= 0.f || _scale.z <= 0.f)
+		if (_scale.x <= 0.1 || _scale.y <= 0.1 || _scale.z <= 0.1)
 			return;
 
 		m_scale = _scale;
 		Recreate();
-
 	}
 
 	void BoxCollider::UpdateData()

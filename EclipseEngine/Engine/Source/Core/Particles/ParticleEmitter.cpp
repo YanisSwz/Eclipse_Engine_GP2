@@ -6,14 +6,22 @@ namespace Core
 {
 	ParticleEmitter::ParticleEmitter()
 	{
-		//m_particles.resize(particleEmitterProps.maxNbParticles);
 	}
 
 	ParticleEmitter::ParticleEmitter(ParticleEmitterProps _particleEmitterProps, ParticleProps _particleProps)
 	{
 		particleEmitterProps = _particleEmitterProps;
 		particleProps = _particleProps;
-		//m_particles.resize(_particleEmitterProps.maxNbParticles);
+	}
+
+	void ParticleEmitter::SetActive(bool _activate)
+	{
+		m_active = _activate;
+		if (!m_active)
+		{
+			Stop();
+			ResetParticles();
+		}
 	}
 
 	Particle* ParticleEmitter::AddParticle()
@@ -39,23 +47,56 @@ namespace Core
 		return &m_particles[m_particlesCount - 1];
 	}
 
+	void ParticleEmitter::Play()
+	{
+		m_simulationTimeRemaining = particleEmitterProps.simulationDuration;
+		m_spawnRateRemaining = 0.f;
+		m_simulationState = SIMULATION_STATE::PLAY;
+	}
+
+	bool ParticleEmitter::IsPlaying() const
+	{
+		return m_simulationState == SIMULATION_STATE::PLAY;
+	}
+
+	void ParticleEmitter::Stop()
+	{
+		m_simulationState = SIMULATION_STATE::STOP;
+	}
+
 	void ParticleEmitter::Update(float _deltaTime)
 	{
-		if (m_spawnRateRemaining > 0.f)
+		if (m_simulationState == SIMULATION_STATE::PLAY)
 		{
-			m_spawnRateRemaining -= _deltaTime;
-		}
-		else
-		{
-			while (m_spawnRateRemaining <= 0.f)
+			if (m_simulationTimeRemaining > 0.f || particleEmitterProps.bIsLooping)
 			{
-				if (particleEmitterProps.particleSpawnRate == 0.f)
-					break;
+				if (!particleEmitterProps.bIsLooping)
+				{
+					m_simulationTimeRemaining -= _deltaTime;
+					if (m_simulationTimeRemaining <= 0.f)
+					{
+						m_simulationState = SIMULATION_STATE::STOP;
+						return;
+					}
+				}
 
-				if (m_particlesCount <= particleEmitterProps.maxNbParticles)
-					SpawnParticle();
+				if (m_spawnRateRemaining > 0.f)
+				{
+					m_spawnRateRemaining -= _deltaTime;
+				}
+				else
+				{
+					while (m_spawnRateRemaining <= 0.f)
+					{
+						if (particleEmitterProps.particleSpawnRate == 0.f)
+							break;
 
-				m_spawnRateRemaining += particleEmitterProps.particleSpawnRate + Math::Tools::Random() * particleEmitterProps.particleSpawnRateVariation;
+						if (m_particlesCount <= particleEmitterProps.maxNbParticles)
+							SpawnParticle();
+
+						m_spawnRateRemaining += particleEmitterProps.particleSpawnRate + Math::Tools::Random() * particleEmitterProps.particleSpawnRateVariation;
+					}
+				}
 			}
 		}
 
@@ -89,10 +130,13 @@ namespace Core
 		Math::Vec3 velocityVariation = particleProps.velocityVariation;
 
 		_j["ParticleEmitter"] = json{
+			{"IsActive", IsActive()},
 			json{"ParticleEmitterProps", { 
 				{"MaxParticleNumber", particleEmitterProps.maxNbParticles},
 				{"SpawnRate", particleEmitterProps.particleSpawnRate},
-				{"SpawnRateVariation", particleEmitterProps.particleSpawnRateVariation}
+				{"SpawnRateVariation", particleEmitterProps.particleSpawnRateVariation},
+				{"SimulationDuration", particleEmitterProps.simulationDuration},
+				{"IsLooping", particleEmitterProps.bIsLooping}
 			}},
 			json{"ParticleProps", { 
 				{"LifeTime", particleProps.lifeTime},
@@ -111,6 +155,7 @@ namespace Core
 
 	void ParticleEmitter::Deserialize(const json& _j)
 	{
+		bool bIsActive;
 		float positionOffset[3];
 		float positionVariation[3];
 		float colorBegin[4];
@@ -120,6 +165,8 @@ namespace Core
 
 		json particleEmitterPropsJson = _j["ParticleEmitterProps"];
 		json particlePropsJson = _j["ParticleProps"];
+
+		_j.at("IsActive").get_to(bIsActive);
 
 		particlePropsJson.at("PositionOffset").get_to(positionOffset);
 		particlePropsJson.at("PositionVariation").get_to(positionVariation);
@@ -131,18 +178,33 @@ namespace Core
 		particleEmitterPropsJson.at("MaxParticleNumber").get_to(particleEmitterProps.maxNbParticles);
 		particleEmitterPropsJson.at("SpawnRate").get_to(particleEmitterProps.particleSpawnRate);
 		particleEmitterPropsJson.at("SpawnRateVariation").get_to(particleEmitterProps.particleSpawnRateVariation);
+		particleEmitterPropsJson.at("SimulationDuration").get_to(particleEmitterProps.simulationDuration);
+		particleEmitterPropsJson.at("IsLooping").get_to(particleEmitterProps.bIsLooping);
 		
 		particlePropsJson.at("LifeTime").get_to(particleProps.lifeTime);
 		particlePropsJson.at("BeginSize").get_to(particleProps.sizeBegin);
 		particlePropsJson.at("EndSize").get_to(particleProps.sizeEnd);
 		particlePropsJson.at("SizeVariation").get_to(particleProps.sizeVariation);
 
+		SetActive(bIsActive);
 		particleProps.positionOffset = { positionOffset[0], positionOffset[1], positionOffset[2] };
 		particleProps.positionVariation = { positionVariation[0], positionVariation[1], positionVariation[2] };
 		particleProps.colorBegin = { colorBegin[0] * 255.f, colorBegin[1] * 255.f, colorBegin[2] * 255.f, colorBegin[3] * 255.f };
 		particleProps.colorEnd = { colorEnd[0] * 255.f, colorEnd[1] * 255.f, colorEnd[2] * 255.f, colorEnd[3] * 255.f };
 		particleProps.velocity = { velocity[0], velocity[1], velocity[2] };
 		particleProps.velocityVariation = { velocityVariation[0], velocityVariation[1], velocityVariation[2] };
+	}
+	
+	void ParticleEmitter::Destroy()
+	{
+		m_active = false;
+		m_destroyed = true;
+		Delete();
+	}
+
+	void ParticleEmitter::Delete()
+	{
+		ResetParticles();
 	}
 
 	void ParticleEmitter::SpawnParticle()
@@ -164,6 +226,12 @@ namespace Core
 		spawnedParticle->velocity = particleProps.velocity + randomVelocity;
 	}
 
+	void ParticleEmitter::ResetParticles()
+	{
+		m_particles.clear();
+		m_particlesCount = 0;
+	}
+
 	void ParticleEmitter::UpdateParticles(float _deltaTime)
 	{
 		for (int i = 0; i < m_particles.size(); ++i)
@@ -177,6 +245,10 @@ namespace Core
 				m_particles[i].isEnable = false;
 				--m_particlesCount;
 				continue;
+			}
+			else if (m_particles[i].lifeTimeRemaining > particleProps.lifeTime)
+			{
+				m_particles[i].lifeTimeRemaining = particleProps.lifeTime;
 			}
 
 			float ltr = m_particles[i].lifeTimeRemaining / particleProps.lifeTime;

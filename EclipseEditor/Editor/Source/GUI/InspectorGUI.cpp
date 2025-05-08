@@ -318,6 +318,7 @@ namespace GUI
 
 			GUI::ColorEdit4("Color", _light->GetColorRef());
 
+			ImGui::NewLine();
 			ImGui::TreePop();
 		}
 	}
@@ -338,6 +339,7 @@ namespace GUI
 			GUI::ColorEdit4("Color", _light->GetColorRef());
 			GUI::DragFloat("Range", "##", &_light->GetDistanceRef(), 0.1f, 1.f, 200.f);
 
+			ImGui::NewLine();
 			ImGui::TreePop();
 		}
 	}
@@ -361,6 +363,7 @@ namespace GUI
 			GUI::DragFloat("Inner Angle", "##2", &_light->GetInnerCutOffRef(), 1.f, 1.f, std::min(_light->GetOuterCutOff(), 180.f));
 			GUI::DragFloat("Outer Angle", "##3", &_light->GetOuterCutOffRef(), 1.f, _light->GetInnerCutOff(), 180.f);
 
+			ImGui::NewLine();
 			ImGui::TreePop();
 		}
 	}
@@ -533,6 +536,7 @@ namespace GUI
 				if (ImGui::Button("Set as current listener"))
 					_listener->SetCurrentListener();
 			}
+			ImGui::NewLine();
 			ImGui::TreePop();
 		}
 	}
@@ -550,8 +554,17 @@ namespace GUI
 				return;
 			}
 
+			if (ImGui::Button("Play"))
+				_particleEmitter->Play();
+			ImGui::SameLine();
+			if (ImGui::Button("Stop"))
+				_particleEmitter->Stop();
+
 			ImGui::SeparatorText("Emitter Properties");
 			GUI::DragInt("Max Particle", "MaxParticleDragInt", &_particleEmitter->particleEmitterProps.maxNbParticles, 0.1f, 0, Core::ParticleEmitter::MAX_PARTICLE_COUNT);
+			GUI::CheckBox("Is Looping", "IsLoopingCheckBox", &_particleEmitter->particleEmitterProps.bIsLooping);
+			if (!_particleEmitter->particleEmitterProps.bIsLooping)
+				GUI::DragFloat("Simulation \nDuration", "SimulationDurationCheckBox", &_particleEmitter->particleEmitterProps.simulationDuration, 0.1f, 0.f, FLT_MAX);
 			GUI::DragFloat("Spawn Rate", "ParticleSpawnRateDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRate, 0.1f, 0.f, FLT_MAX);
 			GUI::DragFloat("Spawn Rate \nVariation", "ParticleSpawnRateVariationDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRateVariation, 0.1f, 0.f, FLT_MAX);
 
@@ -564,6 +577,8 @@ namespace GUI
 			GUI::DragFloat("Size Variation", "SizeVariationDragFloat", &_particleEmitter->particleProps.sizeVariation, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragVec3XYZ("Velocity", _particleEmitter->particleProps.velocity, 0.f, 125.f);
 			GUI::DragVec3XYZ("Velocity Variation", _particleEmitter->particleProps.velocityVariation, 0.f, 125.f);
+
+			ImGui::NewLine();
 			ImGui::TreePop();
 		}
 	}

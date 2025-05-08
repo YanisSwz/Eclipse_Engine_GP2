@@ -115,5 +115,6 @@ namespace Core
 		m_transformSystem.Reset();
 		m_renderSystem.Reset();
 		m_cameraSystem.Reset();
+		m_particleSystem.Reset();
 	}
 }
