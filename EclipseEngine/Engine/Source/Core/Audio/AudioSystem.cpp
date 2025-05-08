@@ -1,5 +1,6 @@
 #include "Audio/AudioSystem.hpp"
 #include "Logger.hpp"
+#include "Resource/ResourceManager.hpp"
 
 namespace Core
 {
@@ -8,6 +9,7 @@ namespace Core
 		m_audioEngine.init();
 		m_audioEngine.setVisualizationEnable(true);
 		EnableAudio();
+		Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Audio engine successfully initialized");
 	}
 
 	void AudioSystem::Start()
@@ -22,15 +24,10 @@ namespace Core
 		{
 			for(int i = 0; i < m_currentSourcesCount; ++i)
 			{
-				if (m_audioSources[i].IsPlayingOnAwake() && m_audioSources[i].IsActive())
+				if (m_audioSources[i].IsPlayingOnAwake() && m_audioSources[i].IsActive() && m_audioSources[i].GetClip() != nullptr)
 					m_audioSources[i].Play();
 			}
 		}
-	}
-
-	void AudioSystem::Destroy()
-	{
-		m_audioEngine.deinit();
 	}
 
 	void AudioSystem::Update()
@@ -84,7 +81,7 @@ namespace Core
 		{
 			for (int i = 0; i < m_currentSourcesCount; ++i)
 			{
-				if (m_audioSources[i].IsActive())
+				if (m_audioSources[i].IsActive() && m_audioSources[i].GetClip() != nullptr)
 					m_audioSources[i].Play();
 			}
 		}
@@ -97,7 +94,7 @@ namespace Core
 		{
 			for (int i = 0; i < m_currentSourcesCount; ++i)
 			{
-				if(!m_audioSources[i].IsPaused())
+				if(!m_audioSources[i].IsPaused() && m_audioSources[i].GetClip() != nullptr)
 				{
 					m_audioSources[i].Pause();
 					m_audioSourcesToUnpause.push_back(&m_audioSources[i]);
@@ -125,7 +122,14 @@ namespace Core
 
 	void AudioSystem::PlayStartUp()
 	{
-		
+		if(m_startupSound == nullptr)
+			m_startupSound = Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>("startup.mp3");
+		if (m_startupSound == nullptr) 
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Failed to load startup sound!");
+			return;
+		}
+		m_audioEngine.play(m_startupSound->audioFile);
 	}
 
 	AudioSource* AudioSystem::AddAudioSource()

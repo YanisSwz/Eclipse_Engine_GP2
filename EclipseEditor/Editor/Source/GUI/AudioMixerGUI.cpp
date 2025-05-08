@@ -52,6 +52,7 @@ namespace GUI
 			channels.clear();
 		}
 
+		//Play, Pause and Stop buttons
 		if (m_playBtnTexture == nullptr)
 			m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
 		if (ImGui::ImageButton("Play", m_playBtnTexture->GetID(), ImVec2(masterChannelSize.x/3.f, masterChannelSize.x / 3.f)))

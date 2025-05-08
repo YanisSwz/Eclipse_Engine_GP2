@@ -6,6 +6,11 @@
 #include "AudioListener.hpp"
 #include <vector>
 
+namespace Resource
+{
+	class AudioClip;
+}
+
 namespace Core
 {
 	class AudioSystem
@@ -20,10 +25,9 @@ namespace Core
 		ECLIPSE_ENGINE void Update();
 		ECLIPSE_ENGINE void Play();
 		ECLIPSE_ENGINE void SetPause(bool _pause);
-		ECLIPSE_ENGINE inline bool IsPaused() const { return m_paused; }
+		ECLIPSE_ENGINE bool IsPaused() const;
 		ECLIPSE_ENGINE void Stop();
 
-		//TODO Update
 		ECLIPSE_ENGINE void PlayStartUp();
 		ECLIPSE_ENGINE AudioSource* AddAudioSource();
 		ECLIPSE_ENGINE AudioListener* AddAudioListener();
@@ -33,10 +37,10 @@ namespace Core
 		ECLIPSE_ENGINE AudioListener* GetCurrentAudioListener() const;
 		ECLIPSE_ENGINE void EnableAudio();
 		ECLIPSE_ENGINE void DisableAudio();
-		ECLIPSE_ENGINE inline bool IsAudioEnabled() const { return m_canPlay; }
-		ECLIPSE_ENGINE inline float* GetStereoVolume() { return m_stereoVolume; }
+		ECLIPSE_ENGINE bool IsAudioEnabled() const;
+		ECLIPSE_ENGINE float* GetStereoVolume();
 		ECLIPSE_ENGINE float GetVolume() const;
-		ECLIPSE_ENGINE inline float GetMaxVolume() { return m_audioEngine.getGlobalVolume(); }
+		ECLIPSE_ENGINE float GetMaxVolume();
 		ECLIPSE_ENGINE void SetMaxVolume(float _volume);
 		ECLIPSE_ENGINE std::vector<AudioSource*> GetAudioSources();
 
@@ -54,10 +58,12 @@ namespace Core
 		AudioListener* m_currentListener = nullptr;
 
 		SoLoud::Soloud m_audioEngine{};
-		SoLoud::Wav m_startupSound{};
+		Resource::AudioClip* m_startupSound{};
 
 		bool m_canPlay = true;
 		bool m_paused = false;
 		float m_stereoVolume[2] = { 0.f, 0.f };
 	};
 }
+
+#include "AudioSystem.inl"
