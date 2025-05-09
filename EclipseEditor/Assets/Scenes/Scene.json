@@ -38,13 +38,13 @@
                         "Model": {
                             "IsActive": true,
                             "Mesh": "Cube.obj",
-                            "Texture": "VikingRoom.img",
+                            "Texture": "WhiteTexture.img",
                             "Shader": "DefaultDeferredRendering.shd"
                         }
                     },
                     {
                         "BoxCollider": {
-                            "IsActive": false,
+                            "IsActive": true,
                             "IsDynamic": false,
                             "OffsetPosition": [
                                 0.0,
@@ -73,8 +73,8 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
+                        0.5,
                         0.0,
-                        1.0,
                         0.0
                     ],
                     "LocalScale": [
@@ -83,15 +83,15 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
+                        0.6532819271087646,
+                        -0.6532819271087646,
+                        0.27059701085090637,
+                        0.27059701085090637
                     ],
                     "LocalEulerAngles": [
+                        -90.0,
                         0.0,
-                        0.0,
-                        0.0
+                        44.99981689453125
                     ],
                     "ParentIndex": -1
                 },
@@ -106,7 +106,7 @@
                     },
                     {
                         "MeshCollider": {
-                            "IsActive": false,
+                            "IsActive": true,
                             "IsDynamic": false,
                             "OffsetPosition": [
                                 0.0,
@@ -119,10 +119,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                1.0,
-                                0.0,
-                                0.0,
-                                0.0
+                                0.6532819271087646,
+                                -0.6532819271087646,
+                                0.27059701085090637,
+                                0.27059701085090637
                             ],
                             "Mass": 1.0,
                             "Mesh": "VikingRoom.obj"
@@ -136,8 +136,8 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        -3.4973134994506836,
-                        5.268796920776367,
+                        4.5,
+                        5.0,
                         0.0
                     ],
                     "LocalScale": [
@@ -146,15 +146,15 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
+                        0.6665481328964233,
+                        0.6382241249084473,
+                        0.30441734194755554,
+                        -0.23603710532188416
                     ],
                     "LocalEulerAngles": [
-                        0.0,
-                        0.0,
-                        0.0
+                        90.0,
+                        6.0,
+                        -45.0
                     ],
                     "ParentIndex": -1
                 },
@@ -182,10 +182,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                1.0,
-                                0.0,
-                                0.0,
-                                0.0
+                                0.6665481328964233,
+                                0.6382241249084473,
+                                0.30441734194755554,
+                                -0.23603710532188416
                             ],
                             "Mass": 1.0
                         }
@@ -198,8 +198,8 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        3.580409526824951,
-                        5.986671447753906,
+                        4.499140739440918,
+                        0.12229883670806885,
                         0.0
                     ],
                     "LocalScale": [
@@ -208,15 +208,15 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
+                        0.6532814502716064,
+                        0.6532814502716064,
+                        -0.27059805393218994,
+                        0.27059805393218994
                     ],
                     "LocalEulerAngles": [
+                        90.0,
                         0.0,
-                        0.0,
-                        0.0
+                        45.0
                     ],
                     "ParentIndex": -1
                 },
@@ -244,10 +244,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                1.0,
-                                0.0,
-                                0.0,
-                                0.0
+                                0.6532814502716064,
+                                0.6532814502716064,
+                                -0.27059805393218994,
+                                0.27059805393218994
                             ],
                             "Mass": 1.0
                         }
@@ -260,7 +260,7 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        1.8389289379119873,
+                        2.40830397605896,
                         0.0,
                         0.0
                     ],
@@ -322,14 +322,14 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        1.9659168720245361,
-                        1.4662715196609497,
+                        0.5,
+                        5.0,
                         0.0
                     ],
                     "LocalScale": [
-                        1.0,
-                        1.0,
-                        1.0
+                        0.25,
+                        0.25,
+                        0.25
                     ],
                     "LocalRotation": [
                         1.0,
@@ -384,9 +384,9 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        -1.0,
-                        1.5,
-                        -1.6946799755096436
+                        -2.0,
+                        0.0,
+                        0.0
                     ],
                     "LocalScale": [
                         1.0,
@@ -394,15 +394,15 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
+                        0.6532814502716064,
+                        -0.6532814502716064,
+                        0.27059805393218994,
+                        0.27059805393218994
                     ],
                     "LocalEulerAngles": [
+                        -90.0,
                         0.0,
-                        0.0,
-                        0.0
+                        45.0
                     ],
                     "ParentIndex": -1
                 },
@@ -423,9 +423,9 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        1.0,
-                        1.0,
-                        0.0
+                        -0.6944991946220398,
+                        0.6944991946220398,
+                        1.3940439224243164
                     ],
                     "LocalScale": [
                         0.5,
@@ -458,55 +458,13 @@
             }
         },
         {
-            "DirectionalLight": {
-                "IsActive": true,
-                "Transform": {
-                    "LocalPosition": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "LocalRotation": [
-                        -4.371138828673793e-08,
-                        -1.0,
-                        0.0,
-                        -0.0
-                    ],
-                    "LocalEulerAngles": [
-                        -180.0,
-                        0.0,
-                        0.0
-                    ],
-                    "ParentIndex": -1
-                },
-                "Components": [
-                    {
-                        "DirectionalLight": {
-                            "IsActive": true,
-                            "Color": [
-                                1.0,
-                                0.9019607901573181,
-                                0.7607843279838562,
-                                1.0
-                            ]
-                        }
-                    }
-                ]
-            }
-        },
-        {
             "PointLight": {
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
+                        -5.0,
                         0.0,
-                        0.3609684705734253,
-                        -3.0698275566101074
+                        0.0
                     ],
                     "LocalScale": [
                         1.0,
@@ -536,18 +494,10 @@
                                 1.0,
                                 1.0
                             ],
-                            "Distance": 2.700000047683716,
+                            "Distance": 15.0,
                             "ConstantAttenuation": 1.0,
                             "LinearAttenuation": 0.09000000357627869,
                             "QuadraticAttenuation": 0.03200000151991844
-                        }
-                    },
-                    {
-                        "Model": {
-                            "IsActive": true,
-                            "Mesh": "Earth.obj",
-                            "Texture": "Earth.img",
-                            "Shader": "DefaultDeferredRendering.shd"
                         }
                     }
                 ]
@@ -558,9 +508,9 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
-                        0.0,
-                        0.0,
-                        0.0
+                        -8.0,
+                        1.0,
+                        -0.9471156597137451
                     ],
                     "LocalScale": [
                         1.0,
@@ -568,13 +518,13 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        0.7071067690849304,
-                        0.7071067690849304,
+                        0.9238795042037964,
+                        0.3826834559440613,
                         0.0,
                         0.0
                     ],
                     "LocalEulerAngles": [
-                        90.0,
+                        45.0,
                         0.0,
                         0.0
                     ],
@@ -590,9 +540,9 @@
                                 0.0,
                                 1.0
                             ],
-                            "InnerCutOff": 25.0,
-                            "OuterCutOff": 35.0,
-                            "Distance": 10.0,
+                            "InnerCutOff": 40.0,
+                            "OuterCutOff": 50.0,
+                            "Distance": 5.699999809265137,
                             "ConstantAttenuation": 1.0,
                             "LinearAttenuation": 0.09000000357627869,
                             "QuadraticAttenuation": 0.03200000151991844
@@ -650,9 +600,9 @@
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
+                        7.0,
                         0.0,
-                        0.0,
-                        -2.995365858078003
+                        0.0
                     ],
                     "LocalScale": [
                         1.0,
@@ -677,8 +627,8 @@
                         "ParticleEmitter": {
                             "IsActive": true,
                             "ParticleEmitterProps": {
-                                "MaxParticleNumber": 173,
-                                "SpawnRate": 0.009999999776482582,
+                                "MaxParticleNumber": 2000,
+                                "SpawnRate": 0.0010000000474974513,
                                 "SpawnRateVariation": 0.0,
                                 "SimulationDuration": 5.0,
                                 "IsLooping": true
@@ -700,29 +650,60 @@
                                 "SizeVariation": 74.0,
                                 "BeginColor": [
                                     1.0,
-                                    0.9046154022216797,
+                                    0.0,
                                     0.0,
                                     1.0
                                 ],
                                 "EndColor": [
                                     1.0,
-                                    0.0,
+                                    0.9046154022216797,
                                     0.0,
                                     1.0
                                 ],
                                 "Velocity": [
                                     0.0,
-                                    0.0,
+                                    1.0,
                                     0.0
                                 ],
                                 "VelocityVariation": [
-                                    5.0,
-                                    0.0,
-                                    5.0
+                                    1.0,
+                                    0.75,
+                                    0.0
                                 ]
                             }
                         }
-                    },
+                    }
+                ]
+            }
+        },
+        {
+            "Camera": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        5.233633041381836,
+                        -8.862860679626465
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.983413577079773,
+                        0.18137739598751068,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        20.899999618530273,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
                     {
                         "Camera": {
                             "IsActive": true,
