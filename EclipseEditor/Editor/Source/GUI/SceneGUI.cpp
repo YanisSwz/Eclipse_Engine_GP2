@@ -6,10 +6,10 @@
 
 namespace GUI
 {
-	void SceneGUI::Draw(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera, const unsigned int _textureID, int& _windowWidth, int& _windowHeight, int& _windowPosX, int& _windowPosY)
+	void SceneGUI::Draw(Core::GameObject* _crtGOSelected, Core::GameObject* _gameObjectPicked, Core::SceneCamera* _camera, const unsigned int _textureID, int& _windowWidth, int& _windowHeight, int& _windowPosX, int& _windowPosY)
 	{
 		ImGui::SetNextWindowSizeConstraints({ 300.f, 300.f }, ImGui::GetMainViewport()->Size);
-		ImGuiWindowFlags sceneWindowFlags = ImGuiWindowFlags_None;
+		ImGuiWindowFlags sceneWindowFlags = ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
 		ImGui::Begin("Scene", 0, sceneWindowFlags);
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
@@ -46,13 +46,43 @@ namespace GUI
 			ImGui::End();
 		}
 
+		ImGui::SetCursorPos({ 0.f, 0.f });
 		ImVec2 uv0{ 0.f, 1.f };
 		ImVec2 uv1{ 1.f, 0.f };
-		ImGui::GetWindowDrawList()->AddImage(
-			static_cast<intptr_t>(_textureID),
-			ImVec2(windowPos.x, windowPos.y),
-			ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
-			uv0, uv1);
+		ImGui::Image(static_cast<intptr_t>(_textureID),
+			ImVec2(windowSize.x, windowSize.y),
+			uv0, uv1 );
+
+		// Drag & Drop Resource Target
+		if (_gameObjectPicked)
+		{
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MeshName", ImGuiDragDropFlags_AcceptBeforeDelivery))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					std::string payload_n = *static_cast<std::string*>(payload->Data);
+
+					Core::Model* modelComponent = _gameObjectPicked->GetComponent<Core::Model>();
+					if (modelComponent)
+						modelComponent->SetMesh(Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(payload_n));
+				}
+
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureName", ImGuiDragDropFlags_AcceptBeforeDelivery))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					std::string payload_n = *static_cast<std::string*>(payload->Data);
+
+					Core::Model* modelComponent = _gameObjectPicked->GetComponent<Core::Model>();
+					if (modelComponent)
+						modelComponent->SetTexture(Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(payload_n));
+				}
+				ImGui::EndDragDropTarget();
+			}
+		}
+
+		ImGui::SetItemAllowOverlap();
+		ImGui::SetCursorPos({ 8.f, 38.f });
 
 		// Editor Buttons
 		if (!m_translateBtnTexture)

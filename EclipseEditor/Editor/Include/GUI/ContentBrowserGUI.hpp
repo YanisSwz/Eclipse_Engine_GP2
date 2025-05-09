@@ -1,6 +1,11 @@
 #pragma once
 #include "GUI/FolderGUI.hpp"
 
+namespace Core
+{
+	class GameObject;
+}
+
 namespace GUI
 {
 	class ContentBrowserGUI
