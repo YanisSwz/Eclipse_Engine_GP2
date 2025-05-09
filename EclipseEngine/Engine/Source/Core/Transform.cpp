@@ -133,7 +133,7 @@ namespace Core
 		if (m_parent != nullptr)
 		{
 			m_rotation = m_parent->m_rotation * m_localRotation;
-			m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+			m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		}
 		else
 		{
@@ -222,7 +222,7 @@ namespace Core
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 
 		//We also update the transform's up, right and forward local vectors
 		m_right = m_rotation.Rotate(Math::Vec3::right);
@@ -244,7 +244,7 @@ namespace Core
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 
 		//We also update the transform's up, right and forward local vectors
 		m_right = m_rotation.Rotate(Math::Vec3::right);
@@ -261,9 +261,9 @@ namespace Core
 	void Transform::SetLocalRotation(Math::Quat _quat)
 	{
 		m_localRotation = Math::Quat::Normalized(_quat);
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 		m_rotation = m_parent->m_rotation * m_localRotation;
-		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
@@ -281,7 +281,7 @@ namespace Core
 		m_localEulerAngles = _vec;
 		m_localRotation = Math::Quat::QuaternionEuler(m_localEulerAngles.x, m_localEulerAngles.y, m_localEulerAngles.z);
 		m_rotation = m_parent->m_rotation * m_localRotation;
-		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
@@ -335,7 +335,7 @@ namespace Core
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 
 		//We also update the transform's up, right and forward local vectors
 		m_right = m_rotation.Rotate(Math::Vec3::right);
@@ -359,7 +359,7 @@ namespace Core
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 
 		//We also update the transform's up, right and forward local vectors
 		m_right = m_rotation.Rotate(Math::Vec3::right);
@@ -399,9 +399,9 @@ namespace Core
 		m_localRotation.z = _z;
 		m_localRotation.Normalize();
 
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 		m_rotation = m_parent ? (m_parent->m_rotation * m_localRotation) : m_localRotation;
-		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
@@ -422,7 +422,7 @@ namespace Core
 
 		m_localRotation = Math::Quat::QuaternionEuler(m_localEulerAngles.x, m_localEulerAngles.y, m_localEulerAngles.z);
 		m_rotation = m_parent ? (m_parent->m_rotation * m_localRotation) : m_localRotation;
-		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
