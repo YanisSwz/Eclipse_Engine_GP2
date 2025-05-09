@@ -19,6 +19,7 @@ namespace GUI
 
 		std::string name;
 
+		static void InitIcons();
 		void Init();
 		void SetParent(FolderGUI* _parent);
 
@@ -45,5 +46,7 @@ namespace GUI
 
 		static Resource::Texture* m_folderIcon;
 		static Resource::Texture* m_meshIcon;
+		static Resource::Texture* m_audioIcon;
+		static Resource::Texture* m_sceneIcon;
 	};
 }

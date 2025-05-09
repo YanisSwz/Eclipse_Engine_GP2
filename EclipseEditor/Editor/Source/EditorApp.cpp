@@ -92,16 +92,30 @@ void EditorApp::Render()
 		{
 			ImGui::OpenPopup("Create New Scene");
 			ImGui::SetNextWindowSize(ImVec2(250, 150));
+
 		}
 
 		if (ImGui::BeginPopupModal("Create New Scene", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
 		{
-			ImGui::InputText("##NewScene", m_newSceneName.data(), 255);
-
-			if (ImGui::Button("Create"))
+			bool bIsSceneNameValid = true;
+			if (m_newSceneName == "" || m_newSceneName.size() > SCENE_NAME_MAX_SIZE)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
+				bIsSceneNameValid = false;
+			}
+			ImGui::InputText("##NewScene", &m_newSceneName);
+			if (!bIsSceneNameValid)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Create") && bIsSceneNameValid)
 			{
 				CreateNewScene();
 			}
+			if (!bIsSceneNameValid)
+			{
+				ImGui::EndDisabled();
+				ImGui::PopStyleColor();
+			}
+			
 			ImGui::SameLine();
 			if (ImGui::Button("Cancel"))
 			{
@@ -350,7 +364,6 @@ void EditorApp::SaveScene()
 
 void EditorApp::CreateNewScene()
 {
-	m_newSceneName = m_newSceneName.c_str();
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Creating new Scene: %s", m_newSceneName.c_str());
 	bIsNewSceneWindowOpen = false;
 	ImGui::CloseCurrentPopup();
