@@ -21,16 +21,28 @@ namespace GUI
 
 		if (_camera->MouseSpeedChanged())
 		{
-			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.75f));
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 0.95f));
+			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(.75f, .75f, .75f, 0.95f));
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 2.f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 3.f);
 			ImGui::SetNextWindowSize(m_windowSizeCameraChangedSpeed);
 			ImGui::SetNextWindowPos({ windowPos.x + windowSize.x / 2.f - m_windowSizeCameraChangedSpeed.x / 2.f, windowPos.y + windowSize.y / 2.f - m_windowSizeCameraChangedSpeed.y / 2.f });
-			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration;
+			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
 			ImGui::Begin("MouseSpeedChangedWindow", 0, mouseSpeedChangedWindowFlags);
 
-			ImGui::SetWindowFontScale(3.f);
+			ImGui::SetWindowFontScale(2.f);
+			float windowWidth = ImGui::GetWindowSize().x;
+			float textWidth = 0.f;
+			if(_camera->GetMouseSpeed() < 10.f)
+				textWidth = ImGui::CalcTextSize("5.50").x;
+			else
+				textWidth = ImGui::CalcTextSize("10.00").x;
+			ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+			ImGui::SetCursorPosY(m_windowSizeCameraChangedSpeed.y/2.f - ImGui::GetFontSize()/2.f);
 			ImGui::Text("%.2f", _camera->GetMouseSpeed());
 
-			ImGui::PopStyleColor();
+			ImGui::PopStyleColor(2);
+			ImGui::PopStyleVar(2);
 			ImGui::End();
 		}
 

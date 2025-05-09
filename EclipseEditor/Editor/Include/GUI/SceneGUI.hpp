@@ -33,7 +33,7 @@ namespace GUI
 	private:
 		ImGuizmo::OPERATION m_crtGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 		ImGuizmo::MODE m_crtGizmoMode = ImGuizmo::MODE::LOCAL;
-		ImVec2 m_windowSizeCameraChangedSpeed{ 100.f, 100.f };
+		ImVec2 m_windowSizeCameraChangedSpeed{ 100.f, 75.f };
 		std::vector<std::string> GizmoOperatorsString{ "Translate", "Rotation", "Scale" };
 
 		Resource::Texture* m_translateBtnTexture = nullptr;
