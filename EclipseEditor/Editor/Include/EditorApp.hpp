@@ -90,6 +90,7 @@ private:
 	Core::Serializer m_serializer;
 
 	std::string m_newSceneName;
+	int SCENE_NAME_MAX_SIZE = 20;
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();

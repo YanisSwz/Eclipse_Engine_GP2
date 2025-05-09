@@ -34,7 +34,7 @@ namespace Core
 		float m_minSpeed = 0.1f;
 		float m_maxSpeed = 10.f;
 		float m_increaseSpeedValue = 0.2f;
-		float m_delayBeforeTurnMouseSpeedChangedToOff = 2.f;
+		float m_delayBeforeTurnMouseSpeedChangedToOff = 0.5f;
 		float m_timerBeforeTurnMouseSpeedChangedToOff = 0.f;
 		bool bisMouseSpeedChanged = false;
 

@@ -10,10 +10,20 @@ namespace GUI
 {
 	Resource::Texture* FolderGUI::m_folderIcon = nullptr;
 	Resource::Texture* FolderGUI::m_meshIcon = nullptr;
+	Resource::Texture* FolderGUI::m_audioIcon = nullptr;
+	Resource::Texture* FolderGUI::m_sceneIcon = nullptr;
 
 	FolderGUI::FolderGUI(std::string _name)
 		: name(_name)
 	{
+	}
+
+	void FolderGUI::InitIcons()
+	{
+		m_folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("FolderV.img");
+		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("PrefabV.img");
+		m_audioIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("SoundV.img");
+		m_sceneIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("SFileV.img");
 	}
 
 	void FolderGUI::Init()
@@ -49,9 +59,6 @@ namespace GUI
 
 			return;
 		}
-
-		m_folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("FolderIcon.img");
-		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("MeshIcon.img");
 
 		FolderGUI* textureFolder = new FolderGUI("Texture");
 		m_folderChildren.push_back(textureFolder);
@@ -170,14 +177,18 @@ namespace GUI
 	{
 		FolderGUI* newFolderSelected = nullptr;
 
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.75f, 0.f));
 		
 		std::string invisibleFolderName = "##";
 		invisibleFolderName.append(m_folderChildren[_index]->name).append(" Folder Button");
-		if (ImGui::ImageButton(invisibleFolderName.c_str(), m_folderIcon->GetID(), { 100.f, 100.f }, { 0.f, 1.f }, { 1.f, 0.f }))
+		if (ImGui::ImageButton(invisibleFolderName.c_str(), m_folderIcon->GetID(), { 75.f, 75.f }, { 0.f, 1.f }, { 1.f, 0.f }))
 			newFolderSelected = m_folderChildren[_index];
 		
 		ImGui::PopStyleVar();
+		ImGui::PopStyleColor(3);
 		ImGui::Text(m_folderChildren[_index]->name.c_str());
 		return newFolderSelected;
 	}
@@ -220,7 +231,7 @@ namespace GUI
 	{
 		ImGui::PushID(_index);
 		Resource::AudioClip* audio = m_audioFiles[_index - m_folderChildren.size() - m_textureFiles.size() - m_meshFiles.size()];
-		DrawImage(audio->name.c_str(), m_meshIcon->GetID(), 100.f);
+		DrawImage(audio->name.c_str(), m_audioIcon->GetID(), 100.f);
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
@@ -237,14 +248,18 @@ namespace GUI
 	{
 		ImGui::PushID(_index);
 
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.f, 0.f, 0.f, 0.f));
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
 
 		std::string invisibleSceneName = "##";
 		invisibleSceneName.append(m_sceneFiles[_index]).append(" Scene Button");
-		if (ImGui::ImageButton(invisibleSceneName.c_str(), m_meshIcon->GetID(), { 100.f, 100.f }, { 0.f, 1.f }, { 1.f, 0.f }))
+		if (ImGui::ImageButton(invisibleSceneName.c_str(), m_sceneIcon->GetID(), { 100.f, 100.f }, { 0.f, 1.f }, { 1.f, 0.f }))
 			_selectedScene = m_sceneFiles[_index];
 
 		ImGui::PopStyleVar();
+		ImGui::PopStyleColor(3);
 		ImGui::Text(m_sceneFiles[_index].c_str());
 
 		ImGui::PopID();
