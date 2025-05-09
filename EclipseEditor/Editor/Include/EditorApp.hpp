@@ -101,7 +101,8 @@ private:
 	void CreateNewScene();
 
 	void DrawScene();
-	void PickObjectID();
+	Core::GameObject* PickObject();
+	void DropResourceInScene();
 
 	void DestroyScene();
 	void DestroyGUI();
