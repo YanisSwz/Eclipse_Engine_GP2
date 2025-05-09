@@ -72,17 +72,17 @@ void EditorApp::Render()
 	{
 		if (ImGui::BeginMenu("File", true))
 		{
-			if (ImGui::MenuItem("Save"))
+			if (ImGui::MenuItem("Save Scene"))
 			{
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Save");
 				SaveScene();
 			}
-			if (ImGui::MenuItem("Load"))
+			if (ImGui::MenuItem("Reload Scene"))
 			{
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Load");
 				ReloadScene();
 			}
-			if (ImGui::MenuItem("Create"))
+			if (ImGui::MenuItem("Create Scene"))
 			{
 				bIsNewSceneWindowOpen = true;
 			}
