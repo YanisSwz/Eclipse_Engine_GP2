@@ -14,6 +14,8 @@ namespace Core
 
 	void AudioSystem::Start()
 	{
+		if (m_paused)
+			m_paused = false;
 		ResetAudioSourcesPause();
 		if (m_currentListener == nullptr)
 		{
@@ -22,7 +24,7 @@ namespace Core
 		}
 		else
 		{
-			for(int i = 0; i < m_currentSourcesCount; ++i)
+			for (int i = 0; i < m_currentSourcesCount; ++i)
 			{
 				if (m_audioSources[i].IsPlayingOnAwake() && m_audioSources[i].IsActive() && m_audioSources[i].GetClip() != nullptr)
 					m_audioSources[i].Play();
@@ -36,7 +38,7 @@ namespace Core
 		m_stereoVolume[1] = m_audioEngine.getApproximateVolume(1);
 		if (m_currentListener != nullptr)
 		{
-			if(!m_currentListener->IsActive() && !m_currentListener->IsDestroyed())
+			if (!m_currentListener->IsActive() && !m_currentListener->IsDestroyed())
 			{
 				if (m_canPlay)
 					DisableAudio();
@@ -62,7 +64,7 @@ namespace Core
 		}
 		else
 		{
-			if(m_canPlay)
+			if (m_canPlay)
 				DisableAudio();
 		}
 	}
@@ -72,18 +74,10 @@ namespace Core
 		if (m_paused)
 			m_paused = false;
 		ResetAudioSourcesPause();
-		if (m_currentListener == nullptr)
+		for (int i = 0; i < m_currentSourcesCount; ++i)
 		{
-			DisableAudio();
-			return;
-		}
-		else
-		{
-			for (int i = 0; i < m_currentSourcesCount; ++i)
-			{
-				if (m_audioSources[i].IsActive() && m_audioSources[i].GetClip() != nullptr)
-					m_audioSources[i].Play();
-			}
+			if (m_audioSources[i].IsActive() && m_audioSources[i].GetClip() != nullptr)
+				m_audioSources[i].Play();
 		}
 	}
 
@@ -94,7 +88,7 @@ namespace Core
 		{
 			for (int i = 0; i < m_currentSourcesCount; ++i)
 			{
-				if(!m_audioSources[i].IsPaused() && m_audioSources[i].GetClip() != nullptr)
+				if (!m_audioSources[i].IsPaused() && m_audioSources[i].GetClip() != nullptr)
 				{
 					m_audioSources[i].Pause();
 					m_audioSourcesToUnpause.push_back(&m_audioSources[i]);
@@ -122,9 +116,9 @@ namespace Core
 
 	void AudioSystem::PlayStartUp()
 	{
-		if(m_startupSound == nullptr)
+		if (m_startupSound == nullptr)
 			m_startupSound = Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>("startup.mp3");
-		if (m_startupSound == nullptr) 
+		if (m_startupSound == nullptr)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Failed to load startup sound!");
 			return;
@@ -220,14 +214,14 @@ namespace Core
 	{
 		m_stereoVolume[0] = m_audioEngine.getApproximateVolume(0);
 		m_stereoVolume[1] = m_audioEngine.getApproximateVolume(1);
-		if (m_currentListener != nullptr) 
+		if (m_currentListener != nullptr)
 		{
 			if (m_currentListener->IsActive())
 				m_currentListener->Update();
 			else
 				m_audioEngine.set3dListenerParameters(0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f);
 		}
-		
+
 		for (int i = 0; i < m_currentSourcesCount; ++i)
 			m_audioSources[i].Update();
 		m_audioEngine.update3dAudio();
@@ -269,7 +263,7 @@ namespace Core
 		m_canPlay = false;
 		AudioSource::Disable();
 	}
-	
+
 	float AudioSystem::GetVolume() const
 	{
 		if (m_stereoVolume[0] > m_stereoVolume[1])
@@ -291,9 +285,9 @@ namespace Core
 	std::vector<AudioSource*> AudioSystem::GetAudioSources()
 	{
 		std::vector<AudioSource*> sources{};
-		for(int i = 0; i < m_currentSourcesCount; ++i)
+		for (int i = 0; i < m_currentSourcesCount; ++i)
 		{
-			if(!m_audioSources[i].IsDestroyed())
+			if (!m_audioSources[i].IsDestroyed())
 				sources.push_back(&m_audioSources[i]);
 		}
 		return sources;

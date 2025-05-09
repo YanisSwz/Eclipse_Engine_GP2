@@ -14,6 +14,9 @@ namespace GUI
 		ImGui::SetNextWindowBgAlpha(1.0f);
 		ImGui::Begin("Audio Mixer", 0, ImGuiWindowFlags_HorizontalScrollbar);
 
+		if (!_audioSystem->IsAudioEnabled())
+			ImGui::BeginDisabled();
+
 		// Master volume
 		ImVec2 masterChannelSize{ 50.f, ImGui::GetWindowHeight() / 1.5f };
 		float volume = _audioSystem->GetMaxVolume();
@@ -84,6 +87,12 @@ namespace GUI
 			m_stopBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Stop.img");
 		if (ImGui::ImageButton("Stop", m_stopBtnTexture->GetID(), ImVec2(masterChannelSize.x / 3.f, masterChannelSize.x / 3.f)))
 			_audioSystem->Stop();
+
+		if (!_audioSystem->IsAudioEnabled())
+		{
+			ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No audio listener");
+			ImGui::EndDisabled();
+		}
 
 		ImGui::End();
 	}
