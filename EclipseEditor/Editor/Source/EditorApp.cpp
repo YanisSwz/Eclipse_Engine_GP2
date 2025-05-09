@@ -46,7 +46,8 @@ void EditorApp::Update()
 	if (m_window->GetKey(Windowing::KEY_CODE::KEY_ESCAPE, Windowing::INPUT_ACTION::INPUT_PRESS))
 		m_window->SetWindowShouldClose(true);
 
-	PickObjectID();
+	if (m_window->GetMouseButton(Windowing::MOUSE_CODE::MIDDLE_BUTTON, Windowing::INPUT_ACTION::INPUT_PRESS))
+		m_crtGOSelected = PickObject();
 
 	deltaTime = m_window->GetTime() - oldTime;
 	oldTime = m_window->GetTime();
@@ -131,7 +132,7 @@ void EditorApp::Render()
 		if (gameState == GAME_STATE::STOP)
 		{
 			// Play Button
-			if(m_playBtnTexture == nullptr)
+			if (m_playBtnTexture == nullptr)
 				m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
 
 			ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
@@ -182,7 +183,7 @@ void EditorApp::Render()
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.75f, 0.75f, 0.75f, 1.f });
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.85f, 0.85f, 0.85f, 1.f });
 
-			if(ImGui::ImageButton("Resume", m_pauseBtnTexture->GetID(), { 25.f, 25.f }))
+			if (ImGui::ImageButton("Resume", m_pauseBtnTexture->GetID(), { 25.f, 25.f }))
 			{
 				m_scene.SetState(GAME_STATE::PLAY);
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Resume!");
@@ -230,7 +231,12 @@ void EditorApp::Render()
 		m_inspectorGUI.Draw(m_crtGOSelected);
 
 	if (bIsSceneWindowEnabled)
-		m_sceneGUI.Draw(m_crtGOSelected, &m_sceneCamera, m_editorPipeline->GetFinalTexture(), m_sceneWindowWidth, m_sceneWindowHeight, m_sceneWindowPosX, m_sceneWindowPosY);
+	{
+		Core::GameObject* gameObjectPicked = nullptr;
+		if (m_window->GetMouseButton(Windowing::MOUSE_CODE::LEFT_BUTTON, Windowing::INPUT_ACTION::INPUT_RELEASE))
+			gameObjectPicked = PickObject();
+		m_sceneGUI.Draw(m_crtGOSelected, gameObjectPicked, &m_sceneCamera, m_editorPipeline->GetFinalTexture(), m_sceneWindowWidth, m_sceneWindowHeight, m_sceneWindowPosX, m_sceneWindowPosY);
+	}
 
 	if (bIsGameWindowEnabled)
 		m_gameGUI.Draw(m_scene.GetSystemManager()->GetCameraSystem()->GetCurrentCamera(), m_gamePipeline->GetFinalTexture(), m_gameWindowWidth, m_gameWindowHeight);
@@ -241,6 +247,7 @@ void EditorApp::Render()
 	std::string selectedScene;
 	if (bIsContentBrowserWindowEnabled)
 		selectedScene = m_contentBrowserGUI.Draw();
+
 	if (selectedScene != "")
 	{
 		SaveScene();
@@ -378,17 +385,13 @@ void EditorApp::DrawScene()
 		m_scene.GetSystemManager()->Render(m_renderInterface, m_gamePipeline, gameCamera->GetViewProjectionMatrix(m_gameWindowWidth, m_gameWindowHeight), gameCamera->GetViewPos());
 }
 
-void EditorApp::PickObjectID()
+Core::GameObject* EditorApp::PickObject()
 {
-	if (m_window->GetMouseButton(Windowing::MOUSE_CODE::MIDDLE_BUTTON, Windowing::INPUT_ACTION::INPUT_PRESS))
-	{
-		Math::Vec2 mousePos = m_window->GetCursorPos();
-		int mousePosX = static_cast<int>(mousePos.x) - m_sceneWindowPosX;
-		int mousePosY = m_sceneWindowHeight - (static_cast<int>(mousePos.y) - (m_sceneWindowPosY - 30)); // -30 for the size of the ImGui window titlebar
-		int pickID = m_editorPipeline->PickObjectID(mousePosX, mousePosY);
-
-		m_crtGOSelected = m_scene.GetObjectByID(pickID);
-	}
+	Math::Vec2 mousePos = m_window->GetCursorPos();
+	int mousePosX = static_cast<int>(mousePos.x) - m_sceneWindowPosX;
+	int mousePosY = m_sceneWindowHeight - (static_cast<int>(mousePos.y) - (m_sceneWindowPosY - 30)); // -30 for the size of the ImGui window titlebar
+	int pickID = m_editorPipeline->PickObjectID(mousePosX, mousePosY);
+	return m_scene.GetObjectByID(pickID);;
 }
 
 void EditorApp::DestroyScene()
