@@ -12,6 +12,7 @@
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
 #include "Core/Particles/ParticleEmitter.hpp"
+#include <implot.h>
 
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
@@ -249,7 +250,7 @@ void EditorApp::Render()
 	}
 
 	if (bIsAudioMixerWindowEnabled)
-		m_audioMixerGUI.Draw(m_scene.GetSystemManager()->GetAudioSystem());
+		m_audioMixerGUI.Draw(m_scene.GetSystemManager()->GetAudioSystem(), deltaTime);
 
 	GUI::EndFrame();
 
@@ -294,6 +295,7 @@ void EditorApp::InitGUI()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImPlot::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
@@ -407,5 +409,6 @@ void EditorApp::DestroyGUI()
 	ImGui_ImplGlfw_Shutdown();
 #endif // ImGuiImplementGLFW
 
+	ImPlot::DestroyContext();
 	ImGui::DestroyContext();
 }

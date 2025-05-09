@@ -8,7 +8,7 @@ namespace GUI
 {
 	AudioMixerGUI::AudioMixerGUI() {}
 
-	void AudioMixerGUI::Draw(Core::AudioSystem* _audioSystem)
+	void AudioMixerGUI::Draw(Core::AudioSystem* _audioSystem, float _deltaTime)
 	{
 		ImGui::SetNextWindowSizeConstraints({ 300.f, 350.f }, ImGui::GetMainViewport()->Size);
 		ImGui::SetNextWindowBgAlpha(1.0f);
@@ -20,7 +20,7 @@ namespace GUI
 		// Master volume
 		ImVec2 masterChannelSize{ 50.f, ImGui::GetWindowHeight() / 1.5f };
 		float volume = _audioSystem->GetMaxVolume();
-		if (GUI::AudioChannel("Master", _audioSystem->GetStereoVolume(), volume, masterChannelSize))
+		if (GUI::AudioChannel("Master", _audioSystem->GetStereoVolume(), _audioSystem->GetVolume(), volume, masterChannelSize))
 			_audioSystem->SetMaxVolume(volume);
 
 		// Audio sources
@@ -93,6 +93,28 @@ namespace GUI
 			ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No audio listener");
 			ImGui::EndDisabled();
 		}
+
+		m_timer += _deltaTime;
+		if (m_timer >= 0.01f)
+		{
+			m_timer -= 0.01f;
+			m_values.push_back(_audioSystem->GetVolume());
+			if (static_cast<int>(m_values.size()) > ImGui::GetWindowSize().x / 16.f)
+				m_values.erase(m_values.begin());
+		}
+
+		ImPlot::PushStyleVar(ImPlotStyleVar_PlotPadding, ImVec2(0, 0));
+		if (ImPlot::BeginPlot("test", ImVec2(ImGui::GetWindowSize().x/2.f, 100.f), ImPlotFlags_CanvasOnly))
+		{
+			ImPlot::SetupAxes("Time (s)", "Volume (%)", ImPlotAxisFlags_NoDecorations, ImPlotAxisFlags_NoDecorations);
+			ImPlot::SetupAxesLimits(0, 100 - 1, 0.f, 1.f, ImGuiCond_Always);
+			ImPlot::SetNextLineStyle(ImVec4(1.f, 0.75f, 0.f, 1.f));
+			ImPlot::SetNextFillStyle(ImVec4(1.f, 0.75f, 0.f, 1.f), 0.25f);
+
+			ImPlot::PlotLine("test", m_values.data(), static_cast<int>(m_values.size()), 1, 0, ImPlotLineFlags_Shaded);
+			ImPlot::EndPlot();
+		}
+		ImPlot::PopStyleVar();
 
 		ImGui::End();
 	}

@@ -630,7 +630,7 @@ namespace GUI
 		_color.w = col[3];
 	}
 
-	bool AudioChannel(const char* _label, float* _stereoVolume, float& _sliderValue, ImVec2 _size, float _offset)
+	bool AudioChannel(const char* _label, float* _stereoVolume, float _currentVolume, float& _sliderValue, ImVec2 _size, float _offset)
 	{
 		ImGui::SetCursorPosX(8.f + _offset);
 		float alpha = ImGui::GetStyle().Alpha;
@@ -645,18 +645,13 @@ namespace GUI
 		label += "StereoVolume";
 		ImGui::PlotHistogram(label.c_str(), _stereoVolume, 2, 0, NULL, 0.0f, 1.0f, _size);
 
-		float vol = 0.f;
-		if (_stereoVolume[0] > _stereoVolume[1])
-			vol = _stereoVolume[0];
-		else
-			vol = _stereoVolume[1];
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(8.f + _offset);
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(1.f, 1.f, 1.f, 1.f));
 		label = "##";
 		label += _label;
 		label += "MaxVolume";
-		ImGui::VSliderFloat(label.c_str(), _size, &vol, 0.0f, 1.0f, "");
+		ImGui::VSliderFloat(label.c_str(), _size, &_currentVolume, 0.0f, 1.0f, "");
 		ImGui::EndDisabled();
 		ImGui::PopStyleColor(4);
 		ImGui::PopStyleVar();
