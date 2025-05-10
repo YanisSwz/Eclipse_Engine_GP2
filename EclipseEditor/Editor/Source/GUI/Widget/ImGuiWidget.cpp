@@ -511,9 +511,13 @@ namespace GUI
 	{
 		ImVec2 uv_min = ImVec2(0.0f, 1.0f);
 		ImVec2 uv_max = ImVec2(1.0f, 0.0f);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.f, 0.f, 0.f, 0.f));
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
-		ImGui::ImageButton(_imageName, _imageID, ImVec2(_size, _size), uv_min, uv_max, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+		ImGui::ImageButton(_imageName, _imageID, ImVec2(_size, _size), uv_min, uv_max, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 		ImGui::PopStyleVar();
+		ImGui::PopStyleColor(3);
 	}
 
 	bool ComboFilter(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values, float _maxColumnWidth)
