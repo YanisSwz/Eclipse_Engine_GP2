@@ -10,7 +10,7 @@ namespace GUI
 
 	void AudioMixerGUI::Draw(Core::AudioSystem* _audioSystem, float _deltaTime)
 	{
-		ImGui::SetNextWindowSizeConstraints({ 300.f, 350.f }, ImGui::GetMainViewport()->Size);
+		ImGui::SetNextWindowSizeConstraints({ 300.f, 625.f }, ImGui::GetMainViewport()->Size);
 		ImGui::SetNextWindowBgAlpha(1.0f);
 		ImGui::Begin("Audio Mixer", 0, ImGuiWindowFlags_HorizontalScrollbar);
 
@@ -95,11 +95,11 @@ namespace GUI
 		}
 
 		m_timer += _deltaTime;
-		if (m_timer >= 0.01f)
+		if (m_timer >= m_refreshRate)
 		{
-			m_timer -= 0.01f;
+			m_timer -= m_refreshRate;
 			m_values.push_back(_audioSystem->GetVolume());
-			if (static_cast<int>(m_values.size()) > ImGui::GetWindowSize().x / 16.f)
+			if (static_cast<int>(m_values.size()) > MAX_TIME * NB_VALUES)
 				m_values.erase(m_values.begin());
 		}
 
@@ -107,11 +107,11 @@ namespace GUI
 		if (ImPlot::BeginPlot("test", ImVec2(ImGui::GetWindowSize().x/2.f, 100.f), ImPlotFlags_CanvasOnly))
 		{
 			ImPlot::SetupAxes("Time (s)", "Volume (%)", ImPlotAxisFlags_NoDecorations, ImPlotAxisFlags_NoDecorations);
-			ImPlot::SetupAxesLimits(0, 100 - 1, 0.f, 1.f, ImGuiCond_Always);
+			ImPlot::SetupAxesLimits(0, NB_VALUES - 1, -0.001f, 1.001f, ImGuiCond_Always);
 			ImPlot::SetNextLineStyle(ImVec4(1.f, 0.75f, 0.f, 1.f));
 			ImPlot::SetNextFillStyle(ImVec4(1.f, 0.75f, 0.f, 1.f), 0.25f);
 
-			ImPlot::PlotLine("test", m_values.data(), static_cast<int>(m_values.size()), 1, 0, ImPlotLineFlags_Shaded);
+			ImPlot::PlotLine("test", m_values.data(), static_cast<int>(m_values.size()), 1/MAX_TIME, 0, ImPlotLineFlags_Shaded);
 			ImPlot::EndPlot();
 		}
 		ImPlot::PopStyleVar();
