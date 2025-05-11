@@ -431,6 +431,10 @@ namespace GUI
 					ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput);
 					ImGui::EndDisabled();
 				}
+			}
+
+			if(clip != nullptr)
+			{
 				if (m_playBtnTexture == nullptr)
 					m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
 				if (ImGui::ImageButton("Play", m_playBtnTexture->GetID(), ImVec2(25.f, 25.f)))

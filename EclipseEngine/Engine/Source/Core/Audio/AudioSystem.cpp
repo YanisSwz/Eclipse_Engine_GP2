@@ -123,7 +123,7 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Failed to load startup sound!");
 			return;
 		}
-		m_audioEngine.play(m_startupSound->audioFile);
+		m_audioEngine.play(*m_startupSound->GetAudio());
 	}
 
 	AudioSource* AudioSystem::AddAudioSource()

@@ -76,13 +76,13 @@ namespace Core
 			m_paused = false;
 		if (!m_3D)
 		{
-			m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
+			m_sound = m_audioEngine->play(*m_audioClip->GetAudio(), m_volume);
 			m_audioEngine->setPan(m_sound, m_pan);
 		}
 		else
 		{
 			Math::Vec3 pos = m_gameObject->transform->GetPosition();
-			m_sound = m_audioEngine->play3d(m_audioClip->audioFile, pos.x, pos.y, pos.z, 0.f, 0.f, 0.f, m_volume, true);
+			m_sound = m_audioEngine->play3d(*m_audioClip->GetAudio(), pos.x, pos.y, pos.z, 0.f, 0.f, 0.f, m_volume, true);
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
 			m_audioEngine->set3dSourceAttenuation(m_sound, SoLoud::AudioSource::ATTENUATION_MODELS::LINEAR_DISTANCE, 1.f);
 			m_audioEngine->setPause(m_sound, false);
@@ -131,7 +131,7 @@ namespace Core
 			return;
 		}
 		m_audioClipLength = m_audioClip->GetLength();
-		m_sampleRate = m_audioClip->audioFile.mSampleCount / m_audioClip->GetLength();
+		m_sampleRate = m_audioClip->GetSampleCount() / m_audioClipLength;
 	}
 
 	void AudioSource::SetLooping(bool _looping)
@@ -145,14 +145,14 @@ namespace Core
 	{
 		if (m_audioClip == nullptr)
 			return nullptr;
-		return m_audioClip->audioFile.mData;
+		return m_audioClip->GetData();
 	}
 
 	int AudioSource::GetSampleCount() const
 	{
 		if (m_audioClip == nullptr)
 			return 0;
-		return m_audioClip->audioFile.mSampleCount;
+		return m_audioClip->GetSampleCount();
 	}
 
 	float AudioSource::GetTime() const
