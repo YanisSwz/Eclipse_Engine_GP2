@@ -566,10 +566,10 @@ namespace GUI
 
 			ImGui::SeparatorText("Particle Properties");
 			GUI::DragFloat("Life Time", "LifeTimeDragFloat", &_particleEmitter->particleProps.lifeTime, 0.1f, 0.f, FLT_MAX);
-			GUI::DragColorRGBA("Color Begin", _particleEmitter->particleProps.colorBegin, 255.f);
-			GUI::DragColorRGBA("Color End", _particleEmitter->particleProps.colorEnd, 255.f);
-			GUI::DragFloat("Size Begin", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
-			GUI::DragFloat("Size End", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			ColorEdit4("Begin Color", _particleEmitter->particleProps.colorBegin);			
+			ColorEdit4("End Color", _particleEmitter->particleProps.colorEnd);
+			GUI::DragFloat("Begin Size", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			GUI::DragFloat("End Size", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("Size Variation", "SizeVariationDragFloat", &_particleEmitter->particleProps.sizeVariation, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragVec3XYZ("Velocity", _particleEmitter->particleProps.velocity, 0.f, 125.f);
 			GUI::DragVec3XYZ("Velocity Variation", _particleEmitter->particleProps.velocityVariation, 0.f, 125.f);

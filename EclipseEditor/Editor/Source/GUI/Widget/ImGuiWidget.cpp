@@ -624,14 +624,25 @@ namespace GUI
 		return ImGui::SliderFloat(_sliderName, value, _min, _max, _format);
 	}
 
-	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags)
+	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags, float _maxColumnWidth)
 	{
-		float col[4]{ _color.x, _color.y, _color.z, _color.w };
-		ImGui::ColorEdit4(_label, col, flags);
-		_color.x = col[0];
-		_color.y = col[1];
-		_color.z = col[2];
-		_color.w = col[3];
+		std::string invisibleLabel = std::string("##") + _label;
+		ImGui::PushID(invisibleLabel.c_str());
+		ImGui::Columns(2, 0, false);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
+		ImGui::Text(_label);
+		ImGui::NextColumn();
+		float col[4]{ _color.x / 255.f, _color.y / 255.f, _color.z / 255.f, _color.w / 255.f };
+		ImGui::ColorEdit4(invisibleLabel.c_str(), col, flags);
+		_color.x = col[0] * 255.f;
+		_color.y = col[1] * 255.f;
+		_color.z = col[2] * 255.f;
+		_color.w = col[3] * 255.f;
+		ImGui::Columns(1);
+		ImGui::PopID();
 	}
 
 	bool AudioChannel(const char* _label, float* _stereoVolume, float& _sliderValue, ImVec2 _size, float _offset)
