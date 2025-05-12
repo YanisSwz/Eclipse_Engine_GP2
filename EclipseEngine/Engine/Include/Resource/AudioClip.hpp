@@ -19,6 +19,7 @@ namespace Resource
 		ECLIPSE_ENGINE SoLoud::AudioSource* GetAudio();
 		ECLIPSE_ENGINE int GetSampleCount() const;
 		ECLIPSE_ENGINE float* GetData();
+		ECLIPSE_ENGINE inline bool IsStream() const { return m_isStream; }
 
 	private:
 		bool m_isStream = false;

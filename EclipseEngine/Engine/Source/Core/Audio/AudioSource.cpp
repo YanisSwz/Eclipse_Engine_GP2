@@ -35,19 +35,23 @@ namespace Core
 		m_destroyed = true;
 	}
 
-	void AudioSource::Update() 
+	void AudioSource::Update()
 	{
 		if (m_destroyed || !m_active)
 			return;
 
-		if (!m_3D)
-			return;
+		// Workaround to loop Wavstream
+		if (m_audioClip->IsStream() && m_looping && fabsf(static_cast<float>(m_audioEngine->getStreamTime(m_sound)) - m_audioClipLength) <= 0.02f)
+			Play();
 
 		if (!m_audioEngine->isValidVoiceHandle(m_sound))
 			return;
 
+		if (!m_3D)
+			return;
 		if (!m_gameObject->transform->HasPositionChanged())
 			return;
+
 
 		Math::Vec3 newPos = m_gameObject->transform->GetPosition();
 		m_audioEngine->set3dSourcePosition(m_sound, newPos.x, newPos.y, newPos.z);
@@ -63,7 +67,7 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to play!");
 			return;
 		}
-		if(m_volume <= Math::Tools::epsilon)
+		if (m_volume <= Math::Tools::epsilon)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Prevented clip with 0 volume to play");
 			return;
@@ -87,7 +91,8 @@ namespace Core
 			m_audioEngine->set3dSourceAttenuation(m_sound, SoLoud::AudioSource::ATTENUATION_MODELS::LINEAR_DISTANCE, 1.f);
 			m_audioEngine->setPause(m_sound, false);
 		}
-		m_audioEngine->setLooping(m_sound, m_looping);
+		if (!m_audioClip->IsStream())
+			m_audioEngine->setLooping(m_sound, m_looping);
 		m_audioEngine->setSamplerate(m_sound, m_sampleRate);
 	}
 
@@ -99,7 +104,7 @@ namespace Core
 			return;
 		}
 		if (!m_audioEngine->isValidVoiceHandle(m_sound) && m_paused)
-		{	
+		{
 			m_paused = false;
 			return;
 		}
@@ -110,7 +115,7 @@ namespace Core
 
 	void AudioSource::Stop()
 	{
-		if(m_audioClip == nullptr)
+		if (m_audioClip == nullptr)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "No audio clip to stop!");
 			return;
@@ -125,7 +130,7 @@ namespace Core
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			Stop();
 		m_audioClip = _clip;
-		if(m_audioClip == nullptr)
+		if (m_audioClip == nullptr)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "Failed to set audio clip!");
 			return;
@@ -211,7 +216,7 @@ namespace Core
 
 	void AudioSource::SetSampleRate(float _rate)
 	{
-		if(_rate < 8000.f)
+		if (_rate < 8000.f)
 			_rate = 8000.f;
 		else if (_rate > 96000.f)
 			_rate = 96000.f;

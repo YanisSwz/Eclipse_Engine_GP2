@@ -418,6 +418,10 @@ namespace GUI
 				ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, std::to_string(_source->GetLength()).c_str(), -range, range, ImVec2(0.f, 200.f));
 				ImGui::PopStyleColor();
 
+			}
+
+			if(clip != nullptr)
+			{
 				if (_source->IsPlaying())
 				{
 					float time = _source->GetTime();
@@ -431,10 +435,6 @@ namespace GUI
 					ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput);
 					ImGui::EndDisabled();
 				}
-			}
-
-			if(clip != nullptr)
-			{
 				if (m_playBtnTexture == nullptr)
 					m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
 				if (ImGui::ImageButton("Play", m_playBtnTexture->GetID(), ImVec2(25.f, 25.f)))
