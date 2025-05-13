@@ -109,7 +109,7 @@ namespace Core
 		float mass = m_mass;
 		Math::Vec3 scale = m_scale;
 		Math::Vec3 position = m_position;
-		Math::Vec3 rotationEuler = m_rotation.GetEulerAnglesDegXYZ();
+		Math::Vec3 rotationEuler = m_rotation.GetEulerAnglesDegZYX();
 		JPH::Vec3 jphVelocity = m_bodyInterface->GetLinearVelocity(m_bodyID);
 		Math::Vec3 myVelocity{ jphVelocity.GetX(), jphVelocity.GetY(), jphVelocity.GetZ() };
 		JPH::Vec3 jphAngularVelocity = m_bodyInterface->GetAngularVelocity(m_bodyID);
