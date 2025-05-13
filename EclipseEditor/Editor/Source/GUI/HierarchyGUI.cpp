@@ -33,6 +33,10 @@ namespace GUI
 					int* payload_n;
 					payload_n = static_cast<int*>(payload->Data);
 					_scene->GetSystemManager()->GetTransformsRoot()->AddChild(_scene->GetObjectByID(*payload_n)->transform);
+					_scene->GetObjectByID(*payload_n)->transform->SetChanged(true);
+					_scene->GetObjectByID(*payload_n)->transform->SetPosition(_scene->GetObjectByID(*payload_n)->transform->GetPosition());
+					_scene->GetObjectByID(*payload_n)->transform->SetRotation(_scene->GetObjectByID(*payload_n)->transform->GetRotation());
+					_scene->GetObjectByID(*payload_n)->transform->SetScale(_scene->GetObjectByID(*payload_n)->transform->GetScale());
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -90,6 +94,10 @@ namespace GUI
 					int* payload_n;
 					payload_n = static_cast<int*>(payload->Data);
 					_scene->GetObjectByID(*payload_n)->transform->SetParent(_crtTransform);
+					_scene->GetObjectByID(*payload_n)->transform->SetChanged(true);
+					_scene->GetObjectByID(*payload_n)->transform->SetPosition(_scene->GetObjectByID(*payload_n)->transform->GetPosition());
+					_scene->GetObjectByID(*payload_n)->transform->SetRotation(_scene->GetObjectByID(*payload_n)->transform->GetRotation());
+					_scene->GetObjectByID(*payload_n)->transform->SetScale(_scene->GetObjectByID(*payload_n)->transform->GetScale());
 				}
 				ImGui::EndDragDropTarget();
 			}

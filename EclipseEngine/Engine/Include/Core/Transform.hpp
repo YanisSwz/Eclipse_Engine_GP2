@@ -71,6 +71,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetPositionChanged(bool _changed);
 		ECLIPSE_ENGINE void SetScaleChanged(bool _changed);
 		ECLIPSE_ENGINE void SetRotationChanged(bool _changed);
+		ECLIPSE_ENGINE void SetChanged(bool _changed);
 
 		ECLIPSE_ENGINE void Serialize(json& _j) override;
 		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
