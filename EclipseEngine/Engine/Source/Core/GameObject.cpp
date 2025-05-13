@@ -9,7 +9,7 @@ namespace Core
 		.data<&GameObject::transform>(hash("Transform"))
 		.data<&GameObject::m_components>(hash("Components"));
 
-	std::vector<std::string> GameObject::m_tags{"Untagged", "Enemy", "Player"};
+	std::vector<std::string> GameObject::m_tags{};
 
 	GameObject::GameObject(SystemManager* _manager, Transform* _t, std::string _name)
 	{
@@ -86,6 +86,28 @@ namespace Core
 		return m_systemManager;
 	}
 
+	void GameObject::SerializeTags(std::string _filePath)
+	{
+		std::ofstream fileStream(_filePath);
+		json tags = m_tags;
+		fileStream << std::setw(4) << tags << std::endl;
+	}
+
+	void GameObject::DeserializeTags(std::string _filePath)
+	{
+		std::ifstream fileStream(_filePath);
+
+		if (!fileStream.is_open() || fileStream.peek() == std::ifstream::traits_type::eof())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "No tags to load in %s", _filePath.c_str());
+			return;
+		}
+
+		json tags;
+		fileStream >> tags;
+		m_tags = tags;
+	}
+
 	Component* GameObject::AddComponent(std::string _componentType)
 	{
 		Component* newComp = m_systemManager->AddComponent(_componentType);
@@ -101,6 +123,7 @@ namespace Core
 	void GameObject::Serialize(json& _j)
 	{
 		_j[name]["IsActive"] = IsActive();
+		_j[name]["Tag"] = tag;
 
 		json transformJson;
 		transform->Serialize(transformJson);
@@ -122,6 +145,7 @@ namespace Core
 		json gameObject = _j.front();
 
 		m_active = gameObject["IsActive"];
+		tag = gameObject["Tag"];
 
 		transform->Deserialize(gameObject["Transform"]);
 

@@ -20,7 +20,7 @@ namespace Core
 		ECLIPSE_ENGINE ~GameObject();
 
 		std::string name = "";
-		std::string tag = GameObject::m_tags[0];
+		std::string tag;
 		Transform* transform = nullptr;
 
 		ECLIPSE_ENGINE static inline std::vector<std::string> GetTags() { return m_tags; }
@@ -32,6 +32,9 @@ namespace Core
 
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
 		ECLIPSE_ENGINE inline std::vector<Component*> GetComponents() { return m_components; }
+
+		ECLIPSE_ENGINE static void SerializeTags(std::string _filePath);
+		ECLIPSE_ENGINE static void DeserializeTags(std::string _filePath);
 
 		template <typename T>
 		T* AddComponent()

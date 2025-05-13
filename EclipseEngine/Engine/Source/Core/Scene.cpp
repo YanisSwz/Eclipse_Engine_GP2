@@ -25,6 +25,7 @@ namespace Core
 
 		m_gameObjects[m_currentGameObjectCount].~GameObject();
 		new (&m_gameObjects[m_currentGameObjectCount]) GameObject(&m_systemManager);
+		m_gameObjects[m_currentGameObjectCount].tag = GameObject::GetTags()[0];
 		++m_currentGameObjectCount;
 		return &m_gameObjects[m_currentGameObjectCount - 1];
 	}
@@ -139,6 +140,7 @@ namespace Core
 		for (int i = 0; i < GetCount(); ++i)
 		{
 			gameObject = GetGameObjectByIndex(i);
+
 			if (gameObject->IsDestroyed())
 			{
 				++destroyedNb;

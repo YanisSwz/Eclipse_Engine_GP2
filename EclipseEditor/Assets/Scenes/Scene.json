@@ -9,6 +9,7 @@
         {
             "Floor": {
                 "IsActive": true,
+                "Tag": "Floor",
                 "Transform": {
                     "LocalPosition": [
                         0.0,
@@ -22,11 +23,6 @@
                     ],
                     "LocalRotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
                         0.0,
                         0.0,
                         0.0
@@ -71,6 +67,7 @@
         {
             "VikingRoom": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         0.5,
@@ -87,11 +84,6 @@
                         -0.6532819271087646,
                         0.27059701085090637,
                         0.27059701085090637
-                    ],
-                    "LocalEulerAngles": [
-                        -90.0,
-                        0.0,
-                        44.99981689453125
                     ],
                     "ParentIndex": -1
                 },
@@ -134,6 +126,7 @@
         {
             "Capsule1": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         4.5,
@@ -148,13 +141,8 @@
                     "LocalRotation": [
                         0.6665481328964233,
                         0.6382241249084473,
-                        0.30441734194755554,
-                        -0.23603710532188416
-                    ],
-                    "LocalEulerAngles": [
-                        90.0,
-                        6.0,
-                        -45.0
+                        0.3044174313545227,
+                        -0.23603704571723938
                     ],
                     "ParentIndex": -1
                 },
@@ -182,10 +170,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                0.6665481328964233,
-                                0.6382241249084473,
-                                0.30441734194755554,
-                                -0.23603710532188416
+                                0.6665481925010681,
+                                0.638224184513092,
+                                0.3044174611568451,
+                                -0.23603709042072296
                             ],
                             "Mass": 1.0
                         }
@@ -196,6 +184,7 @@
         {
             "Capsule2": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         4.499140739440918,
@@ -208,15 +197,10 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        0.6532814502716064,
-                        0.6532814502716064,
-                        -0.27059805393218994,
-                        0.27059805393218994
-                    ],
-                    "LocalEulerAngles": [
-                        90.0,
-                        0.0,
-                        45.0
+                        0.6532810926437378,
+                        0.6532818078994751,
+                        -0.27059733867645264,
+                        0.2705989181995392
                     ],
                     "ParentIndex": -1
                 },
@@ -244,10 +228,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                0.6532814502716064,
-                                0.6532814502716064,
-                                -0.27059805393218994,
-                                0.27059805393218994
+                                0.6532810926437378,
+                                0.6532818078994751,
+                                -0.27059733867645264,
+                                0.2705989181995392
                             ],
                             "Mass": 1.0
                         }
@@ -258,6 +242,7 @@
         {
             "BoxCollider Static": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         2.40830397605896,
@@ -271,11 +256,6 @@
                     ],
                     "LocalRotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
                         0.0,
                         0.0,
                         0.0
@@ -320,6 +300,7 @@
         {
             "BoxCollider Dynamic": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         0.5,
@@ -333,11 +314,6 @@
                     ],
                     "LocalRotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
                         0.0,
                         0.0,
                         0.0
@@ -382,6 +358,7 @@
         {
             "Parent": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         -2.0,
@@ -394,15 +371,10 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        0.6532814502716064,
-                        -0.6532814502716064,
-                        0.27059805393218994,
-                        0.27059805393218994
-                    ],
-                    "LocalEulerAngles": [
-                        -90.0,
-                        0.0,
-                        45.0
+                        0.6532810926437378,
+                        -0.6532818078994751,
+                        0.27059727907180786,
+                        0.2705988883972168
                     ],
                     "ParentIndex": -1
                 },
@@ -421,6 +393,7 @@
         {
             "Child": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         -0.6944991946220398,
@@ -434,11 +407,6 @@
                     ],
                     "LocalRotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
                         0.0,
                         0.0,
                         0.0
@@ -460,6 +428,7 @@
         {
             "PointLight": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         -5.0,
@@ -473,11 +442,6 @@
                     ],
                     "LocalRotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
                         0.0,
                         0.0,
                         0.0
@@ -506,6 +470,7 @@
         {
             "SpotLight": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         -8.0,
@@ -520,11 +485,6 @@
                     "LocalRotation": [
                         0.9238795042037964,
                         0.3826834559440613,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
-                        45.0,
                         0.0,
                         0.0
                     ],
@@ -554,6 +514,7 @@
         {
             "Sound Test": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         0.0,
@@ -567,11 +528,6 @@
                     ],
                     "LocalRotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
                         0.0,
                         0.0,
                         0.0
@@ -598,6 +554,7 @@
         {
             "ParticleEmitter": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         7.0,
@@ -611,11 +568,6 @@
                     ],
                     "LocalRotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
                         0.0,
                         0.0,
                         0.0
@@ -679,6 +631,7 @@
         {
             "Camera": {
                 "IsActive": true,
+                "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
                         0.0,
@@ -692,12 +645,7 @@
                     ],
                     "LocalRotation": [
                         0.983413577079773,
-                        0.18137739598751068,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalEulerAngles": [
-                        20.899999618530273,
+                        0.1813773810863495,
                         0.0,
                         0.0
                     ],
