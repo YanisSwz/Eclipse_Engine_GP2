@@ -410,6 +410,10 @@ namespace GUI
 
 			if(clip != nullptr)
 			{
+				std::string temp = _source->channel;
+				if (GUI::ComboFilter("Type", &temp, Core::AudioSource::GetChannelNames()))
+					_source->SetChannel(temp);
+
 				float* data = _source->GetData();
 				if (data != nullptr)
 				{

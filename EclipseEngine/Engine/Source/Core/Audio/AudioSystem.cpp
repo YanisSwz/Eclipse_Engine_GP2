@@ -4,11 +4,22 @@
 
 namespace Core
 {
+	AudioSystem::~AudioSystem()
+	{
+		Stop();
+		std::vector<SoLoud::handle> handles = AudioSource::GetChannelHandles();
+		for (int i = 0; i < static_cast<int>(handles.size()); ++i)
+			m_audioEngine.destroyVoiceGroup(handles[i]);
+		m_audioEngine.deinit();
+	}
+
 	void AudioSystem::Init()
 	{
 		m_audioEngine.init();
 		m_audioEngine.setVisualizationEnable(true);
 		EnableAudio();
+		AudioSource::AddChannel("SFX", m_audioEngine.createVoiceGroup());
+		AudioSource::AddChannel("Music", m_audioEngine.createVoiceGroup());
 		Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Audio engine successfully initialized");
 	}
 
@@ -291,6 +302,11 @@ namespace Core
 				sources.push_back(&m_audioSources[i]);
 		}
 		return sources;
+	}
+
+	SoLoud::Soloud* AudioSystem::GetAudioEngine()
+	{
+		return &m_audioEngine;
 	}
 
 	void AudioSystem::Reset()

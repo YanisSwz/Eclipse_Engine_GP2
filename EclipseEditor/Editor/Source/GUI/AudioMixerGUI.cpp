@@ -10,7 +10,7 @@ namespace GUI
 
 	void AudioMixerGUI::Draw(Core::AudioSystem* _audioSystem, float _deltaTime)
 	{
-		ImGui::SetNextWindowSizeConstraints({ 300.f, 625.f }, ImGui::GetMainViewport()->Size);
+		ImGui::SetNextWindowSizeConstraints({ 300.f, 700.f }, ImGui::GetMainViewport()->Size);
 		ImGui::SetNextWindowBgAlpha(1.0f);
 		ImGui::Begin("Audio Mixer", 0, ImGuiWindowFlags_HorizontalScrollbar);
 
@@ -23,9 +23,25 @@ namespace GUI
 		if (GUI::AudioChannel("Master", _audioSystem->GetStereoVolume(), _audioSystem->GetVolume(), volume, masterChannelSize))
 			_audioSystem->SetMaxVolume(volume);
 
+		// Mix channels (SFX, Music...)
+		std::map<std::string, std::pair<SoLoud::handle, float>>* mixChannels = Core::AudioSource::GetChannels();
+		int count = 0;
+		for (std::map<std::string, std::pair<SoLoud::handle, float>>::iterator it = mixChannels->begin(); it != mixChannels->end(); ++it)
+		{
+			float dummy = it->second.second;
+			ImGui::SameLine();
+			if (GUI::AudioChannel(it->first.c_str(), dummy, ImVec2(50.f, ImGui::GetWindowHeight() / 1.65f), 160.f + count * 120.f))
+			{
+				_audioSystem->GetAudioEngine()->setVolume(it->second.first, dummy);
+				it->second.second = dummy;
+			}
+			++count;
+		}
+
 		// Audio sources
 		ImVec2 audioSourcesChannelSize{ 35.f, ImGui::GetWindowHeight() / 1.75f };
-		float offset = 140.f;
+		float baseOffset = 140.f;
+		float offset = 120.f + baseOffset * static_cast<int>(mixChannels->size());
 		std::vector<Core::AudioSource*> channels = _audioSystem->GetAudioSources();
 		if (!channels.empty())
 		{
@@ -38,7 +54,7 @@ namespace GUI
 				if (!channels[i]->Is3D())
 				{
 					float pan = channels[i]->GetPan();
-					if (GUI::AudioChannel(channels[i]->GetGameObject()->name.c_str(), channels[i]->IsPlaying(), &pan, vol, audioSourcesChannelSize, offset + i * offset, i))
+					if (GUI::AudioChannel(channels[i]->GetGameObject()->name.c_str(), channels[i]->IsPlaying(), &pan, vol, audioSourcesChannelSize, offset + i * baseOffset, i))
 					{
 						channels[i]->SetPan(pan);
 						channels[i]->SetMaxVolume(vol);
@@ -46,7 +62,7 @@ namespace GUI
 				}
 				else
 				{
-					if (GUI::AudioChannel3D(channels[i]->GetGameObject()->name.c_str(), channels[i]->IsPlaying(), vol, audioSourcesChannelSize, offset + i * offset, i))
+					if (GUI::AudioChannel3D(channels[i]->GetGameObject()->name.c_str(), channels[i]->IsPlaying(), vol, audioSourcesChannelSize, offset + i * baseOffset, i))
 						channels[i]->SetMaxVolume(vol);
 				}
 				if (!channels[i]->IsActive() || channels[i]->GetClip() == nullptr)

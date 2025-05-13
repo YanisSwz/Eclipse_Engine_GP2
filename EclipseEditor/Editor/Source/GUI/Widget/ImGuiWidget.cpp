@@ -548,6 +548,7 @@ namespace GUI
 						*_crtValue = _values[i];
 						ImGui::EndCombo();
 						ImGui::PopID();
+						ImGui::Columns(1);
 						return true;
 					}
 				}
@@ -555,6 +556,7 @@ namespace GUI
 			ImGui::EndCombo();
 		}
 		ImGui::PopID();
+		ImGui::Columns(1);
 		return false;
 	}
 
@@ -629,6 +631,46 @@ namespace GUI
 		_color.z = col[2];
 		_color.w = col[3];
 	}
+
+	bool AudioChannel(const char* _label, float& _sliderValue, ImVec2 _size, float _offset)
+	{
+
+		//ImGui::SetCursorPosX(8.f + _offset);
+		//ImGui::VSliderInt();
+
+		//ImGui::SameLine();
+		ImGui::SetCursorPosX(8.f + _offset);
+		auto* colors = ImGui::GetStyle().Colors;
+		ImVec4 color = ImVec4(colors[ImGuiCol_Button].x, colors[ImGuiCol_Button].y, colors[ImGuiCol_Button].z, 1.f);
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
+		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, color);
+		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
+		ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 15);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.35f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
+
+		std::string label = "##";
+		label += _label;
+		label += "Volume";
+		bool changed = ImGui::VSliderFloat(label.c_str(), _size, &_sliderValue, 0.0f, 1.0f, "");
+		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
+			ImGui::SetTooltip("%.3f", _sliderValue);
+		ImGui::PopStyleColor(5);
+		ImGui::PopStyleVar(3);
+
+		ImGui::SameLine();
+		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize()));
+		// We wrap the text to not overflow on other audio channels
+		label = _label;
+		for (int i = 12; i < label.size(); i += 12)
+			label.insert(i, "\n");
+		ImGui::Text(label.c_str());
+
+		return changed;
+	}
+
 
 	bool AudioChannel(const char* _label, float* _stereoVolume, float _currentVolume, float& _sliderValue, ImVec2 _size, float _offset)
 	{

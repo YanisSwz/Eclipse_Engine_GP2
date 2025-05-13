@@ -7,6 +7,7 @@
 namespace Core
 {
 	bool AudioSource::m_audioEnabled = true;
+	std::map<std::string, std::pair<SoLoud::handle, float>> AudioSource::m_audioChannels{};
 
 	AudioSource::AudioSource(SoLoud::Soloud* _audioEngine)
 	{
@@ -52,7 +53,6 @@ namespace Core
 		if (!m_gameObject->transform->HasPositionChanged())
 			return;
 
-
 		Math::Vec3 newPos = m_gameObject->transform->GetPosition();
 		m_audioEngine->set3dSourcePosition(m_sound, newPos.x, newPos.y, newPos.z);
 	}
@@ -80,20 +80,22 @@ namespace Core
 			m_paused = false;
 		if (!m_3D)
 		{
-			m_sound = m_audioEngine->play(*m_audioClip->GetAudio(), m_volume);
+			m_sound = m_audioEngine->play(*m_audioClip->GetAudio(), m_volume * m_audioChannels[channel].second);
+			m_audioEngine->addVoiceToGroup(m_audioChannels[channel].first, m_sound);
 			m_audioEngine->setPan(m_sound, m_pan);
 		}
 		else
 		{
 			Math::Vec3 pos = m_gameObject->transform->GetPosition();
-			m_sound = m_audioEngine->play3d(*m_audioClip->GetAudio(), pos.x, pos.y, pos.z, 0.f, 0.f, 0.f, m_volume, true);
+			m_sound = m_audioEngine->play3d(*m_audioClip->GetAudio(), pos.x, pos.y, pos.z, 0.f, 0.f, 0.f, m_volume * m_audioChannels[channel].second, true);
+			m_audioEngine->addVoiceToGroup(m_audioChannels[channel].first, m_sound);
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
 			m_audioEngine->set3dSourceAttenuation(m_sound, SoLoud::AudioSource::ATTENUATION_MODELS::LINEAR_DISTANCE, 1.f);
 			m_audioEngine->setPause(m_sound, false);
 		}
 		if (!m_audioClip->IsStream())
 			m_audioEngine->setLooping(m_sound, m_looping);
-		else 
+		else
 			m_isPlaying = true;
 		m_audioEngine->setSamplerate(m_sound, m_sampleRate);
 	}
@@ -215,7 +217,7 @@ namespace Core
 
 		m_volume = _vol;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
-			m_audioEngine->setVolume(m_sound, m_volume);
+			m_audioEngine->setVolume(m_sound, m_volume * m_audioChannels[channel].second);
 	}
 
 	void AudioSource::SetSampleRate(float _rate)
@@ -266,6 +268,19 @@ namespace Core
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
 	}
 
+	void AudioSource::SetChannel(std::string _name)
+	{
+		if(m_audioChannels.find(_name) == m_audioChannels.end())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s name doesn't exist", _name.c_str());
+			return;
+		}
+		channel = _name;
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+			m_audioEngine->setVolume(m_sound, m_volume * m_audioChannels[channel].second);
+	}
+
+	// Static functions
 	void AudioSource::Enable()
 	{
 		m_audioEnabled = true;
@@ -274,6 +289,44 @@ namespace Core
 	void AudioSource::Disable()
 	{
 		m_audioEnabled = false;
+	}
+
+	void AudioSource::AddChannel(std::string _name, SoLoud::handle _handle, float _volume)
+	{
+		for (auto& it : m_audioChannels)
+		{
+			if (it.first == _name)
+			{
+				Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s channel already exists", _name.c_str());
+				return;
+			}
+		}
+		m_audioChannels[_name] = std::make_pair(_handle, _volume);
+	}
+
+	std::vector<std::string> AudioSource::GetChannelNames()
+	{
+		std::vector<std::string> names;
+		for (auto& it : m_audioChannels)
+		{
+			names.push_back(it.first);
+		}
+		return names;
+	}
+
+	std::vector<SoLoud::handle> AudioSource::GetChannelHandles()
+	{
+		std::vector<SoLoud::handle> handles;
+		for (auto& it : m_audioChannels)
+		{
+			handles.push_back(it.second.first);
+		}
+		return handles;
+	}
+
+	std::map<std::string, std::pair<SoLoud::handle, float>>* AudioSource::GetChannels()
+	{
+		return &m_audioChannels;
 	}
 
 	void AudioSource::Serialize(json& _j)
