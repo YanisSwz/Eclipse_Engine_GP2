@@ -13,8 +13,6 @@ namespace GUI
 		ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
 		
-
-
 		if (ImGui::BeginPopupContextWindow("HierarchyPopUpMenu"))
 		{
 			if (ImGui::Button("Add Node"))
@@ -27,6 +25,18 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx(_scene->GetName().c_str(), ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_DefaultOpen))
 		{
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TransformDrag"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(int));
+					int* payload_n;
+					payload_n = static_cast<int*>(payload->Data);
+					_scene->GetSystemManager()->GetTransformsRoot()->AddChild(_scene->GetObjectByID(*payload_n)->transform);
+				}
+				ImGui::EndDragDropTarget();
+			}
+			
 			std::vector<Core::Transform*> transforms = _scene->GetSystemManager()->GetTransformsRoot()->GetChildren();
 			for (Core::Transform* transform : transforms)
 			{
@@ -64,6 +74,26 @@ namespace GUI
 
 			if (!_crtTransform->GetGameObject()->IsActive())
 				ImGui::PopStyleVar();
+
+
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				ImGui::SetDragDropPayload("TransformDrag", &_crtTransform->GetGameObject()->GetIDRef(), sizeof(int));
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TransformDrag"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(int));
+					int* payload_n;
+					payload_n = static_cast<int*>(payload->Data);
+					_scene->GetObjectByID(*payload_n)->transform->SetParent(_crtTransform);
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 
 			if (ImGui::BeginPopupContextItem("HierarchyPopUpMenu"))
 			{

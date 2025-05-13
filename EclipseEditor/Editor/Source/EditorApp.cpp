@@ -12,6 +12,8 @@
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
 #include "Core/Particles/ParticleEmitter.hpp"
+#include "Scripting/TestScript.hpp"
+#include "Scripting/RegisterTypeMacro.hpp"
 
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
@@ -57,7 +59,7 @@ void EditorApp::Update()
 	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_sceneWindowPosX) - windowPos.x, static_cast<float>(m_sceneWindowPosY) - windowPos.y }, { static_cast<float>(m_sceneWindowWidth), static_cast<float>(m_sceneWindowHeight) });
 
 	m_sceneGUI.UpdateGizmoMode(m_window);
-	m_scene.Update(deltaTime);
+	m_scene.Update(m_window, deltaTime);
 
 	m_window->PollEvents();
 }
@@ -138,8 +140,6 @@ void EditorApp::Render()
 			ImGui::MenuItem("Audio Mixer", "", &bIsAudioMixerWindowEnabled);
 			ImGui::EndMenu();
 		}
-
-
 
 		ImGui::SetCursorPosX(ImGui::GetWindowWidth() / 2.f - 55.f);
 		GAME_STATE gameState = m_scene.GetState();
@@ -286,6 +286,7 @@ void EditorApp::Destroy()
 	DestroyScene();
 	DestroyGUI();
 
+	m_scene.Reset();
 	m_renderInterface->DestroyDefaultGraphicPipeline(m_editorPipeline);
 	m_renderInterface->DestroyDefaultGraphicPipeline(m_gamePipeline);
 	delete m_renderInterface;

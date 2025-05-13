@@ -17,6 +17,7 @@ namespace Core
 		ECLIPSE_ENGINE bool& GetActiveRef();
 		ECLIPSE_ENGINE static void Destroy(Object* _obj);
 		ECLIPSE_ENGINE int GetID() const;
+		ECLIPSE_ENGINE int& GetIDRef();
 
 		virtual void Serialize(json& _j) override = 0;
 		virtual void Deserialize(const json& _j) override = 0;

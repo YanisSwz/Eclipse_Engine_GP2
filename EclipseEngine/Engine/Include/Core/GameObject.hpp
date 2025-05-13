@@ -4,7 +4,7 @@
 #include <typeinfo>
 #include "Component.hpp"
 #include "Transform.hpp"
-#include "MonoBehaviour.hpp"
+#include "Scripting/MonoBehaviour.hpp"
 #include "SystemManager.hpp"
 #include "ProjectExports.hpp"
 
@@ -33,16 +33,6 @@ namespace Core
 		template <typename T>
 		T* AddComponent()
 		{
-			for (int i = 0; i < m_components.size(); ++i)
-			{
-				T* castedComponent = dynamic_cast<T*>(m_components[i]);
-				if (castedComponent != nullptr)
-				{
-					MonoBehaviour* dynamicModel_ptr = dynamic_cast<MonoBehaviour*>(castedComponent);
-					if (dynamicModel_ptr == nullptr)
-						return nullptr;
-				}
-			}
 			T* newComp = m_systemManager->AddComponent<T>();
 			if (newComp)
 			{

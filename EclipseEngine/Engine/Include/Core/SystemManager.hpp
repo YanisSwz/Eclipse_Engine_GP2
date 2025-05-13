@@ -1,6 +1,7 @@
 #pragma once
 #include "ProjectExports.hpp"
 #include "TransformSystem.hpp"
+#include "Scripting/ScriptingSystem.hpp"
 #include "RenderSystem.hpp"
 #include "Physics/PhysicsSystem.hpp"
 #include "Audio/AudioSystem.hpp"
@@ -8,6 +9,11 @@
 #include "Particles/ParticleSystem.hpp"
 #include "GameState.hpp"
 #include <vector>
+
+namespace Windowing
+{
+	class IWindow;
+}
 
 namespace Core
 {
@@ -17,12 +23,13 @@ namespace Core
 		ECLIPSE_ENGINE SystemManager();
 		ECLIPSE_ENGINE ~SystemManager();
 
-		ECLIPSE_ENGINE void Update(float _deltaTime, GAME_STATE _state);
+		ECLIPSE_ENGINE void Update(Windowing::IWindow* _window, float _deltaTime, GAME_STATE _state);
 		ECLIPSE_ENGINE Transform* AddTransform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE Transform* GetTransformsRoot() const;
 		ECLIPSE_ENGINE inline RenderSystem* GetRenderSystem() { return &m_renderSystem; };
 		ECLIPSE_ENGINE AudioSystem* GetAudioSystem();
 		ECLIPSE_ENGINE CameraSystem* GetCameraSystem();
+		ECLIPSE_ENGINE ScriptingSystem* GetScriptingSystem();
 		ECLIPSE_ENGINE void Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos);
 
 		template <typename T>
@@ -85,6 +92,11 @@ namespace Core
 				delete basePtr;
 				return dynamic_cast<T*>(m_particleSystem.AddParticleEmitter());
 			}
+			else if (ScriptComponent* scriptComponent_ptr = dynamic_cast<ScriptComponent*>(basePtr))
+			{
+				delete basePtr;
+				return dynamic_cast<T*>(m_scriptingSystem.AddScript());
+			}
 			delete basePtr;
 			return nullptr;
 		}
@@ -96,6 +108,7 @@ namespace Core
 	private:
 		CameraSystem m_cameraSystem{};
 		TransformSystem m_transformSystem{};
+		ScriptingSystem m_scriptingSystem{};
 		RenderSystem m_renderSystem{};
 		PhysicsSystem m_physicsSystem{};
 		AudioSystem m_audioSystem{};
