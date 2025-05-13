@@ -1,4 +1,5 @@
 #include "Scene.hpp"
+#include <cmath>
 
 namespace Core
 {
@@ -102,5 +103,99 @@ namespace Core
 			m_gameObjects[i].Destroy();
 		m_currentGameObjectCount = 0;
 		m_systemManager.Reset();
+	}
+
+	void Scene::SerializeToFile(std::string _filePath)
+	{
+		std::ofstream fileStream(_filePath);
+		fileStream << std::setw(4) << Serialize() << std::endl;
+	}
+
+	void Scene::DeserializeFromFile(std::string _filePath)
+	{
+		std::ifstream fileStream(_filePath);
+
+		if (!fileStream.is_open() || fileStream.peek() == std::ifstream::traits_type::eof())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Scene %s is empty or can't be loaded", _filePath.c_str());
+			return;
+		}
+
+		json scene;
+		fileStream >> scene;
+
+		Deserialize(scene);
+	}
+
+	json Scene::Serialize()
+	{
+		json scene;
+		Math::Vec4 ambientLight = GetSystemManager()->GetRenderSystem()->GetAmbientLight();
+		scene["AmbientLight"] = { ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3] };
+
+		std::vector<json> jsonGameObjects;
+		GameObject* gameObject;
+		int destroyedNb = 0;
+		for (int i = 0; i < GetCount(); ++i)
+		{
+			gameObject = GetGameObjectByIndex(i);
+			if (gameObject->IsDestroyed())
+			{
+				++destroyedNb;
+				continue;
+			}
+
+			json jsonGameObject;
+			gameObject->Serialize(jsonGameObject);
+			int index = GetGameObjectParentIndex(i);
+			if (index >= 0)
+				index = std::max(index - destroyedNb, -1);
+			jsonGameObject[gameObject->name]["Transform"]["ParentIndex"] =  index;
+			jsonGameObjects.push_back(jsonGameObject);
+		}
+		scene["GameObjects"] = jsonGameObjects;
+
+		return scene;
+	}
+
+	void Scene::Deserialize(const json& _j)
+	{
+		float ambientLight[4];
+		_j.at("AmbientLight").get_to(ambientLight);
+		GetSystemManager()->GetRenderSystem()->SetAmbientLight({ ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3] });
+
+		json gameObjects = _j.at("GameObjects");
+		int gameObjectCount = static_cast<int>(gameObjects.size());
+
+		// Recreate all serialized GameObjects
+		for (int i = 0; i < gameObjectCount; ++i)
+		{
+			json gameObjectJson = gameObjects[i];
+			GameObject* gameObject = CreateGameObject();
+			gameObject->Deserialize(gameObjectJson);
+		}
+
+		// Recreate Scene graph via Transforms
+		for (int i = 0; i < gameObjectCount; ++i)
+		{
+			GameObject* gameObject = GetGameObjectByIndex(i);
+			int parentIndex = gameObjects[i][gameObject->name]["Transform"]["ParentIndex"];
+			if (parentIndex > 0)
+			{
+				GameObject* parent = GetGameObjectByIndex(parentIndex);
+				if (parent)
+					gameObject->transform->SetParent(parent->transform);
+			}
+		}
+	}
+
+	void Scene::SavePrefab(GameObject* _gameObject, Resource::Prefab* _prefab)
+	{
+
+	}
+
+	GameObject* Scene::InstantiatePrefab(GameObject* _parent, Resource::Prefab* _prefab)
+	{
+		return nullptr;
 	}
 }

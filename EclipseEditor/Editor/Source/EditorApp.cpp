@@ -445,7 +445,7 @@ void EditorApp::LoadScene(std::string _sceneName)
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Loading Scene: %s", _sceneName.c_str());
 	std::string directoryPath = "Assets/Scenes/";
 	m_scene.SetName(_sceneName);
-	m_serializer.DeserializeSceneFromFile(&m_scene, directoryPath + _sceneName + ".json");
+	m_scene.DeserializeFromFile(directoryPath + _sceneName + ".json");
 }
 
 void EditorApp::ReloadScene()
@@ -458,7 +458,7 @@ void EditorApp::SaveScene()
 {
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Saving Scene: %s", m_scene.GetName().c_str());
 	std::string directoryPath = "Assets/Scenes/";
-	m_serializer.SerializeSceneToFile(&m_scene, directoryPath + m_scene.GetName() + ".json");
+	m_scene.SerializeToFile(directoryPath + m_scene.GetName() + ".json");
 }
 
 void EditorApp::CreateNewScene()

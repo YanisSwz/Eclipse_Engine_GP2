@@ -9,7 +9,6 @@
 #include "GUI/ContentBrowserGUI.hpp"
 #include "GUI/GameGUI.hpp"
 #include "GUI/AudioMixerGUI.hpp"
-#include "Serializer.hpp"
 
 namespace Windowing
 {
@@ -86,8 +85,6 @@ private:
 	Resource::Texture* m_playBtnTexture = nullptr;
 	Resource::Texture* m_stopBtnTexture = nullptr;
 	Resource::Texture* m_pauseBtnTexture = nullptr;
-
-	Core::Serializer m_serializer;
 
 	std::string m_newSceneName;
 	int SCENE_NAME_MAX_SIZE = 20;

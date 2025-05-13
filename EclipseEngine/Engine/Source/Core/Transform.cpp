@@ -445,8 +445,7 @@ namespace Core
 		_j = json{
 			{"LocalPosition", { localPosition.x, localPosition.y, localPosition.z }},
 			{"LocalScale", { localScale.x, localScale.y, localScale.z }},
-			{"LocalRotation", { localRotation.w, localRotation.x, localRotation.y, localRotation.z }},
-			{"LocalEulerAngles", { localEulerAngles.x, localEulerAngles.y, localEulerAngles.z }}
+			{"LocalRotation", { localRotation.w, localRotation.x, localRotation.y, localRotation.z }}
 		};
 	}
 
@@ -455,17 +454,14 @@ namespace Core
 		float localPosition[3];
 		float localScale[3];
 		float localRotation[4];
-		float localEulerAngles[3];
 
 		_j.at("LocalPosition").get_to(localPosition);
 		_j.at("LocalScale").get_to(localScale);
 		_j.at("LocalRotation").get_to(localRotation);
-		_j.at("LocalEulerAngles").get_to(localEulerAngles);
 		
 		SetLocalPosition(localPosition[0], localPosition[1], localPosition[2]);
 		SetLocalScale(localScale[0], localScale[1], localScale[2]);
 		SetLocalRotation(localRotation[0], localRotation[1], localRotation[2], localRotation[3]);
-		SetLocalEulerAngles(localEulerAngles[0], localEulerAngles[1], localEulerAngles[2]);
 
 		SetPositionChanged(true);
 		SetScaleChanged(true);
