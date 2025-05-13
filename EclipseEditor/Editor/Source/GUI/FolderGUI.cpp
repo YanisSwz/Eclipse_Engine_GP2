@@ -20,10 +20,10 @@ namespace GUI
 
 	void FolderGUI::InitIcons()
 	{
-		m_folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("FolderV.img");
-		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("PrefabV.img");
-		m_audioIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("SoundV.img");
-		m_sceneIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("SFileV.img");
+		m_folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Folder.img");
+		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Prefab.img");
+		m_audioIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Sound.img");
+		m_sceneIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Scene.img");
 	}
 
 	void FolderGUI::Init()
@@ -236,7 +236,7 @@ namespace GUI
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
 			ImGui::SetDragDropPayload("AudioClipName", &audio->name, sizeof(std::string));
-			DrawImage(audio->name.c_str(), m_meshIcon->GetID(), 100.f);
+			DrawImage(audio->name.c_str(), m_audioIcon->GetID(), 100.f);
 			ImGui::Text(audio->name.c_str());
 			ImGui::EndDragDropSource();
 		}

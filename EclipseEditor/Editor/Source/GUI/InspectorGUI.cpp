@@ -414,9 +414,7 @@ namespace GUI
 				float range = 1000.f;
 				if (_source->GetMaxVolume() >= 1.f/range)
 					range = 1.f / _source->GetMaxVolume();
-				ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 0.75f, 0.f, 1.f));
 				ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, std::to_string(_source->GetLength()).c_str(), -range, range, ImVec2(0.f, 200.f));
-				ImGui::PopStyleColor();
 
 				if (_source->IsPlaying())
 				{
@@ -441,15 +439,12 @@ namespace GUI
 					m_pauseBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Pause.img");
 				if (_source->IsPaused())
 				{
-					ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
 					ImGui::PushStyleColor(ImGuiCol_Button, { 0.5f, 0.5f, 0.5f, 1.f });
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.75f, 0.75f, 0.75f, 1.f });
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.85f, 0.85f, 0.85f, 1.f });
 
 					if (ImGui::ImageButton("Unpause", m_pauseBtnTexture->GetID(), ImVec2(25.f, 25.f)))
 						_source->Pause();
 
-					ImGui::PopStyleColor(4);
+					ImGui::PopStyleColor();
 				}
 				else
 				{
@@ -571,10 +566,10 @@ namespace GUI
 
 			ImGui::SeparatorText("Particle Properties");
 			GUI::DragFloat("Life Time", "LifeTimeDragFloat", &_particleEmitter->particleProps.lifeTime, 0.1f, 0.f, FLT_MAX);
-			GUI::DragColorRGBA("Color Begin", _particleEmitter->particleProps.colorBegin, 255.f);
-			GUI::DragColorRGBA("Color End", _particleEmitter->particleProps.colorEnd, 255.f);
-			GUI::DragFloat("Size Begin", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
-			GUI::DragFloat("Size End", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			ColorEdit4("Begin Color", _particleEmitter->particleProps.colorBegin);			
+			ColorEdit4("End Color", _particleEmitter->particleProps.colorEnd);
+			GUI::DragFloat("Begin Size", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			GUI::DragFloat("End Size", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("Size Variation", "SizeVariationDragFloat", &_particleEmitter->particleProps.sizeVariation, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragVec3XYZ("Velocity", _particleEmitter->particleProps.velocity, 0.f, 125.f);
 			GUI::DragVec3XYZ("Velocity Variation", _particleEmitter->particleProps.velocityVariation, 0.f, 125.f);

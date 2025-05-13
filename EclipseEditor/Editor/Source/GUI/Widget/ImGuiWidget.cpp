@@ -511,9 +511,13 @@ namespace GUI
 	{
 		ImVec2 uv_min = ImVec2(0.0f, 1.0f);
 		ImVec2 uv_max = ImVec2(1.0f, 0.0f);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.f, 0.f, 0.f, 0.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.f, 0.f, 0.f, 0.f));
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
-		ImGui::ImageButton(_imageName, _imageID, ImVec2(_size, _size), uv_min, uv_max, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+		ImGui::ImageButton(_imageName, _imageID, ImVec2(_size, _size), uv_min, uv_max, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 		ImGui::PopStyleVar();
+		ImGui::PopStyleColor(3);
 	}
 
 	bool ComboFilter(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values, float _maxColumnWidth)
@@ -620,14 +624,25 @@ namespace GUI
 		return ImGui::SliderFloat(_sliderName, value, _min, _max, _format);
 	}
 
-	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags)
+	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags, float _maxColumnWidth)
 	{
-		float col[4]{ _color.x, _color.y, _color.z, _color.w };
-		ImGui::ColorEdit4(_label, col, flags);
-		_color.x = col[0];
-		_color.y = col[1];
-		_color.z = col[2];
-		_color.w = col[3];
+		std::string invisibleLabel = std::string("##") + _label;
+		ImGui::PushID(invisibleLabel.c_str());
+		ImGui::Columns(2, 0, false);
+		if ((ImGui::GetWindowWidth() / 4.f) < _maxColumnWidth)
+			ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 4.f);
+		else
+			ImGui::SetColumnWidth(0, _maxColumnWidth);
+		ImGui::Text(_label);
+		ImGui::NextColumn();
+		float col[4]{ _color.x / 255.f, _color.y / 255.f, _color.z / 255.f, _color.w / 255.f };
+		ImGui::ColorEdit4(invisibleLabel.c_str(), col, flags);
+		_color.x = col[0] * 255.f;
+		_color.y = col[1] * 255.f;
+		_color.z = col[2] * 255.f;
+		_color.w = col[3] * 255.f;
+		ImGui::Columns(1);
+		ImGui::PopID();
 	}
 
 	bool AudioChannel(const char* _label, float* _stereoVolume, float& _sliderValue, ImVec2 _size, float _offset)
