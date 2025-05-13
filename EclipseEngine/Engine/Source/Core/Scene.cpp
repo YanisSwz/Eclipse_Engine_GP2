@@ -193,11 +193,48 @@ namespace Core
 
 	void Scene::SavePrefab(GameObject* _gameObject, Resource::Prefab* _prefab)
 	{
-
+		std::string filePath = "Assets/Prefabs/" + _prefab->name + ".json";
 	}
 
 	GameObject* Scene::InstantiatePrefab(GameObject* _parent, Resource::Prefab* _prefab)
 	{
-		return nullptr;
+		std::string filePath = "Assets/Prefabs/" + _prefab->name + ".json";
+
+		std::ifstream fileStream(filePath);
+
+		if (!fileStream.is_open() || fileStream.peek() == std::ifstream::traits_type::eof())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "Prefab at %s is empty or can't be loaded", filePath.c_str());
+			return;
+		}
+
+		json prefab;
+		fileStream >> prefab;
+
+		int gameObjectCount = static_cast<int>(prefab.size());
+		std::vector<GameObject*> gameObjects;
+
+		// Recreate all serialized GameObjects
+		for (int i = 0; i < gameObjectCount; ++i)
+		{
+			json gameObjectJson = prefab[i];
+			gameObjects.push_back(CreateGameObject());
+			gameObjects[i]->Deserialize(gameObjectJson);
+		}
+
+		// Recreate Scene graph via Transforms
+		for (int i = 0; i < gameObjects.size(); ++i)
+		{
+			GameObject* gameObject = gameObjects[i];
+			int parentIndex = prefab[i][gameObject->name]["Transform"]["ParentIndex"];
+			if (parentIndex > 0 && parentIndex < gameObjects.size())
+			{
+				GameObject* parent = gameObjects[parentIndex];
+				if (parent)
+					gameObject->transform->SetParent(parent->transform);
+			}
+		}
+
+		return gameObjects.empty() ? nullptr : gameObjects[0];
 	}
 }
