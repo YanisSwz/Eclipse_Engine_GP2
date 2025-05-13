@@ -408,32 +408,47 @@ namespace GUI
 			if (clip == nullptr)
 				ImGui::BeginDisabled();
 
-			float* data = _source->GetData();
-			if (data != nullptr)
-			{
-				float range = 1000.f;
-				if (_source->GetMaxVolume() >= 1.f/range)
-					range = 1.f / _source->GetMaxVolume();
-				ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 0.75f, 0.f, 1.f));
-				ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, std::to_string(_source->GetLength()).c_str(), -range, range, ImVec2(0.f, 200.f));
-				ImGui::PopStyleColor();
-
-			}
-
 			if(clip != nullptr)
 			{
-				if (_source->IsPlaying())
+				float* data = _source->GetData();
+				if (data != nullptr)
 				{
-					float time = _source->GetTime();
-					if (ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput))
-						_source->SetTime(time);
+					float range = 1000.f;
+					if (_source->GetMaxVolume() >= 1.f / range)
+						range = 1.f / _source->GetMaxVolume();
+					ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 0.75f, 0.f, 1.f));
+					char length[32];
+					sprintf_s(length, "%.2f", _source->GetLength());
+					ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, length, -range, range, ImVec2(0.f, 200.f));
+					ImGui::PopStyleColor();
+
+					if (_source->IsPlaying())
+					{
+						float time = _source->GetTime();
+						if (ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.2f", ImGuiSliderFlags_NoInput))
+							_source->SetTime(time);
+					}
+					else
+					{
+						ImGui::BeginDisabled();
+						float time = 0.0f;
+						ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.2f", ImGuiSliderFlags_NoInput);
+						ImGui::EndDisabled();
+					}
 				}
 				else
 				{
-					ImGui::BeginDisabled();
-					float time = 0.0f;
-					ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput);
-					ImGui::EndDisabled();
+					ImGui::Text("Music Stream");
+					std::string overlay = "";
+					ImGui::ProgressBar(_source->GetTime()/_source->GetLength(), ImVec2(2.f * ImGui::GetWindowWidth()/3.f, 25.f), overlay.c_str());
+					char time[32];
+					sprintf_s(time, "%.2f", _source->GetTime());
+					char length[32];
+					sprintf_s(length, "%.2f", _source->GetLength());
+					overlay = time;
+					overlay += " / ";
+					overlay += length;
+					ImGui::Text(overlay.c_str());
 				}
 				if (m_playBtnTexture == nullptr)
 					m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
@@ -508,7 +523,6 @@ namespace GUI
 			float max = _source->GetMaxDistance();
 			if (GUI::DragFloat("MinDistance", "##4", &min, 0.1f, 0.1f, max - 0.1f, "%.1f"))
 				_source->SetMinDistance(min);
-
 			if (GUI::DragFloat("MaxDistance", "##5", &max, 0.1f, min + 0.1f, 1000.f, "%.1f"))
 				_source->SetMaxDistance(max);
 			if (!is3D)

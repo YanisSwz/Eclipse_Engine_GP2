@@ -37,11 +37,11 @@ namespace Core
 
 	void AudioSource::Update()
 	{
-		if (m_destroyed || !m_active)
+		if (m_destroyed || !m_active || m_audioClip == nullptr)
 			return;
 
 		// Workaround to loop Wavstream
-		if (m_audioClip->IsStream() && m_looping && fabsf(static_cast<float>(m_audioEngine->getStreamTime(m_sound)) - m_audioClipLength) <= 0.02f)
+		if (m_audioClip->IsStream() && m_looping && !m_audioEngine->isValidVoiceHandle(m_sound) && m_isPlaying)
 			Play();
 
 		if (!m_audioEngine->isValidVoiceHandle(m_sound))
@@ -93,6 +93,8 @@ namespace Core
 		}
 		if (!m_audioClip->IsStream())
 			m_audioEngine->setLooping(m_sound, m_looping);
+		else 
+			m_isPlaying = true;
 		m_audioEngine->setSamplerate(m_sound, m_sampleRate);
 	}
 
@@ -123,6 +125,8 @@ namespace Core
 		if (m_paused)
 			Pause();
 		m_audioEngine->stop(m_sound);
+		if (m_isPlaying)
+			m_isPlaying = false;
 	}
 
 	void AudioSource::SetClip(Resource::AudioClip* _clip)
@@ -142,7 +146,7 @@ namespace Core
 	void AudioSource::SetLooping(bool _looping)
 	{
 		m_looping = _looping;
-		if (m_audioEngine->isValidVoiceHandle(m_sound))
+		if (m_audioEngine->isValidVoiceHandle(m_sound) && !m_audioClip->IsStream())
 			m_audioEngine->setLooping(m_sound, m_looping);
 	}
 

@@ -14,6 +14,7 @@ namespace Resource
 	void AudioClip::GetFileContent(std::string _path)
 	{
 		uintmax_t size = std::filesystem::file_size(_path);
+		// If size is bigger than 10MB, we use a stream instead of loading directly in memory
 		if (size >= 10000000)
 		{
 			m_isStream = true;

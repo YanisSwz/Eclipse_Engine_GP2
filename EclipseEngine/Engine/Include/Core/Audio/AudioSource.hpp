@@ -63,6 +63,10 @@ namespace Core
 		bool m_playOnAwake = true;
 		bool m_paused = false;
 		bool m_3D = false;
+		/// <summary>
+		/// boolean for looping streams to avoid playing all the time
+		/// </summary>
+		bool m_isPlaying = false;
 		float m_audioClipLength = 0.f;
 		float m_volume = 1.f;
 		float m_sampleRate = 0.f;
