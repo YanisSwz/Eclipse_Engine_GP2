@@ -552,6 +552,7 @@ namespace GUI
 						*_crtValue = _values[i];
 						ImGui::EndCombo();
 						ImGui::PopID();
+						ImGui::Columns(1);
 						return true;
 					}
 				}
@@ -559,6 +560,7 @@ namespace GUI
 			ImGui::EndCombo();
 		}
 		ImGui::PopID();
+		ImGui::Columns(1);
 		return false;
 	}
 

@@ -9,6 +9,8 @@ namespace Core
 		.data<&GameObject::transform>(hash("Transform"))
 		.data<&GameObject::m_components>(hash("Components"));
 
+	std::vector<std::string> GameObject::m_tags{"Untagged", "Enemy", "Player"};
+
 	GameObject::GameObject(SystemManager* _manager, Transform* _t, std::string _name)
 	{
 		m_systemManager = _manager;
@@ -49,10 +51,22 @@ namespace Core
 		m_destroyed = true;
 	}
 
+	void GameObject::AddTag(std::string _tag)
+	{
+		auto it = std::find(m_tags.begin(), m_tags.end(), _tag);
+		if (it != m_tags.end())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s tag already exists", _tag.c_str());
+			return;
+		}
+		
+		m_tags.push_back(_tag);
+	}
+
 	void GameObject::Destroy(GameObject* _obj)
 	{
 		_obj->Destroy();
-	}
+	}	
 
 	void GameObject::SetActive(bool _active)
 	{

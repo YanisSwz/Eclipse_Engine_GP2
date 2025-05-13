@@ -40,6 +40,44 @@ namespace GUI
 			else if (_crtGOSelected->name.size() > MAX_NAME_SIZE)
 				_crtGOSelected->name = _crtGOSelected->name.substr(0, MAX_NAME_SIZE-1).append("...");
 		}
+		GUI::ComboFilter("Tag", &_crtGOSelected->tag, Core::GameObject::GetTags());
+		ImGui::SameLine();
+		if(ImGui::Button("Add Tag"))
+		{
+			ImGui::OpenPopup("Create Tag");
+			ImGui::SetNextWindowSize(ImVec2(250, 150));
+		}
+
+		if (ImGui::BeginPopupModal("Create Tag", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			bool bIsNameValid = true;
+			if (m_newTagName == "" || m_newTagName.size() > MAX_TAG_NAME_SIZE)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
+				bIsNameValid = false;
+			}
+			ImGui::InputText("##NewScene", &m_newTagName);
+			if (!bIsNameValid)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Create") && bIsNameValid)
+			{
+				Core::GameObject::AddTag(m_newTagName);
+				_crtGOSelected->tag = m_newTagName;
+				m_newTagName = "";
+				ImGui::CloseCurrentPopup();
+			}
+			if (!bIsNameValid)
+			{
+				ImGui::EndDisabled();
+				ImGui::PopStyleColor();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+				ImGui::CloseCurrentPopup();
+
+			ImGui::EndPopup();
+		}
 
 		bool bIsActive = _crtGOSelected->IsActive();
 		if (GUI::CheckBox("Active", "##", &bIsActive))
