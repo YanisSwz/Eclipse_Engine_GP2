@@ -32,11 +32,11 @@ namespace GUI
 					IM_ASSERT(payload->DataSize == sizeof(int));
 					int* payload_n;
 					payload_n = static_cast<int*>(payload->Data);
-					_scene->GetSystemManager()->GetTransformsRoot()->AddChild(_scene->GetObjectByID(*payload_n)->transform);
-					_scene->GetObjectByID(*payload_n)->transform->SetChanged(true);
-					_scene->GetObjectByID(*payload_n)->transform->SetPosition(_scene->GetObjectByID(*payload_n)->transform->GetPosition());
-					_scene->GetObjectByID(*payload_n)->transform->SetRotation(_scene->GetObjectByID(*payload_n)->transform->GetRotation());
-					_scene->GetObjectByID(*payload_n)->transform->SetScale(_scene->GetObjectByID(*payload_n)->transform->GetScale());
+					Core::Transform* transform = _scene->GetObjectByID(*payload_n)->transform;
+					_scene->GetSystemManager()->GetTransformsRoot()->AddChild(transform);
+					transform->SetPosition(transform->GetPosition());
+					transform->SetRotation(transform->GetRotation());
+					transform->SetScale(transform->GetScale());
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -93,11 +93,11 @@ namespace GUI
 					IM_ASSERT(payload->DataSize == sizeof(int));
 					int* payload_n;
 					payload_n = static_cast<int*>(payload->Data);
-					_scene->GetObjectByID(*payload_n)->transform->SetParent(_crtTransform);
-					_scene->GetObjectByID(*payload_n)->transform->SetChanged(true);
-					_scene->GetObjectByID(*payload_n)->transform->SetPosition(_scene->GetObjectByID(*payload_n)->transform->GetPosition());
-					_scene->GetObjectByID(*payload_n)->transform->SetRotation(_scene->GetObjectByID(*payload_n)->transform->GetRotation());
-					_scene->GetObjectByID(*payload_n)->transform->SetScale(_scene->GetObjectByID(*payload_n)->transform->GetScale());
+					Core::Transform* transform = _scene->GetObjectByID(*payload_n)->transform;
+					transform->SetParent(_crtTransform);
+					transform->SetPosition(transform->GetPosition());
+					transform->SetRotation(transform->GetRotation());
+					transform->SetScale(transform->GetScale());
 				}
 				ImGui::EndDragDropTarget();
 			}
