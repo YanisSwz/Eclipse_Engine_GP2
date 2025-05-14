@@ -12,7 +12,6 @@
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
 #include "Core/Particles/ParticleEmitter.hpp"
-#include "Scripting/TestScript.hpp"
 #include "Scripting/RegisterTypeMacro.hpp"
 
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
@@ -59,7 +58,7 @@ void EditorApp::Update()
 	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_sceneWindowPosX) - windowPos.x, static_cast<float>(m_sceneWindowPosY) - windowPos.y }, { static_cast<float>(m_sceneWindowWidth), static_cast<float>(m_sceneWindowHeight) });
 
 	m_sceneGUI.UpdateGizmoMode(m_window);
-	m_scene.Update(m_window, deltaTime);
+	m_scene.Update(m_window, deltaTime, Core::ScriptComponent::GetScriptRegister());
 
 	m_window->PollEvents();
 }
@@ -118,7 +117,7 @@ void EditorApp::Render()
 				ImGui::EndDisabled();
 				ImGui::PopStyleColor();
 			}
-			
+
 			ImGui::SameLine();
 			if (ImGui::Button("Cancel"))
 			{

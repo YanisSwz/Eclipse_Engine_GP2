@@ -23,7 +23,7 @@ namespace Core
 		ECLIPSE_ENGINE SystemManager();
 		ECLIPSE_ENGINE ~SystemManager();
 
-		ECLIPSE_ENGINE void Update(Windowing::IWindow* _window, float _deltaTime, GAME_STATE _state);
+		ECLIPSE_ENGINE void Update(Windowing::IWindow* _window, float _deltaTime, GAME_STATE _state, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register);
 		ECLIPSE_ENGINE Transform* AddTransform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE Transform* GetTransformsRoot() const;
 		ECLIPSE_ENGINE inline RenderSystem* GetRenderSystem() { return &m_renderSystem; };

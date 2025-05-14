@@ -9,6 +9,7 @@
 #include "Core/Lighting/PointLight.hpp"
 #include "Core/Lighting/SpotLight.hpp"
 #include "Core/Audio/AudioSource.hpp"
+#include "Core/Scripting/ScriptComponent.hpp"
 #include "GameObject.hpp"
 #include "Model.hpp"
 
@@ -38,7 +39,7 @@ namespace GUI
 			if (_crtGOSelected->name.size() == 0)
 				_crtGOSelected->name = "GameObject" + std::to_string(_crtGOSelected->GetID());
 			else if (_crtGOSelected->name.size() > MAX_NAME_SIZE)
-				_crtGOSelected->name = _crtGOSelected->name.substr(0, MAX_NAME_SIZE-1).append("...");
+				_crtGOSelected->name = _crtGOSelected->name.substr(0, MAX_NAME_SIZE - 1).append("...");
 		}
 
 		bool bIsActive = _crtGOSelected->IsActive();
@@ -61,6 +62,7 @@ namespace GUI
 		DrawAudioSourceComponent(_crtGOSelected->GetComponent<Core::AudioSource>());
 		DrawAudioListenerComponent(_crtGOSelected->GetComponent<Core::AudioListener>());
 		DrawParticleEmitterComponent(_crtGOSelected->GetComponent<Core::ParticleEmitter>());
+		DrawScriptComponent(_crtGOSelected->GetComponent<Core::ScriptComponent>());
 
 		DrawAddComponent(_crtGOSelected);
 
@@ -412,7 +414,7 @@ namespace GUI
 			if (data != nullptr)
 			{
 				float range = 1000.f;
-				if (_source->GetMaxVolume() >= 1.f/range)
+				if (_source->GetMaxVolume() >= 1.f / range)
 					range = 1.f / _source->GetMaxVolume();
 				ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, std::to_string(_source->GetLength()).c_str(), -range, range, ImVec2(0.f, 200.f));
 
@@ -460,7 +462,7 @@ namespace GUI
 
 				ImGui::NewLine();
 			}
-			
+
 			bool isLooping = _source->IsLooping();
 			if (GUI::CheckBox("Looping", "##1", &isLooping))
 				_source->SetLooping(isLooping);
@@ -504,7 +506,7 @@ namespace GUI
 				_source->SetMaxDistance(max);
 			if (!is3D)
 				ImGui::EndDisabled();
-			
+
 			if (clip == nullptr)
 				ImGui::EndDisabled();
 
@@ -566,7 +568,7 @@ namespace GUI
 
 			ImGui::SeparatorText("Particle Properties");
 			GUI::DragFloat("Life Time", "LifeTimeDragFloat", &_particleEmitter->particleProps.lifeTime, 0.1f, 0.f, FLT_MAX);
-			ColorEdit4("Begin Color", _particleEmitter->particleProps.colorBegin);			
+			ColorEdit4("Begin Color", _particleEmitter->particleProps.colorBegin);
 			ColorEdit4("End Color", _particleEmitter->particleProps.colorEnd);
 			GUI::DragFloat("Begin Size", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("End Size", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
@@ -578,10 +580,27 @@ namespace GUI
 			ImGui::TreePop();
 		}
 	}
+	void InspectorGUI::DrawScriptComponent(Core::ScriptComponent* _scriptComponent)
+	{
+		if (!_scriptComponent)
+			return;
+
+		if (ImGui::TreeNodeEx(std::string(_scriptComponent->scriptName).append(" (Script)").c_str(), m_treeNodeComponentFlags))
+		{
+			if (DrawDeleteComponentPopup(_scriptComponent))
+			{
+				ImGui::TreePop();
+				return;
+			}
+
+			ImGui::NewLine();
+			ImGui::TreePop();
+		}
+	}
 
 	void InspectorGUI::DrawAddComponent(Core::GameObject* _crtGOSelected)
 	{
-		if (ImGui::Button("Add Component"))
+		if (ImGui::Button(" + Add Component"))
 			ImGui::OpenPopup("Add Component Popup Window");
 
 		ImGui::SetNextWindowSize(m_alreadyAddComponentWindowSize);
@@ -593,9 +612,11 @@ namespace GUI
 			DrawAddLightComponent(_crtGOSelected);
 			DrawAddAudioComponent(_crtGOSelected);
 			DrawAddParticlesComponent(_crtGOSelected);
+			DrawAddScriptComponent(_crtGOSelected);
 			ImGui::EndPopup();
 		}
 
+		// Component already added Window modal
 		if (bIsComponentAlreadyAddedWindowEnable)
 			ImGui::OpenPopup("ComponentAlreadyAddedWindowModal");
 
@@ -607,6 +628,53 @@ namespace GUI
 				bIsComponentAlreadyAddedWindowEnable = false;
 				ImGui::CloseCurrentPopup();
 			}
+			ImGui::EndPopup();
+		}
+
+		// Add New Script Window modal
+		if (bIsAddingScript)
+			ImGui::OpenPopup("CreatNewScriptComponentWindowModal");
+
+		ImGui::SetNextWindowSize(m_addingScriptWindowSize, ImGuiCond_Once);
+		if (ImGui::BeginPopupModal("CreatNewScriptComponentWindowModal", 0, m_alreadyAddComponentWindowFlags))
+		{
+			ImGui::Text("Script: ");
+			ImGui::SameLine();
+
+			bool bIsScriptNameValid = true;
+			if (m_newScriptName == "" || m_newScriptName.size() > SCRIPT_NAME_MAX_SIZE)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
+				bIsScriptNameValid = false;
+			}
+			ImGui::InputText("##AddingScriptComponentName", &m_newScriptName);
+			if (!bIsScriptNameValid)
+				ImGui::BeginDisabled();
+			ImGui::NewLine();
+
+			ImVec2 btnSize{ m_addingScriptWindowSize.x * 0.46f, 30.f };
+			if (ImGui::Button("Create", btnSize) && bIsScriptNameValid)
+			{
+				Core::ScriptComponent::CreateScript(m_newScriptName);
+				m_newScriptName.clear();
+				bIsAddingScript = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (!bIsScriptNameValid)
+			{
+				ImGui::EndDisabled();
+				ImGui::PopStyleColor();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Close", btnSize))
+			{
+				m_newScriptName.clear();
+				bIsAddingScript = false;
+				ImGui::CloseCurrentPopup();
+			}
+
 			ImGui::EndPopup();
 		}
 	}
@@ -770,7 +838,6 @@ namespace GUI
 
 	void InspectorGUI::DrawAddParticlesComponent(Core::GameObject* _crtGOSelected)
 	{
-		_crtGOSelected;
 		if (ImGui::TreeNodeEx("Particles", m_treeNodeAddComponentFlags))
 		{
 			if (ImGui::Button("Particle Emitter", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
@@ -780,6 +847,35 @@ namespace GUI
 					_crtGOSelected->AddComponent<Core::ParticleEmitter>();
 				else
 					bIsComponentAlreadyAddedWindowEnable = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::TreePop();
+		}
+	}
+
+	void InspectorGUI::DrawAddScriptComponent(Core::GameObject* _crtGOSelected)
+	{
+
+		if (ImGui::TreeNodeEx("Scripts", m_treeNodeAddComponentFlags))
+		{
+			for (std::unordered_map<std::string, std::function<Core::MonoBehaviour* ()>>::iterator it = Core::ScriptComponent::GetScriptRegister().begin(); 
+				it != Core::ScriptComponent::GetScriptRegister().end(); ++it)
+			{
+				if (ImGui::Button(it->first.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
+				{
+					Core::ScriptComponent* scriptComponent = _crtGOSelected->GetComponent<Core::ScriptComponent>();
+					if (!scriptComponent)
+						_crtGOSelected->AddComponent<Core::ScriptComponent>()->Bind(it->first);
+					else
+						bIsComponentAlreadyAddedWindowEnable = true;
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			// Add Script
+			if (ImGui::Button(" + AddScript", ImVec2(ImGui::GetContentRegionAvail().x, 30.f)))
+			{
+				bIsAddingScript = true;
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::TreePop();

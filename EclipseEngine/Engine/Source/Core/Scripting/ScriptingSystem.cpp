@@ -41,7 +41,7 @@ namespace Core
 		return &m_scripts[m_currentScriptCount - 1];
 	}
 
-	void ScriptingSystem::Update(Windowing::IWindow* _window, float _deltaTime)
+	void ScriptingSystem::Update(Windowing::IWindow* _window, float _deltaTime, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register)
 	{
 		for (int i = 0; i < m_currentScriptCount; ++i)
 		{
@@ -51,7 +51,7 @@ namespace Core
 				if (!script->Instance)
 				{
 					if (script->InstanciateFunction)
-						script->InstanciateFunction();
+						script->InstanciateFunction(_register);
 					if (script->Instance)
 						script->Instance->m_gameObject = script->m_gameObject;
 					if (script->OnStartFunction)

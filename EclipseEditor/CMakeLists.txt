@@ -1,6 +1,6 @@
 ##### EclipseEditor #####
 
-file(GLOB_RECURSE ECLIPSE_EDITOR_SOURCES "Editor/Source/*.cpp")
+file(GLOB_RECURSE ECLIPSE_EDITOR_SOURCES "Editor/Source/*.cpp" "Assets/Scripts/*.cpp")
 
 add_executable(ECLIPSE_EDITOR WIN32 ${ECLIPSE_EDITOR_SOURCES})
 
@@ -18,6 +18,7 @@ endif()
 
 add_subdirectory(Editor)
 add_subdirectory(Libs)
+add_subdirectory(Assets)
 
 add_custom_command(
 TARGET ECLIPSE_EDITOR

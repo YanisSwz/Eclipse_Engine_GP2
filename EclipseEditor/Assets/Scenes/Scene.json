@@ -649,14 +649,14 @@
                                 "EndSize": 74.0,
                                 "SizeVariation": 74.0,
                                 "BeginColor": [
-                                    1.0,
+                                    0.8823529481887817,
                                     0.0,
                                     0.0,
                                     1.0
                                 ],
                                 "EndColor": [
                                     1.0,
-                                    0.9046154022216797,
+                                    1.0,
                                     0.0,
                                     1.0
                                 ],
@@ -677,13 +677,13 @@
             }
         },
         {
-            "Camera": {
+            "ParticleEmitter2": {
                 "IsActive": true,
                 "Transform": {
                     "LocalPosition": [
+                        11.0,
                         0.0,
-                        5.233633041381836,
-                        -8.862860679626465
+                        0.0
                     ],
                     "LocalScale": [
                         1.0,
@@ -691,13 +691,13 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        0.983413577079773,
-                        0.18137739598751068,
+                        1.0,
+                        0.0,
                         0.0,
                         0.0
                     ],
                     "LocalEulerAngles": [
-                        20.899999618530273,
+                        0.0,
                         0.0,
                         0.0
                     ],
@@ -705,11 +705,53 @@
                 },
                 "Components": [
                     {
-                        "Camera": {
+                        "ParticleEmitter": {
                             "IsActive": true,
-                            "FOV": 60.0,
-                            "Near": 0.10000000149011612,
-                            "Far": 1000.0
+                            "ParticleEmitterProps": {
+                                "MaxParticleNumber": 2000,
+                                "SpawnRate": 0.0020000000949949026,
+                                "SpawnRateVariation": 0.0,
+                                "SimulationDuration": 5.0,
+                                "IsLooping": true
+                            },
+                            "ParticleProps": {
+                                "LifeTime": 2.0,
+                                "PositionOffset": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "PositionVariation": [
+                                    0.5,
+                                    0.5,
+                                    0.5
+                                ],
+                                "BeginSize": 75.0,
+                                "EndSize": 50.0,
+                                "SizeVariation": 50.0,
+                                "BeginColor": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "EndColor": [
+                                    1.0,
+                                    0.0,
+                                    0.0,
+                                    1.0
+                                ],
+                                "Velocity": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "VelocityVariation": [
+                                    1.5,
+                                    1.5,
+                                    1.5
+                                ]
+                            }
                         }
                     }
                 ]
@@ -721,8 +763,8 @@
                 "Transform": {
                     "LocalPosition": [
                         0.0,
-                        10.0,
-                        0.0
+                        -0.4476907551288605,
+                        -3.0
                     ],
                     "LocalScale": [
                         1.0,
@@ -744,17 +786,17 @@
                 },
                 "Components": [
                     {
-                        "ScriptComponent": {
-                            "IsActive": true,
-                            "scriptName": "TestScript"
-                        }
-                    },
-                    {
                         "Model": {
                             "IsActive": true,
                             "Mesh": "Cube.obj",
                             "Texture": "VikingRoom.img",
                             "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "ScriptComponent": {
+                            "IsActive": true,
+                            "scriptName": "PlayerScript"
                         }
                     }
                 ]
@@ -794,6 +836,87 @@
                             "FOV": 60.0,
                             "Near": 0.10000000149011612,
                             "Far": 1000.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "ParticleEmitter3": {
+                "IsActive": true,
+                "Transform": {
+                    "LocalPosition": [
+                        11.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalEulerAngles": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "ParticleEmitter": {
+                            "IsActive": true,
+                            "ParticleEmitterProps": {
+                                "MaxParticleNumber": 2000,
+                                "SpawnRate": 0.0010000000474974513,
+                                "SpawnRateVariation": 0.0,
+                                "SimulationDuration": 5.0,
+                                "IsLooping": true
+                            },
+                            "ParticleProps": {
+                                "LifeTime": 2.0,
+                                "PositionOffset": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "PositionVariation": [
+                                    0.5,
+                                    0.5,
+                                    0.5
+                                ],
+                                "BeginSize": 75.0,
+                                "EndSize": 50.0,
+                                "SizeVariation": 50.0,
+                                "BeginColor": [
+                                    0.0,
+                                    0.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "EndColor": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "Velocity": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "VelocityVariation": [
+                                    1.5,
+                                    1.5,
+                                    1.5
+                                ]
+                            }
                         }
                     }
                 ]

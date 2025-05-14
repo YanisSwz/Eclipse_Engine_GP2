@@ -13,12 +13,12 @@ namespace Core
 		m_audioSystem.Destroy();
 	}
 
-	void SystemManager::Update(Windowing::IWindow* _window, float _deltaTime, GAME_STATE _state)
+	void SystemManager::Update(Windowing::IWindow* _window, float _deltaTime, GAME_STATE _state, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register)
 	{
 		switch (_state)
 		{
 		case GAME_STATE::PLAY:
-			m_scriptingSystem.Update(_window, _deltaTime);
+			m_scriptingSystem.Update(_window, _deltaTime, _register);
 			m_transformSystem.Update();
 			m_physicsSystem.Update(_deltaTime);
 			m_audioSystem.Update();

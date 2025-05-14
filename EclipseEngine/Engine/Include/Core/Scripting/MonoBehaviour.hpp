@@ -1,21 +1,17 @@
 #pragma once
 #include "ProjectExports.hpp"
-
-namespace Windowing
-{
-	class IWindow;
-}
+#include "Windowing/IWindow.hpp"
+#include "Core/Physics/ICollider.hpp"
 
 namespace Core 
 {
 	class GameObject;
-	class ICollider;
 
 	class MonoBehaviour
 	{
 	public:
 		ECLIPSE_ENGINE MonoBehaviour() = default;
-		ECLIPSE_ENGINE ~MonoBehaviour() = default;
+		ECLIPSE_ENGINE virtual ~MonoBehaviour() = 0;
 
 
 		ECLIPSE_ENGINE virtual void OnStart();

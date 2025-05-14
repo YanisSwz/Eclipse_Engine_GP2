@@ -11,7 +11,7 @@ namespace Core
 		~ScriptingSystem();
 
 		ECLIPSE_ENGINE ScriptComponent* AddScript();
-		ECLIPSE_ENGINE void Update(Windowing::IWindow* _window, float _deltaTime);
+		ECLIPSE_ENGINE void Update(Windowing::IWindow* _window, float _deltaTime, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register);
 		ECLIPSE_ENGINE void Reset();
 
 	private:
