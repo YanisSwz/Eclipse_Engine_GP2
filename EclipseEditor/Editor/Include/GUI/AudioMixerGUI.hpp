@@ -1,7 +1,9 @@
 #pragma once
 #include <imgui.h>
+#include <imgui_stdlib.h>
 #include <implot.h>
 #include <vector>
+#include <string>
 
 namespace Core
 {
@@ -36,5 +38,8 @@ namespace GUI
 		std::vector<float> m_values{};
 		const float MAX_TIME = 4.f;
 		const int NB_VALUES = 100;
+
+		std::string m_newChannelName = "";
+		const int MAX_CHANNEL_NAME_SIZE = 12;
 	};
 }

@@ -18,8 +18,8 @@ namespace Core
 		m_audioEngine.init();
 		m_audioEngine.setVisualizationEnable(true);
 		EnableAudio();
-		AudioSource::AddChannel("SFX", m_audioEngine.createVoiceGroup());
 		AudioSource::AddChannel("Music", m_audioEngine.createVoiceGroup());
+		AudioSource::AddChannel("SFX", m_audioEngine.createVoiceGroup());
 		Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Audio engine successfully initialized");
 	}
 

@@ -3,7 +3,7 @@
 #include "ProjectExports.hpp"
 #include "soloud.h"
 #include "Resource/AudioClip.hpp"
-#include <map>
+#include <unordered_map>
 #include <utility>
 #include <string>
 
@@ -58,9 +58,10 @@ namespace Core
 		ECLIPSE_ENGINE static void Enable();
 		ECLIPSE_ENGINE static void Disable();
 		ECLIPSE_ENGINE static void AddChannel(std::string _name, SoLoud::handle _handle, float _volume = 1.f);
+		ECLIPSE_ENGINE static void DeleteChannel(std::string _name);
 		ECLIPSE_ENGINE static std::vector<std::string> GetChannelNames();
 		ECLIPSE_ENGINE static std::vector<SoLoud::handle> GetChannelHandles();
-		ECLIPSE_ENGINE static std::map<std::string, std::pair<SoLoud::handle, float>>* GetChannels();
+		ECLIPSE_ENGINE static std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* GetChannels();
 
 		ECLIPSE_ENGINE void Serialize(json& _j) override;
 		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
@@ -68,7 +69,7 @@ namespace Core
 		std::string channel = "SFX";
 	private:
 		static bool m_audioEnabled;
-		static std::map<std::string, std::pair<SoLoud::handle, float>> m_audioChannels;
+		static std::unordered_map<std::string, std::pair<SoLoud::handle, float>> m_audioChannels;
 		bool m_looping = false;
 		bool m_playOnAwake = true;
 		bool m_paused = false;

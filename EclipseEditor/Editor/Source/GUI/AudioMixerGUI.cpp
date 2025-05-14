@@ -24,9 +24,9 @@ namespace GUI
 			_audioSystem->SetMaxVolume(volume);
 
 		// Mix channels (SFX, Music...)
-		std::map<std::string, std::pair<SoLoud::handle, float>>* mixChannels = Core::AudioSource::GetChannels();
+		std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* mixChannels = Core::AudioSource::GetChannels();
 		int count = 0;
-		for (std::map<std::string, std::pair<SoLoud::handle, float>>::iterator it = mixChannels->begin(); it != mixChannels->end(); ++it)
+		for (std::unordered_map<std::string, std::pair<SoLoud::handle, float>>::iterator it = mixChannels->begin(); it != mixChannels->end(); ++it)
 		{
 			float dummy = it->second.second;
 			ImGui::SameLine();
@@ -71,16 +71,52 @@ namespace GUI
 			channels.clear();
 		}
 
+		if (ImGui::Button("Add channel"))
+		{
+			ImGui::OpenPopup("Create Channel");
+			ImGui::SetNextWindowSize(ImVec2(250, 150));
+		}
+
+		if (ImGui::BeginPopupModal("Create Channel", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			bool bIsNameValid = true;
+			if (m_newChannelName == "" || m_newChannelName.size() > MAX_CHANNEL_NAME_SIZE)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
+				bIsNameValid = false;
+			}
+			ImGui::InputText("##NewScene", &m_newChannelName);
+			if (!bIsNameValid)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Create") && bIsNameValid)
+			{
+				Core::AudioSource::AddChannel(m_newChannelName, _audioSystem->GetAudioEngine()->createVoiceGroup(), 1.f);
+				m_newChannelName = "";
+				ImGui::CloseCurrentPopup();
+			}
+			if (!bIsNameValid)
+			{
+				ImGui::EndDisabled();
+				ImGui::PopStyleColor();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+				ImGui::CloseCurrentPopup();
+
+			ImGui::EndPopup();
+		}
+
 		//Play, Pause and Stop buttons
 		if (m_playBtnTexture == nullptr)
 			m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
-		if (ImGui::ImageButton("Play", m_playBtnTexture->GetID(), ImVec2(masterChannelSize.x/3.f, masterChannelSize.x / 3.f)))
+		if (ImGui::ImageButton("Play", m_playBtnTexture->GetID(), ImVec2(masterChannelSize.x / 3.f, masterChannelSize.x / 3.f)))
 			_audioSystem->Play();
 
 		ImGui::SameLine();
 		if (m_pauseBtnTexture == nullptr)
 			m_pauseBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Pause.img");
-		if(_audioSystem->IsPaused())
+		if (_audioSystem->IsPaused())
 		{
 			ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
 			ImGui::PushStyleColor(ImGuiCol_Button, { 0.5f, 0.5f, 0.5f, 1.f });
@@ -120,14 +156,14 @@ namespace GUI
 		}
 
 		ImPlot::PushStyleVar(ImPlotStyleVar_PlotPadding, ImVec2(0, 0));
-		if (ImPlot::BeginPlot("test", ImVec2(ImGui::GetWindowSize().x/2.f, 100.f), ImPlotFlags_CanvasOnly))
+		if (ImPlot::BeginPlot("test", ImVec2(ImGui::GetWindowSize().x / 2.f, 100.f), ImPlotFlags_CanvasOnly))
 		{
 			ImPlot::SetupAxes("Time (s)", "Volume (%)", ImPlotAxisFlags_NoDecorations, ImPlotAxisFlags_NoDecorations);
 			ImPlot::SetupAxesLimits(0, NB_VALUES - 1, -0.001f, 1.001f, ImGuiCond_Always);
 			ImPlot::SetNextLineStyle(ImVec4(1.f, 0.75f, 0.f, 1.f));
 			ImPlot::SetNextFillStyle(ImVec4(1.f, 0.75f, 0.f, 1.f), 0.25f);
 
-			ImPlot::PlotLine("test", m_values.data(), static_cast<int>(m_values.size()), 1/MAX_TIME, 0, ImPlotLineFlags_Shaded);
+			ImPlot::PlotLine("test", m_values.data(), static_cast<int>(m_values.size()), 1 / MAX_TIME, 0, ImPlotLineFlags_Shaded);
 			ImPlot::EndPlot();
 		}
 		ImPlot::PopStyleVar();

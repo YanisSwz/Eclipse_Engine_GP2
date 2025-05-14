@@ -1,4 +1,5 @@
 #include "GUI/Widget/ImGuiWidget.hpp"
+#include "Core/Audio/AudioSource.hpp"
 
 namespace GUI
 {
@@ -649,11 +650,6 @@ namespace GUI
 
 	bool AudioChannel(const char* _label, float& _sliderValue, ImVec2 _size, float _offset)
 	{
-
-		//ImGui::SetCursorPosX(8.f + _offset);
-		//ImGui::VSliderInt();
-
-		//ImGui::SameLine();
 		ImGui::SetCursorPosX(8.f + _offset);
 		auto* colors = ImGui::GetStyle().Colors;
 		ImVec4 color = ImVec4(colors[ImGuiCol_Button].x, colors[ImGuiCol_Button].y, colors[ImGuiCol_Button].z, 1.f);
@@ -682,6 +678,15 @@ namespace GUI
 		for (int i = 12; i < label.size(); i += 12)
 			label.insert(i, "\n");
 		ImGui::Text(label.c_str());
+
+		ImGui::SameLine();
+		ImGui::SetCursorPos(ImVec2(8.f + _offset, 46.f + _size.y + ImGui::GetFontSize()));
+		ImGui::PushID(_label);
+		if (ImGui::Button("Delete")) 
+		{
+			//Core::AudioSource::DeleteChannel(_label);
+		}
+		ImGui::PopID();
 
 		return changed;
 	}

@@ -7,7 +7,7 @@
 namespace Core
 {
 	bool AudioSource::m_audioEnabled = true;
-	std::map<std::string, std::pair<SoLoud::handle, float>> AudioSource::m_audioChannels{};
+	std::unordered_map<std::string, std::pair<SoLoud::handle, float>> AudioSource::m_audioChannels{};
 
 	AudioSource::AudioSource(SoLoud::Soloud* _audioEngine)
 	{
@@ -304,6 +304,15 @@ namespace Core
 		m_audioChannels[_name] = std::make_pair(_handle, _volume);
 	}
 
+	void AudioSource::DeleteChannel(std::string _name)
+	{
+		auto it = m_audioChannels.find(_name);
+		if (it != m_audioChannels.end())
+		{
+			m_audioChannels.erase(it);
+		}
+	}
+
 	std::vector<std::string> AudioSource::GetChannelNames()
 	{
 		std::vector<std::string> names;
@@ -324,7 +333,7 @@ namespace Core
 		return handles;
 	}
 
-	std::map<std::string, std::pair<SoLoud::handle, float>>* AudioSource::GetChannels()
+	std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* AudioSource::GetChannels()
 	{
 		return &m_audioChannels;
 	}
