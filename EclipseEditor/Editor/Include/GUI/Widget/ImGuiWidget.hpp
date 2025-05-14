@@ -26,7 +26,7 @@ namespace GUI
 	bool ComboBox(const char* _comboName, std::string* _crtValue, std::vector<std::string> _values, float _maxColumnWidth = 100.f);
 	bool CheckBox(const char* _checkBoxName, const char* _invisibleCheckBoxName, bool* _boolean, float _maxColumnWidth = 100.f);
 	bool FloatSlider(const char* _sliderName, float* value, float _min, float _max, const char* _format);
-	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags = 0);
+	void ColorEdit4(const char* _label, Math::Vec4& _color, ImGuiColorEditFlags flags = 0, float _maxColumnWidth = 100.f);
 	bool AudioChannel(const char* _label, float& _sliderValue, ImVec2 _size, float _offset = 0.f);
 	bool AudioChannel(const char* _label, float* _stereoVolume, float _currentVolume, float& _sliderValue, ImVec2 _size, float _offset = 0.f);
 	bool AudioChannel(const char* _label, bool _isPlaying, float* _pan, float& _sliderValue, ImVec2 _size, float _offset = 0.f, int ID = 0);

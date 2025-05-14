@@ -69,6 +69,8 @@ namespace GUI
 		bool bIsScaleLocked = false;
 		Math::Vec3 m_scaleFactor{ 1.f, 1.f, 1.f };
 		const int MAX_NAME_SIZE = 50;
+		std::string m_newTagName;
+		const int MAX_TAG_NAME_SIZE = 20;
 
 		Resource::Texture* m_playBtnTexture = nullptr;
 		Resource::Texture* m_stopBtnTexture = nullptr;

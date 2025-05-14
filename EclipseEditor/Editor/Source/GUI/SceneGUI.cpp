@@ -6,10 +6,10 @@
 
 namespace GUI
 {
-	void SceneGUI::Draw(Core::GameObject* _crtGOSelected, Core::SceneCamera* _camera, const unsigned int _textureID, int& _windowWidth, int& _windowHeight, int& _windowPosX, int& _windowPosY)
+	void SceneGUI::Draw(Core::GameObject* _crtGOSelected, Core::GameObject* _gameObjectPicked, Core::SceneCamera* _camera, const unsigned int _textureID, int& _windowWidth, int& _windowHeight, int& _windowPosX, int& _windowPosY)
 	{
 		ImGui::SetNextWindowSizeConstraints({ 300.f, 300.f }, ImGui::GetMainViewport()->Size);
-		ImGuiWindowFlags sceneWindowFlags = ImGuiWindowFlags_None;
+		ImGuiWindowFlags sceneWindowFlags = ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
 		ImGui::Begin("Scene", 0, sceneWindowFlags);
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
@@ -21,26 +21,68 @@ namespace GUI
 
 		if (_camera->MouseSpeedChanged())
 		{
-			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.75f));
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 0.95f));
+			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(.75f, .75f, .75f, 0.95f));
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 2.f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 3.f);
 			ImGui::SetNextWindowSize(m_windowSizeCameraChangedSpeed);
 			ImGui::SetNextWindowPos({ windowPos.x + windowSize.x / 2.f - m_windowSizeCameraChangedSpeed.x / 2.f, windowPos.y + windowSize.y / 2.f - m_windowSizeCameraChangedSpeed.y / 2.f });
-			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration;
+			ImGuiWindowFlags mouseSpeedChangedWindowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
 			ImGui::Begin("MouseSpeedChangedWindow", 0, mouseSpeedChangedWindowFlags);
 
-			ImGui::SetWindowFontScale(3.f);
+			ImGui::SetWindowFontScale(2.f);
+			float windowWidth = ImGui::GetWindowSize().x;
+			float textWidth = 0.f;
+			if(_camera->GetMouseSpeed() < 10.f)
+				textWidth = ImGui::CalcTextSize("5.50").x;
+			else
+				textWidth = ImGui::CalcTextSize("10.00").x;
+			ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+			ImGui::SetCursorPosY(m_windowSizeCameraChangedSpeed.y/2.f - ImGui::GetFontSize()/2.f);
 			ImGui::Text("%.2f", _camera->GetMouseSpeed());
 
-			ImGui::PopStyleColor();
+			ImGui::PopStyleColor(2);
+			ImGui::PopStyleVar(2);
 			ImGui::End();
 		}
 
+		ImGui::SetCursorPos({ 0.f, 0.f });
 		ImVec2 uv0{ 0.f, 1.f };
 		ImVec2 uv1{ 1.f, 0.f };
-		ImGui::GetWindowDrawList()->AddImage(
-			static_cast<intptr_t>(_textureID),
-			ImVec2(windowPos.x, windowPos.y),
-			ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
-			uv0, uv1);
+		ImGui::Image(static_cast<intptr_t>(_textureID),
+			ImVec2(windowSize.x, windowSize.y),
+			uv0, uv1 );
+
+		// Drag & Drop Resource Target
+		if (_gameObjectPicked)
+		{
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MeshName", ImGuiDragDropFlags_AcceptBeforeDelivery))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					std::string payload_n = *static_cast<std::string*>(payload->Data);
+
+					Core::Model* modelComponent = _gameObjectPicked->GetComponent<Core::Model>();
+					if (modelComponent)
+						modelComponent->SetMesh(Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(payload_n));
+				}
+
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureName", ImGuiDragDropFlags_AcceptBeforeDelivery))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					std::string payload_n = *static_cast<std::string*>(payload->Data);
+
+					Core::Model* modelComponent = _gameObjectPicked->GetComponent<Core::Model>();
+					if (modelComponent)
+						modelComponent->SetTexture(Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(payload_n));
+				}
+				ImGui::EndDragDropTarget();
+			}
+		}
+
+		ImGui::SetItemAllowOverlap();
+		ImGui::SetCursorPos({ 8.f, 38.f });
 
 		// Editor Buttons
 		if (!m_translateBtnTexture)

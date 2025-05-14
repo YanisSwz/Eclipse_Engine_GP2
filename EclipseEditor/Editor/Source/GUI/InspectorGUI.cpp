@@ -40,6 +40,44 @@ namespace GUI
 			else if (_crtGOSelected->name.size() > MAX_NAME_SIZE)
 				_crtGOSelected->name = _crtGOSelected->name.substr(0, MAX_NAME_SIZE-1).append("...");
 		}
+		GUI::ComboFilter("Tag", &_crtGOSelected->tag, Core::GameObject::GetTags());
+		ImGui::SameLine();
+		if(ImGui::Button("Add Tag"))
+		{
+			ImGui::OpenPopup("Create Tag");
+			ImGui::SetNextWindowSize(ImVec2(250, 150));
+		}
+
+		if (ImGui::BeginPopupModal("Create Tag", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			bool bIsNameValid = true;
+			if (m_newTagName == "" || m_newTagName.size() > MAX_TAG_NAME_SIZE)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
+				bIsNameValid = false;
+			}
+			ImGui::InputText("##NewScene", &m_newTagName);
+			if (!bIsNameValid)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Create") && bIsNameValid)
+			{
+				Core::GameObject::AddTag(m_newTagName);
+				_crtGOSelected->tag = m_newTagName;
+				m_newTagName = "";
+				ImGui::CloseCurrentPopup();
+			}
+			if (!bIsNameValid)
+			{
+				ImGui::EndDisabled();
+				ImGui::PopStyleColor();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+				ImGui::CloseCurrentPopup();
+
+			ImGui::EndPopup();
+		}
 
 		bool bIsActive = _crtGOSelected->IsActive();
 		if (GUI::CheckBox("Active", "##", &bIsActive))
@@ -464,15 +502,12 @@ namespace GUI
 					m_pauseBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Pause.img");
 				if (_source->IsPaused())
 				{
-					ImGui::PushStyleColor(ImGuiCol_Border, { 0.f, 0.f, 0.f, 0.f });
 					ImGui::PushStyleColor(ImGuiCol_Button, { 0.5f, 0.5f, 0.5f, 1.f });
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.75f, 0.75f, 0.75f, 1.f });
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.85f, 0.85f, 0.85f, 1.f });
 
 					if (ImGui::ImageButton("Unpause", m_pauseBtnTexture->GetID(), ImVec2(25.f, 25.f)))
 						_source->Pause();
 
-					ImGui::PopStyleColor(4);
+					ImGui::PopStyleColor();
 				}
 				else
 				{
@@ -593,10 +628,10 @@ namespace GUI
 
 			ImGui::SeparatorText("Particle Properties");
 			GUI::DragFloat("Life Time", "LifeTimeDragFloat", &_particleEmitter->particleProps.lifeTime, 0.1f, 0.f, FLT_MAX);
-			GUI::DragColorRGBA("Color Begin", _particleEmitter->particleProps.colorBegin, 255.f);
-			GUI::DragColorRGBA("Color End", _particleEmitter->particleProps.colorEnd, 255.f);
-			GUI::DragFloat("Size Begin", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
-			GUI::DragFloat("Size End", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			ColorEdit4("Begin Color", _particleEmitter->particleProps.colorBegin);			
+			ColorEdit4("End Color", _particleEmitter->particleProps.colorEnd);
+			GUI::DragFloat("Begin Size", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+			GUI::DragFloat("End Size", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("Size Variation", "SizeVariationDragFloat", &_particleEmitter->particleProps.sizeVariation, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragVec3XYZ("Velocity", _particleEmitter->particleProps.velocity, 0.f, 125.f);
 			GUI::DragVec3XYZ("Velocity Variation", _particleEmitter->particleProps.velocityVariation, 0.f, 125.f);

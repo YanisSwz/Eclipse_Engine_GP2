@@ -55,10 +55,10 @@ Quat Quat::QuaternionEuler(float yaw, float pitch, float roll)
 	float sy = sinf(yaw * 0.5f);
 
 	Quat q = Quat::Identity();
-	q.w = cr * cp * cy - sr * sp * sy;
-	q.x = cr * cp * sy + sr * sp * cy;
-	q.y = cr * sp * cy - sr * cp * sy;
-	q.z = sr * cp * cy + cr * sp * sy;
+	q.w = cr * cp * cy + sr * sp * sy;
+	q.x = cr * cp * sy - sr * sp * cy;
+	q.y = cr * sp * cy + sr * cp * sy;
+	q.z = sr * cp * cy - cr * sp * sy;
 
 
 	return q;

@@ -4,6 +4,7 @@
 #include "SystemManager.hpp"
 #include "ProjectExports.hpp"
 #include "GameState.hpp"
+#include "Prefab.hpp"
 #include <type_traits>
 
 namespace Core
@@ -39,6 +40,13 @@ namespace Core
 		ECLIPSE_ENGINE void Reset();
 		ECLIPSE_ENGINE inline std::string GetName() const { return m_name; }
 		ECLIPSE_ENGINE inline void SetName(std::string _name) { m_name = _name; }
+
+		ECLIPSE_ENGINE void SerializeToFile(std::string _filePath);
+		ECLIPSE_ENGINE void DeserializeFromFile(std::string _filePath);
+		ECLIPSE_ENGINE json Serialize();
+		ECLIPSE_ENGINE void Deserialize(const json& _j);
+		ECLIPSE_ENGINE void SavePrefab(GameObject* _gameObject, Resource::Prefab* _prefab);
+		ECLIPSE_ENGINE GameObject* InstantiatePrefab(GameObject* _parent, Resource::Prefab* _prefab);
 
 	private:
 		static const int MAX_SIZE = 100;
