@@ -3,6 +3,7 @@
 #include "Component.hpp"
 #include "ProjectExports.hpp"
 #include <vector>
+#include <utility>
 
 namespace Core
 {
@@ -14,7 +15,7 @@ namespace Core
 		ECLIPSE_ENGINE Transform(Math::Vec3 _translation = { 0.f, 0.f, 0.f }, Math::Vec3 _rotation = { 0.f, 0.f, 0.f }, Math::Vec3 _scale = { 1.f, 1.f, 1.f }, Transform* _parent = nullptr);
 		ECLIPSE_ENGINE ~Transform();
 
-		// Hierarchy 
+		// Hierarchy
 		ECLIPSE_ENGINE void SetParent(Transform* _parent);
 		ECLIPSE_ENGINE void AddChild(Transform* _child);
 		ECLIPSE_ENGINE void RemoveChild(Transform* _child);
@@ -72,6 +73,8 @@ namespace Core
 		ECLIPSE_ENGINE void SetScaleChanged(bool _changed);
 		ECLIPSE_ENGINE void SetRotationChanged(bool _changed);
 
+		ECLIPSE_ENGINE std::vector<std::pair<GameObject*, int>> GetHierarchy();
+
 		ECLIPSE_ENGINE void Serialize(json& _j) override;
 		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
 
@@ -80,6 +83,8 @@ namespace Core
 		void UpdatePosition();
 		void UpdateScale();
 		void UpdateRotation();
+
+		void GetHierarchyRecursive(std::vector<std::pair<GameObject*, int>>& _parentHierarchy, int _parentIndex);
 
 		// Hierarchy
 		Transform* m_parent = nullptr;

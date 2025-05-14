@@ -435,6 +435,13 @@ namespace Core
 			m_positionChanged = true;
 	}
 
+	std::vector<std::pair<GameObject*, int>> Transform::GetHierarchy()
+	{
+		std::vector<std::pair<GameObject*, int>> hierarchy;
+		GetHierarchyRecursive(hierarchy, -1);
+		return hierarchy;
+	}
+
 	void Transform::Serialize(json& _j)
 	{
 		Math::Vec3 localPosition = GetLocalPosition();
@@ -466,5 +473,18 @@ namespace Core
 		SetPositionChanged(true);
 		SetScaleChanged(true);
 		SetRotationChanged(true);
+	}
+
+	void Transform::GetHierarchyRecursive(std::vector<std::pair<GameObject*, int>>& _parentHierarchy, int _parentIndex)
+	{
+		int index = static_cast<int>(_parentHierarchy.size());
+		std::pair<GameObject*, int> current;
+		current.first = m_gameObject;
+		current.second = _parentIndex;
+		_parentHierarchy.push_back(current);
+
+		for (int i = 0; i < m_children.size(); ++i)
+			if (m_children[i])
+				m_children[i]->GetHierarchyRecursive(_parentHierarchy, index);
 	}
 }

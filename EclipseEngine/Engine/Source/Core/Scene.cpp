@@ -110,6 +110,7 @@ namespace Core
 	{
 		std::ofstream fileStream(_filePath);
 		fileStream << std::setw(4) << Serialize() << std::endl;
+		fileStream.close();
 	}
 
 	void Scene::DeserializeFromFile(std::string _filePath)
@@ -124,6 +125,7 @@ namespace Core
 
 		json scene;
 		fileStream >> scene;
+		fileStream.close();
 
 		Deserialize(scene);
 	}
@@ -147,13 +149,13 @@ namespace Core
 				continue;
 			}
 
-			json jsonGameObject;
-			gameObject->Serialize(jsonGameObject);
+			json gameObjectJson;
+			gameObject->Serialize(gameObjectJson);
 			int index = GetGameObjectParentIndex(i);
 			if (index >= 0)
 				index = std::max(index - destroyedNb, -1);
-			jsonGameObject[gameObject->name]["Transform"]["ParentIndex"] =  index;
-			jsonGameObjects.push_back(jsonGameObject);
+			gameObjectJson[gameObject->name]["Transform"]["ParentIndex"] = index;
+			jsonGameObjects.push_back(gameObjectJson);
 		}
 		scene["GameObjects"] = jsonGameObjects;
 
@@ -193,23 +195,38 @@ namespace Core
 
 	void Scene::SavePrefab(GameObject* _gameObject, Resource::Prefab* _prefab)
 	{
-		std::string filePath = "Assets/Prefabs/" + _prefab->name + ".json";
+		json prefab;
+
+		std::vector<std::pair<GameObject*, int>> hierarchy = _gameObject->transform->GetHierarchy();
+
+		for (int i = 0; i < hierarchy.size(); ++i)
+		{
+			std::pair<GameObject*, int> gameObject = hierarchy[i];
+			json gameObjectJson;
+			gameObject.first->Serialize(gameObjectJson);
+			gameObjectJson[gameObject.first->name]["Transform"]["ParentIndex"] = gameObject.second;
+			prefab[i] = gameObjectJson;
+		}
+
+		std::ofstream fileStream(_prefab->GetFilePath());
+		fileStream << std::setw(4) << prefab << std::endl;
+		fileStream.close();
 	}
 
 	GameObject* Scene::InstantiatePrefab(GameObject* _parent, Resource::Prefab* _prefab)
 	{
-		std::string filePath = "Assets/Prefabs/" + _prefab->name + ".json";
-
+		std::string filePath = _prefab->GetFilePath();
 		std::ifstream fileStream(filePath);
 
 		if (!fileStream.is_open() || fileStream.peek() == std::ifstream::traits_type::eof())
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "Prefab at %s is empty or can't be loaded", filePath.c_str());
-			return;
+			return nullptr;
 		}
 
 		json prefab;
 		fileStream >> prefab;
+		fileStream.close();
 
 		int gameObjectCount = static_cast<int>(prefab.size());
 		std::vector<GameObject*> gameObjects;
@@ -227,12 +244,14 @@ namespace Core
 		{
 			GameObject* gameObject = gameObjects[i];
 			int parentIndex = prefab[i][gameObject->name]["Transform"]["ParentIndex"];
-			if (parentIndex > 0 && parentIndex < gameObjects.size())
+			if (parentIndex >= 0 && parentIndex < gameObjects.size())
 			{
 				GameObject* parent = gameObjects[parentIndex];
 				if (parent)
 					gameObject->transform->SetParent(parent->transform);
 			}
+			else if (_parent)
+				gameObject->transform->SetParent(_parent->transform);
 		}
 
 		return gameObjects.empty() ? nullptr : gameObjects[0];

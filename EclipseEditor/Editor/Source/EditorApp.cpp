@@ -237,7 +237,7 @@ void EditorApp::Render()
 
 	if (bIsHierarchieWindowEnabled)
 	{
-		Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
+		Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected, &m_contentBrowserGUI);
 		if (newGOSelected)
 			m_crtGOSelected = newGOSelected;
 	}
