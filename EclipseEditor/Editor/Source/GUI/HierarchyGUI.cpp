@@ -32,7 +32,11 @@ namespace GUI
 					IM_ASSERT(payload->DataSize == sizeof(int));
 					int* payload_n;
 					payload_n = static_cast<int*>(payload->Data);
-					_scene->GetSystemManager()->GetTransformsRoot()->AddChild(_scene->GetObjectByID(*payload_n)->transform);
+					Core::Transform* transform = _scene->GetObjectByID(*payload_n)->transform;
+					_scene->GetSystemManager()->GetTransformsRoot()->AddChild(transform);
+					transform->SetPosition(transform->GetPosition());
+					transform->SetRotation(transform->GetRotation());
+					transform->SetScale(transform->GetScale());
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -89,7 +93,11 @@ namespace GUI
 					IM_ASSERT(payload->DataSize == sizeof(int));
 					int* payload_n;
 					payload_n = static_cast<int*>(payload->Data);
-					_scene->GetObjectByID(*payload_n)->transform->SetParent(_crtTransform);
+					Core::Transform* transform = _scene->GetObjectByID(*payload_n)->transform;
+					transform->SetParent(_crtTransform);
+					transform->SetPosition(transform->GetPosition());
+					transform->SetRotation(transform->GetRotation());
+					transform->SetScale(transform->GetScale());
 				}
 				ImGui::EndDragDropTarget();
 			}

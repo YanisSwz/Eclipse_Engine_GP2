@@ -58,4 +58,11 @@ namespace Core
 		if (m_children.size() > 0)
 			m_positionChanged = _changed;
 	}
+
+	inline void Transform::SetChanged(bool _changed)
+	{
+		m_positionChanged = _changed;
+		m_rotationChanged = _changed;
+		m_scaleChanged = _changed;
+	}
 }
