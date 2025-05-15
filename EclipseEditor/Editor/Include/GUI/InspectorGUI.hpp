@@ -72,7 +72,8 @@ namespace GUI
 		bool bIsScaleLocked = false;
 		Math::Vec3 m_scaleFactor{ 1.f, 1.f, 1.f };
 		const int MAX_NAME_SIZE = 50;
-		
+		std::string m_newTagName;
+		const int MAX_TAG_NAME_SIZE = 20;
 		const int SCRIPT_NAME_MAX_SIZE = 20;
 		std::string m_newScriptName = "";
 		ImVec2 m_addingScriptWindowSize{ 350.f, 110.f };

@@ -13,6 +13,8 @@ namespace Resource
 	public:
 		ECLIPSE_ENGINE ResourceManager();
 		ECLIPSE_ENGINE ~ResourceManager();
+		ResourceManager(const ResourceManager& _rm) = delete;
+		void operator=(const ResourceManager& _rm) = delete;
 
 		ECLIPSE_ENGINE static ResourceManager& GetInstance();
 		ECLIPSE_ENGINE static void DestroyInstance();

@@ -59,4 +59,14 @@ namespace GUI
 				folders[i]->AddSceneFile(_newScene);
 		}
 	}
+
+	void ContentBrowserGUI::AddPrefab(Resource::Prefab* _newPrefab)
+	{
+		std::vector<FolderGUI*> folders = m_folderRoot->GetChildren();
+		for (int i = 0; i < folders.size(); ++i)
+		{
+			if (folders[i]->name == "Prefab")
+				folders[i]->AddPrefabFile(_newPrefab);
+		}
+	}
 }

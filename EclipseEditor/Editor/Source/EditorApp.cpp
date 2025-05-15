@@ -13,6 +13,7 @@
 #include "Lighting/SpotLight.hpp"
 #include "Core/Particles/ParticleEmitter.hpp"
 #include "Scripting/RegisterTypeMacro.hpp"
+#include <implot.h>
 
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	: m_width(_width),
@@ -40,6 +41,8 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	Resource::ResourceManager::GetInstance().DestroyAllResources();
 
 	LoadResources();
+	Core::GameObject::DeserializeTags("Assets/Settings/Tags.json");
+	m_scene.GetSystemManager()->GetAudioSystem()->DeserializeChannels("Assets/Settings/AudioChannels.json");
 	LoadScene("Scene");
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Editor successfully initialized");
 
@@ -102,52 +105,22 @@ void EditorApp::Render()
 			}
 			if (ImGui::MenuItem("Create Scene"))
 			{
+				bIsNewSceneWindowStarted = true;
 				bIsNewSceneWindowOpen = true;
 			}
+			if (ImGui::MenuItem("Create Prefab"))
+			{
+				bIsNewPrefabWindowStarted = true;
+				bIsNewPrefabWindowOpen = true;
+			}
+
+
 			ImGui::EndMenu();
-		}
-
-		if (bIsNewSceneWindowOpen)
-		{
-			ImGui::OpenPopup("Create New Scene");
-			ImGui::SetNextWindowSize(ImVec2(250, 150));
-
-		}
-
-		if (ImGui::BeginPopupModal("Create New Scene", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
-		{
-			bool bIsSceneNameValid = true;
-			if (m_newSceneName == "" || m_newSceneName.size() > SCENE_NAME_MAX_SIZE)
-			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
-				bIsSceneNameValid = false;
-			}
-			ImGui::InputText("##NewScene", &m_newSceneName);
-			if (!bIsSceneNameValid)
-				ImGui::BeginDisabled();
-			if (ImGui::Button("Create") && bIsSceneNameValid)
-			{
-				CreateNewScene();
-			}
-			if (!bIsSceneNameValid)
-			{
-				ImGui::EndDisabled();
-				ImGui::PopStyleColor();
-			}
-
-			ImGui::SameLine();
-			if (ImGui::Button("Cancel"))
-			{
-				bIsNewSceneWindowOpen = false;
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
 		}
 
 		if (ImGui::BeginMenu("Windows", true))
 		{
-			ImGui::MenuItem("Hierarchy", "", &bIsHierarchieWindowEnabled);
+			ImGui::MenuItem("Hierarchy", "", &bIsHierarchyWindowEnabled);
 			ImGui::MenuItem("Inspector", "", &bIsInspectorWindowEnabled);
 			ImGui::MenuItem("Scene", "", &bIsSceneWindowEnabled);
 			ImGui::MenuItem("Game", "", &bIsGameWindowEnabled);
@@ -202,6 +175,91 @@ void EditorApp::Render()
 			ImGui::PopStyleColor(4);
 		}
 
+		if (bIsNewSceneWindowStarted)
+			ImGui::OpenPopup("Create New Scene");
+		if (bIsNewSceneWindowOpen)
+			ImGui::SetNextWindowSize(ImVec2(250, 150));
+
+		if (ImGui::BeginPopupModal("Create New Scene", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			if (bIsNewSceneWindowStarted)
+				bIsNewSceneWindowStarted = false;
+
+			bool bIsSceneNameValid = true;
+			if (m_newSceneName == "" || m_newSceneName.size() > SCENE_NAME_MAX_SIZE)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
+				bIsSceneNameValid = false;
+			}
+			ImGui::InputText("##NewScene", &m_newSceneName);
+			if (!bIsSceneNameValid)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Create") && bIsSceneNameValid)
+			{
+				CreateNewScene();
+			}
+			if (!bIsSceneNameValid)
+			{
+				ImGui::EndDisabled();
+				ImGui::PopStyleColor();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+			{
+				bIsNewSceneWindowOpen = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
+		if (bIsNewPrefabWindowStarted)
+			ImGui::OpenPopup("Create New Prefab");
+		if (bIsNewPrefabWindowOpen)
+			ImGui::SetNextWindowSize(ImVec2(250, 150));
+
+		if (ImGui::BeginPopupModal("Create New Prefab", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			if (bIsNewPrefabWindowStarted)
+				bIsNewPrefabWindowStarted = false;
+
+			bool bIsPrefabNameValid = true;
+			Resource::ResourceManager* resourceManager = &Resource::ResourceManager::GetInstance();
+			if (m_newPrefabName == "" || m_newPrefabName.size() > PREFAB_NAME_MAX_SIZE || resourceManager->GetResource<Resource::Prefab>(m_newPrefabName) != nullptr)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
+				bIsPrefabNameValid = false;
+			}
+			ImGui::InputText("##NewPrefab", &m_newPrefabName);
+			if (!bIsPrefabNameValid)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Create") && bIsPrefabNameValid)
+			{
+				std::string fileName = m_newPrefabName + ".json";
+				Resource::Prefab* newPrefab = resourceManager->AddResourceToLoad<Resource::Prefab>(fileName, "Assets/Prefabs/" + fileName);
+				resourceManager->LoadAllResources();
+				bIsNewPrefabWindowOpen = false;
+				m_newPrefabName.clear();
+				ImGui::CloseCurrentPopup();
+				m_contentBrowserGUI.AddPrefab(newPrefab);
+			}
+			if (!bIsPrefabNameValid)
+			{
+				ImGui::EndDisabled();
+				ImGui::PopStyleColor();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+			{
+				bIsNewPrefabWindowOpen = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
 		if (gameState == GAME_STATE::PAUSE)
 		{
 			// Resume Button
@@ -250,7 +308,7 @@ void EditorApp::Render()
 			m_crtGOSelected = nullptr;
 	}
 
-	if (bIsHierarchieWindowEnabled)
+	if (bIsHierarchyWindowEnabled)
 	{
 		Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
 		if (newGOSelected)
@@ -286,7 +344,7 @@ void EditorApp::Render()
 	}
 
 	if (bIsAudioMixerWindowEnabled)
-		m_audioMixerGUI.Draw(m_scene.GetSystemManager()->GetAudioSystem());
+		m_audioMixerGUI.Draw(m_scene.GetSystemManager()->GetAudioSystem(), deltaTime);
 
 	GUI::EndFrame();
 
@@ -303,6 +361,9 @@ void EditorApp::Destroy()
 	DestroyGUI();
 
 	m_scene.Reset();
+	Core::GameObject::SerializeTags("Assets/Settings/Tags.json");
+	m_scene.GetSystemManager()->GetAudioSystem()->SerializeChannels("Assets/Settings/AudioChannels.json");
+
 	m_renderInterface->DestroyDefaultGraphicPipeline(m_editorPipeline);
 	m_renderInterface->DestroyDefaultGraphicPipeline(m_gamePipeline);
 	delete m_renderInterface;
@@ -422,7 +483,7 @@ void EditorApp::SetupImGuiStyle()
 	style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.7960784435272217f, 0.6784313917160034f, 0.9411764740943909f, 1.0f);
 	style.Colors[ImGuiCol_Separator] = ImVec4(0.2078431397676468f, 0.2078431397676468f, 0.2078431397676468f, 1.0f);
 	style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.6627451181411743f, 0.5254902243614197f, 0.8901960849761963f, 1.0f);
-	style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+	style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.7960784435272217f, 0.6784313917160034f, 0.9411764740943909f, 1.0f);
 	style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.7960784435272217f, 0.6784313917160034f, 0.9411764740943909f, 1.0f);
 	style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.6627451181411743f, 0.5254902243614197f, 0.8901960849761963f, 1.0f);
 	style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.7960784435272217f, 0.6784313917160034f, 0.9411764740943909f, 1.0f);
@@ -452,6 +513,7 @@ void EditorApp::InitGUI()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImPlot::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
@@ -491,7 +553,7 @@ void EditorApp::LoadScene(std::string _sceneName)
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Loading Scene: %s", _sceneName.c_str());
 	std::string directoryPath = "Assets/Scenes/";
 	m_scene.SetName(_sceneName);
-	m_serializer.DeserializeSceneFromFile(&m_scene, directoryPath + _sceneName + ".json");
+	m_scene.DeserializeFromFile(directoryPath + _sceneName + ".json");
 }
 
 void EditorApp::ReloadScene()
@@ -504,7 +566,7 @@ void EditorApp::SaveScene()
 {
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Saving Scene: %s", m_scene.GetName().c_str());
 	std::string directoryPath = "Assets/Scenes/";
-	m_serializer.SerializeSceneToFile(&m_scene, directoryPath + m_scene.GetName() + ".json");
+	m_scene.SerializeToFile(directoryPath + m_scene.GetName() + ".json");
 }
 
 void EditorApp::CreateNewScene()
@@ -561,5 +623,6 @@ void EditorApp::DestroyGUI()
 	ImGui_ImplGlfw_Shutdown();
 #endif // ImGuiImplementGLFW
 
+	ImPlot::DestroyContext();
 	ImGui::DestroyContext();
 }

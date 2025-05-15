@@ -19,6 +19,12 @@ target_include_directories(imguizmo PUBLIC ${IMGUIZMO_DIR})
 
 target_link_libraries(ECLIPSE_EDITOR PUBLIC imguizmo)
 
-#add_subdirectory(${IMGUIZMO_DIR})
-#include_directories(IMGUIZMO_DIR)
-#target_link_libraries(ECLIPSE_EDITOR PUBLIC ImGuizmo)
+# ImPlot
+set(IMPLOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ImPlot")
+file(GLOB IMPLOT_SOURCES "${IMPLOT_DIR}/*.cpp") 
+add_library(implot STATIC ${IMPLOT_SOURCES})
+target_include_directories(implot PUBLIC ${IMPLOT_DIR})
+
+target_link_libraries(implot PUBLIC imgui)
+target_link_libraries(ECLIPSE_EDITOR PUBLIC implot)
+

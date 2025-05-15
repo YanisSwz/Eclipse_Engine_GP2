@@ -9,6 +9,8 @@ namespace Core
 		.data<&GameObject::transform>(hash("Transform"))
 		.data<&GameObject::m_components>(hash("Components"));
 
+	std::vector<std::string> GameObject::m_tags{};
+
 	GameObject::GameObject(SystemManager* _manager, Transform* _t, std::string _name)
 	{
 		m_systemManager = _manager;
@@ -47,10 +49,22 @@ namespace Core
 			m_components[i]->Destroy();
 	}
 
+	void GameObject::AddTag(std::string _tag)
+	{
+		auto it = std::find(m_tags.begin(), m_tags.end(), _tag);
+		if (it != m_tags.end())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s tag already exists", _tag.c_str());
+			return;
+		}
+		
+		m_tags.push_back(_tag);
+	}
+
 	void GameObject::Destroy(GameObject* _obj)
 	{
 		_obj->Destroy();
-	}
+	}	
 
 	void GameObject::SetActive(bool _active)
 	{
@@ -70,6 +84,30 @@ namespace Core
 		return m_systemManager;
 	}
 
+	void GameObject::SerializeTags(std::string _filePath)
+	{
+		std::ofstream fileStream(_filePath);
+		json tags = m_tags;
+		fileStream << std::setw(4) << tags << std::endl;
+		fileStream.close();
+	}
+
+	void GameObject::DeserializeTags(std::string _filePath)
+	{
+		std::ifstream fileStream(_filePath);
+
+		if (!fileStream.is_open() || fileStream.peek() == std::ifstream::traits_type::eof())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "No tags to load in %s", _filePath.c_str());
+			return;
+		}
+
+		json tags;
+		fileStream >> tags;
+		fileStream.close();
+		m_tags = tags;
+	}
+
 	Component* GameObject::AddComponent(std::string _componentType)
 	{
 		Component* newComp = m_systemManager->AddComponent(_componentType);
@@ -85,6 +123,7 @@ namespace Core
 	void GameObject::Serialize(json& _j)
 	{
 		_j[name]["IsActive"] = IsActive();
+		_j[name]["Tag"] = tag;
 
 		json transformJson;
 		transform->Serialize(transformJson);
@@ -106,6 +145,7 @@ namespace Core
 		json gameObject = _j.front();
 
 		m_active = gameObject["IsActive"];
+		tag = gameObject["Tag"];
 
 		transform->Deserialize(gameObject["Transform"]);
 

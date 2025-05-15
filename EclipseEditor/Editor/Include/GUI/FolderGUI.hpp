@@ -7,6 +7,7 @@ namespace Resource
 	class Texture;
 	class Mesh;
 	class AudioClip;
+	class Prefab;
 }
 
 namespace GUI
@@ -31,9 +32,11 @@ namespace GUI
 		void DrawMeshGUI(int _index);
 		void DrawAudioGUI(int _index);
 		void DrawSceneGUI(int _index, std::string& _selectedScene);
+		void DrawPrefabGUI(int _index);
 		void Delete();
 
 		void AddSceneFile(std::string _newSceneFile);
+		void AddPrefabFile(Resource::Prefab* _newPrefab);
 		inline std::vector<FolderGUI*> GetChildren() { return m_folderChildren; }
 
 	private:
@@ -43,10 +46,12 @@ namespace GUI
 		std::vector<Resource::Mesh*> m_meshFiles;
 		std::vector<Resource::AudioClip*> m_audioFiles;
 		std::vector<std::string> m_sceneFiles;
+		std::vector<Resource::Prefab*> m_prefabFiles;
 
 		static Resource::Texture* m_folderIcon;
 		static Resource::Texture* m_meshIcon;
 		static Resource::Texture* m_audioIcon;
 		static Resource::Texture* m_sceneIcon;
+		static Resource::Texture* m_prefabIcon;
 	};
 }

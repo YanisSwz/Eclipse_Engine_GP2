@@ -2,6 +2,7 @@
 #include "Resource/ResourceManager.hpp"
 #include "Resource/Texture.hpp"
 #include "Resource/Mesh.hpp"
+#include "Resource/Prefab.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include <filesystem>
 #include <math.h>
@@ -12,6 +13,7 @@ namespace GUI
 	Resource::Texture* FolderGUI::m_meshIcon = nullptr;
 	Resource::Texture* FolderGUI::m_audioIcon = nullptr;
 	Resource::Texture* FolderGUI::m_sceneIcon = nullptr;
+	Resource::Texture* FolderGUI::m_prefabIcon = nullptr;
 
 	FolderGUI::FolderGUI(std::string _name)
 		: name(_name)
@@ -21,9 +23,10 @@ namespace GUI
 	void FolderGUI::InitIcons()
 	{
 		m_folderIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Folder.img");
-		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Prefab.img");
+		m_meshIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("EmptyPrefab.img");
 		m_audioIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Sound.img");
 		m_sceneIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Scene.img");
+		m_prefabIcon = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Prefab.img");
 	}
 
 	void FolderGUI::Init()
@@ -56,7 +59,13 @@ namespace GUI
 				if (entry.path().extension() == ".json")
 				m_sceneFiles.push_back(entry.path().stem().string());
 			}
-
+			return;
+		}
+		else if (name == "Prefab")
+		{
+			std::vector<std::string> prefabNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Prefab>();
+			for (std::string prefabName : prefabNames)
+				m_prefabFiles.push_back(Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(prefabName));
 			return;
 		}
 
@@ -79,6 +88,11 @@ namespace GUI
 		m_folderChildren.push_back(sceneFolder);
 		sceneFolder->Init();
 		sceneFolder->SetParent(this);
+
+		FolderGUI* prefabFolder = new FolderGUI("Prefab");
+		m_folderChildren.push_back(prefabFolder);
+		prefabFolder->Init();
+		prefabFolder->SetParent(this);
 	}
 
 	void FolderGUI::SetParent(FolderGUI* _parent)
@@ -125,8 +139,9 @@ namespace GUI
 		int meshFilesSize = static_cast<int>(m_meshFiles.size());
 		int audioFilesSize = static_cast<int>(m_audioFiles.size());
 		int sceneFilesSize = static_cast<int>(m_sceneFiles.size());
+		int prefabFilesSize = static_cast<int>(m_prefabFiles.size());
 
-		int nbElem = folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize + sceneFilesSize;
+		int nbElem = folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize + sceneFilesSize + prefabFilesSize;
 		float tempNbElemInColumn = ImGui::GetColumnWidth() / 150.f;
 		int nbElemInColumn = fmod(tempNbElemInColumn, 1.f) <= 0.65f ? static_cast<int>(tempNbElemInColumn) - 2 : static_cast<int>(tempNbElemInColumn) - 1;
 
@@ -165,6 +180,12 @@ namespace GUI
 					else if (i < folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize + sceneFilesSize)
 					{
 						DrawSceneGUI(i, _selectedScene);
+					}
+					else if (i < folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize + sceneFilesSize + prefabFilesSize)
+					{
+						DrawPrefabGUI(i);
+
+						
 					}
 				}
 				ImGui::EndTable();
@@ -265,6 +286,23 @@ namespace GUI
 		ImGui::PopID();
 	}
 
+	void FolderGUI::DrawPrefabGUI(int _index)
+	{
+		ImGui::PushID(_index);
+		Resource::Prefab* prefab = m_prefabFiles[_index - m_folderChildren.size() - m_textureFiles.size() - m_meshFiles.size()];
+		DrawImage(prefab->name.c_str(), m_prefabIcon->GetID(), 100.f);
+
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("PrefabName", &prefab->name, sizeof(std::string));
+			DrawImage(prefab->name.c_str(), m_prefabIcon->GetID(), 100.f);
+			ImGui::Text(prefab->name.c_str());
+			ImGui::EndDragDropSource();
+		}
+		ImGui::Text(prefab->name.c_str());
+		ImGui::PopID();
+	}
+
 	void FolderGUI::Delete()
 	{
 		for (FolderGUI* folder : m_folderChildren)
@@ -275,5 +313,11 @@ namespace GUI
 	void FolderGUI::AddSceneFile(std::string _newSceneFile)
 	{
 		m_sceneFiles.push_back(_newSceneFile);
+	}
+
+	void FolderGUI::AddPrefabFile(Resource::Prefab* _newPrefab)
+	{
+		if (_newPrefab)
+			m_prefabFiles.push_back(_newPrefab);
 	}
 }

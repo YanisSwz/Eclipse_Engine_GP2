@@ -1,6 +1,9 @@
 #include "GUI/HierarchyGUI.hpp"
+#include "GUI/ContentBrowserGUI.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
-#include "vector"
+#include "Resource/ResourceManager.hpp"
+#include "Resource/Prefab.hpp"
+#include <vector>
 #include "Scene.hpp"
 
 namespace GUI
@@ -125,7 +128,66 @@ namespace GUI
 				{
 					if (ImGui::Button("Delete Node"))
 						_crtGOSelected->Destroy();
+
+					if (ImGui::Button("Save as Prefab"))
+					{
+						bIsPrefabWindowOpen = true;
+						bIsPrefabInstantiate = false;
+						ImGui::OpenPopup("Prefab Selection");
+						ImGui::SetNextWindowSize(ImVec2(250, 150));
+					}
 				}
+
+				if (ImGui::Button("Instantiate Prefab"))
+				{
+					bIsPrefabWindowOpen = true;
+					bIsPrefabInstantiate = true;
+					ImGui::OpenPopup("Prefab Selection");
+					ImGui::SetNextWindowSize(ImVec2(250, 150));
+				}
+
+				if (ImGui::BeginPopupModal("Prefab Selection"))
+				{
+					std::vector<std::string> prefabNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Prefab>();
+
+					GUI::ComboFilter("Prefab", &m_crtPrefabName, prefabNames);
+
+					if (bIsPrefabInstantiate)
+					{
+						m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
+						if (ImGui::Button("Instantiate") && m_crtPrefab)
+						{
+							_scene->InstantiatePrefab(_crtGOSelected, m_crtPrefab);
+							m_crtPrefabName.clear();
+							m_crtPrefab = nullptr;
+							bIsPrefabWindowOpen = false;
+							ImGui::CloseCurrentPopup();
+						}
+					}
+					else
+					{
+						m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
+						if (ImGui::Button("Save") && m_crtPrefab)
+						{
+							_scene->SavePrefab(_crtGOSelected, m_crtPrefab);
+							m_crtPrefabName.clear();
+							m_crtPrefab = nullptr;
+							bIsPrefabWindowOpen = false;
+							ImGui::CloseCurrentPopup();
+						}
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Cancel"))
+					{
+						m_crtPrefabName.clear();
+						m_crtPrefab = nullptr;
+						bIsPrefabWindowOpen = false;
+						ImGui::CloseCurrentPopup();
+					}
+
+					ImGui::EndPopup();
+				}
+
 				ImGui::EndPopup();
 			}
 			for (Core::Transform* transform : transforms)
@@ -133,6 +195,21 @@ namespace GUI
 				Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
 				if (tempNewGOSelected)
 					newGameObjectSelected = tempNewGOSelected;
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PrefabName"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					m_crtPrefabName = *static_cast<std::string*>(payload->Data);
+
+					m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
+					_scene->InstantiatePrefab(_crtTransform->GetGameObject(), m_crtPrefab);
+					m_crtPrefabName.clear();
+					m_crtPrefab = nullptr;
+				}
+				ImGui::EndDragDropTarget();
 			}
 
 			ImGui::TreePop();

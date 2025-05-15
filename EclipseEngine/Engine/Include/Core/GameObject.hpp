@@ -20,8 +20,11 @@ namespace Core
 		ECLIPSE_ENGINE ~GameObject();
 
 		std::string name = "";
+		std::string tag;
 		Transform* transform = nullptr;
 
+		ECLIPSE_ENGINE static inline std::vector<std::string> GetTags() { return m_tags; }
+		ECLIPSE_ENGINE static void AddTag(std::string _tag);
 		ECLIPSE_ENGINE static void Destroy(GameObject* _obj);
 		ECLIPSE_ENGINE void Destroy() override;
 
@@ -29,6 +32,9 @@ namespace Core
 
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
 		ECLIPSE_ENGINE inline std::vector<Component*> GetComponents() { return m_components; }
+
+		ECLIPSE_ENGINE static void SerializeTags(std::string _filePath);
+		ECLIPSE_ENGINE static void DeserializeTags(std::string _filePath);
 
 		template <typename T>
 		T* AddComponent()
@@ -91,6 +97,7 @@ namespace Core
 		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
 
 	private:
+		static std::vector<std::string> m_tags;
 		std::vector<Component*> m_components{};
 		SystemManager* m_systemManager = nullptr;
 	};

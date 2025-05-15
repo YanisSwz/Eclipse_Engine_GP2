@@ -7,6 +7,7 @@
 namespace Core
 {
 	bool AudioSource::m_audioEnabled = true;
+	std::vector<std::tuple<std::string, SoLoud::handle, float>> AudioSource::m_audioChannels{};
 
 	AudioSource::AudioSource(SoLoud::Soloud* _audioEngine)
 	{
@@ -35,22 +36,42 @@ namespace Core
 		m_destroyed = true;
 	}
 
-	void AudioSource::Update() 
+	void AudioSource::Update()
 	{
-		if (m_destroyed || !m_active)
+		if (m_destroyed || !m_active || m_audioClip == nullptr)
 			return;
 
-		if (!m_3D)
-			return;
+		// Workaround to loop Wavstream
+		if (m_audioClip->IsStream() && m_looping && !m_audioEngine->isValidVoiceHandle(m_sound) && m_isPlaying)
+			Play();
 
 		if (!m_audioEngine->isValidVoiceHandle(m_sound))
 			return;
 
+		if (!m_3D)
+			return;
 		if (!m_gameObject->transform->HasPositionChanged())
 			return;
 
 		Math::Vec3 newPos = m_gameObject->transform->GetPosition();
 		m_audioEngine->set3dSourcePosition(m_sound, newPos.x, newPos.y, newPos.z);
+	}
+
+	void AudioSource::UpdateChannel()
+	{
+		if (m_destroyed)
+			return;
+
+		std::tuple<std::string, SoLoud::handle, float>* channelPtr = FindChannel(channel);
+		if (!channelPtr)
+		{
+			channel = "SFX";
+			if (m_audioEngine->isValidVoiceHandle(m_sound))
+			{
+				m_audioEngine->addVoiceToGroup(std::get<1>(*channelPtr), m_sound);
+				m_audioEngine->setVolume(m_sound, m_volume * std::get<2>(*channelPtr));
+			}
+		}
 	}
 
 	void AudioSource::Play()
@@ -63,7 +84,7 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "No audio clip to play!");
 			return;
 		}
-		if(m_volume <= Math::Tools::epsilon)
+		if (m_volume <= Math::Tools::epsilon)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Prevented clip with 0 volume to play");
 			return;
@@ -74,20 +95,28 @@ namespace Core
 
 		if (m_paused)
 			m_paused = false;
+
+		std::tuple<std::string, SoLoud::handle, float>* channelPtr = FindChannel(channel);
+
 		if (!m_3D)
 		{
-			m_sound = m_audioEngine->play(m_audioClip->audioFile, m_volume);
+			m_sound = m_audioEngine->play(*m_audioClip->GetAudio(), m_volume * std::get<2>(*channelPtr));
+			m_audioEngine->addVoiceToGroup(std::get<1>(*channelPtr), m_sound);
 			m_audioEngine->setPan(m_sound, m_pan);
 		}
 		else
 		{
 			Math::Vec3 pos = m_gameObject->transform->GetPosition();
-			m_sound = m_audioEngine->play3d(m_audioClip->audioFile, pos.x, pos.y, pos.z, 0.f, 0.f, 0.f, m_volume, true);
+			m_sound = m_audioEngine->play3d(*m_audioClip->GetAudio(), pos.x, pos.y, pos.z, 0.f, 0.f, 0.f, m_volume * std::get<2>(*channelPtr), true);
+			m_audioEngine->addVoiceToGroup(std::get<1>(*channelPtr), m_sound);
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
 			m_audioEngine->set3dSourceAttenuation(m_sound, SoLoud::AudioSource::ATTENUATION_MODELS::LINEAR_DISTANCE, 1.f);
 			m_audioEngine->setPause(m_sound, false);
 		}
-		m_audioEngine->setLooping(m_sound, m_looping);
+		if (!m_audioClip->IsStream())
+			m_audioEngine->setLooping(m_sound, m_looping);
+		else
+			m_isPlaying = true;
 		m_audioEngine->setSamplerate(m_sound, m_sampleRate);
 	}
 
@@ -99,7 +128,7 @@ namespace Core
 			return;
 		}
 		if (!m_audioEngine->isValidVoiceHandle(m_sound) && m_paused)
-		{	
+		{
 			m_paused = false;
 			return;
 		}
@@ -110,7 +139,7 @@ namespace Core
 
 	void AudioSource::Stop()
 	{
-		if(m_audioClip == nullptr)
+		if (m_audioClip == nullptr)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "No audio clip to stop!");
 			return;
@@ -118,6 +147,8 @@ namespace Core
 		if (m_paused)
 			Pause();
 		m_audioEngine->stop(m_sound);
+		if (m_isPlaying)
+			m_isPlaying = false;
 	}
 
 	void AudioSource::SetClip(Resource::AudioClip* _clip)
@@ -125,19 +156,19 @@ namespace Core
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
 			Stop();
 		m_audioClip = _clip;
-		if(m_audioClip == nullptr)
+		if (m_audioClip == nullptr)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::ERROR, "Failed to set audio clip!");
 			return;
 		}
 		m_audioClipLength = m_audioClip->GetLength();
-		m_sampleRate = m_audioClip->audioFile.mSampleCount / m_audioClip->GetLength();
+		m_sampleRate = m_audioClip->GetSampleCount() / m_audioClipLength;
 	}
 
 	void AudioSource::SetLooping(bool _looping)
 	{
 		m_looping = _looping;
-		if (m_audioEngine->isValidVoiceHandle(m_sound))
+		if (m_audioEngine->isValidVoiceHandle(m_sound) && !m_audioClip->IsStream())
 			m_audioEngine->setLooping(m_sound, m_looping);
 	}
 
@@ -145,14 +176,14 @@ namespace Core
 	{
 		if (m_audioClip == nullptr)
 			return nullptr;
-		return m_audioClip->audioFile.mData;
+		return m_audioClip->GetData();
 	}
 
 	int AudioSource::GetSampleCount() const
 	{
 		if (m_audioClip == nullptr)
 			return 0;
-		return m_audioClip->audioFile.mSampleCount;
+		return m_audioClip->GetSampleCount();
 	}
 
 	float AudioSource::GetTime() const
@@ -206,12 +237,12 @@ namespace Core
 
 		m_volume = _vol;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
-			m_audioEngine->setVolume(m_sound, m_volume);
+			m_audioEngine->setVolume(m_sound, m_volume * std::get<2>(*FindChannel(channel)));
 	}
 
 	void AudioSource::SetSampleRate(float _rate)
 	{
-		if(_rate < 8000.f)
+		if (_rate < 8000.f)
 			_rate = 8000.f;
 		else if (_rate > 96000.f)
 			_rate = 96000.f;
@@ -257,6 +288,23 @@ namespace Core
 			m_audioEngine->set3dSourceMinMaxDistance(m_sound, m_minDistance, m_maxDistance);
 	}
 
+	void AudioSource::SetChannel(std::string _name)
+	{
+		std::tuple<std::string, SoLoud::handle, float>* channelPtr = FindChannel(_name);
+		if(!channelPtr)
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s name doesn't exist", _name.c_str());
+			return;
+		}
+		channel = _name;
+		if (m_audioEngine->isValidVoiceHandle(m_sound))
+		{
+			m_audioEngine->addVoiceToGroup(std::get<1>(*channelPtr), m_sound);
+			m_audioEngine->setVolume(m_sound, m_volume * std::get<2>(*channelPtr));
+		}
+	}
+
+	// Static functions
 	void AudioSource::Enable()
 	{
 		m_audioEnabled = true;
@@ -267,10 +315,44 @@ namespace Core
 		m_audioEnabled = false;
 	}
 
+	void AudioSource::AddChannel(std::string _name, SoLoud::handle _handle, float _volume)
+	{
+		if (FindChannel(_name))
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s channel already exists", _name.c_str());
+
+		m_audioChannels.push_back({ _name, _handle, _volume });
+	}
+
+	std::vector<std::string> AudioSource::GetChannelNames()
+	{
+		std::vector<std::string> names;
+		for (int i = 0; i < m_audioChannels.size(); ++i)
+		{
+			names.push_back(std::get<0>(m_audioChannels[i]));
+		}
+		return names;
+	}
+
+	std::vector<SoLoud::handle> AudioSource::GetChannelHandles()
+	{
+		std::vector<SoLoud::handle> handles;
+		for (int i = 0; i < m_audioChannels.size(); ++i)
+		{
+			handles.push_back(std::get<1>(m_audioChannels[i]));
+		}
+		return handles;
+	}
+
+	std::vector<std::tuple<std::string, SoLoud::handle, float>>& AudioSource::GetChannels()
+	{
+		return m_audioChannels;
+	}
+
 	void AudioSource::Serialize(json& _j)
 	{
 		_j["AudioSource"] = json{
 				{"IsActive", IsActive()},
+				{"Channel", channel},
 				{"PlayOnAwake", IsPlayingOnAwake()},
 				{"IsLooping", IsLooping()},
 				{"Is3D", Is3D()},
@@ -285,6 +367,7 @@ namespace Core
 	void AudioSource::Deserialize(const json& _j)
 	{
 		bool bIsActive;
+		std::string channelName;
 		bool bIsPlayingOnAwake;
 		bool bIsLooping;
 		bool bIs3D;
@@ -295,6 +378,7 @@ namespace Core
 		std::string clipName;
 
 		_j.at("IsActive").get_to(bIsActive);
+		_j.at("Channel").get_to(channelName);
 		_j.at("PlayOnAwake").get_to(bIsPlayingOnAwake);
 		_j.at("IsLooping").get_to(bIsLooping);
 		_j.at("Is3D").get_to(bIs3D);
@@ -305,6 +389,7 @@ namespace Core
 		_j.at("AudioClip").get_to(clipName);
 
 		SetActive(bIsActive);
+		SetChannel(channelName);
 		SetPlayOnAwake(bIsPlayingOnAwake);
 		SetLooping(bIsLooping);
 		Set3D(bIs3D);
@@ -313,5 +398,25 @@ namespace Core
 		SetMinDistance(minDistance);
 		SetMaxDistance(maxDistance);
 		SetClip(Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>(clipName));
+	}
+
+	std::tuple<std::string, SoLoud::handle, float>* AudioSource::FindChannel(std::string _channelName)
+	{
+		for (int i = 0; i < m_audioChannels.size(); ++i)
+		{
+			if (std::get<0>(m_audioChannels[i]) == _channelName)
+				return &m_audioChannels[i];
+		}
+		return nullptr;
+	}
+
+	int AudioSource::FindChannelIndex(std::string _channelName)
+	{
+		for (int i = 0; i < m_audioChannels.size(); ++i)
+		{
+			if (std::get<0>(m_audioChannels[i]) == _channelName)
+				return i;
+		}
+		return -1;
 	}
 }

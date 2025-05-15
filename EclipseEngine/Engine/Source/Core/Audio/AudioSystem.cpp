@@ -1,9 +1,21 @@
 #include "Audio/AudioSystem.hpp"
 #include "Logger.hpp"
 #include "Resource/ResourceManager.hpp"
+#include <fstream>
+#include <vector>
+#include <tuple>
 
 namespace Core
 {
+	AudioSystem::~AudioSystem()
+	{
+		Stop();
+		std::vector<SoLoud::handle> handles = AudioSource::GetChannelHandles();
+		for (int i = 0; i < static_cast<int>(handles.size()); ++i)
+			m_audioEngine.destroyVoiceGroup(handles[i]);
+		m_audioEngine.deinit();
+	}
+
 	void AudioSystem::Init()
 	{
 		m_audioEngine.init();
@@ -14,6 +26,8 @@ namespace Core
 
 	void AudioSystem::Start()
 	{
+		if (m_paused)
+			m_paused = false;
 		ResetAudioSourcesPause();
 		if (m_currentListener == nullptr)
 		{
@@ -22,7 +36,7 @@ namespace Core
 		}
 		else
 		{
-			for(int i = 0; i < m_currentSourcesCount; ++i)
+			for (int i = 0; i < m_currentSourcesCount; ++i)
 			{
 				if (m_audioSources[i].IsPlayingOnAwake() && m_audioSources[i].IsActive() && m_audioSources[i].GetClip() != nullptr)
 					m_audioSources[i].Play();
@@ -36,7 +50,7 @@ namespace Core
 		m_stereoVolume[1] = m_audioEngine.getApproximateVolume(1);
 		if (m_currentListener != nullptr)
 		{
-			if(!m_currentListener->IsActive() && !m_currentListener->IsDestroyed())
+			if (!m_currentListener->IsActive() && !m_currentListener->IsDestroyed())
 			{
 				if (m_canPlay)
 					DisableAudio();
@@ -62,7 +76,7 @@ namespace Core
 		}
 		else
 		{
-			if(m_canPlay)
+			if (m_canPlay)
 				DisableAudio();
 		}
 	}
@@ -72,18 +86,10 @@ namespace Core
 		if (m_paused)
 			m_paused = false;
 		ResetAudioSourcesPause();
-		if (m_currentListener == nullptr)
+		for (int i = 0; i < m_currentSourcesCount; ++i)
 		{
-			DisableAudio();
-			return;
-		}
-		else
-		{
-			for (int i = 0; i < m_currentSourcesCount; ++i)
-			{
-				if (m_audioSources[i].IsActive() && m_audioSources[i].GetClip() != nullptr)
-					m_audioSources[i].Play();
-			}
+			if (m_audioSources[i].IsActive() && m_audioSources[i].GetClip() != nullptr)
+				m_audioSources[i].Play();
 		}
 	}
 
@@ -94,7 +100,7 @@ namespace Core
 		{
 			for (int i = 0; i < m_currentSourcesCount; ++i)
 			{
-				if(!m_audioSources[i].IsPaused() && m_audioSources[i].GetClip() != nullptr)
+				if (!m_audioSources[i].IsPaused() && m_audioSources[i].GetClip() != nullptr)
 				{
 					m_audioSources[i].Pause();
 					m_audioSourcesToUnpause.push_back(&m_audioSources[i]);
@@ -117,19 +123,21 @@ namespace Core
 		if (m_paused)
 			m_paused = false;
 		m_audioEngine.stopAll();
+		for (int i = 0; i < m_currentSourcesCount; ++i)
+			m_audioSources[i].Stop();
 		ResetAudioSourcesPause();
 	}
 
 	void AudioSystem::PlayStartUp()
 	{
-		if(m_startupSound == nullptr)
+		if (m_startupSound == nullptr)
 			m_startupSound = Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>("startup.mp3");
-		if (m_startupSound == nullptr) 
+		if (m_startupSound == nullptr)
 		{
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Failed to load startup sound!");
 			return;
 		}
-		m_audioEngine.play(m_startupSound->audioFile);
+		m_audioEngine.play(*m_startupSound->GetAudio());
 	}
 
 	AudioSource* AudioSystem::AddAudioSource()
@@ -220,14 +228,14 @@ namespace Core
 	{
 		m_stereoVolume[0] = m_audioEngine.getApproximateVolume(0);
 		m_stereoVolume[1] = m_audioEngine.getApproximateVolume(1);
-		if (m_currentListener != nullptr) 
+		if (m_currentListener != nullptr)
 		{
 			if (m_currentListener->IsActive())
 				m_currentListener->Update();
 			else
 				m_audioEngine.set3dListenerParameters(0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f);
 		}
-		
+
 		for (int i = 0; i < m_currentSourcesCount; ++i)
 			m_audioSources[i].Update();
 		m_audioEngine.update3dAudio();
@@ -269,7 +277,7 @@ namespace Core
 		m_canPlay = false;
 		AudioSource::Disable();
 	}
-	
+
 	float AudioSystem::GetVolume() const
 	{
 		if (m_stereoVolume[0] > m_stereoVolume[1])
@@ -291,12 +299,35 @@ namespace Core
 	std::vector<AudioSource*> AudioSystem::GetAudioSources()
 	{
 		std::vector<AudioSource*> sources{};
-		for(int i = 0; i < m_currentSourcesCount; ++i)
+		for (int i = 0; i < m_currentSourcesCount; ++i)
 		{
-			if(!m_audioSources[i].IsDestroyed())
+			if (!m_audioSources[i].IsDestroyed())
 				sources.push_back(&m_audioSources[i]);
 		}
 		return sources;
+	}
+
+	SoLoud::Soloud* AudioSystem::GetAudioEngine()
+	{
+		return &m_audioEngine;
+	}
+
+	void AudioSystem::DeleteChannel(std::string _name)
+	{
+		if (_name == "SFX" || _name == "Music")
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Cannot delete base audio channels");
+			return;
+		}
+		std::vector<std::tuple<std::string, SoLoud::handle, float>>& channels = AudioSource::GetChannels();
+		std::tuple<std::string, SoLoud::handle, float>* channel = AudioSource::FindChannel(_name);
+		if (channel)
+		{
+			m_audioEngine.destroyVoiceGroup(std::get<1>(*channel));
+			channels.erase(channels.begin() + AudioSource::FindChannelIndex(_name));
+			for (int i = 0; i < m_currentSourcesCount; ++i)
+				m_audioSources[i].UpdateChannel();
+		}
 	}
 
 	void AudioSystem::Reset()
@@ -304,5 +335,39 @@ namespace Core
 		m_currentSourcesCount = 0;
 		m_currentListenersCount = 0;
 		m_currentListener = nullptr;
+	}
+
+	void AudioSystem::SerializeChannels(std::string _filePath)
+	{
+		std::ofstream fileStream(_filePath);
+		json channels;
+		
+		std::vector<std::tuple<std::string, SoLoud::handle, float>>& audioChannels = AudioSource::GetChannels();
+
+		for (int i = 0; i < audioChannels.size(); ++i)
+		{
+			channels[std::get<0>(audioChannels[i])] = std::get<2>(audioChannels[i]);
+		}
+
+		fileStream << std::setw(4) << channels << std::endl;
+		fileStream.close();
+	}
+
+	void AudioSystem::DeserializeChannels(std::string _filePath)
+	{
+		std::ifstream fileStream(_filePath);
+
+		if (!fileStream.is_open() || fileStream.peek() == std::ifstream::traits_type::eof())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "No audio channels to load in %s", _filePath.c_str());
+			return;
+		}
+
+		json channels;
+		fileStream >> channels;
+		fileStream.close();
+
+		for (auto it = channels.begin(); it != channels.end(); ++it)
+			AudioSource::AddChannel(it.key(), m_audioEngine.createVoiceGroup(), it.value());
 	}
 }

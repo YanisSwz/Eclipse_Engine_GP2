@@ -41,6 +41,44 @@ namespace GUI
 			else if (_crtGOSelected->name.size() > MAX_NAME_SIZE)
 				_crtGOSelected->name = _crtGOSelected->name.substr(0, MAX_NAME_SIZE - 1).append("...");
 		}
+		GUI::ComboFilter("Tag", &_crtGOSelected->tag, Core::GameObject::GetTags());
+		ImGui::SameLine();
+		if(ImGui::Button("Add Tag"))
+		{
+			ImGui::OpenPopup("Create Tag");
+			ImGui::SetNextWindowSize(ImVec2(250, 150));
+		}
+
+		if (ImGui::BeginPopupModal("Create Tag", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+			bool bIsNameValid = true;
+			if (m_newTagName == "" || m_newTagName.size() > MAX_TAG_NAME_SIZE)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
+				bIsNameValid = false;
+			}
+			ImGui::InputText("##NewScene", &m_newTagName);
+			if (!bIsNameValid)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Create") && bIsNameValid)
+			{
+				Core::GameObject::AddTag(m_newTagName);
+				_crtGOSelected->tag = m_newTagName;
+				m_newTagName = "";
+				ImGui::CloseCurrentPopup();
+			}
+			if (!bIsNameValid)
+			{
+				ImGui::EndDisabled();
+				ImGui::PopStyleColor();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+				ImGui::CloseCurrentPopup();
+
+			ImGui::EndPopup();
+		}
 
 		bool bIsActive = _crtGOSelected->IsActive();
 		if (GUI::CheckBox("Active", "##", &bIsActive))
@@ -410,26 +448,51 @@ namespace GUI
 			if (clip == nullptr)
 				ImGui::BeginDisabled();
 
-			float* data = _source->GetData();
-			if (data != nullptr)
+			if(clip != nullptr)
 			{
-				float range = 1000.f;
-				if (_source->GetMaxVolume() >= 1.f / range)
-					range = 1.f / _source->GetMaxVolume();
-				ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, std::to_string(_source->GetLength()).c_str(), -range, range, ImVec2(0.f, 200.f));
+				std::string temp = _source->channel;
+				if (GUI::ComboFilter("Type", &temp, Core::AudioSource::GetChannelNames()))
+					_source->SetChannel(temp);
 
-				if (_source->IsPlaying())
+				float* data = _source->GetData();
+				if (data != nullptr)
 				{
-					float time = _source->GetTime();
-					if (ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput))
-						_source->SetTime(time);
+					float range = 1000.f;
+					if (_source->GetMaxVolume() >= 1.f / range)
+						range = 1.f / _source->GetMaxVolume();
+					ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(1.f, 0.75f, 0.f, 1.f));
+					char length[32];
+					sprintf_s(length, "%.2f", _source->GetLength());
+					ImGui::PlotLines("##clip", data, _source->GetSampleCount(), 0, length, -range, range, ImVec2(0.f, 200.f));
+					ImGui::PopStyleColor();
+
+					if (_source->IsPlaying())
+					{
+						float time = _source->GetTime();
+						if (ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.2f", ImGuiSliderFlags_NoInput))
+							_source->SetTime(time);
+					}
+					else
+					{
+						ImGui::BeginDisabled();
+						float time = 0.0f;
+						ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.2f", ImGuiSliderFlags_NoInput);
+						ImGui::EndDisabled();
+					}
 				}
 				else
 				{
-					ImGui::BeginDisabled();
-					float time = 0.0f;
-					ImGui::SliderFloat("##Time", &time, 0.0f, _source->GetLength(), "%.3f", ImGuiSliderFlags_NoInput);
-					ImGui::EndDisabled();
+					ImGui::Text("Music Stream");
+					std::string overlay = "";
+					ImGui::ProgressBar(_source->GetTime()/_source->GetLength(), ImVec2(2.f * ImGui::GetWindowWidth()/3.f, 25.f), overlay.c_str());
+					char time[32];
+					sprintf_s(time, "%.2f", _source->GetTime());
+					char length[32];
+					sprintf_s(length, "%.2f", _source->GetLength());
+					overlay = time;
+					overlay += " / ";
+					overlay += length;
+					ImGui::Text(overlay.c_str());
 				}
 				if (m_playBtnTexture == nullptr)
 					m_playBtnTexture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Start.img");
@@ -501,7 +564,6 @@ namespace GUI
 			float max = _source->GetMaxDistance();
 			if (GUI::DragFloat("MinDistance", "##4", &min, 0.1f, 0.1f, max - 0.1f, "%.1f"))
 				_source->SetMinDistance(min);
-
 			if (GUI::DragFloat("MaxDistance", "##5", &max, 0.1f, min + 0.1f, 1000.f, "%.1f"))
 				_source->SetMaxDistance(max);
 			if (!is3D)

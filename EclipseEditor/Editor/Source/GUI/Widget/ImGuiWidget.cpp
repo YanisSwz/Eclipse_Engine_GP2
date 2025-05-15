@@ -1,4 +1,6 @@
 #include "GUI/Widget/ImGuiWidget.hpp"
+#include "Resource/ResourceManager.hpp"
+#include "Resource/Texture.hpp"
 
 namespace GUI
 {
@@ -552,6 +554,7 @@ namespace GUI
 						*_crtValue = _values[i];
 						ImGui::EndCombo();
 						ImGui::PopID();
+						ImGui::Columns(1);
 						return true;
 					}
 				}
@@ -559,6 +562,7 @@ namespace GUI
 			ImGui::EndCombo();
 		}
 		ImGui::PopID();
+		ImGui::Columns(1);
 		return false;
 	}
 
@@ -645,8 +649,91 @@ namespace GUI
 		ImGui::PopID();
 	}
 
-	bool AudioChannel(const char* _label, float* _stereoVolume, float& _sliderValue, ImVec2 _size, float _offset)
+	bool AudioChannel(const char* _label, float& _sliderValue, ImVec2 _size, float _offset)
 	{
+		ImGui::SetCursorPosX(8.f + _offset);
+		auto* colors = ImGui::GetStyle().Colors;
+		ImVec4 color = ImVec4(colors[ImGuiCol_Button].x, colors[ImGuiCol_Button].y, colors[ImGuiCol_Button].z, 1.f);
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
+		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, color);
+		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
+		ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 15);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.35f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
+
+		std::string label = "##";
+		label += _label;
+		label += "Volume";
+		bool changed = ImGui::VSliderFloat(label.c_str(), _size, &_sliderValue, 0.0f, 1.0f, "");
+		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
+			ImGui::SetTooltip("%.3f", _sliderValue);
+		ImGui::PopStyleColor(5);
+		ImGui::PopStyleVar(3);
+
+		ImGui::SameLine();
+		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize()));
+		// We wrap the text to not overflow on other audio channels
+		label = _label;
+		for (int i = 12; i < label.size(); i += 12)
+			label.insert(i, "\n");
+		ImGui::Text(label.c_str());
+
+		return changed;
+	}
+
+	bool AudioChannel(const char* _label, float& _sliderValue, bool _canDelete, bool& _deleted, ImVec2 _size, float _offset)
+	{
+		ImGui::SetCursorPosX(8.f + _offset);
+		// SLIDER
+		ImGuiStyle& style = ImGui::GetStyle();
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(style.Colors[ImGuiCol_SliderGrabActive].x, style.Colors[ImGuiCol_SliderGrabActive].y, style.Colors[ImGuiCol_SliderGrabActive].z, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(style.Colors[ImGuiCol_SliderGrabActive].x, style.Colors[ImGuiCol_SliderGrabActive].y, style.Colors[ImGuiCol_SliderGrabActive].z, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, style.Colors[ImGuiCol_SliderGrabActive]);
+		float alpha = style.Alpha;
+		if (alpha != 1.f)
+			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0);
+		else
+			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 50);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.1f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.65f);
+
+		std::string label = "##";
+		label += _label;
+		label += "Volume";
+		Resource::Texture* image = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Slider.img");
+		bool changed = ImGui::ImageSlider(label.c_str(), image->GetID(), ImVec2(25, 50), _size, &_sliderValue, 0.0f, 1.0f, "");
+		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
+			ImGui::SetTooltip("%.3f", _sliderValue);
+		ImGui::PopStyleColor(3);
+		ImGui::PopStyleVar(3);
+
+		ImGui::SameLine();
+		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize()));
+		// We wrap the text to not overflow on other audio channels
+		label = _label;
+		for (int i = 12; i < label.size(); i += 12)
+			label.insert(i, "\n");
+		ImGui::Text(label.c_str());
+
+		if (_canDelete)
+		{
+			ImGui::SameLine();
+			ImGui::SetCursorPos(ImVec2(8.f + _offset, 46.f + _size.y + ImGui::GetFontSize()));
+			ImGui::PushID(_label);
+			if (ImGui::Button("Delete"))
+				_deleted = true;
+			ImGui::PopID();
+		}
+
+		return changed;
+	}
+
+
+	bool AudioChannel(const char* _label, float* _stereoVolume, float _currentVolume, float& _sliderValue, ImVec2 _size, float _offset)
+	{
+		// VOLUME DISPLAY
 		ImGui::SetCursorPosX(8.f + _offset);
 		float alpha = ImGui::GetStyle().Alpha;
 		ImGui::BeginDisabled();
@@ -660,50 +747,47 @@ namespace GUI
 		label += "StereoVolume";
 		ImGui::PlotHistogram(label.c_str(), _stereoVolume, 2, 0, NULL, 0.0f, 1.0f, _size);
 
-		float vol = 0.f;
-		if (_stereoVolume[0] > _stereoVolume[1])
-			vol = _stereoVolume[0];
-		else
-			vol = _stereoVolume[1];
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(8.f + _offset);
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(1.f, 1.f, 1.f, 1.f));
 		label = "##";
 		label += _label;
 		label += "MaxVolume";
-		ImGui::VSliderFloat(label.c_str(), _size, &vol, 0.0f, 1.0f, "");
+		ImGui::VSliderFloat(label.c_str(), _size, &_currentVolume, 0.0f, 1.0f, "");
 		ImGui::EndDisabled();
 		ImGui::PopStyleColor(4);
 		ImGui::PopStyleVar();
 
+		// SLIDER
 		ImGui::SameLine();
-
-		auto* colors = ImGui::GetStyle().Colors;
-		ImVec4 color = ImVec4(colors[ImGuiCol_Button].x, colors[ImGuiCol_Button].y, colors[ImGuiCol_Button].z, alpha);
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
-		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, color);
-		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
-		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
-		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
-		ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 15);
-		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.35f);
-		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
+		ImGuiStyle& style = ImGui::GetStyle();
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(style.Colors[ImGuiCol_SliderGrabActive].x, style.Colors[ImGuiCol_SliderGrabActive].y, style.Colors[ImGuiCol_SliderGrabActive].z, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(style.Colors[ImGuiCol_SliderGrabActive].x, style.Colors[ImGuiCol_SliderGrabActive].y, style.Colors[ImGuiCol_SliderGrabActive].z, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgActive,style.Colors[ImGuiCol_SliderGrabActive]);
+		if (alpha != 1.f)
+			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0);
+		else
+			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 50);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.1f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.65f);
 
 		label = "##";
 		label += _label;
 		label += "Volume";
-		bool changed = ImGui::VSliderFloat(label.c_str(), _size, &_sliderValue, 0.0f, 1.0f, "");
+		Resource::Texture* image = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Slider.img");
+		bool changed = ImGui::ImageSlider(label.c_str(), image->GetID(), ImVec2(25, 50), _size, &_sliderValue, 0.0f, 1.0f, "");
 		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
 			ImGui::SetTooltip("%.3f", _sliderValue);
-		ImGui::PopStyleColor(5);
+		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar(3);
 
+		// TEXT
 		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize())); 
+		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize()));
 		// We wrap the text to not overflow on other audio channels
 		label = _label;
-		for(int i = 12; i < label.size(); i += 12)
-			label.insert(i, "\n"); 
+		for (int i = 12; i < label.size(); i += 12)
+			label.insert(i, "\n");
 		ImGui::Text(label.c_str());
 
 		return changed;
@@ -722,7 +806,6 @@ namespace GUI
 		std::string label = "##";
 		label += _label;
 		label += "IsPlaying" + std::to_string(ID);
-		
 		ImGui::PushStyleColor(ImGuiCol_CheckMark, ImVec4(1.f, 0.75f, 0.f, 1.f));
 		ImGui::RadioButton(label.c_str(), _isPlaying);
 		ImGui::EndDisabled();
@@ -743,31 +826,27 @@ namespace GUI
 		ImGui::PopStyleVar();
 
 		ImGui::SameLine();
-
-		auto* colors = ImGui::GetStyle().Colors;
-		ImVec4 color = ImVec4(colors[ImGuiCol_Button].x, colors[ImGuiCol_Button].y, colors[ImGuiCol_Button].z, alpha);
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
-		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, color);
-		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
-		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
-		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
-		if(alpha != 1.f)
+		// SLIDER
+		ImGuiStyle& style = ImGui::GetStyle();
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(style.Colors[ImGuiCol_SliderGrabActive].x, style.Colors[ImGuiCol_SliderGrabActive].y, style.Colors[ImGuiCol_SliderGrabActive].z, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(style.Colors[ImGuiCol_SliderGrabActive].x, style.Colors[ImGuiCol_SliderGrabActive].y, style.Colors[ImGuiCol_SliderGrabActive].z, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, style.Colors[ImGuiCol_SliderGrabActive]);
+		if (alpha != 1.f)
 			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0);
 		else
-			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 10);
-		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.25f);
-		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
+			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 50);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.1f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.65f);
 
 		label = "##";
 		label += _label;
-		label += "Volume" + std::to_string(ID);
-		if (ImGui::VSliderFloat(label.c_str(), _size, &_sliderValue, 0.0f, 1.0f, ""))
-			changed = true;
+		label += "Volume";
+		Resource::Texture* image = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Slider.img");
+		changed |= ImGui::ImageSlider(label.c_str(), image->GetID(), ImVec2(25, 50), _size, &_sliderValue, 0.0f, 1.0f, "");
 		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
-			ImGui::SetItemTooltip("%.3f", _sliderValue);
-		ImGui::PopStyleColor(5);
+			ImGui::SetTooltip("%.3f", _sliderValue);
+		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar(3);
-		ImGui::GetStyle().Alpha = alpha;
 
 		ImGui::SameLine();
 		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize()));
@@ -812,26 +891,26 @@ namespace GUI
 
 		ImGui::SameLine();
 
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
-		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, color);
-		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
-		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
-		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
+		// SLIDER
+		ImGuiStyle& style = ImGui::GetStyle();
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(style.Colors[ImGuiCol_SliderGrabActive].x, style.Colors[ImGuiCol_SliderGrabActive].y, style.Colors[ImGuiCol_SliderGrabActive].z, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(style.Colors[ImGuiCol_SliderGrabActive].x, style.Colors[ImGuiCol_SliderGrabActive].y, style.Colors[ImGuiCol_SliderGrabActive].z, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, style.Colors[ImGuiCol_SliderGrabActive]);
 		if (alpha != 1.f)
 			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0);
 		else
-			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 10);
-		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.25f);
-		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
+			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 50);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.1f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.65f);
 
 		label = "##";
 		label += _label;
-		label += "Volume" + std::to_string(ID);
-		if (ImGui::VSliderFloat(label.c_str(), _size, &_sliderValue, 0.0f, 1.0f, ""))
-			changed = true;
+		label += "Volume";
+		Resource::Texture* image = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Slider.img");
+		changed = ImGui::ImageSlider(label.c_str(), image->GetID(), ImVec2(25, 50), _size, &_sliderValue, 0.0f, 1.0f, "");
 		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
-			ImGui::SetItemTooltip("%.3f", _sliderValue);
-		ImGui::PopStyleColor(5);
+			ImGui::SetTooltip("%.3f", _sliderValue);
+		ImGui::PopStyleColor(3);
 		ImGui::PopStyleVar(3);
 
 		ImGui::SameLine();

@@ -2,6 +2,7 @@
 #include "Texture.hpp"
 #include "ShaderProgram.hpp"
 #include "GeoShader.hpp"
+#include "Prefab.hpp"
 #include <filesystem>
 
 namespace Resource
@@ -170,6 +171,13 @@ namespace Resource
 				}
 			}
 
+			for (const auto& entry : std::filesystem::directory_iterator("Assets/Prefabs"))
+			{
+				resourceName = entry.path().filename().string();
+				resourcePath = entry.path().string();
+				AddResourceToLoad<Resource::Prefab>(resourceName, resourcePath);
+			}
+
 			resourceName.clear();
 			resourcePath.clear();
 		}
@@ -209,9 +217,6 @@ namespace Resource
 
 	void ResourceManager::DestroyAllResources()
 	{
-		m_resourcesPath;
-		m_resourcesToLoad;
-		m_resourcesToGenerate;
 		if (!m_resourcesReady.empty())
 		{
 			for (std::map<std::string, IResource*>::iterator it = m_resourcesReady.begin(); it != m_resourcesReady.end(); ++it)

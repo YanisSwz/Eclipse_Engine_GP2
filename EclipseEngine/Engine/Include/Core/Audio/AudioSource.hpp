@@ -3,12 +3,17 @@
 #include "ProjectExports.hpp"
 #include "soloud.h"
 #include "Resource/AudioClip.hpp"
+#include <vector>
+#include <tuple>
+#include <string>
 
 namespace Core
 {
 	class AudioSource : public Component
 	{
 	public:
+		std::string channel = "SFX";
+
 		ECLIPSE_ENGINE AudioSource() = default;
 		ECLIPSE_ENGINE AudioSource(SoLoud::Soloud* _audioEngine);
 		ECLIPSE_ENGINE ~AudioSource() = default;
@@ -17,6 +22,7 @@ namespace Core
 		ECLIPSE_ENGINE void Destroy() override;
 
 		ECLIPSE_ENGINE void Update();
+		ECLIPSE_ENGINE void UpdateChannel();
 		ECLIPSE_ENGINE void Play();
 		/// <summary>
 		/// Pause/Unpause the sound
@@ -50,21 +56,37 @@ namespace Core
 		ECLIPSE_ENGINE void SetMaxDistance(float _max);
 		ECLIPSE_ENGINE void SetPlayOnAwake(bool _play);
 		ECLIPSE_ENGINE bool IsPlayingOnAwake() const;
+		ECLIPSE_ENGINE void SetChannel(std::string _name);
 
 		ECLIPSE_ENGINE static void Enable();
 		ECLIPSE_ENGINE static void Disable();
+		ECLIPSE_ENGINE static void AddChannel(std::string _name, SoLoud::handle _handle, float _volume = 1.f);
+		ECLIPSE_ENGINE static std::vector<std::string> GetChannelNames();
+		ECLIPSE_ENGINE static std::vector<SoLoud::handle> GetChannelHandles();
+		ECLIPSE_ENGINE static std::vector<std::tuple<std::string, SoLoud::handle, float>>& GetChannels();
 
 		ECLIPSE_ENGINE void Serialize(json& _j) override;
 		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
 
+		ECLIPSE_ENGINE static std::tuple<std::string, SoLoud::handle, float>* FindChannel(std::string _channelName);
+		ECLIPSE_ENGINE static int FindChannelIndex(std::string _channelName);
 	private:
 		static bool m_audioEnabled;
+		static std::vector<std::tuple<std::string, SoLoud::handle, float>> m_audioChannels;
 		bool m_looping = false;
 		bool m_playOnAwake = true;
 		bool m_paused = false;
 		bool m_3D = false;
+		/// <summary>
+		/// boolean for looping streams to avoid playing all the time
+		/// </summary>
+		bool m_isPlaying = false;
 		float m_audioClipLength = 0.f;
 		float m_volume = 1.f;
+		/// <summary>
+		/// Volume of voice group
+		/// </summary>
+		float m_channelVolume = 1.f;
 		float m_sampleRate = 0.f;
 		float m_pan = 0.f;
 		float m_minDistance = 1.f;

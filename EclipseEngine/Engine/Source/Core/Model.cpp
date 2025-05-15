@@ -56,9 +56,9 @@ namespace Core
 		_j.at("Texture").get_to(textureName);
 		_j.at("Shader").get_to(shaderName);
 
-		Resource::ResourceManager resourceManager = Resource::ResourceManager::GetInstance();
+		Resource::ResourceManager* resourceManager = &Resource::ResourceManager::GetInstance();
 
 		SetActive(bIsActive);
-		SetData(resourceManager.GetResource<Resource::Mesh>(meshName), resourceManager.GetResource<Resource::Texture>(textureName), resourceManager.GetResource<Resource::ShaderProgram>(shaderName));
+		SetData(resourceManager->GetResource<Resource::Mesh>(meshName), resourceManager->GetResource<Resource::Texture>(textureName), resourceManager->GetResource<Resource::ShaderProgram>(shaderName));
 	}
 }

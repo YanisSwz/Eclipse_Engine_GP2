@@ -133,7 +133,7 @@ namespace Core
 		if (m_parent != nullptr)
 		{
 			m_rotation = m_parent->m_rotation * m_localRotation;
-			m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+			m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		}
 		else
 		{
@@ -222,7 +222,7 @@ namespace Core
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 
 		//We also update the transform's up, right and forward local vectors
 		m_right = m_rotation.Rotate(Math::Vec3::right);
@@ -244,7 +244,7 @@ namespace Core
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 
 		//We also update the transform's up, right and forward local vectors
 		m_right = m_rotation.Rotate(Math::Vec3::right);
@@ -261,9 +261,9 @@ namespace Core
 	void Transform::SetLocalRotation(Math::Quat _quat)
 	{
 		m_localRotation = Math::Quat::Normalized(_quat);
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 		m_rotation = m_parent->m_rotation * m_localRotation;
-		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
@@ -281,7 +281,7 @@ namespace Core
 		m_localEulerAngles = _vec;
 		m_localRotation = Math::Quat::QuaternionEuler(m_localEulerAngles.x, m_localEulerAngles.y, m_localEulerAngles.z);
 		m_rotation = m_parent->m_rotation * m_localRotation;
-		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
@@ -335,7 +335,7 @@ namespace Core
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 
 		//We also update the transform's up, right and forward local vectors
 		m_right = m_rotation.Rotate(Math::Vec3::right);
@@ -359,7 +359,7 @@ namespace Core
 
 		// We cancel the rotation of the parent and update the local euler angles to match our new rotation
 		m_localRotation = Math::Quat::Inverse(m_parent->m_rotation) * m_rotation;
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 
 		//We also update the transform's up, right and forward local vectors
 		m_right = m_rotation.Rotate(Math::Vec3::right);
@@ -399,9 +399,9 @@ namespace Core
 		m_localRotation.z = _z;
 		m_localRotation.Normalize();
 
-		m_localEulerAngles = m_localRotation.GetEulerAnglesDegXYZ();
+		m_localEulerAngles = m_localRotation.GetEulerAnglesDegZYX();
 		m_rotation = m_parent ? (m_parent->m_rotation * m_localRotation) : m_localRotation;
-		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
@@ -422,7 +422,7 @@ namespace Core
 
 		m_localRotation = Math::Quat::QuaternionEuler(m_localEulerAngles.x, m_localEulerAngles.y, m_localEulerAngles.z);
 		m_rotation = m_parent ? (m_parent->m_rotation * m_localRotation) : m_localRotation;
-		m_eulerAngles = m_rotation.GetEulerAnglesDegXYZ();
+		m_eulerAngles = m_rotation.GetEulerAnglesDegZYX();
 		m_rotationChanged = true;
 
 		//We also update the transform's up, right and forward local vectors
@@ -435,6 +435,13 @@ namespace Core
 			m_positionChanged = true;
 	}
 
+	std::vector<std::pair<GameObject*, int>> Transform::GetHierarchy()
+	{
+		std::vector<std::pair<GameObject*, int>> hierarchy;
+		GetHierarchyRecursive(hierarchy, -1);
+		return hierarchy;
+	}
+
 	void Transform::Serialize(json& _j)
 	{
 		Math::Vec3 localPosition = GetLocalPosition();
@@ -445,8 +452,7 @@ namespace Core
 		_j = json{
 			{"LocalPosition", { localPosition.x, localPosition.y, localPosition.z }},
 			{"LocalScale", { localScale.x, localScale.y, localScale.z }},
-			{"LocalRotation", { localRotation.w, localRotation.x, localRotation.y, localRotation.z }},
-			{"LocalEulerAngles", { localEulerAngles.x, localEulerAngles.y, localEulerAngles.z }}
+			{"LocalRotation", { localRotation.w, localRotation.x, localRotation.y, localRotation.z }}
 		};
 	}
 
@@ -455,20 +461,30 @@ namespace Core
 		float localPosition[3];
 		float localScale[3];
 		float localRotation[4];
-		float localEulerAngles[3];
 
 		_j.at("LocalPosition").get_to(localPosition);
 		_j.at("LocalScale").get_to(localScale);
 		_j.at("LocalRotation").get_to(localRotation);
-		_j.at("LocalEulerAngles").get_to(localEulerAngles);
 		
 		SetLocalPosition(localPosition[0], localPosition[1], localPosition[2]);
 		SetLocalScale(localScale[0], localScale[1], localScale[2]);
 		SetLocalRotation(localRotation[0], localRotation[1], localRotation[2], localRotation[3]);
-		SetLocalEulerAngles(localEulerAngles[0], localEulerAngles[1], localEulerAngles[2]);
 
 		SetPositionChanged(true);
 		SetScaleChanged(true);
 		SetRotationChanged(true);
+	}
+
+	void Transform::GetHierarchyRecursive(std::vector<std::pair<GameObject*, int>>& _parentHierarchy, int _parentIndex)
+	{
+		int index = static_cast<int>(_parentHierarchy.size());
+		std::pair<GameObject*, int> current;
+		current.first = m_gameObject;
+		current.second = _parentIndex;
+		_parentHierarchy.push_back(current);
+
+		for (int i = 0; i < m_children.size(); ++i)
+			if (m_children[i])
+				m_children[i]->GetHierarchyRecursive(_parentHierarchy, index);
 	}
 }

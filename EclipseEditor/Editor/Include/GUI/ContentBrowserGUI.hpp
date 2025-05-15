@@ -19,6 +19,7 @@ namespace GUI
 		void Delete();
 
 		void AddScene(std::string _newScene);
+		void AddPrefab(Resource::Prefab* _newPrefab);
 
 	private:
 		FolderGUI* m_folderRoot = nullptr;
