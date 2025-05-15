@@ -17,7 +17,7 @@ namespace Core
 	{
 	public:
 		ECLIPSE_ENGINE AudioSystem() = default;
-		ECLIPSE_ENGINE ~AudioSystem() = default;
+		ECLIPSE_ENGINE ~AudioSystem();
 
 		ECLIPSE_ENGINE void Init();
 		ECLIPSE_ENGINE void Start();
@@ -43,6 +43,7 @@ namespace Core
 		ECLIPSE_ENGINE float GetMaxVolume();
 		ECLIPSE_ENGINE void SetMaxVolume(float _volume);
 		ECLIPSE_ENGINE std::vector<AudioSource*> GetAudioSources();
+		ECLIPSE_ENGINE SoLoud::Soloud* GetAudioEngine();
 
 		ECLIPSE_ENGINE void Reset();
 

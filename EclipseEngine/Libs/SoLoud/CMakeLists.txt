@@ -1,6 +1,6 @@
 ##### SoLoud #####
 
-add_compile_definitions(WITH_WINMM)
+add_compile_definitions(WITH_MINIAUDIO)
 
 # Query all source files (sub-dir recursive) and stores it in MATH_LIB_SOURCES var
 file(GLOB_RECURSE SOLOUD_SOURCES "src/*.cpp" "src/*.c")
