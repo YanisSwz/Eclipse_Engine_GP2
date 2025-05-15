@@ -122,6 +122,8 @@ namespace Core
 		if (m_paused)
 			m_paused = false;
 		m_audioEngine.stopAll();
+		for (int i = 0; i < m_currentSourcesCount; ++i)
+			m_audioSources[i].Stop();
 		ResetAudioSourcesPause();
 	}
 

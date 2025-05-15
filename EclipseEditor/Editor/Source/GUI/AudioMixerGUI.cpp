@@ -83,6 +83,11 @@ namespace GUI
 			channels.clear();
 		}
 
+		// Disabled text
+		if(!_audioSystem->IsAudioEnabled())
+			ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No audio listener");
+
+		// Add channel GUI
 		if (ImGui::Button("Add channel"))
 		{
 			ImGui::OpenPopup("Create Channel");
@@ -152,12 +157,7 @@ namespace GUI
 		if (ImGui::ImageButton("Stop", m_stopBtnTexture->GetID(), ImVec2(masterChannelSize.x / 3.f, masterChannelSize.x / 3.f)))
 			_audioSystem->Stop();
 
-		if (!_audioSystem->IsAudioEnabled())
-		{
-			ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No audio listener");
-			ImGui::EndDisabled();
-		}
-
+		// Volume over time display
 		m_timer += _deltaTime;
 		if (m_timer >= m_refreshRate)
 		{
@@ -179,6 +179,9 @@ namespace GUI
 			ImPlot::EndPlot();
 		}
 		ImPlot::PopStyleVar();
+
+		if (!_audioSystem->IsAudioEnabled())
+			ImGui::EndDisabled();
 
 		ImGui::End();
 	}
