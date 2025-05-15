@@ -94,6 +94,7 @@ private:
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();
+	void DrawWaitingImage();
 	void SetupImGuiStyle();
 	void InitGUI();
 	void LoadResources();

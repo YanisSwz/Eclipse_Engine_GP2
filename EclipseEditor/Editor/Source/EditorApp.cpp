@@ -22,6 +22,7 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	InitWindowing(_windowName);
 	InitGUI();
 	InitRHI();
+	DrawWaitingImage();
 	LoadResources();
 	LoadScene("Scene");
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Editor successfully initialized");
@@ -309,6 +310,41 @@ void EditorApp::InitRHI()
 		return;
 	}
 	m_renderInterface->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
+}
+
+void EditorApp::DrawWaitingImage()
+{
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultShader.vert", "Assets/Shaders/VertFragShaders/DefaultShader.vert");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultShader.frag", "Assets/Shaders/VertFragShaders/DefaultShader.frag");
+	Resource::ShaderProgram* shader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DefaultShader.shd", "DefaultShader.vert", "DefaultShader.frag");
+	Resource::Texture* logo = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Logo.icn", "Assets/Icons/LogoTitle.png");
+	Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Quad.obj", "Assets/Models/Quad.obj");
+	Resource::ResourceManager::GetInstance().LoadAllResources();
+	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
+
+	Math::Mat4 VP = Math::Mat4::PerspectiveMatrix(m_window->width, m_window->height, 60.f, 0.1f, 100.f);
+	VP *= Math::Mat4::ViewMatrix({ 0.f, 0.f, 1.f }, { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
+	Math::Mat4 TRS = Math::Mat4::TRS(Math::Vec3{ 0.f, 0.f, -1.f }, Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ 1.f, 1.f, 1.f });
+
+	m_renderInterface->EnableContextCapability(RHI::IFLAGS::BLEND);
+	m_renderInterface->BlendFunc(RHI::IFLAGS::SRC_ALPHA, RHI::IFLAGS::ONE_MINUS_SRC_ALPHA);
+
+	m_renderInterface->ClearBackgroundColor({ 0.14f, 0.15f, 0.18f, 1.0f });
+	m_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
+	m_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
+
+	shader->Bind();
+	shader->SetMat4("VP", VP, true);
+	shader->SetMat4("TRS", TRS, true);
+	logo->Bind();
+	mesh->Draw();
+	logo->Unbind();
+	shader->Unbind();
+
+	m_window->SwapBuffers();
+	m_renderInterface->DisableContextCapability(RHI::IFLAGS::BLEND);
+
+	Resource::ResourceManager::GetInstance().DestroyAllResources();
 }
 
 void EditorApp::SetupImGuiStyle()

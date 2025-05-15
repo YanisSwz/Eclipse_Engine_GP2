@@ -40,10 +40,12 @@ namespace RHI
 
 			ECLIPSE_ENGINE bool InitGraphicsAPI() const override;
 			ECLIPSE_ENGINE void EnableContextCapability(IFLAGS _capability) const override;
+			ECLIPSE_ENGINE void DisableContextCapability(IFLAGS _capability) const override;
 			ECLIPSE_ENGINE void ClearBackgroundColor(Math::Vec4 _color) const override;
 			ECLIPSE_ENGINE void ClearBuffer(IFLAGS _buffers) const override;
 			ECLIPSE_ENGINE void Viewport(int _x, int _y, int _width, int _height) const override;
 			ECLIPSE_ENGINE void DepthFunc(IFLAGS _depthComparison) const override;
+			ECLIPSE_ENGINE void BlendFunc(IFLAGS _sFactor, IFLAGS _dFactor) const override;
 		};
 	}
 }
