@@ -29,6 +29,20 @@ namespace Resource
 		m_imgData = stbi_load(_path.c_str(), &m_width, &m_height, &m_numColCh, 0);
 	}
 
+	void Texture::GetFileContentFlipped(std::string _path)
+	{
+		// Verify if Texture file path exists
+		if (!std::filesystem::exists(_path))
+		{
+			std::cout << "The file: " << _path << " not found!" << std::endl;
+			return;
+		}
+
+		// Get Texture file content
+		stbi_set_flip_vertically_on_load(false);
+		m_imgData = stbi_load(_path.c_str(), &m_width, &m_height, &m_numColCh, 0);
+	}
+
 	void Texture::Generate(RHI::IRenderInterface* _rdrInterface)
 	{
 		m_rdrInter = _rdrInterface;
@@ -53,6 +67,11 @@ namespace Resource
 	int Texture::GetHeight() const
 	{
 		return m_height;
+	}
+
+	unsigned char* Texture::GetImageData() const
+	{
+		return m_imgData;
 	}
 
 	void Texture::Bind()

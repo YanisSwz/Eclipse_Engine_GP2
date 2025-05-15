@@ -92,9 +92,9 @@ private:
 	std::string m_newSceneName;
 	int SCENE_NAME_MAX_SIZE = 20;
 
-	void InitWindowing(const char* _windowName);
+	void InitWindowing(const char* _windowName, Resource::Texture* _icon);
 	void InitRHI();
-	void DrawWaitingImage();
+	void DrawWaitingImage(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader);
 	void SetupImGuiStyle();
 	void InitGUI();
 	void LoadResources();

@@ -11,11 +11,13 @@ namespace Resource
 		ECLIPSE_ENGINE ~Texture() override;
 
 		ECLIPSE_ENGINE void GetFileContent(std::string _path) override;
+		ECLIPSE_ENGINE void GetFileContentFlipped(std::string _path);
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 		
 		ECLIPSE_ENGINE unsigned int GetID() const;
 		ECLIPSE_ENGINE int GetWidth() const;
 		ECLIPSE_ENGINE int GetHeight() const;
+		ECLIPSE_ENGINE unsigned char* GetImageData() const;
 
 		ECLIPSE_ENGINE void Bind();
 		ECLIPSE_ENGINE void Unbind();

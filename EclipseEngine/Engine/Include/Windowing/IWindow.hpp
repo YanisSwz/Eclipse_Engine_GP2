@@ -23,6 +23,7 @@ namespace Windowing
 		virtual ~IWindow() = default;
 
 		virtual void CreateWindow(const char* _name, int _width, int _height) = 0;
+		virtual void SetIcon(int _width, int _height, unsigned char* _pixels) = 0;
 		virtual float GetTime() = 0;
 		virtual bool WindowShouldClose() = 0;
 		virtual void SetWindowShouldClose(bool _bShouldClose) = 0;

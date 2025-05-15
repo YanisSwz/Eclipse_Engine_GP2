@@ -568,13 +568,15 @@ namespace GUI
 
 			ImGui::SeparatorText("Particle Properties");
 			GUI::DragFloat("Life Time", "LifeTimeDragFloat", &_particleEmitter->particleProps.lifeTime, 0.1f, 0.f, FLT_MAX);
+			GUI::DragVec3XYZ("Position \nOffset", _particleEmitter->particleProps.positionOffset, 0.f, 125.f);
+			GUI::DragVec3XYZ("Position \nVariation", _particleEmitter->particleProps.positionVariation, 0.f, 125.f);
 			ColorEdit4("Begin Color", _particleEmitter->particleProps.colorBegin);
 			ColorEdit4("End Color", _particleEmitter->particleProps.colorEnd);
 			GUI::DragFloat("Begin Size", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("End Size", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("Size Variation", "SizeVariationDragFloat", &_particleEmitter->particleProps.sizeVariation, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragVec3XYZ("Velocity", _particleEmitter->particleProps.velocity, 0.f, 125.f);
-			GUI::DragVec3XYZ("Velocity Variation", _particleEmitter->particleProps.velocityVariation, 0.f, 125.f);
+			GUI::DragVec3XYZ("Velocity \nVariation", _particleEmitter->particleProps.velocityVariation, 0.f, 125.f);
 
 			ImGui::NewLine();
 			ImGui::TreePop();

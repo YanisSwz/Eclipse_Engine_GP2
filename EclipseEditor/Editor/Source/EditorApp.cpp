@@ -19,10 +19,26 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	m_height(_height)
 {
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Initializing editor...");
-	InitWindowing(_windowName);
+
+	Resource::Texture* logo = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Logo.icn", "Assets/Icons/LogoTitle.png");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultShader.vert", "Assets/Shaders/VertFragShaders/DefaultShader.vert");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultShader.frag", "Assets/Shaders/VertFragShaders/DefaultShader.frag");
+	Resource::ShaderProgram* shader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DefaultShader.shd", "DefaultShader.vert", "DefaultShader.frag");
+	Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Quad.obj", "Assets/Models/Quad.obj");
+	Resource::ResourceManager::GetInstance().LoadAllResources();
+
+	Resource::Texture* flipedLogo = new Resource::Texture("flipedLogo.icn");
+	flipedLogo->GetFileContentFlipped("Assets/Icons/Logo.png");
+	InitWindowing(_windowName, flipedLogo);
+	delete flipedLogo;
+
 	InitGUI();
 	InitRHI();
-	DrawWaitingImage();
+
+	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
+	DrawWaitingImage(mesh, logo, shader);
+	Resource::ResourceManager::GetInstance().DestroyAllResources();
+
 	LoadResources();
 	LoadScene("Scene");
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Editor successfully initialized");
@@ -294,10 +310,11 @@ void EditorApp::Destroy()
 	delete m_window;
 }
 
-void EditorApp::InitWindowing(const char* _windowName)
+void EditorApp::InitWindowing(const char* _windowName, Resource::Texture* _icon)
 {
 	m_window = new Windowing::GLFWWindow;
 	m_window->CreateWindow(_windowName, m_width, m_height);
+	m_window->SetIcon(_icon->GetWidth(), _icon->GetHeight(), _icon->GetImageData());
 }
 
 void EditorApp::InitRHI()
@@ -312,15 +329,10 @@ void EditorApp::InitRHI()
 	m_renderInterface->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
 }
 
-void EditorApp::DrawWaitingImage()
+void EditorApp::DrawWaitingImage(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader)
 {
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultShader.vert", "Assets/Shaders/VertFragShaders/DefaultShader.vert");
-	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultShader.frag", "Assets/Shaders/VertFragShaders/DefaultShader.frag");
-	Resource::ShaderProgram* shader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DefaultShader.shd", "DefaultShader.vert", "DefaultShader.frag");
-	Resource::Texture* logo = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Logo.icn", "Assets/Icons/LogoTitle.png");
-	Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Quad.obj", "Assets/Models/Quad.obj");
-	Resource::ResourceManager::GetInstance().LoadAllResources();
-	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
+	if (!_mesh || !_texture || !_shader)
+		return;
 
 	Math::Mat4 VP = Math::Mat4::PerspectiveMatrix(m_window->width, m_window->height, 60.f, 0.1f, 100.f);
 	VP *= Math::Mat4::ViewMatrix({ 0.f, 0.f, 1.f }, { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
@@ -333,18 +345,16 @@ void EditorApp::DrawWaitingImage()
 	m_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 	m_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
-	shader->Bind();
-	shader->SetMat4("VP", VP, true);
-	shader->SetMat4("TRS", TRS, true);
-	logo->Bind();
-	mesh->Draw();
-	logo->Unbind();
-	shader->Unbind();
+	_shader->Bind();
+	_shader->SetMat4("VP", VP, true);
+	_shader->SetMat4("TRS", TRS, true);
+	_texture->Bind();
+	_mesh->Draw();
+	_texture->Unbind();
+	_shader->Unbind();
 
 	m_window->SwapBuffers();
 	m_renderInterface->DisableContextCapability(RHI::IFLAGS::BLEND);
-
-	Resource::ResourceManager::GetInstance().DestroyAllResources();
 }
 
 void EditorApp::SetupImGuiStyle()
