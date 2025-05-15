@@ -46,9 +46,9 @@ namespace Core
 		return m_transformSystem.GetRoot();
 	}
 
-	void SystemManager::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos)
+	void SystemManager::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos)
 	{
-		m_renderSystem.Render(_renderInterface, _pipeline, _VP, _viewPos, m_particleSystem.GetRenderData());
+		m_renderSystem.Render(_renderInterface, _pipeline, _V, _P, _viewPos, m_particleSystem.GetRenderData());
 	}
 
 	AudioSystem* SystemManager::GetAudioSystem()

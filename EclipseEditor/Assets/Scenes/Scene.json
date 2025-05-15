@@ -645,24 +645,24 @@
                                     0.5,
                                     0.5
                                 ],
-                                "BeginSize": 23.0,
-                                "EndSize": 74.0,
-                                "SizeVariation": 74.0,
+                                "BeginSize": 5.0,
+                                "EndSize": 5.0,
+                                "SizeVariation": 5.0,
                                 "BeginColor": [
-                                    0.8823529481887817,
-                                    0.0,
-                                    0.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
                                     1.0
                                 ],
                                 "EndColor": [
                                     1.0,
                                     1.0,
-                                    0.0,
+                                    1.0,
                                     1.0
                                 ],
                                 "Velocity": [
                                     0.0,
-                                    1.0,
+                                    0.6000000238418579,
                                     0.0
                                 ],
                                 "VelocityVariation": [
@@ -726,9 +726,9 @@
                                     0.5,
                                     0.5
                                 ],
-                                "BeginSize": 75.0,
-                                "EndSize": 50.0,
-                                "SizeVariation": 50.0,
+                                "BeginSize": 1.0,
+                                "EndSize": 1.0,
+                                "SizeVariation": 1.0,
                                 "BeginColor": [
                                     1.0,
                                     1.0,
@@ -891,9 +891,9 @@
                                     0.5,
                                     0.5
                                 ],
-                                "BeginSize": 75.0,
-                                "EndSize": 50.0,
-                                "SizeVariation": 50.0,
+                                "BeginSize": 1.0,
+                                "EndSize": 1.0,
+                                "SizeVariation": 1.0,
                                 "BeginColor": [
                                     0.0,
                                     0.0,

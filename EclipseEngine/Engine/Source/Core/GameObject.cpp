@@ -41,12 +41,10 @@ namespace Core
 	void GameObject::Destroy()
 	{
 		m_active = false;
+		m_destroyed = true;
 		transform->Destroy();
 		for (int i = 0; i < m_components.size(); ++i)
-		{
 			m_components[i]->Destroy();
-		}
-		m_destroyed = true;
 	}
 
 	void GameObject::Destroy(GameObject* _obj)

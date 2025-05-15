@@ -129,7 +129,7 @@ namespace Core
 		m_ambientLight = _ambientLight;
 	}
 
-	void RenderSystem::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<std::vector<ParticleRenderData>> _particlesData)
+	void RenderSystem::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos, std::vector<ParticleEmitterRenderData> _particlesData)
 	{
 		if (_renderInterface != nullptr && _pipeline != nullptr)
 		{
@@ -137,7 +137,7 @@ namespace Core
 			_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 			_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
-			_pipeline->Draw(_VP, _viewPos, GetStaticModels(), m_ambientLight, GetDirLights(), GetPointLights(), GetSpotLights(), _particlesData);
+			_pipeline->Draw(_V, _P, _viewPos, GetStaticModels(), m_ambientLight, GetDirLights(), GetPointLights(), GetSpotLights(), _particlesData);
 		}
 	}
 

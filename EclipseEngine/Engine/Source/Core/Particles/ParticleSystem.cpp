@@ -49,9 +49,9 @@ namespace Core
 		}
 	}
 	
-	std::vector<std::vector<ParticleRenderData>> ParticleSystem::GetRenderData()
+	std::vector<ParticleEmitterRenderData> ParticleSystem::GetRenderData()
 	{
-		std::vector<std::vector<ParticleRenderData>> renderData;
+		std::vector<ParticleEmitterRenderData> renderData;
 		for (int i = 0; i < m_particleEmitterCount; ++i)
 			renderData.push_back(m_particleEmitter[i].GetRenderData());
 

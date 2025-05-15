@@ -1,17 +1,23 @@
 #include "Core/Particles/ParticleEmitter.hpp"
 #include "Core/GameObject.hpp"
 #include "Logger.hpp"
+#include "Resource/ResourceManager.hpp"
+#include "Resource/Mesh.hpp"
 
 namespace Core
 {
 	ParticleEmitter::ParticleEmitter()
 	{
+		particleProps.mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(particleProps.defaultMeshName);
+		particleProps.texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(particleProps.defaultTextureName);
 	}
 
 	ParticleEmitter::ParticleEmitter(ParticleEmitterProps _particleEmitterProps, ParticleProps _particleProps)
 	{
 		particleEmitterProps = _particleEmitterProps;
 		particleProps = _particleProps;
+		particleProps.mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(particleProps.defaultMeshName);
+		particleProps.texture = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>(particleProps.defaultTextureName);
 	}
 
 	void ParticleEmitter::SetActive(bool _activate)
@@ -66,6 +72,13 @@ namespace Core
 
 	void ParticleEmitter::Update(float _deltaTime)
 	{
+		if (!particleProps.mesh)
+		{
+			particleProps.mesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(particleProps.defaultMeshName);
+			if (!particleProps.mesh)
+				return;
+		}
+
 		if (m_simulationState == SIMULATION_STATE::PLAY)
 		{
 			if (m_simulationTimeRemaining > 0.f || particleEmitterProps.bIsLooping)
@@ -103,9 +116,15 @@ namespace Core
 		UpdateParticles(_deltaTime);
 	}
 
-	std::vector<ParticleRenderData> ParticleEmitter::GetRenderData()
+	ParticleEmitterRenderData ParticleEmitter::GetRenderData()
 	{
-		std::vector<ParticleRenderData> renderData;
+		ParticleEmitterRenderData particleEmitterRenderData;
+		if (!particleProps.mesh)
+			particleEmitterRenderData.particleMesh = Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(particleProps.defaultMeshName);
+		particleEmitterRenderData.particleMesh = particleProps.mesh;
+		particleEmitterRenderData.particleTexture = particleProps.texture;
+		particleEmitterRenderData.bIsBillboard = particleProps.bIsBillboard;
+
 		ParticleRenderData particleRenderData;
 		for (int i = static_cast<int>(m_particles.size()) - 1; i >= 0; --i)
 		{
@@ -114,10 +133,10 @@ namespace Core
 				particleRenderData.color = m_particles[i].color / 255.f;
 				particleRenderData.position = m_particles[i].position;
 				particleRenderData.size = m_particles[i].size;
-				renderData.push_back(particleRenderData);
+				particleEmitterRenderData.particlesRenderData.push_back(particleRenderData);
 			}
 		}
-		return renderData;
+		return particleEmitterRenderData;
 	}
 
 	void ParticleEmitter::Serialize(json& _j)
@@ -131,14 +150,14 @@ namespace Core
 
 		_j["ParticleEmitter"] = json{
 			{"IsActive", IsActive()},
-			json{"ParticleEmitterProps", { 
+			json{"ParticleEmitterProps", {
 				{"MaxParticleNumber", particleEmitterProps.maxNbParticles},
 				{"SpawnRate", particleEmitterProps.particleSpawnRate},
 				{"SpawnRateVariation", particleEmitterProps.particleSpawnRateVariation},
 				{"SimulationDuration", particleEmitterProps.simulationDuration},
 				{"IsLooping", particleEmitterProps.bIsLooping}
 			}},
-			json{"ParticleProps", { 
+			json{"ParticleProps", {
 				{"LifeTime", particleProps.lifeTime},
 				{"PositionOffset", { positionOffset.x, positionOffset.y, positionOffset.z }},
 				{"PositionVariation", { positionVariation.x, positionVariation.y, positionVariation.z }},
@@ -180,7 +199,7 @@ namespace Core
 		particleEmitterPropsJson.at("SpawnRateVariation").get_to(particleEmitterProps.particleSpawnRateVariation);
 		particleEmitterPropsJson.at("SimulationDuration").get_to(particleEmitterProps.simulationDuration);
 		particleEmitterPropsJson.at("IsLooping").get_to(particleEmitterProps.bIsLooping);
-		
+
 		particlePropsJson.at("LifeTime").get_to(particleProps.lifeTime);
 		particlePropsJson.at("BeginSize").get_to(particleProps.sizeBegin);
 		particlePropsJson.at("EndSize").get_to(particleProps.sizeEnd);
@@ -194,7 +213,7 @@ namespace Core
 		particleProps.velocity = { velocity[0], velocity[1], velocity[2] };
 		particleProps.velocityVariation = { velocityVariation[0], velocityVariation[1], velocityVariation[2] };
 	}
-	
+
 	void ParticleEmitter::Destroy()
 	{
 		m_active = false;

@@ -182,13 +182,13 @@ namespace Core
 
 	void Transform::Destroy()
 	{
+		m_active = false;
+		m_destroyed = true;
 		for(int i = 0; i < m_children.size(); ++i)
 		{
 			if (!m_children[i]->IsDestroyed())
 				m_children[i]->GetGameObject()->Destroy();
 		}
-		m_active = false;
-		m_destroyed = true;
 	}
 
 	void Transform::SetPosition(Math::Vec3 _vec)

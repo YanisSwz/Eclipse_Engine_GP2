@@ -58,8 +58,10 @@ namespace RHI::OpenGL
 		return m_deferredRenderPass->PickID(_mousePosX, _mousePosY);
 	}
 
-	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _VP, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights, std::vector<std::vector<Core::ParticleRenderData>> _particlesData)
+	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights, std::vector<Core::ParticleEmitterRenderData> _particlesData)
 	{
+		Math::Mat4 _VP = _P * _V;
+
 		// Deferred Render Pass
 		m_deferredRenderPass->Bind();
 
@@ -84,7 +86,7 @@ namespace RHI::OpenGL
 
 		// Particle Render Pass
 		m_FB->Bind();
-		m_particleRenderPass->Draw(_VP, _particlesData);
+		m_particleRenderPass->Draw(_V, _P, _particlesData);
 		m_FB->Unbind();
 	}
 

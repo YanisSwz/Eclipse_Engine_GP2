@@ -30,7 +30,7 @@ namespace Core
 		ECLIPSE_ENGINE AudioSystem* GetAudioSystem();
 		ECLIPSE_ENGINE CameraSystem* GetCameraSystem();
 		ECLIPSE_ENGINE ScriptingSystem* GetScriptingSystem();
-		ECLIPSE_ENGINE void Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos);
+		ECLIPSE_ENGINE void Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos);
 
 		template <typename T>
 		T* AddComponent()
