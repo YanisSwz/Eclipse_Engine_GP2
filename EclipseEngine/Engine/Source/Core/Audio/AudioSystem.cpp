@@ -1,6 +1,9 @@
 #include "Audio/AudioSystem.hpp"
 #include "Logger.hpp"
 #include "Resource/ResourceManager.hpp"
+#include <fstream>
+#include <utility>
+#include <unordered_map>
 
 namespace Core
 {
@@ -18,8 +21,6 @@ namespace Core
 		m_audioEngine.init();
 		m_audioEngine.setVisualizationEnable(true);
 		EnableAudio();
-		AudioSource::AddChannel("Music", m_audioEngine.createVoiceGroup());
-		AudioSource::AddChannel("SFX", m_audioEngine.createVoiceGroup());
 		Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Audio engine successfully initialized");
 	}
 
@@ -314,5 +315,39 @@ namespace Core
 		m_currentSourcesCount = 0;
 		m_currentListenersCount = 0;
 		m_currentListener = nullptr;
+	}
+
+	void AudioSystem::SerializeChannels(std::string _filePath)
+	{
+		std::ofstream fileStream(_filePath);
+		json channels;
+		
+		std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* audioChannels = AudioSource::GetChannels();
+
+		for (auto it = audioChannels->begin(); it != audioChannels->end(); ++it)
+		{
+			channels[it->first] = it->second.second;
+		}
+
+		fileStream << std::setw(4) << channels << std::endl;
+		fileStream.close();
+	}
+
+	void AudioSystem::DeserializeChannels(std::string _filePath)
+	{
+		std::ifstream fileStream(_filePath);
+
+		if (!fileStream.is_open() || fileStream.peek() == std::ifstream::traits_type::eof())
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "No audio channels to load in %s", _filePath.c_str());
+			return;
+		}
+
+		json channels;
+		fileStream >> channels;
+		fileStream.close();
+
+		for (auto it = channels.begin(); it != channels.end(); ++it)
+			AudioSource::AddChannel(it.key(), m_audioEngine.createVoiceGroup(), it.value());
 	}
 }

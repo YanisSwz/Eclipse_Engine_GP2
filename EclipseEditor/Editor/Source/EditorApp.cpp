@@ -24,6 +24,7 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	InitRHI();
 	LoadResources();
 	Core::GameObject::DeserializeTags("Assets/Settings/Tags.json");
+	m_scene.GetSystemManager()->GetAudioSystem()->DeserializeChannels("Assets/Settings/AudioChannels.json");
 	LoadScene("Scene");
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Editor successfully initialized");
 
@@ -344,6 +345,7 @@ void EditorApp::Destroy()
 	DestroyGUI();
 
 	Core::GameObject::SerializeTags("Assets/Settings/Tags.json");
+	m_scene.GetSystemManager()->GetAudioSystem()->SerializeChannels("Assets/Settings/AudioChannels.json");
 
 	m_renderInterface->DestroyDefaultGraphicPipeline(m_editorPipeline);
 	m_renderInterface->DestroyDefaultGraphicPipeline(m_gamePipeline);

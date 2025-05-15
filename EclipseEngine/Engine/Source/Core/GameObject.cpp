@@ -91,6 +91,7 @@ namespace Core
 		std::ofstream fileStream(_filePath);
 		json tags = m_tags;
 		fileStream << std::setw(4) << tags << std::endl;
+		fileStream.close();
 	}
 
 	void GameObject::DeserializeTags(std::string _filePath)
@@ -105,6 +106,7 @@ namespace Core
 
 		json tags;
 		fileStream >> tags;
+		fileStream.close();
 		m_tags = tags;
 	}
 
