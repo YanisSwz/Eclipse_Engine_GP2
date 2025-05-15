@@ -309,6 +309,24 @@ namespace Core
 		return &m_audioEngine;
 	}
 
+	void AudioSystem::DeleteChannel(std::string _name)
+	{
+		if (_name == "SFX" || _name == "Music")
+		{
+			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Cannot delete base audio channels");
+			return;
+		}
+		std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* channels = AudioSource::GetChannels();
+		std::unordered_map<std::string, std::pair<SoLoud::handle, float>>::iterator it = channels->find(_name);
+		if (it != channels->end())
+		{
+			m_audioEngine.destroyVoiceGroup(it->second.first);
+			channels->erase(it);
+			for (int i = 0; i < m_currentSourcesCount; ++i)
+				m_audioSources[i].UpdateChannel();
+		}
+	}
+
 	void AudioSystem::Reset()
 	{
 		m_currentSourcesCount = 0;

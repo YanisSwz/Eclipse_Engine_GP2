@@ -1,5 +1,4 @@
 #include "GUI/Widget/ImGuiWidget.hpp"
-#include "Core/Audio/AudioSource.hpp"
 
 namespace GUI
 {
@@ -679,14 +678,49 @@ namespace GUI
 			label.insert(i, "\n");
 		ImGui::Text(label.c_str());
 
+		return changed;
+	}
+
+	bool AudioChannel(const char* _label, float& _sliderValue, bool _canDelete, bool& _deleted, ImVec2 _size, float _offset)
+	{
+		ImGui::SetCursorPosX(8.f + _offset);
+		auto* colors = ImGui::GetStyle().Colors;
+		ImVec4 color = ImVec4(colors[ImGuiCol_Button].x, colors[ImGuiCol_Button].y, colors[ImGuiCol_Button].z, 1.f);
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, color);
+		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, color);
+		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
+		ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 15);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderThickness, 0.35f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SliderContrast, 0.75f);
+
+		std::string label = "##";
+		label += _label;
+		label += "Volume";
+		bool changed = ImGui::VSliderFloat(label.c_str(), _size, &_sliderValue, 0.0f, 1.0f, "");
+		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
+			ImGui::SetTooltip("%.3f", _sliderValue);
+		ImGui::PopStyleColor(5);
+		ImGui::PopStyleVar(3);
+
 		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2(8.f + _offset, 46.f + _size.y + ImGui::GetFontSize()));
-		ImGui::PushID(_label);
-		if (ImGui::Button("Delete")) 
+		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize()));
+		// We wrap the text to not overflow on other audio channels
+		label = _label;
+		for (int i = 12; i < label.size(); i += 12)
+			label.insert(i, "\n");
+		ImGui::Text(label.c_str());
+
+		if (_canDelete)
 		{
-			//Core::AudioSource::DeleteChannel(_label);
+			ImGui::SameLine();
+			ImGui::SetCursorPos(ImVec2(8.f + _offset, 46.f + _size.y + ImGui::GetFontSize()));
+			ImGui::PushID(_label);
+			if (ImGui::Button("Delete"))
+				_deleted = true;
+			ImGui::PopID();
 		}
-		ImGui::PopID();
 
 		return changed;
 	}
@@ -727,7 +761,7 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
-		if(alpha != 1.f)
+		if (alpha != 1.f)
 			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0);
 		else
 			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 15);
@@ -744,11 +778,11 @@ namespace GUI
 		ImGui::PopStyleVar(3);
 
 		ImGui::SameLine();
-		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize())); 
+		ImGui::SetCursorPos(ImVec2(8.f + _offset, 16.f + _size.y + ImGui::GetFontSize()));
 		// We wrap the text to not overflow on other audio channels
 		label = _label;
-		for(int i = 12; i < label.size(); i += 12)
-			label.insert(i, "\n"); 
+		for (int i = 12; i < label.size(); i += 12)
+			label.insert(i, "\n");
 		ImGui::Text(label.c_str());
 
 		return changed;
@@ -767,7 +801,7 @@ namespace GUI
 		std::string label = "##";
 		label += _label;
 		label += "IsPlaying" + std::to_string(ID);
-		
+
 		ImGui::PushStyleColor(ImGuiCol_CheckMark, ImVec4(1.f, 0.75f, 0.f, 1.f));
 		ImGui::RadioButton(label.c_str(), _isPlaying);
 		ImGui::EndDisabled();
@@ -796,7 +830,7 @@ namespace GUI
 		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, color);
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 		ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
-		if(alpha != 1.f)
+		if (alpha != 1.f)
 			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0);
 		else
 			ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 10);

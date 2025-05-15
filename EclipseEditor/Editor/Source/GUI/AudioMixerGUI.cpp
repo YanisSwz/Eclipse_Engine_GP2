@@ -30,7 +30,19 @@ namespace GUI
 		{
 			float dummy = it->second.second;
 			ImGui::SameLine();
-			if (GUI::AudioChannel(it->first.c_str(), dummy, ImVec2(50.f, ImGui::GetWindowHeight() / 1.65f), 160.f + count * 120.f))
+			bool changed = false;
+			bool deleted = false;
+			if (count < 2)
+				changed = GUI::AudioChannel(it->first.c_str(), dummy, false, deleted, ImVec2(50.f, ImGui::GetWindowHeight() / 1.65f), 160.f + count * 120.f);
+			else
+				changed = GUI::AudioChannel(it->first.c_str(), dummy, true, deleted, ImVec2(50.f, ImGui::GetWindowHeight() / 1.65f), 160.f + count * 120.f);
+
+			if (deleted)
+			{
+				_audioSystem->DeleteChannel(it->first);
+				break;
+			}
+			if (changed)
 			{
 				_audioSystem->GetAudioEngine()->setVolume(it->second.first, dummy);
 				it->second.second = dummy;
@@ -156,14 +168,14 @@ namespace GUI
 		}
 
 		ImPlot::PushStyleVar(ImPlotStyleVar_PlotPadding, ImVec2(0, 0));
-		if (ImPlot::BeginPlot("test", ImVec2(ImGui::GetWindowSize().x / 2.f, 100.f), ImPlotFlags_CanvasOnly))
+		if (ImPlot::BeginPlot("VolumeOverTime", ImVec2(ImGui::GetWindowSize().x / 2.f, 100.f), ImPlotFlags_CanvasOnly))
 		{
 			ImPlot::SetupAxes("Time (s)", "Volume (%)", ImPlotAxisFlags_NoDecorations, ImPlotAxisFlags_NoDecorations);
 			ImPlot::SetupAxesLimits(0, NB_VALUES - 1, -0.001f, 1.001f, ImGuiCond_Always);
 			ImPlot::SetNextLineStyle(ImVec4(1.f, 0.75f, 0.f, 1.f));
 			ImPlot::SetNextFillStyle(ImVec4(1.f, 0.75f, 0.f, 1.f), 0.25f);
 
-			ImPlot::PlotLine("test", m_values.data(), static_cast<int>(m_values.size()), 1 / MAX_TIME, 0, ImPlotLineFlags_Shaded);
+			ImPlot::PlotLine("VolumeOverTime", m_values.data(), static_cast<int>(m_values.size()), 1 / MAX_TIME, 0, ImPlotLineFlags_Shaded);
 			ImPlot::EndPlot();
 		}
 		ImPlot::PopStyleVar();

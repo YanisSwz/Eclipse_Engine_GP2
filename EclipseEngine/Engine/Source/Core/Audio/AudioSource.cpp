@@ -57,6 +57,23 @@ namespace Core
 		m_audioEngine->set3dSourcePosition(m_sound, newPos.x, newPos.y, newPos.z);
 	}
 
+	void AudioSource::UpdateChannel()
+	{
+		if (m_destroyed)
+			return;
+
+		auto it = m_audioChannels.find(channel);
+		if (it == m_audioChannels.end())
+		{
+			channel = "SFX";
+			if (m_audioEngine->isValidVoiceHandle(m_sound))
+			{
+				m_audioEngine->addVoiceToGroup(m_audioChannels[channel].first, m_sound);
+				m_audioEngine->setVolume(m_sound, m_volume * m_audioChannels[channel].second);
+			}
+		}
+	}
+
 	void AudioSource::Play()
 	{
 		if (!m_audioEnabled)
@@ -277,7 +294,10 @@ namespace Core
 		}
 		channel = _name;
 		if (m_audioEngine->isValidVoiceHandle(m_sound))
+		{
+			m_audioEngine->addVoiceToGroup(m_audioChannels[channel].first, m_sound);
 			m_audioEngine->setVolume(m_sound, m_volume * m_audioChannels[channel].second);
+		}
 	}
 
 	// Static functions
@@ -302,15 +322,6 @@ namespace Core
 			}
 		}
 		m_audioChannels[_name] = std::make_pair(_handle, _volume);
-	}
-
-	void AudioSource::DeleteChannel(std::string _name)
-	{
-		auto it = m_audioChannels.find(_name);
-		if (it != m_audioChannels.end())
-		{
-			m_audioChannels.erase(it);
-		}
 	}
 
 	std::vector<std::string> AudioSource::GetChannelNames()

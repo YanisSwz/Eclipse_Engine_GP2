@@ -20,6 +20,7 @@ namespace Core
 		ECLIPSE_ENGINE void Destroy() override;
 
 		ECLIPSE_ENGINE void Update();
+		ECLIPSE_ENGINE void UpdateChannel();
 		ECLIPSE_ENGINE void Play();
 		/// <summary>
 		/// Pause/Unpause the sound
@@ -58,7 +59,6 @@ namespace Core
 		ECLIPSE_ENGINE static void Enable();
 		ECLIPSE_ENGINE static void Disable();
 		ECLIPSE_ENGINE static void AddChannel(std::string _name, SoLoud::handle _handle, float _volume = 1.f);
-		ECLIPSE_ENGINE static void DeleteChannel(std::string _name);
 		ECLIPSE_ENGINE static std::vector<std::string> GetChannelNames();
 		ECLIPSE_ENGINE static std::vector<SoLoud::handle> GetChannelHandles();
 		ECLIPSE_ENGINE static std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* GetChannels();
@@ -80,6 +80,10 @@ namespace Core
 		bool m_isPlaying = false;
 		float m_audioClipLength = 0.f;
 		float m_volume = 1.f;
+		/// <summary>
+		/// Volume of voice group
+		/// </summary>
+		float m_channelVolume = 1.f;
 		float m_sampleRate = 0.f;
 		float m_pan = 0.f;
 		float m_minDistance = 1.f;

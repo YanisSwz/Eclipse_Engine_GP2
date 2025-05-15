@@ -44,6 +44,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetMaxVolume(float _volume);
 		ECLIPSE_ENGINE std::vector<AudioSource*> GetAudioSources();
 		ECLIPSE_ENGINE SoLoud::Soloud* GetAudioEngine();
+		ECLIPSE_ENGINE void DeleteChannel(std::string _name);
 
 		ECLIPSE_ENGINE void Reset();
 
