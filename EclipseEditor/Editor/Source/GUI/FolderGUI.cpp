@@ -184,6 +184,8 @@ namespace GUI
 					else if (i < folderChildrenSize + texturesFilesSize + meshFilesSize + audioFilesSize + sceneFilesSize + prefabFilesSize)
 					{
 						DrawPrefabGUI(i);
+
+						
 					}
 				}
 				ImGui::EndTable();

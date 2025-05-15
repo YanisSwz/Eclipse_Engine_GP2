@@ -73,14 +73,17 @@ private:
 	GUI::GameGUI m_gameGUI;
 	GUI::AudioMixerGUI m_audioMixerGUI;
 
-	bool bIsHierarchieWindowEnabled = true;
+	bool bIsHierarchyWindowEnabled = true;
 	bool bIsInspectorWindowEnabled = true;
 	bool bIsSceneWindowEnabled = true;
 	bool bIsConsoleWindowEnabled = true;
 	bool bIsContentBrowserWindowEnabled = true;
 	bool bIsGameWindowEnabled = true;
 	bool bIsAudioMixerWindowEnabled = true;
+	bool bIsNewSceneWindowStarted = false;
 	bool bIsNewSceneWindowOpen = false;
+	bool bIsNewPrefabWindowStarted = false;
+	bool bIsNewPrefabWindowOpen = false;
 
 	Resource::Texture* m_playBtnTexture = nullptr;
 	Resource::Texture* m_stopBtnTexture = nullptr;
@@ -88,6 +91,9 @@ private:
 
 	std::string m_newSceneName;
 	int SCENE_NAME_MAX_SIZE = 20;
+
+	std::string m_newPrefabName;
+	int PREFAB_NAME_MAX_SIZE = 20;
 
 	void InitWindowing(const char* _windowName);
 	void InitRHI();
