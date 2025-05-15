@@ -2,6 +2,7 @@
 #include "Scripting/MonoBehaviour.hpp"
 #include "Scripting/RegisterTypeMacro.hpp"
 #include "Physics/BoxCollider.hpp"
+#include "Audio/AudioSource.hpp"
 
 class PlayerScript : public Core::MonoBehaviour
 {
@@ -18,6 +19,8 @@ public:
 
 private:
 	Core::BoxCollider* m_collider = nullptr;
+	Core::AudioSource* m_source = nullptr;
+	float m_speed = 5.f;
 };
 
 REGISTER_TYPE(PlayerScript);
