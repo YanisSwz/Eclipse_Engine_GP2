@@ -534,7 +534,7 @@ namespace GUI
 		ImGui::NextColumn();
 		if (ImGui::BeginCombo(invisibleComboName.c_str(), _crtValue->c_str()))
 		{
-			ImGuiTextFilter filter;
+			static ImGuiTextFilter filter;
 			if (ImGui::IsWindowAppearing())
 			{
 				ImGui::SetKeyboardFocusHere();
