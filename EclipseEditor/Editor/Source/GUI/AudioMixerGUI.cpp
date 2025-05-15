@@ -24,28 +24,28 @@ namespace GUI
 			_audioSystem->SetMaxVolume(volume);
 
 		// Mix channels (SFX, Music...)
-		std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* mixChannels = Core::AudioSource::GetChannels();
+		std::vector<std::tuple<std::string, SoLoud::handle, float>>& mixChannels = Core::AudioSource::GetChannels();
 		int count = 0;
-		for (std::unordered_map<std::string, std::pair<SoLoud::handle, float>>::iterator it = mixChannels->begin(); it != mixChannels->end(); ++it)
+		for (int i = 0; i < mixChannels.size(); ++i)
 		{
-			float dummy = it->second.second;
+			float dummy = std::get<2>(mixChannels[i]);
 			ImGui::SameLine();
 			bool changed = false;
 			bool deleted = false;
 			if (count < 2)
-				changed = GUI::AudioChannel(it->first.c_str(), dummy, false, deleted, ImVec2(50.f, ImGui::GetWindowHeight() / 1.65f), 160.f + count * 120.f);
+				changed = GUI::AudioChannel(std::get<0>(mixChannels[i]).c_str(), dummy, false, deleted, ImVec2(50.f, ImGui::GetWindowHeight() / 1.65f), 160.f + count * 120.f);
 			else
-				changed = GUI::AudioChannel(it->first.c_str(), dummy, true, deleted, ImVec2(50.f, ImGui::GetWindowHeight() / 1.65f), 160.f + count * 120.f);
+				changed = GUI::AudioChannel(std::get<0>(mixChannels[i]).c_str(), dummy, true, deleted, ImVec2(50.f, ImGui::GetWindowHeight() / 1.65f), 160.f + count * 120.f);
 
 			if (deleted)
 			{
-				_audioSystem->DeleteChannel(it->first);
+				_audioSystem->DeleteChannel(std::get<0>(mixChannels[i]));
 				break;
 			}
 			if (changed)
 			{
-				_audioSystem->GetAudioEngine()->setVolume(it->second.first, dummy);
-				it->second.second = dummy;
+				_audioSystem->GetAudioEngine()->setVolume(std::get<1>(mixChannels[i]), dummy);
+				std::get<2>(mixChannels[i]) = dummy;
 			}
 			++count;
 		}
@@ -53,7 +53,7 @@ namespace GUI
 		// Audio sources
 		ImVec2 audioSourcesChannelSize{ 35.f, ImGui::GetWindowHeight() / 1.75f };
 		float baseOffset = 140.f;
-		float offset = 120.f + baseOffset * static_cast<int>(mixChannels->size());
+		float offset = 120.f + baseOffset * static_cast<int>(mixChannels.size());
 		std::vector<Core::AudioSource*> channels = _audioSystem->GetAudioSources();
 		if (!channels.empty())
 		{

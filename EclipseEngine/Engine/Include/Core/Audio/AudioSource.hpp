@@ -3,8 +3,8 @@
 #include "ProjectExports.hpp"
 #include "soloud.h"
 #include "Resource/AudioClip.hpp"
-#include <unordered_map>
-#include <utility>
+#include <vector>
+#include <tuple>
 #include <string>
 
 namespace Core
@@ -12,6 +12,8 @@ namespace Core
 	class AudioSource : public Component
 	{
 	public:
+		std::string channel = "SFX";
+
 		ECLIPSE_ENGINE AudioSource() = default;
 		ECLIPSE_ENGINE AudioSource(SoLoud::Soloud* _audioEngine);
 		ECLIPSE_ENGINE ~AudioSource() = default;
@@ -61,15 +63,16 @@ namespace Core
 		ECLIPSE_ENGINE static void AddChannel(std::string _name, SoLoud::handle _handle, float _volume = 1.f);
 		ECLIPSE_ENGINE static std::vector<std::string> GetChannelNames();
 		ECLIPSE_ENGINE static std::vector<SoLoud::handle> GetChannelHandles();
-		ECLIPSE_ENGINE static std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* GetChannels();
+		ECLIPSE_ENGINE static std::vector<std::tuple<std::string, SoLoud::handle, float>>& GetChannels();
 
 		ECLIPSE_ENGINE void Serialize(json& _j) override;
 		ECLIPSE_ENGINE void Deserialize(const json& _j) override;
 
-		std::string channel = "SFX";
+		ECLIPSE_ENGINE static std::tuple<std::string, SoLoud::handle, float>* FindChannel(std::string _channelName);
+		ECLIPSE_ENGINE static int FindChannelIndex(std::string _channelName);
 	private:
 		static bool m_audioEnabled;
-		static std::unordered_map<std::string, std::pair<SoLoud::handle, float>> m_audioChannels;
+		static std::vector<std::tuple<std::string, SoLoud::handle, float>> m_audioChannels;
 		bool m_looping = false;
 		bool m_playOnAwake = true;
 		bool m_paused = false;

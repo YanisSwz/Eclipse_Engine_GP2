@@ -2,8 +2,8 @@
 #include "Logger.hpp"
 #include "Resource/ResourceManager.hpp"
 #include <fstream>
-#include <utility>
-#include <unordered_map>
+#include <vector>
+#include <tuple>
 
 namespace Core
 {
@@ -319,12 +319,12 @@ namespace Core
 			Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "Cannot delete base audio channels");
 			return;
 		}
-		std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* channels = AudioSource::GetChannels();
-		std::unordered_map<std::string, std::pair<SoLoud::handle, float>>::iterator it = channels->find(_name);
-		if (it != channels->end())
+		std::vector<std::tuple<std::string, SoLoud::handle, float>>& channels = AudioSource::GetChannels();
+		std::tuple<std::string, SoLoud::handle, float>* channel = AudioSource::FindChannel(_name);
+		if (channel)
 		{
-			m_audioEngine.destroyVoiceGroup(it->second.first);
-			channels->erase(it);
+			m_audioEngine.destroyVoiceGroup(std::get<1>(*channel));
+			channels.erase(channels.begin() + AudioSource::FindChannelIndex(_name));
 			for (int i = 0; i < m_currentSourcesCount; ++i)
 				m_audioSources[i].UpdateChannel();
 		}
@@ -342,11 +342,11 @@ namespace Core
 		std::ofstream fileStream(_filePath);
 		json channels;
 		
-		std::unordered_map<std::string, std::pair<SoLoud::handle, float>>* audioChannels = AudioSource::GetChannels();
+		std::vector<std::tuple<std::string, SoLoud::handle, float>>& audioChannels = AudioSource::GetChannels();
 
-		for (auto it = audioChannels->begin(); it != audioChannels->end(); ++it)
+		for (int i = 0; i < audioChannels.size(); ++i)
 		{
-			channels[it->first] = it->second.second;
+			channels[std::get<0>(audioChannels[i])] = std::get<2>(audioChannels[i]);
 		}
 
 		fileStream << std::setw(4) << channels << std::endl;

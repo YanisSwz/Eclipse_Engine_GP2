@@ -842,7 +842,7 @@ namespace GUI
 		label += _label;
 		label += "Volume";
 		Resource::Texture* image = Resource::ResourceManager::GetInstance().GetResource<Resource::Texture>("Slider.img");
-		changed = ImGui::ImageSlider(label.c_str(), image->GetID(), ImVec2(25, 50), _size, &_sliderValue, 0.0f, 1.0f, "");
+		changed |= ImGui::ImageSlider(label.c_str(), image->GetID(), ImVec2(25, 50), _size, &_sliderValue, 0.0f, 1.0f, "");
 		if (ImGui::IsItemActive() || ImGui::IsItemHovered())
 			ImGui::SetTooltip("%.3f", _sliderValue);
 		ImGui::PopStyleColor(3);

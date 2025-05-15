@@ -173,7 +173,7 @@
                                 0.6665481925010681,
                                 0.638224184513092,
                                 0.3044174611568451,
-                                -0.23603709042072296
+                                -0.23603706061840057
                             ],
                             "Mass": 1.0
                         }
@@ -538,6 +538,7 @@
                     {
                         "AudioSource": {
                             "IsActive": true,
+                            "Channel": "SFX",
                             "PlayOnAwake": true,
                             "IsLooping": false,
                             "Is3D": false,
