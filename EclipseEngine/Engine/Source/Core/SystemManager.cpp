@@ -1,4 +1,5 @@
 #include "SystemManager.hpp"
+#include "IWindow.hpp"
 
 namespace Core
 {
@@ -12,19 +13,22 @@ namespace Core
 		m_audioSystem.Destroy();
 	}
 
-	void SystemManager::Update(float _deltaTime, GAME_STATE _state)
+	void SystemManager::Update(Windowing::IWindow* _window, float _deltaTime, GAME_STATE _state, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register)
 	{
-		m_transformSystem.Update();
 		switch (_state)
 		{
 		case GAME_STATE::PLAY:
+			m_scriptingSystem.Update(_window, _deltaTime, _register);
+			m_transformSystem.Update();
 			m_physicsSystem.Update(_deltaTime);
 			m_audioSystem.Update();
 			break;
 		case GAME_STATE::PAUSE:
+			m_transformSystem.Update();
 			m_physicsSystem.Update(0.f);
 			break;
 		case GAME_STATE::STOP:
+			m_transformSystem.Update();
 			m_audioSystem.EditorUpdate();
 			break;
 		}
@@ -55,6 +59,11 @@ namespace Core
 	CameraSystem* SystemManager::GetCameraSystem()
 	{
 		return &m_cameraSystem;
+	}
+
+	ScriptingSystem* SystemManager::GetScriptingSystem()
+	{
+		return &m_scriptingSystem;
 	}
 
 	Component* SystemManager::AddComponent(std::string _componentType)
@@ -103,6 +112,10 @@ namespace Core
 		{
 			return m_particleSystem.AddParticleEmitter();
 		}
+		else if (_componentType == "ScriptComponent")
+		{
+			return m_scriptingSystem.AddScript();
+		}
 
 		Logging::Logger::GetInstance().Log(Logging::PRIORITY::WARNING, "%s is not a Component type", _componentType);
 		return nullptr;
@@ -111,6 +124,7 @@ namespace Core
 	void SystemManager::Reset()
 	{
 		m_audioSystem.Reset();
+		m_scriptingSystem.Reset();
 		m_physicsSystem.Reset();
 		m_transformSystem.Reset();
 		m_renderSystem.Reset();

@@ -7,6 +7,11 @@
 #include "Prefab.hpp"
 #include <type_traits>
 
+namespace Windowing
+{
+	class IWindow;
+}
+
 namespace Core
 {
 	class Scene
@@ -15,7 +20,7 @@ namespace Core
 		ECLIPSE_ENGINE Scene() = default;
 		ECLIPSE_ENGINE ~Scene() = default;
 
-		ECLIPSE_ENGINE void Update(float _deltaTime);
+		ECLIPSE_ENGINE void Update(Windowing::IWindow* _window, float _deltaTime, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register);
 		ECLIPSE_ENGINE GameObject* CreateGameObject();
 		ECLIPSE_ENGINE SystemManager* GetSystemManager();
 		ECLIPSE_ENGINE GameObject* GetObjectByID(int _id);

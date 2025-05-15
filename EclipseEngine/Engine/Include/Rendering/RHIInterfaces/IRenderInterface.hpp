@@ -50,10 +50,12 @@ namespace RHI
 
 		virtual bool InitGraphicsAPI() const = 0;
 		virtual void EnableContextCapability(IFLAGS _capability) const = 0;
+		virtual void DisableContextCapability(IFLAGS _capability) const = 0;
 		virtual void ClearBackgroundColor(Math::Vec4 _color) const = 0;
 		virtual void ClearBuffer(IFLAGS _buffers) const = 0;
 		virtual void Viewport(int _x, int _y, int _width, int _height) const = 0;
 		virtual void DepthFunc(IFLAGS _depthComparison) const = 0;
+		virtual void BlendFunc(IFLAGS _sFactor, IFLAGS _dFactor) const = 0;
 
 	private:
 

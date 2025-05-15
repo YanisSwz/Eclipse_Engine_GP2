@@ -12,6 +12,7 @@
 #include "Lighting/PointLight.hpp"
 #include "Lighting/SpotLight.hpp"
 #include "Core/Particles/ParticleEmitter.hpp"
+#include "Scripting/RegisterTypeMacro.hpp"
 #include <implot.h>
 
 EditorApp::EditorApp(const char* _windowName, int _width, int _height)
@@ -19,9 +20,26 @@ EditorApp::EditorApp(const char* _windowName, int _width, int _height)
 	m_height(_height)
 {
 	Logging::Logger::GetInstance().Log(Logging::PRIORITY::INFO, "Initializing editor...");
-	InitWindowing(_windowName);
+
+	Resource::Texture* logo = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Texture>("Logo.icn", "Assets/Icons/LogoTitle.png");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::VertShader>("DefaultShader.vert", "Assets/Shaders/VertFragShaders/DefaultShader.vert");
+	Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::FragShader>("DefaultShader.frag", "Assets/Shaders/VertFragShaders/DefaultShader.frag");
+	Resource::ShaderProgram* shader = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::ShaderProgram>("DefaultShader.shd", "DefaultShader.vert", "DefaultShader.frag");
+	Resource::Mesh* mesh = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Mesh>("Quad.obj", "Assets/Models/Quad.obj");
+	Resource::ResourceManager::GetInstance().LoadAllResources();
+
+	Resource::Texture* flipedLogo = new Resource::Texture("flipedLogo.icn");
+	flipedLogo->GetFileContentFlipped("Assets/Icons/Logo.png");
+	InitWindowing(_windowName, flipedLogo);
+	delete flipedLogo;
+
 	InitGUI();
 	InitRHI();
+
+	Resource::ResourceManager::GetInstance().GenerateAllResources(m_renderInterface);
+	DrawWaitingImage(mesh, logo, shader);
+	Resource::ResourceManager::GetInstance().DestroyAllResources();
+
 	LoadResources();
 	Core::GameObject::DeserializeTags("Assets/Settings/Tags.json");
 	m_scene.GetSystemManager()->GetAudioSystem()->DeserializeChannels("Assets/Settings/AudioChannels.json");
@@ -60,7 +78,7 @@ void EditorApp::Update()
 	m_sceneCamera.Update(m_window, deltaTime, { static_cast<float>(m_sceneWindowPosX) - windowPos.x, static_cast<float>(m_sceneWindowPosY) - windowPos.y }, { static_cast<float>(m_sceneWindowWidth), static_cast<float>(m_sceneWindowHeight) });
 
 	m_sceneGUI.UpdateGizmoMode(m_window);
-	m_scene.Update(deltaTime);
+	m_scene.Update(m_window, deltaTime, Core::ScriptComponent::GetScriptRegister());
 
 	m_window->PollEvents();
 }
@@ -111,8 +129,6 @@ void EditorApp::Render()
 			ImGui::MenuItem("Audio Mixer", "", &bIsAudioMixerWindowEnabled);
 			ImGui::EndMenu();
 		}
-
-
 
 		ImGui::SetCursorPosX(ImGui::GetWindowWidth() / 2.f - 55.f);
 		GAME_STATE gameState = m_scene.GetState();
@@ -344,6 +360,7 @@ void EditorApp::Destroy()
 	DestroyScene();
 	DestroyGUI();
 
+	m_scene.Reset();
 	Core::GameObject::SerializeTags("Assets/Settings/Tags.json");
 	m_scene.GetSystemManager()->GetAudioSystem()->SerializeChannels("Assets/Settings/AudioChannels.json");
 
@@ -354,10 +371,11 @@ void EditorApp::Destroy()
 	delete m_window;
 }
 
-void EditorApp::InitWindowing(const char* _windowName)
+void EditorApp::InitWindowing(const char* _windowName, Resource::Texture* _icon)
 {
 	m_window = new Windowing::GLFWWindow;
 	m_window->CreateWindow(_windowName, m_width, m_height);
+	m_window->SetIcon(_icon->GetWidth(), _icon->GetHeight(), _icon->GetImageData());
 }
 
 void EditorApp::InitRHI()
@@ -370,6 +388,34 @@ void EditorApp::InitRHI()
 		return;
 	}
 	m_renderInterface->EnableContextCapability(RHI::IFLAGS::DEPTH_TEST);
+}
+
+void EditorApp::DrawWaitingImage(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader)
+{
+	if (!_mesh || !_texture || !_shader)
+		return;
+
+	Math::Mat4 VP = Math::Mat4::PerspectiveMatrix(m_window->width, m_window->height, 60.f, 0.1f, 100.f);
+	VP *= Math::Mat4::ViewMatrix({ 0.f, 0.f, 1.f }, { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
+	Math::Mat4 TRS = Math::Mat4::TRS(Math::Vec3{ 0.f, 0.f, -1.f }, Math::Vec3{ 0.f, 0.f, 0.f }, Math::Vec3{ 1.f, 1.f, 1.f });
+
+	m_renderInterface->EnableContextCapability(RHI::IFLAGS::BLEND);
+	m_renderInterface->BlendFunc(RHI::IFLAGS::SRC_ALPHA, RHI::IFLAGS::ONE_MINUS_SRC_ALPHA);
+
+	m_renderInterface->ClearBackgroundColor({ 0.14f, 0.15f, 0.18f, 1.0f });
+	m_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
+	m_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
+
+	_shader->Bind();
+	_shader->SetMat4("VP", VP, true);
+	_shader->SetMat4("TRS", TRS, true);
+	_texture->Bind();
+	_mesh->Draw();
+	_texture->Unbind();
+	_shader->Unbind();
+
+	m_window->SwapBuffers();
+	m_renderInterface->DisableContextCapability(RHI::IFLAGS::BLEND);
 }
 
 void EditorApp::SetupImGuiStyle()

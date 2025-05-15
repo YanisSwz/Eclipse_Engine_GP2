@@ -15,6 +15,11 @@ namespace Core
 		return m_id;
 	}
 
+	int& Object::GetIDRef()
+	{
+		return m_id;
+	}
+
 	void Object::Destroy()
 	{
 		m_active = false;

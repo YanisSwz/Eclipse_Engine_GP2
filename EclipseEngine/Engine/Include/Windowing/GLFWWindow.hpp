@@ -16,6 +16,7 @@ namespace Windowing
 		ECLIPSE_ENGINE ~GLFWWindow() override = default;
 
 		ECLIPSE_ENGINE void CreateWindow(const char* _name, int _width, int _height) override;
+		ECLIPSE_ENGINE void SetIcon(int _width, int _height, unsigned char* _pixels) override;
 		ECLIPSE_ENGINE float GetTime() override;
 		ECLIPSE_ENGINE bool WindowShouldClose() override;
 		ECLIPSE_ENGINE void SetWindowShouldClose(bool _bShouldClose) override;

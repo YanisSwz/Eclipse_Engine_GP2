@@ -174,6 +174,11 @@ void OpenGLRenderInterface::EnableContextCapability(IFLAGS _capability) const
 	glEnable(CastToOpenGLFlags(_capability));
 }
 
+void OpenGLRenderInterface::DisableContextCapability(IFLAGS _capability) const
+{
+	glDisable(CastToOpenGLFlags(_capability));
+}
+
 void OpenGLRenderInterface::ClearBackgroundColor(Math::Vec4 _color) const
 {
 	glClearColor(_color.x, _color.y, _color.z, _color.w);
@@ -192,4 +197,9 @@ void OpenGLRenderInterface::Viewport(int _x, int _y, int _width, int _height) co
 void OpenGLRenderInterface::DepthFunc(IFLAGS _depthComparison) const
 {
 	glDepthFunc(CastToOpenGLFlags(_depthComparison));
+}
+
+void OpenGLRenderInterface::BlendFunc(IFLAGS _sFactor, IFLAGS _dFactor) const
+{
+	glBlendFunc(CastToOpenGLFlags(_sFactor), CastToOpenGLFlags(_dFactor));
 }

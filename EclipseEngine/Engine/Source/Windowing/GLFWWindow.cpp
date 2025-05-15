@@ -42,6 +42,15 @@ namespace Windowing
         glfwGetWindowSize(m_window, &width, &height);
     }
 
+    void GLFWWindow::SetIcon(int _width, int _height, unsigned char* _pixels)
+    {
+        GLFWimage logo;
+        logo.width = 800;
+        logo.height = 800;
+        logo.pixels = _pixels;
+        glfwSetWindowIcon(m_window, 1, &logo);
+    }
+
     float GLFWWindow::GetTime()
     {
         return static_cast<float>(glfwGetTime());

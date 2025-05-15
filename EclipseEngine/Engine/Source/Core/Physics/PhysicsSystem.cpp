@@ -188,17 +188,17 @@ namespace Core
 		Core::GameObject* gameObject1 = collider1->GetGameObject();
 		if (gameObject1)
 		{
-			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			Core::ScriptComponent* colliderScript1 = gameObject1->GetComponent<Core::ScriptComponent>();
 			if (colliderScript1)
-				colliderScript1->OnCollisionEnter(collider2);
+				colliderScript1->OnCollisionEnter(colliderScript1->Instance, collider2);
 		}
 
 		Core::GameObject* gameObject2 = collider2->GetGameObject();
 		if (gameObject2)
 		{
-			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			Core::ScriptComponent* colliderScript2 = gameObject2->GetComponent<Core::ScriptComponent>();
 			if (colliderScript2)
-				colliderScript2->OnCollisionEnter(collider1);
+				colliderScript2->OnCollisionEnter(colliderScript2->Instance, collider1);
 		}
 	}
 
@@ -214,17 +214,17 @@ namespace Core
 		Core::GameObject* gameObject1 = collider1->GetGameObject();
 		if (gameObject1)
 		{
-			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			Core::ScriptComponent* colliderScript1 = gameObject1->GetComponent<Core::ScriptComponent>();
 			if (colliderScript1)
-				colliderScript1->OnCollisionStay(collider2);
+				colliderScript1->OnCollisionStay(colliderScript1->Instance, collider2);
 		}
 
 		Core::GameObject* gameObject2 = collider2->GetGameObject();
 		if (gameObject2)
 		{
-			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			Core::ScriptComponent* colliderScript2 = gameObject2->GetComponent<Core::ScriptComponent>();
 			if (colliderScript2)
-				colliderScript2->OnCollisionStay(collider1);
+				colliderScript2->OnCollisionStay(colliderScript2->Instance, collider1);
 		}
 	}
 
@@ -240,17 +240,17 @@ namespace Core
 		Core::GameObject* gameObject1 = collider1->GetGameObject();
 		if (gameObject1)
 		{
-			Core::MonoBehaviour* colliderScript1 = gameObject1->GetComponent<Core::MonoBehaviour>();
+			Core::ScriptComponent* colliderScript1 = gameObject1->GetComponent<Core::ScriptComponent>();
 			if (colliderScript1)
-				colliderScript1->OnCollisionExit(collider2);
+				colliderScript1->OnCollisionExit(colliderScript1->Instance, collider2);
 		}
 
 		Core::GameObject* gameObject2 = collider2->GetGameObject();
 		if (gameObject2)
 		{
-			Core::MonoBehaviour* colliderScript2 = gameObject2->GetComponent<Core::MonoBehaviour>();
+			Core::ScriptComponent* colliderScript2 = gameObject2->GetComponent<Core::ScriptComponent>();
 			if (colliderScript2)
-				colliderScript2->OnCollisionExit(collider1);
+				colliderScript2->OnCollisionExit(colliderScript2->Instance, collider1);
 		}
 	}
 

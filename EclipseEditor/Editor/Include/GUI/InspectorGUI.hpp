@@ -19,6 +19,7 @@ namespace Core
 	class AudioSource;
 	class AudioListener;
 	class ParticleEmitter;
+	class ScriptComponent;
 }
 
 namespace Resource
@@ -50,6 +51,7 @@ namespace GUI
 		void DrawAudioSourceComponent(Core::AudioSource* _source);
 		void DrawAudioListenerComponent(Core::AudioListener* _listener);
 		void DrawParticleEmitterComponent(Core::ParticleEmitter* _particleEmitter);
+		void DrawScriptComponent(Core::ScriptComponent* _scriptComponent);
 
 		void DrawAddComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddCameraComponent(Core::GameObject* _crtGOSelected);
@@ -58,6 +60,7 @@ namespace GUI
 		void DrawAddLightComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddAudioComponent(Core::GameObject* _crtGOSelected);
 		void DrawAddParticlesComponent(Core::GameObject* _crtGOSelected);
+		void DrawAddScriptComponent(Core::GameObject* _crtGOSelected);
 
 		ImGuiTreeNodeFlags m_treeNodeComponentFlags = ImGuiTreeNodeFlags_None;
 		ImGuiTreeNodeFlags m_treeNodeAddComponentFlags = ImGuiTreeNodeFlags_None;
@@ -71,6 +74,10 @@ namespace GUI
 		const int MAX_NAME_SIZE = 50;
 		std::string m_newTagName;
 		const int MAX_TAG_NAME_SIZE = 20;
+		const int SCRIPT_NAME_MAX_SIZE = 20;
+		std::string m_newScriptName = "";
+		ImVec2 m_addingScriptWindowSize{ 350.f, 110.f };
+		bool bIsAddingScript = false;
 
 		Resource::Texture* m_playBtnTexture = nullptr;
 		Resource::Texture* m_stopBtnTexture = nullptr;

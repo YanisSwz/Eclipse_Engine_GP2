@@ -72,6 +72,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetPositionChanged(bool _changed);
 		ECLIPSE_ENGINE void SetScaleChanged(bool _changed);
 		ECLIPSE_ENGINE void SetRotationChanged(bool _changed);
+		ECLIPSE_ENGINE void SetChanged(bool _changed);
 
 		ECLIPSE_ENGINE std::vector<std::pair<GameObject*, int>> GetHierarchy();
 

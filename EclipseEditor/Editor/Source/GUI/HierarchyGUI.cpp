@@ -15,9 +15,7 @@ namespace GUI
 		ImGui::SetNextWindowSizeConstraints({ 200.f, 100.f }, ImGui::GetMainViewport()->Size);
 		ImGuiWindowFlags hierarchyWindowFlags = ImGuiWindowFlags_None;
 		ImGui::Begin("Hierarchy", 0, hierarchyWindowFlags);
-
-
-
+		
 		if (ImGui::BeginPopupContextWindow("HierarchyPopUpMenu"))
 		{
 			if (ImGui::Button("Add Node"))
@@ -30,6 +28,22 @@ namespace GUI
 
 		if (ImGui::TreeNodeEx(_scene->GetName().c_str(), ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_DefaultOpen))
 		{
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TransformDrag"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(int));
+					int* payload_n;
+					payload_n = static_cast<int*>(payload->Data);
+					Core::Transform* transform = _scene->GetObjectByID(*payload_n)->transform;
+					_scene->GetSystemManager()->GetTransformsRoot()->AddChild(transform);
+					transform->SetPosition(transform->GetPosition());
+					transform->SetRotation(transform->GetRotation());
+					transform->SetScale(transform->GetScale());
+				}
+				ImGui::EndDragDropTarget();
+			}
+			
 			std::vector<Core::Transform*> transforms = _scene->GetSystemManager()->GetTransformsRoot()->GetChildren();
 			for (Core::Transform* transform : transforms)
 			{
@@ -67,6 +81,30 @@ namespace GUI
 
 			if (!_crtTransform->GetGameObject()->IsActive())
 				ImGui::PopStyleVar();
+
+
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				ImGui::SetDragDropPayload("TransformDrag", &_crtTransform->GetGameObject()->GetIDRef(), sizeof(int));
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TransformDrag"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(int));
+					int* payload_n;
+					payload_n = static_cast<int*>(payload->Data);
+					Core::Transform* transform = _scene->GetObjectByID(*payload_n)->transform;
+					transform->SetParent(_crtTransform);
+					transform->SetPosition(transform->GetPosition());
+					transform->SetRotation(transform->GetRotation());
+					transform->SetScale(transform->GetScale());
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 
 			if (ImGui::BeginPopupContextItem("HierarchyPopUpMenu"))
 			{

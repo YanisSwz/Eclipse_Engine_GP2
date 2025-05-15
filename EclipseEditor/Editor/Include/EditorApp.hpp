@@ -95,8 +95,9 @@ private:
 	std::string m_newPrefabName;
 	int PREFAB_NAME_MAX_SIZE = 20;
 
-	void InitWindowing(const char* _windowName);
+	void InitWindowing(const char* _windowName, Resource::Texture* _icon);
 	void InitRHI();
+	void DrawWaitingImage(Resource::Mesh* _mesh, Resource::Texture* _texture, Resource::ShaderProgram* _shader);
 	void SetupImGuiStyle();
 	void InitGUI();
 	void LoadResources();

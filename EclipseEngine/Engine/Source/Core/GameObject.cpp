@@ -156,7 +156,8 @@ namespace Core
 		for (int i = 0; i < components.size(); ++i)
 		{
 			Component* component = AddComponent(components[i].begin().key());
-			component->Deserialize(components[i].begin().value());
+			if (component)
+				component->Deserialize(components[i].begin().value());
 		}
 	}
 }
