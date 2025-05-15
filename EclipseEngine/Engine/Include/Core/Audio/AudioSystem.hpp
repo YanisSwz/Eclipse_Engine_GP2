@@ -48,6 +48,9 @@ namespace Core
 
 		ECLIPSE_ENGINE void Reset();
 
+		ECLIPSE_ENGINE void SerializeChannels(std::string _filePath);
+		ECLIPSE_ENGINE void DeserializeChannels(std::string _filePath);
+
 	private:
 		void ResetAudioSourcesPause();
 

@@ -2,12 +2,13 @@
 #include "GUI/ContentBrowserGUI.hpp"
 #include "GUI/Widget/ImGuiWidget.hpp"
 #include "Resource/ResourceManager.hpp"
-#include "vector"
+#include "Resource/Prefab.hpp"
+#include <vector>
 #include "Scene.hpp"
 
 namespace GUI
 {
-	Core::GameObject* HierarchyGUI::Draw(Core::Scene* _scene, Core::GameObject* _crtGOSelected, ContentBrowserGUI* _contentBrowser)
+	Core::GameObject* HierarchyGUI::Draw(Core::Scene* _scene, Core::GameObject* _crtGOSelected)
 	{
 		Core::GameObject* newGameObjectSelected = nullptr;
 
@@ -32,7 +33,7 @@ namespace GUI
 			std::vector<Core::Transform*> transforms = _scene->GetSystemManager()->GetTransformsRoot()->GetChildren();
 			for (Core::Transform* transform : transforms)
 			{
-				Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected, _contentBrowser);
+				Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
 				if (tempNewGOSelected)
 					newGameObjectSelected = tempNewGOSelected;
 			}
@@ -44,7 +45,7 @@ namespace GUI
 		return newGameObjectSelected;
 	}
 
-	Core::GameObject* HierarchyGUI::RecursiveDraw(Core::Transform* _crtTransform, Core::Scene* _scene, Core::GameObject* _crtGOSelected, ContentBrowserGUI* _contentBrowser)
+	Core::GameObject* HierarchyGUI::RecursiveDraw(Core::Transform* _crtTransform, Core::Scene* _scene, Core::GameObject* _crtGOSelected)
 	{
 		Core::GameObject* newGameObjectSelected = nullptr;
 
@@ -92,52 +93,88 @@ namespace GUI
 
 					if (ImGui::Button("Save as Prefab"))
 					{
-						Resource::Prefab* prefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>("prefab.json");
-						if (!prefab)
-						{
-							prefab = Resource::ResourceManager::GetInstance().AddResourceToLoad<Resource::Prefab>("prefab.json", "Assets/Prefabs/prefab.json");
-							Resource::ResourceManager::GetInstance().LoadAllResources();
-							if (_contentBrowser)
-								_contentBrowser->AddPrefab(prefab);
-						}
-						_scene->SavePrefab(_crtGOSelected, prefab);
-						ImGui::CloseCurrentPopup();
-					}
-					if (ImGui::Button("Instantiate Prefab"))
-					{
-						_scene->InstantiatePrefab(newGameObjectSelected, Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>("prefab.json"));
-						ImGui::CloseCurrentPopup();
+						bIsPrefabWindowOpen = true;
+						bIsPrefabInstantiate = false;
+						ImGui::OpenPopup("Prefab Selection");
+						ImGui::SetNextWindowSize(ImVec2(250, 150));
 					}
 				}
+
+				if (ImGui::Button("Instantiate Prefab"))
+				{
+					bIsPrefabWindowOpen = true;
+					bIsPrefabInstantiate = true;
+					ImGui::OpenPopup("Prefab Selection");
+					ImGui::SetNextWindowSize(ImVec2(250, 150));
+				}
+
+				if (ImGui::BeginPopupModal("Prefab Selection"))
+				{
+					std::vector<std::string> prefabNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Prefab>();
+
+					GUI::ComboFilter("Prefab", &m_crtPrefabName, prefabNames);
+
+					if (bIsPrefabInstantiate)
+					{
+						m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
+						if (ImGui::Button("Instantiate") && m_crtPrefab)
+						{
+							_scene->InstantiatePrefab(_crtGOSelected, m_crtPrefab);
+							m_crtPrefabName.clear();
+							m_crtPrefab = nullptr;
+							bIsPrefabWindowOpen = false;
+							ImGui::CloseCurrentPopup();
+						}
+					}
+					else
+					{
+						m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
+						if (ImGui::Button("Save") && m_crtPrefab)
+						{
+							_scene->SavePrefab(_crtGOSelected, m_crtPrefab);
+							m_crtPrefabName.clear();
+							m_crtPrefab = nullptr;
+							bIsPrefabWindowOpen = false;
+							ImGui::CloseCurrentPopup();
+						}
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Cancel"))
+					{
+						m_crtPrefabName.clear();
+						m_crtPrefab = nullptr;
+						bIsPrefabWindowOpen = false;
+						ImGui::CloseCurrentPopup();
+					}
+
+					ImGui::EndPopup();
+				}
+
 				ImGui::EndPopup();
 			}
 			for (Core::Transform* transform : transforms)
 			{
-				Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected, _contentBrowser);
+				Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
 				if (tempNewGOSelected)
 					newGameObjectSelected = tempNewGOSelected;
 			}
 
-			ImGui::TreePop();
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PrefabName"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					m_crtPrefabName = *static_cast<std::string*>(payload->Data);
 
-			//if (ImGui::BeginPopupModal())
-			//{
-			//	std::vector<std::string> prefabNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Prefab>();
-			//	std::string prefabName;
-			//	if (GUI::ComboFilter("Mesh ", &prefabName, prefabNames))
-			//		
-			//	if (ImGui::BeginDragDropTarget())
-			//	{
-			//		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MeshName"))
-			//		{
-			//			IM_ASSERT(payload->DataSize == sizeof(std::string));
-			//			std::string payload_n;
-			//			payload_n = *static_cast<std::string*>(payload->Data);
-			//			_model->SetMesh(Resource::ResourceManager::GetInstance().GetResource<Resource::Mesh>(payload_n));
-			//		}
-			//		ImGui::EndDragDropTarget();
-			//	}
-			//}
+					m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
+					_scene->InstantiatePrefab(_crtTransform->GetGameObject(), m_crtPrefab);
+					m_crtPrefabName.clear();
+					m_crtPrefab = nullptr;
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			ImGui::TreePop();
 		}
 		else
 		{
