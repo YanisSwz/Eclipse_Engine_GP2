@@ -604,7 +604,7 @@ Core::GameObject* EditorApp::PickObject()
 	int mousePosX = static_cast<int>(mousePos.x) - m_sceneWindowPosX;
 	int mousePosY = m_sceneWindowHeight - (static_cast<int>(mousePos.y) - (m_sceneWindowPosY - 30)); // -30 for the size of the ImGui window titlebar
 	int pickID = m_editorPipeline->PickObjectID(mousePosX, mousePosY);
-	return m_scene.GetObjectByID(pickID);;
+	return m_scene.GetObjectByID(pickID);
 }
 
 void EditorApp::DestroyScene()

@@ -4,6 +4,8 @@
 
 namespace Core
 {
+	class Scene;
+
 	class ScriptingSystem
 	{
 	public:
@@ -11,7 +13,7 @@ namespace Core
 		~ScriptingSystem();
 
 		ECLIPSE_ENGINE ScriptComponent* AddScript();
-		ECLIPSE_ENGINE void Update(Windowing::IWindow* _window, float _deltaTime, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register);
+		ECLIPSE_ENGINE void Update(Scene* _scene, Windowing::IWindow* _window, float _deltaTime, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register);
 		ECLIPSE_ENGINE void Reset();
 
 	private:

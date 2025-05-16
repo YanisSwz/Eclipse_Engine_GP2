@@ -1,4 +1,5 @@
 #include "Scripting/ScriptingSystem.hpp"
+#include "Scene.hpp"
 #include "GameObject.hpp"
 #include "Logger.hpp"
 
@@ -41,7 +42,7 @@ namespace Core
 		return &m_scripts[m_currentScriptCount - 1];
 	}
 
-	void ScriptingSystem::Update(Windowing::IWindow* _window, float _deltaTime, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register)
+	void ScriptingSystem::Update(Scene* _scene, Windowing::IWindow* _window, float _deltaTime, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register)
 	{
 		for (int i = 0; i < m_currentScriptCount; ++i)
 		{
@@ -53,7 +54,10 @@ namespace Core
 					if (script->InstanciateFunction)
 						script->InstanciateFunction(_register);
 					if (script->Instance)
+					{
 						script->Instance->m_gameObject = script->m_gameObject;
+						script->Instance->m_scene = _scene;
+					}
 					if (script->OnStartFunction)
 						script->OnStartFunction(script->Instance);
 				}

@@ -1,5 +1,5 @@
 #include "PlayerScript.hpp"
-#include "GameObject.hpp"
+#include "Scene.hpp"
 
 PlayerScript::PlayerScript()
 {

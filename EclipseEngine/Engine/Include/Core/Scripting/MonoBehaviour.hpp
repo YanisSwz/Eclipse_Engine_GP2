@@ -6,6 +6,7 @@
 namespace Core 
 {
 	class GameObject;
+	class Scene;
 
 	class MonoBehaviour
 	{
@@ -23,6 +24,7 @@ namespace Core
 		ECLIPSE_ENGINE virtual void OnCollisionExit(ICollider* _collider);
 
 	protected:
+		Scene* m_scene = nullptr;
 		GameObject* m_gameObject = nullptr;
 		friend class ScriptingSystem;
 	};
