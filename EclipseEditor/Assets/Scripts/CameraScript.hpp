@@ -14,6 +14,10 @@ public:
 	void OnCollisionEnter(Core::ICollider* _collider) override;
 	void OnCollisionStay(Core::ICollider* _collider) override;
 	void OnCollisionExit(Core::ICollider* _collider) override;
+
+private:
+	Core::GameObject* m_player = nullptr;
+	float m_zOffset = 12.f;
 };
 
 REGISTER_TYPE(CameraScript);
