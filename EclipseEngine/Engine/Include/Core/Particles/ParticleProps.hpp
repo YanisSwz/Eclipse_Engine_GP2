@@ -26,7 +26,12 @@ namespace Core
 		Math::Vec4 colorBegin{ 255.f, 0.f, 255.f, 255.f };
 		Math::Vec4 colorEnd{ 255.f, 0.f, 255.f, 255.f };
 
-		Math::Vec3 velocity{ 0.f, 0.f, 0.f };
-		Math::Vec3 velocityVariation{ 1.f, 1.f, 1.f };
+		Math::Vec3 velocityBegin{ 0.f, 0.f, 0.f };
+		Math::Vec3 velocityEnd{ 0.f, 0.f, 0.f };
+		Math::Vec3 velocityVariationBegin{ 1.f, 1.f, 1.f };
+		Math::Vec3 velocityVariationEnd{ 1.f, 1.f, 1.f };
+
+		//Math::Vec3 rotationBegin{ 0.f, 0.f, 0.f };
+		//Math::Vec3 rotationEnd{ 0.f, 0.f, 0.f };
 	};
 }
