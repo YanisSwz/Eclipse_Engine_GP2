@@ -1,6 +1,8 @@
 #include "RHIOpenGL/OpenGLRenderPass/OpenGLParticleRenderPass.hpp"
 #include "Resource/ResourceManager.hpp"
 #include "Resource/ShaderProgram.hpp"
+#include "Core/Particles/ParticleRenderData.hpp"
+#include "Resource/Texture.hpp"
 
 namespace RHI::OpenGL
 {
@@ -36,21 +38,31 @@ namespace RHI::OpenGL
 	{
 	}
 
-	void OpenGLParticleRenderPass::Draw(Math::Mat4 _VP, std::vector<std::vector<Core::ParticleRenderData>> _particlesData)
+	void OpenGLParticleRenderPass::Draw(Math::Mat4 _V, Math::Mat4 _P, std::vector<Core::ParticleEmitterRenderData> _particlesData)
 	{
 		m_particleShader->Bind();
-		m_particleShader->SetMat4("VP", _VP, true);
-		m_particleShader->SetFloat("windowWidth", static_cast<float>(m_width));
-		m_particleShader->SetFloat("windowHeight", static_cast<float>(m_height));
+		m_particleShader->SetMat4("View", _V, true);
+		m_particleShader->SetMat4("Proj", _P, true);
 
 		for (int i = 0; i < _particlesData.size(); ++i)
 		{
-			if (_particlesData[i].empty())
+			if (_particlesData[i].particlesRenderData.empty() || !_particlesData[i].particleMesh)
 				continue;
+			m_particleShader->SetInt("bIsBillboard", static_cast<int>(_particlesData[i].bIsBillboard));
+			if (_particlesData[i].particleTexture)
+			{
+				_particlesData[i].particleTexture->Bind();
+				m_particleShader->SetInt("bHasTexture", 1);
+			}
+			else
+			{
+				glBindTexture(GL_TEXTURE_2D, 0);
+				m_particleShader->SetInt("bHasTexture", 0);
+			}
 
 			glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
 			GLvoid* p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
-			memcpy(p, _particlesData[i].data(), _particlesData[i].size() * sizeof(Core::ParticleRenderData));
+			memcpy(p, _particlesData[i].particlesRenderData.data(), _particlesData[i].particlesRenderData.size() * sizeof(Core::ParticleRenderData));
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
 
 			unsigned int block_index = glGetUniformBlockIndex(m_particleShader->GetProgramID(), "particleDataBlock");
@@ -58,7 +70,12 @@ namespace RHI::OpenGL
 			glBindBufferBase(GL_UNIFORM_BUFFER, binding_point_index, m_ubo);
 			glUniformBlockBinding(m_particleShader->GetProgramID(), block_index, binding_point_index);
 
-			glDrawArraysInstanced(GL_POINTS, 0, 1, static_cast<GLsizei>(_particlesData[i].size()));
+			_particlesData[i].particleMesh->BindVertexArray();
+			GLsizei count = static_cast<GLsizei>(_particlesData[i].particleMesh->GetVerticesIndex().size());
+			GLsizei instanceCount = static_cast<GLsizei>(_particlesData[i].particlesRenderData.size());
+			glDrawElementsInstanced(GL_TRIANGLES, count,
+				GL_UNSIGNED_INT, 0, instanceCount);
+			_particlesData[i].particleMesh->UnbindVertexArray();
 		}
 
 		m_particleShader->Unbind();

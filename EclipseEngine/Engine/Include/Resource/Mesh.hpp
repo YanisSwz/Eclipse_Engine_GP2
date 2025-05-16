@@ -4,6 +4,7 @@
 #include "RHIInterfaces/IVertexBuffer.hpp"
 #include "RHIInterfaces/IIndexBuffer.hpp"
 #include "RHIInterfaces/Vertex.hpp"
+#include "Core/Particles/ParticleRenderData.hpp"
 #include <vector>
 
 namespace Resource
@@ -20,6 +21,8 @@ namespace Resource
 		ECLIPSE_ENGINE void Generate(RHI::IRenderInterface* _rdrInterface) override;
 
 		ECLIPSE_ENGINE void Draw() const;
+		ECLIPSE_ENGINE void BindVertexArray();
+		ECLIPSE_ENGINE void UnbindVertexArray();
 
 		ECLIPSE_ENGINE void Delete() override;
 

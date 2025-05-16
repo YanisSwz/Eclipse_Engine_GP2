@@ -1,5 +1,6 @@
 #include "SystemManager.hpp"
 #include "IWindow.hpp"
+#include "Scene.hpp"
 
 namespace Core
 {
@@ -13,12 +14,12 @@ namespace Core
 		m_audioSystem.Destroy();
 	}
 
-	void SystemManager::Update(Windowing::IWindow* _window, float _deltaTime, GAME_STATE _state, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register)
+	void SystemManager::Update(Scene* _scene, Windowing::IWindow* _window, float _deltaTime, GAME_STATE _state, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register)
 	{
 		switch (_state)
 		{
 		case GAME_STATE::PLAY:
-			m_scriptingSystem.Update(_window, _deltaTime, _register);
+			m_scriptingSystem.Update(_scene, _window, _deltaTime, _register);
 			m_transformSystem.Update();
 			m_physicsSystem.Update(_deltaTime);
 			m_audioSystem.Update();
@@ -46,9 +47,9 @@ namespace Core
 		return m_transformSystem.GetRoot();
 	}
 
-	void SystemManager::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _VP, Math::Vec3 _viewPos)
+	void SystemManager::Render(RHI::IRenderInterface* _renderInterface, RHI::IGraphicPipeline* _pipeline, Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos)
 	{
-		m_renderSystem.Render(_renderInterface, _pipeline, _VP, _viewPos, m_particleSystem.GetRenderData());
+		m_renderSystem.Render(_renderInterface, _pipeline, _V, _P, _viewPos, m_particleSystem.GetRenderData());
 	}
 
 	AudioSystem* SystemManager::GetAudioSystem()

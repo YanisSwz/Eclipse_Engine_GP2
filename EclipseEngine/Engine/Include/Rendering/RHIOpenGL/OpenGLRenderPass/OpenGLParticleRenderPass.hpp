@@ -1,7 +1,7 @@
 #pragma once
 #include "RHIOpenGL/OpenGLRenderPass/OpenGLRenderPass.hpp"
 #include "Maths.hpp"
-#include "Particles/ParticleRenderData.hpp"
+#include "Core/Particles/ParticleRenderData.hpp"
 #include <vector>
 #include <glad/glad.h>
 
@@ -25,7 +25,7 @@ namespace RHI::OpenGL
 		void Rescale(int _width, int _height) override;
 		void Delete() override;
 
-		void Draw(Math::Mat4 _VP, std::vector<std::vector<Core::ParticleRenderData>> _particlesData);
+		void Draw(Math::Mat4 _V, Math::Mat4 _P, std::vector<Core::ParticleEmitterRenderData> _particlesData);
 
 	private:
 		static const int MAX_PARTICLE_SIZE = 2000;

@@ -27,7 +27,7 @@ namespace Core
 		ECLIPSE_ENGINE void Stop();
 
 		ECLIPSE_ENGINE void Update(float _deltaTime);
-		ECLIPSE_ENGINE std::vector<ParticleRenderData> GetRenderData();
+		ECLIPSE_ENGINE ParticleEmitterRenderData GetRenderData();
 		
 		ECLIPSE_ENGINE void Destroy() override;
 		ECLIPSE_ENGINE void Delete();

@@ -589,13 +589,13 @@ void EditorApp::DrawScene()
 {
 	m_editorPipeline->Rescale(m_sceneWindowWidth, m_sceneWindowHeight);
 	m_renderInterface->Viewport(0, 0, m_sceneWindowWidth, m_sceneWindowHeight);
-	m_scene.GetSystemManager()->Render(m_renderInterface, m_editorPipeline, m_sceneCamera.GetVP(), m_sceneCamera.GetViewPos());
+	m_scene.GetSystemManager()->Render(m_renderInterface, m_editorPipeline, m_sceneCamera.GetView(), m_sceneCamera.GetProjection(), m_sceneCamera.GetViewPos());
 
 	m_gamePipeline->Rescale(m_gameWindowWidth, m_gameWindowHeight);
 	m_renderInterface->Viewport(0, 0, m_gameWindowWidth, m_gameWindowHeight);
 	Core::Camera* gameCamera = m_scene.GetSystemManager()->GetCameraSystem()->GetCurrentCamera();
 	if (gameCamera)
-		m_scene.GetSystemManager()->Render(m_renderInterface, m_gamePipeline, gameCamera->GetViewProjectionMatrix(m_gameWindowWidth, m_gameWindowHeight), gameCamera->GetViewPos());
+		m_scene.GetSystemManager()->Render(m_renderInterface, m_gamePipeline, gameCamera->GetViewMatrix(), gameCamera->GetProjectionMatrix(m_gameWindowWidth, m_gameWindowHeight), gameCamera->GetViewPos());
 }
 
 Core::GameObject* EditorApp::PickObject()
@@ -604,7 +604,7 @@ Core::GameObject* EditorApp::PickObject()
 	int mousePosX = static_cast<int>(mousePos.x) - m_sceneWindowPosX;
 	int mousePosY = m_sceneWindowHeight - (static_cast<int>(mousePos.y) - (m_sceneWindowPosY - 30)); // -30 for the size of the ImGui window titlebar
 	int pickID = m_editorPipeline->PickObjectID(mousePosX, mousePosY);
-	return m_scene.GetObjectByID(pickID);;
+	return m_scene.GetObjectByID(pickID);
 }
 
 void EditorApp::DestroyScene()

@@ -6,7 +6,7 @@ namespace Core
 {
 	void Scene::Update(Windowing::IWindow*_window, float _deltaTime, std::unordered_map<std::string, std::function<MonoBehaviour* ()>>& _register)
 	{
-		m_systemManager.Update(_window, _deltaTime, m_state, _register);
+		m_systemManager.Update(this, _window, _deltaTime, m_state, _register);
 	}
 
 	GameObject* Scene::CreateGameObject()

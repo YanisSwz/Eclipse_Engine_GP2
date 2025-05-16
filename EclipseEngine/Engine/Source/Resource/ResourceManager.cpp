@@ -127,57 +127,60 @@ namespace Resource
 			}
 		}
 
-		for (const auto& entry : std::filesystem::directory_iterator("Assets/Shaders/VertGeoFragShaders/"))
+		if (std::filesystem::exists("Assets/Shaders/VertGeoFragShaders/"))
 		{
-			// Load Vertex Shader
-			if (entry.path().extension().string() == ".vert")
+			for (const auto& entry : std::filesystem::directory_iterator("Assets/Shaders/VertGeoFragShaders/"))
 			{
-				resourceName = entry.path().filename().string();
-				resourcePath = entry.path().string();
-				AddResourceToLoad<Resource::VertShader>(resourceName, resourcePath);
-			}
-			// Load Fragment Shader
-			else if (entry.path().extension().string() == ".frag")
-			{
-				resourceName = entry.path().filename().string();
-				resourcePath = entry.path().string();
-				AddResourceToLoad<Resource::FragShader>(resourceName, resourcePath);
-			}
-			else if (entry.path().extension().string() == ".geom")
-			{
-				// Load Geometry Shader
-				resourceName = entry.path().filename().string();
-				resourcePath = entry.path().string();
-				AddResourceToLoad<Resource::GeoShader>(resourceName, resourcePath);
-
-				resourcePath = entry.path().filename().string();
-				// Load Shader Program
-				char popedChar;
-				do
+				// Load Vertex Shader
+				if (entry.path().extension().string() == ".vert")
 				{
-					popedChar = resourceName[resourceName.size() - 1];
-					resourceName.pop_back();
-					resourcePath.pop_back();
-				} while (popedChar != '.');
+					resourceName = entry.path().filename().string();
+					resourcePath = entry.path().string();
+					AddResourceToLoad<Resource::VertShader>(resourceName, resourcePath);
+				}
+				// Load Fragment Shader
+				else if (entry.path().extension().string() == ".frag")
+				{
+					resourceName = entry.path().filename().string();
+					resourcePath = entry.path().string();
+					AddResourceToLoad<Resource::FragShader>(resourceName, resourcePath);
+				}
+				else if (entry.path().extension().string() == ".geom")
+				{
+					// Load Geometry Shader
+					resourceName = entry.path().filename().string();
+					resourcePath = entry.path().string();
+					AddResourceToLoad<Resource::GeoShader>(resourceName, resourcePath);
 
-				resourceName.append(".shd");
-				std::string vertName = resourcePath + ".vert";
-				std::string fragName = resourcePath + ".frag";
-				std::string geoName = resourcePath + ".geom";
+					resourcePath = entry.path().filename().string();
+					// Load Shader Program
+					char popedChar;
+					do
+					{
+						popedChar = resourceName[resourceName.size() - 1];
+						resourceName.pop_back();
+						resourcePath.pop_back();
+					} while (popedChar != '.');
 
-				AddResourceToLoad<Resource::ShaderProgram>(resourceName, vertName, fragName, geoName);
+					resourceName.append(".shd");
+					std::string vertName = resourcePath + ".vert";
+					std::string fragName = resourcePath + ".frag";
+					std::string geoName = resourcePath + ".geom";
+
+					AddResourceToLoad<Resource::ShaderProgram>(resourceName, vertName, fragName, geoName);
+				}
 			}
-		}
 
-		for (const auto& entry : std::filesystem::directory_iterator("Assets/Prefabs"))
-		{
-			resourceName = entry.path().filename().string();
-			resourcePath = entry.path().string();
-			AddResourceToLoad<Resource::Prefab>(resourceName, resourcePath);
-		}
+			for (const auto& entry : std::filesystem::directory_iterator("Assets/Prefabs"))
+			{
+				resourceName = entry.path().filename().string();
+				resourcePath = entry.path().string();
+				AddResourceToLoad<Resource::Prefab>(resourceName, resourcePath);
+			}
 
-		resourceName.clear();
-		resourcePath.clear();
+			resourceName.clear();
+			resourcePath.clear();
+		}
 	}
 
 	void ResourceManager::LoadAllResources()

@@ -106,6 +106,16 @@ namespace Resource
 		m_indexBufferObject->Draw(m_vertexArrayObject);
 	}
 
+	void Mesh::BindVertexArray()
+	{
+		m_vertexArrayObject->Bind();
+	}
+
+	void Mesh::UnbindVertexArray()
+	{
+		m_vertexArrayObject->Unbind();
+	}
+
 	void Mesh::Delete()
 	{
 		if (!m_vertexBuffer.empty())
