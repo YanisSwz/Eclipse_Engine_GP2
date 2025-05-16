@@ -47,7 +47,7 @@ namespace RHI::OpenGL
 		for (int i = 0; i < _particlesData.size(); ++i)
 		{
 			if (_particlesData[i].particlesRenderData.empty() || !_particlesData[i].particleMesh)
-				continue;
+				continue; 
 			m_particleShader->SetInt("bIsBillboard", static_cast<int>(_particlesData[i].bIsBillboard));
 			if (_particlesData[i].particleTexture)
 			{

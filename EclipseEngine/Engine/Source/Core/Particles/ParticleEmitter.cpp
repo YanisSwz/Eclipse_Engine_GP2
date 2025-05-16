@@ -151,8 +151,10 @@ namespace Core
 		Math::Vec3 positionVariation = particleProps.positionVariation;
 		Math::Vec4 colorBegin = particleProps.colorBegin / 255.f;
 		Math::Vec4 colorEnd = particleProps.colorEnd / 255.f;
-		Math::Vec3 velocity = particleProps.velocity;
-		Math::Vec3 velocityVariation = particleProps.velocityVariation;
+		Math::Vec3 velocityBegin = particleProps.velocityBegin;
+		Math::Vec3 velocityEnd = particleProps.velocityEnd;
+		Math::Vec3 velocityVariationBegin = particleProps.velocityVariationBegin;
+		Math::Vec3 velocityVariationEnd = particleProps.velocityVariationEnd;
 		std::string meshName = particleProps.defaultMeshName;
 		if (particleProps.mesh)
 			meshName = particleProps.mesh->name;
@@ -182,8 +184,10 @@ namespace Core
 				{"SizeVariation", particleProps.sizeEnd},
 				{"BeginColor", { colorBegin.x, colorBegin.y, colorBegin.z, colorBegin.w }}, // RGBA
 				{"EndColor", { colorEnd.x, colorEnd.y, colorEnd.z, colorEnd.w }}, // RGBA
-				{"Velocity", { velocity.x, velocity.y, velocity.z }},
-				{"VelocityVariation", { velocityVariation.x, velocityVariation.y, velocityVariation.z }}
+				{"BeginVelocity", { velocityBegin.x, velocityBegin.y, velocityBegin.z }},
+				{"EndVelocity", { velocityEnd.x, velocityEnd.y, velocityEnd.z }},
+				{"VelocityVariationBegin", { velocityVariationBegin.x, velocityVariationBegin.y, velocityVariationBegin.z }},
+				{"VelocityVariationEnd", { velocityVariationEnd.x, velocityVariationEnd.y, velocityVariationEnd.z }}
 			}},
 		};
 	}
@@ -195,8 +199,10 @@ namespace Core
 		float positionVariation[3];
 		float colorBegin[4];
 		float colorEnd[4];
-		float velocity[3];
-		float velocityVariation[3];
+		float velocityBegin[3];
+		float velocityEnd[3];
+		float velocityVariationBegin[3];
+		float velocityVariationEnd[3];
 
 		json particleEmitterPropsJson = _j["ParticleEmitterProps"];
 		json particlePropsJson = _j["ParticleProps"];
@@ -227,8 +233,10 @@ namespace Core
 		particlePropsJson.at("PositionVariation").get_to(positionVariation);
 		particlePropsJson.at("BeginColor").get_to(colorBegin);
 		particlePropsJson.at("EndColor").get_to(colorEnd);
-		particlePropsJson.at("Velocity").get_to(velocity);
-		particlePropsJson.at("VelocityVariation").get_to(velocityVariation);
+		particlePropsJson.at("BeginVelocity").get_to(velocityBegin);
+		particlePropsJson.at("EndVelocity").get_to(velocityEnd);
+		particlePropsJson.at("VelocityVariationBegin").get_to(velocityVariationBegin);
+		particlePropsJson.at("VelocityVariationEnd").get_to(velocityVariationEnd);
 		particlePropsJson.at("LifeTime").get_to(particleProps.lifeTime);
 		particlePropsJson.at("LifeTimeVariation").get_to(particleProps.lifeTimeVariation);
 		particlePropsJson.at("BeginSize").get_to(particleProps.sizeBegin);
@@ -240,8 +248,10 @@ namespace Core
 		particleProps.positionVariation = { positionVariation[0], positionVariation[1], positionVariation[2] };
 		particleProps.colorBegin = { colorBegin[0] * 255.f, colorBegin[1] * 255.f, colorBegin[2] * 255.f, colorBegin[3] * 255.f };
 		particleProps.colorEnd = { colorEnd[0] * 255.f, colorEnd[1] * 255.f, colorEnd[2] * 255.f, colorEnd[3] * 255.f };
-		particleProps.velocity = { velocity[0], velocity[1], velocity[2] };
-		particleProps.velocityVariation = { velocityVariation[0], velocityVariation[1], velocityVariation[2] };
+		particleProps.velocityBegin = { velocityBegin[0], velocityBegin[1], velocityBegin[2] };
+		particleProps.velocityEnd = { velocityEnd[0], velocityEnd[1], velocityEnd[2] };
+		particleProps.velocityVariationBegin = { velocityVariationBegin[0], velocityVariationBegin[1], velocityVariationBegin[2] };
+		particleProps.velocityVariationEnd = { velocityVariationEnd[0], velocityVariationEnd[1], velocityVariationEnd[2] };
 	}
 
 	void ParticleEmitter::Destroy()
@@ -278,10 +288,16 @@ namespace Core
 		spawnedParticle->position = m_gameObject->transform->GetPosition() + particleProps.positionOffset + randomPos;
 		
 		// Velocity
-		Math::Vec3 randomVelocity{	particleProps.velocityVariation.x * Math::Tools::Random() - (particleProps.velocityVariation.x / 2.f),
-									particleProps.velocityVariation.y * Math::Tools::Random() - (particleProps.velocityVariation.y / 2.f),
-									particleProps.velocityVariation.z * Math::Tools::Random() - (particleProps.velocityVariation.z / 2.f) };
-		spawnedParticle->velocity = particleProps.velocity + randomVelocity;
+		Math::Vec3 randomVelocityBegin{ particleProps.velocityVariationBegin.x * Math::Tools::Random() - (particleProps.velocityVariationBegin.x / 2.f),
+									particleProps.velocityVariationBegin.y * Math::Tools::Random() - (particleProps.velocityVariationBegin.y / 2.f),
+									particleProps.velocityVariationBegin.z * Math::Tools::Random() - (particleProps.velocityVariationBegin.z / 2.f) };
+
+		Math::Vec3 randomVelocityEnd{ particleProps.velocityVariationEnd.x * Math::Tools::Random() - (particleProps.velocityVariationEnd.x / 2.f),
+									particleProps.velocityVariationEnd.y * Math::Tools::Random() - (particleProps.velocityVariationEnd.y / 2.f),
+									particleProps.velocityVariationEnd.z * Math::Tools::Random() - (particleProps.velocityVariationEnd.z / 2.f) };
+		spawnedParticle->velocityBegin = particleProps.velocityBegin + randomVelocityBegin;
+		spawnedParticle->velocityEnd = particleProps.velocityBegin + randomVelocityEnd;
+		spawnedParticle->velocity = spawnedParticle->velocityBegin;
 	}
 
 	void ParticleEmitter::ResetParticles()
@@ -313,6 +329,7 @@ namespace Core
 			float ltr = m_particles[i].lifeTimeRemaining / particleProps.lifeTime;
 			m_particles[i].color = particleProps.colorBegin * ltr + particleProps.colorEnd * (1 - ltr);
 			m_particles[i].size = particleProps.sizeBegin * ltr + particleProps.sizeEnd * (1 - ltr);
+			m_particles[i].velocity = m_particles[i].velocityBegin * ltr + m_particles[i].velocityEnd * (1 - ltr);
 			m_particles[i].position += (m_particles[i].velocity * _deltaTime);
 		}
 	}

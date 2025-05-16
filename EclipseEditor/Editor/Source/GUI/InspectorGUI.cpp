@@ -683,8 +683,10 @@ namespace GUI
 			GUI::DragFloat("Begin Size", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("End Size", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("Size Variation", "SizeVariationDragFloat", &_particleEmitter->particleProps.sizeVariation, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
-			GUI::DragVec3XYZ("Velocity", _particleEmitter->particleProps.velocity, 0.f, 125.f);
-			GUI::DragVec3XYZ("Velocity \nVariation", _particleEmitter->particleProps.velocityVariation, 0.f, 125.f);
+			GUI::DragVec3XYZ("Begin \nVelocity", _particleEmitter->particleProps.velocityBegin, 0.f, 125.f);
+			GUI::DragVec3XYZ("End \nVelocity", _particleEmitter->particleProps.velocityEnd, 0.f, 125.f);
+			GUI::DragVec3XYZ("Velocity \nVariation \nBegin", _particleEmitter->particleProps.velocityVariationBegin, 0.f, 125.f);
+			GUI::DragVec3XYZ("Velocity \nVariation \nEnd", _particleEmitter->particleProps.velocityVariationEnd, 0.f, 125.f);
 
 			ImGui::NewLine();
 			ImGui::TreePop();
