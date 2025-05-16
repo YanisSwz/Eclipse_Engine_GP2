@@ -1,0 +1,274 @@
+{
+    "AmbientLight": [
+        1.0,
+        1.0,
+        1.0,
+        0.25
+    ],
+    "GameObjects": [
+        {
+            "Floor": {
+                "IsActive": true,
+                "Tag": "Floor",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        100.0,
+                        100.0,
+                        0.10000000149011612
+                    ],
+                    "LocalRotation": [
+                        0.7071067094802856,
+                        -0.7071068286895752,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Quad.obj",
+                            "Texture": "WhiteTexture.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "BoxCollider": {
+                            "IsActive": true,
+                            "IsDynamic": false,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                100.0,
+                                100.0,
+                                0.10000000149011612
+                            ],
+                            "Rotation": [
+                                0.7071067094802856,
+                                -0.7071068286895752,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Sun": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.9687154293060303,
+                        0.07113800942897797
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.8191520571708679,
+                        0.5735764503479004,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "DirectionalLight": {
+                            "IsActive": true,
+                            "Color": [
+                                1.0,
+                                0.9333333373069763,
+                                0.7137255072593689,
+                                0.5764706134796143
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Main Camera": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        40.0,
+                        -11.100000381469727
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.8191520571708679,
+                        0.5735764503479004,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Camera": {
+                            "IsActive": true,
+                            "FOV": 60.0,
+                            "Near": 0.10000000149011612,
+                            "Far": 1000.0
+                        }
+                    },
+                    {
+                        "ScriptComponent": {
+                            "IsActive": true,
+                            "scriptName": "CameraScript"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Player": {
+                "IsActive": true,
+                "Tag": "Player",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        4.629799842834473,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "LizardMage.obj",
+                            "Texture": "LizardMage.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "ScriptComponent": {
+                            "IsActive": true,
+                            "scriptName": "PlayerScript"
+                        }
+                    },
+                    {
+                        "BoxCollider": {
+                            "IsActive": true,
+                            "IsDynamic": true,
+                            "OffsetPosition": [
+                                0.0,
+                                -3.0,
+                                0.0
+                            ],
+                            "Scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "Rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    },
+                    {
+                        "AudioSource": {
+                            "IsActive": true,
+                            "Channel": "SFX",
+                            "PlayOnAwake": false,
+                            "IsLooping": false,
+                            "Is3D": false,
+                            "Volume": 1.0,
+                            "Pan": 0.0,
+                            "MinDistance": 1.0,
+                            "MaxDistance": 5.0,
+                            "AudioClip": "shoot.wav"
+                        }
+                    },
+                    {
+                        "AudioListener": {
+                            "IsActive": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Light": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        -0.9028493165969849,
+                        4.7910566329956055,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.7071067094802856,
+                        0.70710688829422,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": 3
+                },
+                "Components": [
+                    {
+                        "SpotLight": {
+                            "IsActive": true,
+                            "Color": [
+                                1.0,
+                                0.8847171664237976,
+                                0.4455445408821106,
+                                1.0
+                            ],
+                            "InnerCutOff": 68.0,
+                            "OuterCutOff": 122.0,
+                            "Distance": 3.5,
+                            "ConstantAttenuation": 1.0,
+                            "LinearAttenuation": 0.09000000357627869,
+                            "QuadraticAttenuation": 0.03200000151991844
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
