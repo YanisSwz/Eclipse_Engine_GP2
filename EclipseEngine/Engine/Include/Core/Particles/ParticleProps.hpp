@@ -10,11 +10,11 @@ namespace Core
 	{
 		std::string defaultMeshName = "Quad.obj";
 		Resource::Mesh* mesh = nullptr;
-		std::string defaultTextureName = "WhitTexture.img";
 		Resource::Texture* texture = nullptr;
 		bool bIsBillboard = true;
 
 		float lifeTime = 1.f;
+		float lifeTimeVariation = 0.f;
 		
 		Math::Vec3 positionOffset{ 0.f, 0.f, 0.f };
 		Math::Vec3 positionVariation{ 0.f, 0.f, 0.f };

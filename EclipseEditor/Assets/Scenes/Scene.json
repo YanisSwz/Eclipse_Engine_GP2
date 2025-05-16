@@ -587,7 +587,11 @@
                                 "IsLooping": true
                             },
                             "ParticleProps": {
+                                "MeshName": "Quad.obj",
+                                "TextureName": "None",
+                                "IsBillboard": true,
                                 "LifeTime": 1.100000023841858,
+                                "LifeTimeVariation": 0.0,
                                 "PositionOffset": [
                                     0.0,
                                     0.0,
@@ -664,7 +668,11 @@
                                 "IsLooping": true
                             },
                             "ParticleProps": {
+                                "MeshName": "Quad.obj",
+                                "TextureName": "None",
+                                "IsBillboard": true,
                                 "LifeTime": 2.0,
+                                "LifeTimeVariation": 0.0,
                                 "PositionOffset": [
                                     0.0,
                                     0.0,
@@ -727,11 +735,6 @@
                         0.0,
                         0.0
                     ],
-                    "LocalEulerAngles": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
                     "ParentIndex": -1
                 },
                 "Components": [
@@ -769,14 +772,9 @@
                     ],
                     "LocalRotation": [
                         0.9762960076332092,
-                        0.2164396047592163,
+                        0.21643958985805511,
                         0.0,
                         0.0
-                    ],
-                    "LocalEulerAngles": [
-                        24.999998092651367,
-                        0.0,
-                        -0.0
                     ],
                     "ParentIndex": 13
                 },
@@ -813,11 +811,6 @@
                         0.0,
                         0.0
                     ],
-                    "LocalEulerAngles": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
                     "ParentIndex": -1
                 },
                 "Components": [
@@ -832,7 +825,11 @@
                                 "IsLooping": true
                             },
                             "ParticleProps": {
+                                "MeshName": "Quad.obj",
+                                "TextureName": "None",
+                                "IsBillboard": true,
                                 "LifeTime": 2.0,
+                                "LifeTimeVariation": 0.0,
                                 "PositionOffset": [
                                     0.0,
                                     0.0,

@@ -630,6 +630,7 @@ namespace GUI
 
 			ImGui::SeparatorText("Particle Properties");
 			GUI::DragFloat("Life Time", "LifeTimeDragFloat", &_particleEmitter->particleProps.lifeTime, 0.1f, 0.f, FLT_MAX);
+			GUI::DragFloat("Life Time \nVariation", "LifeTimeVariationDragFloat", &_particleEmitter->particleProps.lifeTimeVariation, 0.1f, 0.f, FLT_MAX);
 
 			std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
 			std::string meshName = _particleEmitter->particleProps.mesh->name;
