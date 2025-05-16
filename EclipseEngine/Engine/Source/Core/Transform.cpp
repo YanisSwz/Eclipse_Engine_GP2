@@ -147,19 +147,33 @@ namespace Core
 		m_forward = m_rotation.Rotate(Math::Vec3::forward);
 	}
 
-	void Transform::LateUpdate()
+	void Transform::LateUpdate(bool _positionChanged, bool _scaleChanged, bool _rotationChanged)
 	{
 		if (m_destroyed)
 			return;
 
-		m_positionChanged = false;
-		m_rotationChanged = false;
-		m_scaleChanged = false;
+		_positionChanged |= m_positionChanged;
+		_scaleChanged |= m_scaleChanged;
+		_rotationChanged |= m_rotationChanged;
+
+		if (!m_isSelected)
+		{
+			if (_positionChanged)
+				UpdatePosition();
+			if (_scaleChanged)
+				UpdateScale();
+			if (_rotationChanged)
+				UpdateRotation();
+		}
 
 		for (int i = 0; i < m_children.size(); ++i)
 		{
-			m_children[i]->LateUpdate();
+			m_children[i]->LateUpdate(_positionChanged, _scaleChanged, _rotationChanged);
 		}
+
+		m_positionChanged = false;
+		m_rotationChanged = false;
+		m_scaleChanged = false;
 	}
 
 	void Transform::StartOverride()
@@ -313,7 +327,7 @@ namespace Core
 		m_positionChanged = true;
 	}
 
-	void Transform::SetScale(float _x, float _y, float _z) 
+	void Transform::SetScale(float _x, float _y, float _z)
 	{
 		m_scale.x = _x;
 		m_scale.y = _y;
@@ -325,7 +339,7 @@ namespace Core
 		m_scaleChanged = true;
 	}
 
-	void Transform::SetRotation(float _w, float _x, float _y, float _z) 
+	void Transform::SetRotation(float _w, float _x, float _y, float _z)
 	{
 		m_rotation.w = _w;
 		m_rotation.x = _x;
@@ -349,7 +363,7 @@ namespace Core
 			m_positionChanged = true;
 	}
 
-	void Transform::SetEulerAngles(float _x, float _y, float _z) 
+	void Transform::SetEulerAngles(float _x, float _y, float _z)
 	{
 		m_eulerAngles.x = _x;
 		m_eulerAngles.y = _y;
@@ -373,7 +387,7 @@ namespace Core
 			m_positionChanged = true;
 	}
 
-	void Transform::SetLocalPosition(float _x, float _y, float _z) 
+	void Transform::SetLocalPosition(float _x, float _y, float _z)
 	{
 		m_localPosition.x = _x;
 		m_localPosition.y = _y;
@@ -382,7 +396,7 @@ namespace Core
 		m_positionChanged = true;
 	}
 
-	void Transform::SetLocalScale(float _x, float _y, float _z) 
+	void Transform::SetLocalScale(float _x, float _y, float _z)
 	{
 		m_localScale.x = _x;
 		m_localScale.y = _y;
@@ -391,7 +405,7 @@ namespace Core
 		m_scaleChanged = true;
 	}
 
-	void Transform::SetLocalRotation(float _w, float _x, float _y, float _z) 
+	void Transform::SetLocalRotation(float _w, float _x, float _y, float _z)
 	{
 		m_localRotation.w = _w;
 		m_localRotation.x = _x;
@@ -414,7 +428,7 @@ namespace Core
 			m_positionChanged = true;
 	}
 
-	void Transform::SetLocalEulerAngles(float _x, float _y, float _z) 
+	void Transform::SetLocalEulerAngles(float _x, float _y, float _z)
 	{
 		m_localEulerAngles.x = _x;
 		m_localEulerAngles.y = _y;

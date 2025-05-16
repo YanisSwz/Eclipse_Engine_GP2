@@ -1,14 +1,12 @@
 #pragma once
 #include "Scripting/MonoBehaviour.hpp"
 #include "Scripting/RegisterTypeMacro.hpp"
-#include "Physics/BoxCollider.hpp"
-#include "Audio/AudioSource.hpp"
 
-class PlayerScript : public Core::MonoBehaviour
+class CameraScript : public Core::MonoBehaviour
 {
 public:
-	PlayerScript();
-	~PlayerScript() override;
+	CameraScript();
+	~CameraScript() override;
 
 	void OnStart() override;
 	void OnUpdate(Windowing::IWindow* _window, float _deltaTime) override;
@@ -16,11 +14,6 @@ public:
 	void OnCollisionEnter(Core::ICollider* _collider) override;
 	void OnCollisionStay(Core::ICollider* _collider) override;
 	void OnCollisionExit(Core::ICollider* _collider) override;
-
-private:
-	Core::BoxCollider* m_collider = nullptr;
-	Core::AudioSource* m_source = nullptr;
-	float m_speed = 10.f;
 };
 
-REGISTER_TYPE(PlayerScript);
+REGISTER_TYPE(CameraScript);

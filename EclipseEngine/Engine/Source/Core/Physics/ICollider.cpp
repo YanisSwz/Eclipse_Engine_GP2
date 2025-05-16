@@ -181,6 +181,11 @@ namespace Core
 		m_bodyInterface->SetPosition(m_bodyID, { m_position.x, m_position.y, m_position.z }, isActivate);
 	}
 
+	void ICollider::SetVelocity(Math::Vec3 _velocity)
+	{
+		m_bodyInterface->SetLinearVelocity(m_bodyID, {_velocity.x, _velocity.y, _velocity.z});
+	}
+
 	Math::Vec3 ICollider::GetPosition() const
 	{
 		JPH::Vec3 pos = m_bodyInterface->GetPosition(m_bodyID);
@@ -223,6 +228,12 @@ namespace Core
 	JPH::BodyID ICollider::GetBodyID() const
 	{
 		return m_bodyID;
+	}
+
+	Math::Vec3 ICollider::GetVelocity() const 
+	{
+		JPH::Vec3 velocity = m_bodyInterface->GetLinearVelocity(m_bodyID);
+		return { velocity.GetX(), velocity.GetY(), velocity.GetZ() };
 	}
 
 	void ICollider::Destroy()

@@ -44,6 +44,7 @@ namespace Core
 		ECLIPSE_ENGINE void SetPosRotScale(Math::Vec3 _position, Math::Vec3 _rotation, Math::Vec3 _scale);
 		ECLIPSE_ENGINE void SetOffsetPos(float _offsetPosX, float _offsetPosY, float _offsetPosZ);
 		ECLIPSE_ENGINE void SetOffsetPos(Math::Vec3 _offsetPos);
+		ECLIPSE_ENGINE void SetVelocity(Math::Vec3 _velocity);
 
 		ECLIPSE_ENGINE Math::Vec3 GetPosition() const;
 		ECLIPSE_ENGINE Math::Vec3 GetOffsetPos() const;
@@ -53,6 +54,7 @@ namespace Core
 		ECLIPSE_ENGINE float GetMass() const;
 		ECLIPSE_ENGINE bool GetIsDynamic() const;
 		ECLIPSE_ENGINE JPH::BodyID GetBodyID() const;
+		ECLIPSE_ENGINE Math::Vec3 GetVelocity() const;
 
 		ECLIPSE_ENGINE void Destroy() override;
 		ECLIPSE_ENGINE void Delete();

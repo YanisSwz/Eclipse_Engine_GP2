@@ -60,13 +60,12 @@ Quat Quat::QuaternionEuler(float yaw, float pitch, float roll)
 	q.y = cr * sp * cy + sr * cp * sy;
 	q.z = sr * cp * cy - cr * sp * sy;
 
-
 	return q;
 }
 
 Quat Quat::QuaternionAxisAngle(Vec3 _axis, float _angle)
 {
-	float angle = Tools::ToRad(_angle)/2.f;
+	float angle = Tools::ToRad(_angle) / 2.f;
 
 	float s = sinf(angle);
 	float x = _axis.x * s;
@@ -167,8 +166,8 @@ Vec3 Quat::GetEulerAnglesRadZYX() const
 	angles.x = atan2f(sinr_cosp, cosr_cosp);
 
 	// pitch (y-axis rotation)
-	float sinp = sqrt(1.f + 2.f * (q.w * q.y - q.x * q.z));
-	float cosp = sqrt(1.f - 2.f * (q.w * q.y - q.x * q.z));
+	float sinp = sqrtf(1.f + 2.f * (q.w * q.y - q.x * q.z));
+	float cosp = sqrtf(1.f - 2.f * (q.w * q.y - q.x * q.z));
 	angles.y = 2.f * atan2f(sinp, cosp) - Tools::PI / 2.f;
 
 	// yaw (z-axis rotation)
@@ -185,15 +184,30 @@ Vec3 Quat::GetEulerAnglesDegZYX() const
 
 	Vec3 angles{ 0.f, 0.f, 0.f };
 
-	// roll (x-axis rotation)
+	/*except when qx* qy + qz * qw = 0.5 (north pole)
+		which gives :
+	heading = 2 * atan2(x, w)
+		bank = 0
+		and when qx * qy + qz * qw = -0.5 (south pole)
+		which gives :
+	heading = -2 * atan2(x, w)
+		bank = 0*/
+
+		// roll (x-axis rotation)
 	float sinr_cosp = 2.f * (q.w * q.x + q.y * q.z);
 	float cosr_cosp = 1.f - 2.f * (q.x * q.x + q.y * q.y);
 	angles.x = Tools::ToDeg(atan2f(sinr_cosp, cosr_cosp));
 
 	// pitch (y-axis rotation)
-	float sinp = sqrt(1.f + 2.f * (q.w * q.y - q.x * q.z));
-	float cosp = sqrt(1.f - 2.f * (q.w * q.y - q.x * q.z));
-	angles.y = Tools::ToDeg(2.f * atan2f(sinp, cosp) - Tools::PI / 2.f);
+	float t2 = 2.f * (q.w * q.y - q.z * q.x);
+	if (t2 > 1.f)
+		t2 = 1.f;
+	else if (t2 < -1.f)
+		t2 = -1.f;
+	/*float sinp = sqrtf(1.f + 2.f * (q.w * q.y - q.x * q.z));
+	float cosp = sqrtf(1.f - 2.f * (q.w * q.y - q.x * q.z));
+	angles.y = Tools::ToDeg(2.f * atan2f(sinp, cosp) - Tools::PI / 2.f);*/
+	angles.y = Tools::ToDeg(asinf(t2));
 
 	// yaw (z-axis rotation)
 	float siny_cosp = 2.f * (q.w * q.z + q.x * q.y);
