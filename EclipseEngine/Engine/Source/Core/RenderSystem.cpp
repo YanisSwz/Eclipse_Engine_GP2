@@ -137,7 +137,7 @@ namespace Core
 			_renderInterface->ClearBuffer(RHI::IFLAGS::COLOR_BUFFER_BIT);
 			_renderInterface->ClearBuffer(RHI::IFLAGS::DEPTH_BUFFER_BIT);
 
-			_pipeline->Draw(_VP, _viewPos, GetStaticModels(), m_ambientLight / 255.f, GetDirLights(), GetPointLights(), GetSpotLights(), _particlesData);
+			_pipeline->Draw(_VP, _viewPos, GetStaticModels(), GetLightsData(), _particlesData);
 		}
 	}
 
@@ -197,5 +197,26 @@ namespace Core
 		}
 
 		return data;
+	}
+
+	RHI::LightsData RenderSystem::GetLightsData() const
+	{
+		std::vector<RHI::DirLightData> dirLightsData = GetDirLights();
+		std::vector<RHI::PointLightData> pointLightsData = GetPointLights();
+		std::vector<RHI::SpotLightData> spotLightsData = GetSpotLights();
+
+		int dirLightsNb = static_cast<int>(dirLightsData.size());
+		int pointLightsNb = static_cast<int>(pointLightsData.size());
+		int spotLightsNb = static_cast<int>(spotLightsData.size());
+
+		return RHI::LightsData(
+			m_ambientLight / 255.f,
+			dirLightsData,
+			pointLightsData,
+			spotLightsData,
+			dirLightsNb,
+			pointLightsNb,
+			spotLightsNb
+		);
 	}
 }

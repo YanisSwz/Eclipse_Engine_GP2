@@ -37,7 +37,7 @@ namespace Core
 		Model m_staticModels[MAX_SIZE];
 		Model m_dynamicModels[MAX_SIZE];
 
-		static const int MAX_LIGHTS_SIZE = 12;
+		static const int MAX_LIGHTS_SIZE = 100;
 		int m_currentDirCount = 0;
 		int m_currentPointCount = 0;
 		int m_currentSpotCount = 0;
@@ -51,5 +51,7 @@ namespace Core
 		std::vector<RHI::DirLightData> GetDirLights() const;
 		std::vector<RHI::PointLightData> GetPointLights() const;
 		std::vector<RHI::SpotLightData> GetSpotLights() const;
+
+		RHI::LightsData GetLightsData() const;
 	};
 }
