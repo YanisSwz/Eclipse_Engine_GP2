@@ -15,7 +15,7 @@ namespace Core
 	RHI::SpotLightData SpotLight::GetData() const
 	{
 		return RHI::SpotLightData{
-			m_color,
+			m_color / 255.f,
 			GetPosition(),
 			cosf(Math::Tools::ToRad(m_innerCutOff/2.f)),
 			GetDirection(),

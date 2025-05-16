@@ -10,7 +10,7 @@ namespace Core
 	RHI::DirLightData DirectionalLight::GetData() const
 	{
 		return RHI::DirLightData{
-			m_color,
+			m_color / 255.f,
 			GetDirection(),
 			0.f
 		};

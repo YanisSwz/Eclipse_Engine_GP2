@@ -13,7 +13,7 @@ namespace Core
 	RHI::PointLightData PointLight::GetData() const
 	{
 		return RHI::PointLightData{
-			m_color,
+			m_color / 255.f,
 			GetPosition(),
 			m_constantAttenuation,
 			1.f/m_distance,

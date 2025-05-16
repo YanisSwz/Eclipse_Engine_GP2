@@ -124,8 +124,8 @@ namespace Core
 	{
 		Math::Vec3 positionOffset = particleProps.positionOffset;
 		Math::Vec3 positionVariation = particleProps.positionVariation;
-		Math::Vec4 colorBegin = particleProps.colorBegin / 255.f;
-		Math::Vec4 colorEnd = particleProps.colorEnd / 255.f;
+		Math::Vec4 colorBegin = particleProps.colorBegin;
+		Math::Vec4 colorEnd = particleProps.colorEnd;
 		Math::Vec3 velocity = particleProps.velocity;
 		Math::Vec3 velocityVariation = particleProps.velocityVariation;
 
@@ -189,8 +189,8 @@ namespace Core
 		SetActive(bIsActive);
 		particleProps.positionOffset = { positionOffset[0], positionOffset[1], positionOffset[2] };
 		particleProps.positionVariation = { positionVariation[0], positionVariation[1], positionVariation[2] };
-		particleProps.colorBegin = { colorBegin[0] * 255.f, colorBegin[1] * 255.f, colorBegin[2] * 255.f, colorBegin[3] * 255.f };
-		particleProps.colorEnd = { colorEnd[0] * 255.f, colorEnd[1] * 255.f, colorEnd[2] * 255.f, colorEnd[3] * 255.f };
+		particleProps.colorBegin = { colorBegin[0], colorBegin[1], colorBegin[2], colorBegin[3] };
+		particleProps.colorEnd = { colorEnd[0], colorEnd[1], colorEnd[2], colorEnd[3] };
 		particleProps.velocity = { velocity[0], velocity[1], velocity[2] };
 		particleProps.velocityVariation = { velocityVariation[0], velocityVariation[1], velocityVariation[2] };
 	}
