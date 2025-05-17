@@ -16,7 +16,7 @@ namespace Core
 	{
 	public:
 		ScriptComponent() = default;
-		~ScriptComponent() = default;
+		ECLIPSE_ENGINE ~ScriptComponent();
 
 		MonoBehaviour* Instance = nullptr;
 		std::string scriptName;
