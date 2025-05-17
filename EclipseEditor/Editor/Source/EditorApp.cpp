@@ -308,6 +308,9 @@ void EditorApp::Render()
 			m_crtGOSelected = nullptr;
 	}
 
+	if (bIsAudioMixerWindowEnabled)
+		m_audioMixerGUI.Draw(m_scene.GetSystemManager()->GetAudioSystem(), deltaTime);
+
 	if (bIsHierarchyWindowEnabled)
 	{
 		Core::GameObject* newGOSelected = m_hierarchyGUI.Draw(&m_scene, m_crtGOSelected);
@@ -342,9 +345,6 @@ void EditorApp::Render()
 		m_scene.Reset();
 		LoadScene(selectedScene);
 	}
-
-	if (bIsAudioMixerWindowEnabled)
-		m_audioMixerGUI.Draw(m_scene.GetSystemManager()->GetAudioSystem(), deltaTime);
 
 	GUI::EndFrame();
 

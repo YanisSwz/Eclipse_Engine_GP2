@@ -627,11 +627,15 @@ namespace GUI
 				GUI::DragFloat("Simulation \nDuration", "SimulationDurationCheckBox", &_particleEmitter->particleEmitterProps.simulationDuration, 0.1f, 0.f, FLT_MAX);
 			GUI::DragFloat("Spawn Rate", "ParticleSpawnRateDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRate, 0.1f, 0.f, FLT_MAX);
 			GUI::DragFloat("Spawn Rate \nVariation", "ParticleSpawnRateVariationDragFloat", &_particleEmitter->particleEmitterProps.particleSpawnRateVariation, 0.1f, 0.f, FLT_MAX);
+			GUI::DragVec3XYZ("Position \nOffset", _particleEmitter->particleProps.positionOffset, 0.f, 125.f);
+			GUI::DragVec3XYZ("Position \nVariation", _particleEmitter->particleProps.positionVariation, 0.f, 125.f);
 
 			ImGui::SeparatorText("Particle Properties");
 			GUI::DragFloat("Life Time", "LifeTimeDragFloat", &_particleEmitter->particleProps.lifeTime, 0.1f, 0.f, FLT_MAX);
 			GUI::DragFloat("Life Time \nVariation", "LifeTimeVariationDragFloat", &_particleEmitter->particleProps.lifeTimeVariation, 0.1f, 0.f, FLT_MAX);
+			GUI::CheckBox("Is Billboard", "IsBillboardCheckBox", &_particleEmitter->particleProps.bIsBillboard);
 
+			ImGui::SeparatorText("Particle Appearance");
 			std::vector<std::string> meshNames = Resource::ResourceManager::GetInstance().GetAllResourceWithType<Resource::Mesh>();
 			std::string meshName = _particleEmitter->particleProps.mesh->name;
 			if (GUI::ComboFilter("Mesh ", &meshName, meshNames))
@@ -674,15 +678,14 @@ namespace GUI
 				ImGui::EndDragDropTarget();
 			}
 			ImGui::Columns(1);
-
-			GUI::CheckBox("Is Billboard", "IsBillboardCheckBox", &_particleEmitter->particleProps.bIsBillboard);
-			GUI::DragVec3XYZ("Position \nOffset", _particleEmitter->particleProps.positionOffset, 0.f, 125.f);
-			GUI::DragVec3XYZ("Position \nVariation", _particleEmitter->particleProps.positionVariation, 0.f, 125.f);
-			ColorEdit4("Begin Color", _particleEmitter->particleProps.colorBegin);
-			ColorEdit4("End Color", _particleEmitter->particleProps.colorEnd);
+			
+			GUI::ColorEdit4("Begin Color", _particleEmitter->particleProps.colorBegin);
+			GUI::ColorEdit4("End Color", _particleEmitter->particleProps.colorEnd);
 			GUI::DragFloat("Begin Size", "SizeBeginDragFloat", &_particleEmitter->particleProps.sizeBegin, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("End Size", "SizeEndDragFloat", &_particleEmitter->particleProps.sizeEnd, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
 			GUI::DragFloat("Size Variation", "SizeVariationDragFloat", &_particleEmitter->particleProps.sizeVariation, 1.f, 0.f, FLT_MAX, "%.3f", 125.f);
+
+			ImGui::SeparatorText("Particle Movement");
 			GUI::DragVec3XYZ("Begin \nVelocity", _particleEmitter->particleProps.velocityBegin, 0.f, 125.f);
 			GUI::DragVec3XYZ("End \nVelocity", _particleEmitter->particleProps.velocityEnd, 0.f, 125.f);
 			GUI::DragVec3XYZ("Velocity \nVariation \nBegin", _particleEmitter->particleProps.velocityVariationBegin, 0.f, 125.f);

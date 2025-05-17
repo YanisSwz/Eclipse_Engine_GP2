@@ -42,7 +42,7 @@ namespace Core
 			STOP
 		};
 
-		SIMULATION_STATE m_simulationState = SIMULATION_STATE::PLAY;
+		SIMULATION_STATE m_simulationState = SIMULATION_STATE::STOP;
 		int m_particlesCount = 0;
 		std::vector<Particle> m_particles;
 

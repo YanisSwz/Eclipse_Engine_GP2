@@ -6,7 +6,7 @@ namespace														\
 {																\
 	static const bool _registered_##TYPE = []()					\
 	{															\
-		Core::ScriptComponent::GetScriptRegister()[#TYPE] = []()  \
+		Core::ScriptComponent::GetScriptRegister()[#TYPE] = []()\
 		{														\
 			return new TYPE;									\
 		};														\

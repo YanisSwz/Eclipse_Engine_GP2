@@ -23,18 +23,20 @@ namespace Core
 			m_transformSystem.Update();
 			m_physicsSystem.Update(_deltaTime);
 			m_audioSystem.Update();
+			m_particleSystem.Update(_deltaTime);
 			break;
 		case GAME_STATE::PAUSE:
 			m_transformSystem.Update();
 			m_physicsSystem.Update(0.f);
+			m_particleSystem.Update(0.f);
 			break;
 		case GAME_STATE::STOP:
 			m_transformSystem.Update();
 			m_audioSystem.EditorUpdate();
+			m_particleSystem.Update(_deltaTime);
 			break;
 		}
 		m_transformSystem.LateUpdate();
-		m_particleSystem.Update(_deltaTime);
 	}
 
 	Transform* SystemManager::AddTransform(Math::Vec3 _translation, Math::Vec3 _rotation, Math::Vec3 _scale, Transform* _parent)

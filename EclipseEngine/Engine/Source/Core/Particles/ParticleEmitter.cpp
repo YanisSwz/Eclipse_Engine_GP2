@@ -296,7 +296,7 @@ namespace Core
 									particleProps.velocityVariationEnd.y * Math::Tools::Random() - (particleProps.velocityVariationEnd.y / 2.f),
 									particleProps.velocityVariationEnd.z * Math::Tools::Random() - (particleProps.velocityVariationEnd.z / 2.f) };
 		spawnedParticle->velocityBegin = particleProps.velocityBegin + randomVelocityBegin;
-		spawnedParticle->velocityEnd = particleProps.velocityBegin + randomVelocityEnd;
+		spawnedParticle->velocityEnd = particleProps.velocityEnd + randomVelocityEnd;
 		spawnedParticle->velocity = spawnedParticle->velocityBegin;
 	}
 

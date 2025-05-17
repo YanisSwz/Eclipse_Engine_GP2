@@ -139,9 +139,9 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        0.6930723786354065,
-                        -0.5808843374252319,
-                        0.14038322865962982,
+                        0.6930723190307617,
+                        -0.5808843970298767,
+                        0.14038318395614624,
                         0.4031333923339844
                     ],
                     "ParentIndex": -1
@@ -170,10 +170,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                0.6930723190307617,
-                                -0.5808843970298767,
-                                0.14038316905498505,
-                                0.40313345193862915
+                                0.6930723786354065,
+                                -0.5808844566345215,
+                                0.14038319885730743,
+                                0.40313342213630676
                             ],
                             "Mass": 1.0
                         }
@@ -197,10 +197,10 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        0.16337308287620544,
+                        0.16337312757968903,
                         0.6011492609977722,
                         -0.6880829334259033,
-                        -0.3721166253089905
+                        -0.3721165955066681
                     ],
                     "ParentIndex": -1
                 },
@@ -228,10 +228,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                0.16337305307388306,
-                                0.6011492013931274,
+                                0.16337312757968903,
+                                0.6011492609977722,
                                 -0.6880829334259033,
-                                -0.3721166253089905
+                                -0.3721165955066681
                             ],
                             "Mass": 1.0
                         }
@@ -553,13 +553,13 @@
             }
         },
         {
-            "ParticleEmitter": {
+            "Wave1": {
                 "IsActive": true,
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        7.0,
-                        1.967179775238037,
+                        6.95363712310791,
+                        4.6985979080200195,
                         0.0
                     ],
                     "LocalScale": [
@@ -598,7 +598,7 @@
                                     0.0
                                 ],
                                 "PositionVariation": [
-                                    3.0,
+                                    0.0,
                                     0.0,
                                     3.0
                                 ],
@@ -618,13 +618,13 @@
                                     1.0
                                 ],
                                 "BeginVelocity": [
-                                    1.0,
-                                    -5.0,
+                                    5.0,
+                                    -10.0,
                                     0.0
                                 ],
                                 "EndVelocity": [
-                                    1.0,
-                                    0.0,
+                                    5.0,
+                                    5.0,
                                     0.0
                                 ],
                                 "VelocityVariationBegin": [
@@ -894,6 +894,97 @@
                                     1.0,
                                     1.0,
                                     1.0
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Wave2": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        12.424078941345215,
+                        2.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "ParticleEmitter": {
+                            "IsActive": true,
+                            "ParticleEmitterProps": {
+                                "MaxParticleNumber": 2000,
+                                "SpawnRate": 0.0010000000474974513,
+                                "SpawnRateVariation": 0.0,
+                                "SimulationDuration": 5.0,
+                                "IsLooping": true
+                            },
+                            "ParticleProps": {
+                                "MeshName": "Cube.obj",
+                                "TextureName": "None",
+                                "IsBillboard": true,
+                                "LifeTime": 1.0,
+                                "LifeTimeVariation": 0.0,
+                                "PositionOffset": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "PositionVariation": [
+                                    0.0,
+                                    0.0,
+                                    3.0
+                                ],
+                                "BeginSize": 5.0,
+                                "EndSize": 5.0,
+                                "SizeVariation": 5.0,
+                                "BeginColor": [
+                                    0.49803921580314636,
+                                    0.5764706134796143,
+                                    1.0,
+                                    1.0
+                                ],
+                                "EndColor": [
+                                    0.0,
+                                    0.1568627506494522,
+                                    1.0,
+                                    1.0
+                                ],
+                                "BeginVelocity": [
+                                    5.0,
+                                    5.0,
+                                    0.0
+                                ],
+                                "EndVelocity": [
+                                    5.0,
+                                    -10.0,
+                                    0.0
+                                ],
+                                "VelocityVariationBegin": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "VelocityVariationEnd": [
+                                    0.0,
+                                    0.0,
+                                    0.0
                                 ]
                             }
                         }
