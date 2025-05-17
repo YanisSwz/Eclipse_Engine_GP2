@@ -127,60 +127,14 @@ namespace Resource
 			}
 		}
 
-		if (std::filesystem::exists("Assets/Shaders/VertGeoFragShaders/"))
+		for (const auto& entry : std::filesystem::directory_iterator("Assets/Prefabs"))
 		{
-			for (const auto& entry : std::filesystem::directory_iterator("Assets/Shaders/VertGeoFragShaders/"))
-			{
-				// Load Vertex Shader
-				if (entry.path().extension().string() == ".vert")
-				{
-					resourceName = entry.path().filename().string();
-					resourcePath = entry.path().string();
-					AddResourceToLoad<Resource::VertShader>(resourceName, resourcePath);
-				}
-				// Load Fragment Shader
-				else if (entry.path().extension().string() == ".frag")
-				{
-					resourceName = entry.path().filename().string();
-					resourcePath = entry.path().string();
-					AddResourceToLoad<Resource::FragShader>(resourceName, resourcePath);
-				}
-				else if (entry.path().extension().string() == ".geom")
-				{
-					// Load Geometry Shader
-					resourceName = entry.path().filename().string();
-					resourcePath = entry.path().string();
-					AddResourceToLoad<Resource::GeoShader>(resourceName, resourcePath);
-
-					resourcePath = entry.path().filename().string();
-					// Load Shader Program
-					char popedChar;
-					do
-					{
-						popedChar = resourceName[resourceName.size() - 1];
-						resourceName.pop_back();
-						resourcePath.pop_back();
-					} while (popedChar != '.');
-
-					resourceName.append(".shd");
-					std::string vertName = resourcePath + ".vert";
-					std::string fragName = resourcePath + ".frag";
-					std::string geoName = resourcePath + ".geom";
-
-					AddResourceToLoad<Resource::ShaderProgram>(resourceName, vertName, fragName, geoName);
-				}
-			}
-
-			for (const auto& entry : std::filesystem::directory_iterator("Assets/Prefabs"))
-			{
-				resourceName = entry.path().filename().string();
-				resourcePath = entry.path().string();
-				AddResourceToLoad<Resource::Prefab>(resourceName, resourcePath);
-			}
-
-			resourceName.clear();
-			resourcePath.clear();
+			resourceName = entry.path().filename().string();
+			resourcePath = entry.path().string();
+			AddResourceToLoad<Resource::Prefab>(resourceName, resourcePath);
 		}
+		resourceName.clear();
+		resourcePath.clear();
 	}
 
 	void ResourceManager::LoadAllResources()

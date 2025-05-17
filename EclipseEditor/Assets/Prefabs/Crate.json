@@ -1,0 +1,60 @@
+[
+    {
+        "Crate": {
+            "IsActive": true,
+            "Tag": "Enemy",
+            "Transform": {
+                "LocalPosition": [
+                    0.0,
+                    4.252824306488037,
+                    14.0600004196167
+                ],
+                "LocalScale": [
+                    4.0,
+                    4.0,
+                    4.0
+                ],
+                "LocalRotation": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "ParentIndex": -1
+            },
+            "Components": [
+                {
+                    "Model": {
+                        "IsActive": true,
+                        "Mesh": "Cube.obj",
+                        "Texture": "WhiteTexture.img",
+                        "Shader": "DefaultDeferredRendering.shd"
+                    }
+                },
+                {
+                    "BoxCollider": {
+                        "IsActive": false,
+                        "IsDynamic": true,
+                        "OffsetPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            4.0,
+                            4.0,
+                            4.0
+                        ],
+                        "Rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "Mass": 1.0
+                    }
+                }
+            ]
+        }
+    }
+]

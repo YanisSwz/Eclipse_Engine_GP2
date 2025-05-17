@@ -1,0 +1,159 @@
+[
+    {
+        "Fireball": {
+            "IsActive": true,
+            "Tag": "Untagged",
+            "Transform": {
+                "LocalPosition": [
+                    0.0,
+                    20.719200134277344,
+                    0.0
+                ],
+                "LocalScale": [
+                    0.004999999888241291,
+                    0.004999999888241291,
+                    0.004999999888241291
+                ],
+                "LocalRotation": [
+                    -0.7071067690849304,
+                    -6.181723932741079e-08,
+                    0.7071067690849304,
+                    -6.181723932741079e-08
+                ],
+                "ParentIndex": -1
+            },
+            "Components": [
+                {
+                    "Model": {
+                        "IsActive": true,
+                        "Mesh": "Fireball.obj",
+                        "Texture": "lava.img",
+                        "Shader": "DefaultDeferredRendering.shd"
+                    }
+                },
+                {
+                    "PointLight": {
+                        "IsActive": true,
+                        "Color": [
+                            1.0,
+                            0.41584157943725586,
+                            0.0,
+                            1.0
+                        ],
+                        "Distance": 2.0,
+                        "ConstantAttenuation": 1.0,
+                        "LinearAttenuation": 0.09000000357627869,
+                        "QuadraticAttenuation": 0.03200000151991844
+                    }
+                },
+                {
+                    "ScriptComponent": {
+                        "IsActive": true,
+                        "scriptName": "Fireball"
+                    }
+                },
+                {
+                    "BoxCollider": {
+                        "IsActive": true,
+                        "IsDynamic": true,
+                        "OffsetPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0.0,
+                            0.7071068286895752,
+                            0.0
+                        ],
+                        "Mass": 1.0
+                    }
+                },
+                {
+                    "ParticleEmitter": {
+                        "IsActive": true,
+                        "ParticleEmitterProps": {
+                            "MaxParticleNumber": 100,
+                            "SpawnRate": 0.0010000000474974513,
+                            "SpawnRateVariation": 0.0,
+                            "SimulationDuration": 0.5,
+                            "IsLooping": false
+                        },
+                        "ParticleProps": {
+                            "MeshName": "Quad.obj",
+                            "TextureName": "None",
+                            "IsBillboard": true,
+                            "LifeTime": 0.5,
+                            "LifeTimeVariation": 0.5,
+                            "PositionOffset": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "PositionVariation": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "BeginSize": 5.0,
+                            "EndSize": 35.0,
+                            "SizeVariation": 35.0,
+                            "BeginColor": [
+                                1.0,
+                                0.0,
+                                1.0,
+                                1.0
+                            ],
+                            "EndColor": [
+                                1.0,
+                                0.0,
+                                1.0,
+                                1.0
+                            ],
+                            "BeginVelocity": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "EndVelocity": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "VelocityVariationBegin": [
+                                20.0,
+                                20.0,
+                                20.0
+                            ],
+                            "VelocityVariationEnd": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ]
+                        }
+                    }
+                },
+                {
+                    "AudioSource": {
+                        "IsActive": true,
+                        "Channel": "SFX",
+                        "PlayOnAwake": false,
+                        "IsLooping": false,
+                        "Is3D": false,
+                        "Volume": 1.0,
+                        "Pan": 0.0,
+                        "MinDistance": 1.0,
+                        "MaxDistance": 50.0,
+                        "AudioClip": "fireball.wav"
+                    }
+                }
+            ]
+        }
+    }
+]

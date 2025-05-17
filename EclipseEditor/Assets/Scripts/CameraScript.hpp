@@ -18,6 +18,8 @@ public:
 private:
 	Core::GameObject* m_player = nullptr;
 	float m_zOffset = 12.f;
+	float m_speed = 5.f;
+	Math::Vec3 targetPos{};
 };
 
 REGISTER_TYPE(CameraScript);

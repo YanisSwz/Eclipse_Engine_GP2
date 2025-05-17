@@ -65,6 +65,7 @@ namespace Math
 		static Vec3 Rotate(Vec3 _vecToRotate, float _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
 		static Vec3 Rotate(Vec3 _vecToRotate, Vec3 _theta, Vec3 _anchor = { 0.f, 0.f, 0.f });
 		static void Print(Vec3 _vec);
+		static Vec3 Lerp(Vec3 _vec1, Vec3 _vec2, float _t);
 		
 		// Operator +, -, *, /
 		Vec3 operator+(float _scalar) const;
