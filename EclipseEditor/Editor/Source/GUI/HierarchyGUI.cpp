@@ -85,7 +85,7 @@ namespace GUI
 		if (!_crtTransform->GetGameObject()->IsActive())
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 0.5f);
 
-		if (ImGui::TreeNodeEx(_crtTransform->GetGameObject()->name.c_str(), treeNodeFlags))
+		if (ImGui::TreeNodeEx((_crtTransform->GetGameObject()->name + "##" + std::to_string(_crtTransform->GetGameObject()->GetID())).c_str(), treeNodeFlags))
 		{
 			if (ImGui::IsItemClicked())
 				newGameObjectSelected = _crtTransform->GetGameObject();
