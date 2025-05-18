@@ -10,9 +10,9 @@
                     0.0
                 ],
                 "LocalScale": [
-                    1.0,
-                    1.0,
-                    1.0
+                    3.0,
+                    3.0,
+                    3.0
                 ],
                 "LocalRotation": [
                     1.0,
@@ -32,8 +32,8 @@
                 {
                     "Model": {
                         "IsActive": true,
-                        "Mesh": "Cube.obj",
-                        "Texture": "WhiteTexture.img",
+                        "Mesh": "Wolf.obj",
+                        "Texture": "Wolf.img",
                         "Shader": "DefaultDeferredRendering.shd"
                     }
                 },
@@ -47,9 +47,9 @@
                             0.0
                         ],
                         "Scale": [
-                            1.0,
-                            1.0,
-                            1.0
+                            3.0,
+                            3.0,
+                            3.0
                         ],
                         "Rotation": [
                             1.0,

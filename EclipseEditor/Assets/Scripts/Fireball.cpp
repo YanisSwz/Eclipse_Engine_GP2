@@ -34,7 +34,7 @@ void Fireball::OnUpdate(Windowing::IWindow* _window, float _deltaTime)
 		if (!m_exploding)
 			Explode();
 	}
-	if (m_source != nullptr && m_emitter != nullptr)
+	if (m_source && m_emitter)
 	{
 		if (m_emitter->IsActive() && !m_emitter->IsPlaying() && m_source->IsActive() && !m_source->IsPlaying())
 			m_gameObject->Destroy();
@@ -78,16 +78,20 @@ void Fireball::OnCollisionExit(Core::ICollider* _collider)
 void Fireball::Explode()
 {
 	m_exploding = true;
-	m_gameObject->GetComponent<Core::Model>()->SetActive(false);
-	m_gameObject->GetComponent<Core::PointLight>()->SetActive(false);
+	Core::Model* model = m_gameObject->GetComponent<Core::Model>();
+	if (model)
+		model->SetActive(false);
+	Core::PointLight* pointLight = m_gameObject->GetComponent<Core::PointLight>();
+	if (pointLight)
+		pointLight->SetActive(false);
 	m_speed = 0.f;
-	if (m_emitter != nullptr)
+	if (m_emitter)
 	{
 		m_emitter->SetActive(true);
 		if (!m_emitter->IsPlaying())
 			m_emitter->Play();
 	}
-	if (m_source != nullptr)
+	if (m_source)
 	{
 		m_source->SetActive(true);
 		if (!m_source->IsPlaying())

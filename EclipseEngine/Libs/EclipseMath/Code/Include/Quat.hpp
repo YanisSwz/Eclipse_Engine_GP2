@@ -74,6 +74,7 @@ namespace Math
 		static Mat3 QuatToMatrix(Quat _q);
 		static Mat4 GetTransformMatrix(Vec3 _translation, Quat _rotation);
 		static Quat Slerp(Quat _q1, Quat _q2, float _t);
+		static Quat LookAt(Vec3 _source, Vec3 _destination);
 	};
 
 }

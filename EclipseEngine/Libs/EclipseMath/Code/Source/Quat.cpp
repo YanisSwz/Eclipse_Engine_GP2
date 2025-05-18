@@ -515,3 +515,22 @@ Quat Quat::Slerp(Quat _q1, Quat _q2, float _t)
 		factor1 * _q1.y + factor2 * q2Copy.y,
 		factor1 * _q1.z + factor2 * q2Copy.z };
 }
+
+Quat Quat::LookAt(Vec3 _source, Vec3 _destination)
+{
+	Vec3 forwardVector = Vec3::Normalized(_destination - _source);
+
+	float dot = Vec3::DotProduct(Vec3::forward, forwardVector);
+
+	if (abs(dot - (-1.0f)) < 0.000001f)
+	{
+		return Quat(Vec3::up.x, Vec3::up.y, Vec3::up.z, Tools::PI);
+	}
+	if (abs(dot - 1.0f) < 0.000001f)
+	{
+		return Quat::Identity();
+	}
+
+	float rotAngle = acos(dot);
+	return Quat::QuaternionAxisAngle(Vec3(0.f, 1.f, 0.f), Tools::ToDeg(rotAngle));
+}

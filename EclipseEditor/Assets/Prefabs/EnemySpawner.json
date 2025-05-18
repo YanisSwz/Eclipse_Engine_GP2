@@ -26,8 +26,8 @@
                 {
                     "Model": {
                         "IsActive": true,
-                        "Mesh": "Cube.obj",
-                        "Texture": "WhiteTexture.img",
+                        "Mesh": "Star.obj",
+                        "Texture": "Star.img",
                         "Shader": "DefaultDeferredRendering.shd"
                     }
                 },

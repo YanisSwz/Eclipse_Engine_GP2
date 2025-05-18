@@ -16,11 +16,11 @@ void EnemyScript::OnStart()
 	m_collider = m_gameObject->GetComponent<Core::BoxCollider>();
 
 	m_emitter = m_gameObject->GetComponent<Core::ParticleEmitter>();
-	if (m_emitter != nullptr)
+	if (m_emitter)
 		m_emitter->SetActive(false);
 
 	m_source = m_gameObject->GetComponent<Core::AudioSource>();
-	if (m_source != nullptr)
+	if (m_source)
 		m_source->SetActive(false);
 
 	m_player = dynamic_cast<PlayerScript*>(m_scene->FindByTag("Player")->GetComponent<Core::ScriptComponent>()->Instance);
@@ -43,11 +43,6 @@ void EnemyScript::OnUpdate(Windowing::IWindow* _window, float _deltaTime)
 		direction.Normalize();
 
 		m_collider->SetVelocity({ direction.x * m_speed, m_collider->GetVelocity().y, direction.z * m_speed });
-
-		//float angle;
-
-		//Math::Vec3 pos = m_gameObject->transform->GetPosition() + m_gameObject->transform->GetRight() * m_speed * _deltaTime;
-		//m_gameObject->transform->SetPosition(pos.x, m_gameObject->transform->GetPosition().y, pos.z);
 	}
 }
 
@@ -85,13 +80,13 @@ void EnemyScript::Explode()
 	m_gameObject->GetComponent<Core::Model>()->SetActive(false);
 	//m_collider->SetDynamic(false);
 	m_speed = 0.f;
-	if (m_emitter != nullptr)
+	if (m_emitter)
 	{
 		m_emitter->SetActive(true);
 		if (!m_emitter->IsPlaying())
 			m_emitter->Play();
 	}
-	if (m_source != nullptr)
+	if (m_source)
 	{
 		m_source->SetActive(true);
 		if (!m_source->IsPlaying())
