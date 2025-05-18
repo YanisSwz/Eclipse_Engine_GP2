@@ -1,5 +1,7 @@
 #include "Fireball.hpp"
 #include "GameObject.hpp"
+#include "EnemyScript.hpp"
+#include "Scripting/ScriptComponent.hpp"
 
 Fireball::Fireball()
 {
@@ -49,8 +51,17 @@ void Fireball::OnCollisionEnter(Core::ICollider* _collider)
 {
 	if (_collider->GetGameObject()->tag == "Enemy")
 	{
-		if(!m_exploding)
+		if (!m_exploding)
+		{
 			Explode();
+			Core::ScriptComponent* script = _collider->GetGameObject()->GetComponent<Core::ScriptComponent>();
+			if (script)
+			{
+				EnemyScript* enemy = dynamic_cast<EnemyScript*>(script->Instance);
+				if (enemy)
+					enemy->TakeDamage();
+			}
+		}
 	}
 }
 

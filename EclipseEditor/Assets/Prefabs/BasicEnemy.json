@@ -1,0 +1,144 @@
+[
+    {
+        "BasicEnemy": {
+            "IsActive": true,
+            "Tag": "Enemy",
+            "Transform": {
+                "LocalPosition": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "LocalScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "LocalRotation": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "ParentIndex": -1
+            },
+            "Components": [
+                {
+                    "ScriptComponent": {
+                        "IsActive": true,
+                        "scriptName": "EnemyScript"
+                    }
+                },
+                {
+                    "Model": {
+                        "IsActive": true,
+                        "Mesh": "Cube.obj",
+                        "Texture": "WhiteTexture.img",
+                        "Shader": "DefaultDeferredRendering.shd"
+                    }
+                },
+                {
+                    "BoxCollider": {
+                        "IsActive": true,
+                        "IsDynamic": true,
+                        "OffsetPosition": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "Scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "Rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "Mass": 1.0
+                    }
+                },
+                {
+                    "ParticleEmitter": {
+                        "IsActive": true,
+                        "ParticleEmitterProps": {
+                            "MaxParticleNumber": 500,
+                            "SpawnRate": 0.009999999776482582,
+                            "SpawnRateVariation": 0.0,
+                            "SimulationDuration": 5.0,
+                            "IsLooping": false
+                        },
+                        "ParticleProps": {
+                            "MeshName": "Quad.obj",
+                            "TextureName": "None",
+                            "IsBillboard": true,
+                            "LifeTime": 1.0,
+                            "LifeTimeVariation": 0.0,
+                            "PositionOffset": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "PositionVariation": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "BeginSize": 75.0,
+                            "EndSize": 25.0,
+                            "SizeVariation": 25.0,
+                            "BeginColor": [
+                                0.003921568859368563,
+                                0.0,
+                                0.003921568859368563,
+                                0.003921568859368563
+                            ],
+                            "EndColor": [
+                                0.003921568859368563,
+                                0.0,
+                                0.003921568859368563,
+                                0.003921568859368563
+                            ],
+                            "BeginVelocity": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "EndVelocity": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "VelocityVariationBegin": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "VelocityVariationEnd": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    }
+                },
+                {
+                    "AudioSource": {
+                        "IsActive": true,
+                        "Channel": "SFX",
+                        "PlayOnAwake": true,
+                        "IsLooping": false,
+                        "Is3D": false,
+                        "Volume": 1.0,
+                        "Pan": 0.0,
+                        "MinDistance": 1.0,
+                        "MaxDistance": 5.0,
+                        "AudioClip": "mana.flac"
+                    }
+                }
+            ]
+        }
+    }
+]

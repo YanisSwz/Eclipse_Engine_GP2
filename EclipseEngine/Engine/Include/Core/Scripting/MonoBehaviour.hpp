@@ -23,6 +23,8 @@ namespace Core
 		ECLIPSE_ENGINE virtual void OnCollisionStay(ICollider* _collider);
 		ECLIPSE_ENGINE virtual void OnCollisionExit(ICollider* _collider);
 
+		ECLIPSE_ENGINE inline GameObject* GetGameObject() { return m_gameObject; }
+
 	protected:
 		Scene* m_scene = nullptr;
 		GameObject* m_gameObject = nullptr;

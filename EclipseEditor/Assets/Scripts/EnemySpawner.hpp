@@ -1,15 +1,14 @@
 #pragma once
 #include "Scripting/MonoBehaviour.hpp"
 #include "Scripting/RegisterTypeMacro.hpp"
-#include "Audio/AudioSource.hpp"
+#include "Prefab.hpp"
 #include "Particles/ParticleEmitter.hpp"
-#include "PlayerScript.hpp"
 
-class EnemyScript : public Core::MonoBehaviour
+class EnemySpawner : public Core::MonoBehaviour
 {
 public:
-	EnemyScript();
-	~EnemyScript() override;
+	EnemySpawner();
+	~EnemySpawner() override;
 
 	void OnStart() override;
 	void OnUpdate(Windowing::IWindow* _window, float _deltaTime) override;
@@ -17,21 +16,17 @@ public:
 	void OnCollisionEnter(Core::ICollider* _collider) override;
 	void OnCollisionStay(Core::ICollider* _collider) override;
 	void OnCollisionExit(Core::ICollider* _collider) override;
-	
-	inline void SetPlayer(PlayerScript* _player) { m_player = _player; }
-	
-	void TakeDamage();
 
 private:
-	PlayerScript* m_player = nullptr;
-	Core::BoxCollider* m_collider = nullptr;
+	Resource::Prefab* m_enemyPrefab = nullptr;
 	Core::ParticleEmitter* m_emitter = nullptr;
-	Core::AudioSource* m_source = nullptr;
-	int m_health = 2;
-	float m_speed = 8.f;
-	bool m_exploding = false;
+	float m_timer = 0.f;
+	float m_duration = 5.f;
+	int m_enemyNb = 3;
+	int m_enemyCount = 0;
+	bool m_deactivated = false;
 	
-	void Explode();
+	void SpawnEnemy();
 };
 
-REGISTER_TYPE(EnemyScript);
+REGISTER_TYPE(EnemySpawner);
