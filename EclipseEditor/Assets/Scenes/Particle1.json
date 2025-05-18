@@ -12,9 +12,9 @@
                 "Tag": "Player",
                 "Transform": {
                     "LocalPosition": [
-                        1.723645567893982,
-                        0.5872029066085815,
-                        -0.12209312617778778
+                        12.000000953674316,
+                        0.5300151109695435,
+                        0.0
                     ],
                     "LocalScale": [
                         1.0,
@@ -22,10 +22,10 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        0.9999200701713562,
-                        0.0,
-                        -0.00013308593770489097,
-                        0.01264597475528717
+                        0.9999985098838806,
+                        1.4673269106424414e-06,
+                        -0.0017098775133490562,
+                        -1.5240971151797567e-05
                     ],
                     "ParentIndex": -1
                 },
@@ -53,10 +53,10 @@
                                 1.0
                             ],
                             "Rotation": [
-                                0.9999200701713562,
+                                0.9999985694885254,
                                 0.0,
-                                -0.00013308593770489097,
-                                0.01264597475528717
+                                -0.001709877629764378,
+                                -1.524348135717446e-05
                             ],
                             "Mass": 1.0
                         }
@@ -262,7 +262,7 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        -10.0,
+                        0.0,
                         5.0,
                         0.0
                     ],
@@ -478,7 +478,7 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        -6.0,
+                        0.0,
                         5.0,
                         0.0
                     ],
@@ -538,7 +538,7 @@
                                     1.0
                                 ],
                                 "BeginVelocity": [
-                                    5.0,
+                                    -5.0,
                                     0.0,
                                     0.0
                                 ],
@@ -668,7 +668,7 @@
                                 "LifeTime": 1.0,
                                 "LifeTimeVariation": 0.0,
                                 "PositionOffset": [
-                                    -2.0,
+                                    0.0,
                                     5.0,
                                     0.0
                                 ],
@@ -759,7 +759,7 @@
                                 "LifeTime": 1.0,
                                 "LifeTimeVariation": 0.0,
                                 "PositionOffset": [
-                                    -2.0,
+                                    0.0,
                                     5.0,
                                     0.0
                                 ],
@@ -879,7 +879,7 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        0.0,
+                        -2.5,
                         5.0,
                         0.0
                     ],
@@ -970,7 +970,7 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        2.5,
+                        0.0,
                         2.5,
                         0.0
                     ],
@@ -1061,7 +1061,7 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        5.0,
+                        2.5,
                         5.0,
                         0.0
                     ],
@@ -1152,7 +1152,7 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        2.5,
+                        0.0,
                         7.5,
                         0.0
                     ],
@@ -1244,7 +1244,7 @@
                 "Transform": {
                     "LocalPosition": [
                         0.0,
-                        0.0,
+                        5.0,
                         0.0
                     ],
                     "LocalScale": [
@@ -1278,8 +1278,8 @@
                                 "LifeTime": 1.0,
                                 "LifeTimeVariation": 0.0,
                                 "PositionOffset": [
-                                    -2.0,
-                                    5.0,
+                                    0.0,
+                                    0.0,
                                     0.0
                                 ],
                                 "PositionVariation": [
@@ -1553,7 +1553,7 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        10.0,
+                        0.0,
                         5.0,
                         0.0
                     ],
