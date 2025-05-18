@@ -149,8 +149,8 @@ namespace Core
 	{
 		Math::Vec3 positionOffset = particleProps.positionOffset;
 		Math::Vec3 positionVariation = particleProps.positionVariation;
-		Math::Vec4 colorBegin = particleProps.colorBegin / 255.f;
-		Math::Vec4 colorEnd = particleProps.colorEnd / 255.f;
+		Math::Vec4 colorBegin = particleProps.colorBegin;
+		Math::Vec4 colorEnd = particleProps.colorEnd;
 		Math::Vec3 velocityBegin = particleProps.velocityBegin;
 		Math::Vec3 velocityEnd = particleProps.velocityEnd;
 		Math::Vec3 velocityVariationBegin = particleProps.velocityVariationBegin;
