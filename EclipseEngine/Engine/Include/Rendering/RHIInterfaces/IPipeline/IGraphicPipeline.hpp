@@ -1,6 +1,7 @@
 #pragma once
 #include "Maths.hpp"
 #include "Core/Particles/ParticleRenderData.hpp"
+#include "RHIInterfaces/Lights.hpp"
 #include <vector>
 
 namespace Resource
@@ -26,7 +27,7 @@ namespace RHI
 		
 		virtual int PickObjectID(int _mousePosX, int _mousePosY) = 0;
 
-		virtual void Draw(Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights, std::vector<Core::ParticleEmitterRenderData> _particleData) = 0;
+		virtual void Draw(Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, RHI::LightsData _lightsData, std::vector<Core::ParticleEmitterRenderData> _particleData) = 0;
 		virtual unsigned int GetFinalTexture() const = 0;
 
 	protected:

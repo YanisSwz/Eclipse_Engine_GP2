@@ -246,8 +246,8 @@ namespace Core
 		SetActive(bIsActive);
 		particleProps.positionOffset = { positionOffset[0], positionOffset[1], positionOffset[2] };
 		particleProps.positionVariation = { positionVariation[0], positionVariation[1], positionVariation[2] };
-		particleProps.colorBegin = { colorBegin[0] * 255.f, colorBegin[1] * 255.f, colorBegin[2] * 255.f, colorBegin[3] * 255.f };
-		particleProps.colorEnd = { colorEnd[0] * 255.f, colorEnd[1] * 255.f, colorEnd[2] * 255.f, colorEnd[3] * 255.f };
+		particleProps.colorBegin = { colorBegin[0], colorBegin[1], colorBegin[2], colorBegin[3] };
+		particleProps.colorEnd = { colorEnd[0], colorEnd[1], colorEnd[2], colorEnd[3] };
 		particleProps.velocityBegin = { velocityBegin[0], velocityBegin[1], velocityBegin[2] };
 		particleProps.velocityEnd = { velocityEnd[0], velocityEnd[1], velocityEnd[2] };
 		particleProps.velocityVariationBegin = { velocityVariationBegin[0], velocityVariationBegin[1], velocityVariationBegin[2] };

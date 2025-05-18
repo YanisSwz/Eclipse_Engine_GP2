@@ -93,6 +93,9 @@ void EditorApp::Render()
 	{
 		if (ImGui::BeginMenu("File", true))
 		{
+			if (m_scene.GetState() != GAME_STATE::STOP)
+				ImGui::BeginDisabled();
+
 			if (ImGui::MenuItem("Save Scene"))
 			{
 				Logging::Logger::GetInstance().Log(Logging::PRIORITY::DEBUG, "Save");
@@ -114,6 +117,8 @@ void EditorApp::Render()
 				bIsNewPrefabWindowOpen = true;
 			}
 
+			if (m_scene.GetState() != GAME_STATE::STOP)
+				ImGui::EndDisabled();
 
 			ImGui::EndMenu();
 		}
@@ -339,7 +344,7 @@ void EditorApp::Render()
 	if (bIsContentBrowserWindowEnabled)
 		selectedScene = m_contentBrowserGUI.Draw();
 
-	if (selectedScene != "")
+	if (m_scene.GetState() == GAME_STATE::STOP && selectedScene != "")
 	{
 		SaveScene();
 		m_scene.Reset();

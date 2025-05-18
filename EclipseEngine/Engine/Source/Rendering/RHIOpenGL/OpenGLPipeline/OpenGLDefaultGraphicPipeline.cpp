@@ -58,7 +58,7 @@ namespace RHI::OpenGL
 		return m_deferredRenderPass->PickID(_mousePosX, _mousePosY);
 	}
 
-	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLights, std::vector<RHI::PointLightData> _pointLights, std::vector<RHI::SpotLightData> _spotLights, std::vector<Core::ParticleEmitterRenderData> _particlesData)
+	void OpenGLDefaultGraphicPipeline::Draw(Math::Mat4 _V, Math::Mat4 _P, Math::Vec3 _viewPos, std::vector<Resource::ModelData> _staticModels, RHI::LightsData _lightsData, std::vector<Core::ParticleEmitterRenderData> _particlesData)
 	{
 		Math::Mat4 _VP = _P * _V;
 
@@ -75,7 +75,7 @@ namespace RHI::OpenGL
 		
 		// Lighting Render Pass
 		m_FB->Bind();
-		m_lightingRenderPass->Draw(_viewPos, m_deferredRenderPass->gPosition, m_deferredRenderPass->gNormal, m_deferredRenderPass->gAlbedoSpec, _ambientLight, _dirLights, _pointLights, _spotLights);
+		m_lightingRenderPass->Draw(_viewPos, m_deferredRenderPass->gPosition, m_deferredRenderPass->gNormal, m_deferredRenderPass->gAlbedoSpec, _lightsData);
 		m_FB->Unbind();
 
 		// Copy Deferred depth buffer into final framebuffer depth buffer

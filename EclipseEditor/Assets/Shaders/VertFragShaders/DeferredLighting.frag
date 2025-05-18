@@ -7,7 +7,6 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
 uniform vec3 viewPos;
-uniform vec4 ambient;
 
 struct DirLight {
     vec4 Color;
@@ -37,17 +36,22 @@ struct SpotLight {
     float Padding;
 };
 
-#define NR_DIR_LIGHTS 12
-#define NR_POINT_LIGHTS 12
-#define NR_SPOT_LIGHTS 12
+#define NR_DIR_LIGHTS 100
+#define NR_POINT_LIGHTS 100
+#define NR_SPOT_LIGHTS 100
 
-uniform DirLight dirLights[NR_DIR_LIGHTS];
-uniform PointLight pointLights[NR_POINT_LIGHTS];
-uniform SpotLight spotLights[NR_SPOT_LIGHTS];
+layout (std140) uniform LightsData
+{
+    vec4 ambientLight;
+    DirLight dirLights[NR_DIR_LIGHTS];
+    PointLight pointLights[NR_POINT_LIGHTS];
+    SpotLight spotLights[NR_SPOT_LIGHTS];
+    int dirLightNb;
+    int pointLightNb;
+    int spotLightNb;
+    int padding;
+} lightsData;
 
-uniform int DirLightNb;
-uniform int PointLightNb;
-uniform int SpotLightNb;
 
 vec3 DirLightComputation(DirLight dirLight, vec3 FragPos, vec3 Normal, vec3 Diffuse, float Specular, vec3 ViewDir)
 {
@@ -121,13 +125,13 @@ void main()
     float Specular = texture(gAlbedoSpec, TexCoords).a;
 
     vec3 ViewDir = normalize(viewPos - FragPos);
-    vec3 lighting = Diffuse * ambient.rgb * ambient.a;
-    for (int i = 0; i < DirLightNb; ++i)
-        lighting += DirLightComputation(dirLights[i], FragPos, Normal, Diffuse, Specular, ViewDir);
-    for (int i = 0; i < PointLightNb; ++i)
-        lighting += PointLightComputation(pointLights[i], FragPos, Normal, Diffuse, Specular, ViewDir);
-    for (int i = 0; i < SpotLightNb; ++i)
-        lighting += SpotLightComputation(spotLights[i], FragPos, Normal, Diffuse, Specular, ViewDir);
+    vec3 lighting = Diffuse * lightsData.ambientLight.rgb * lightsData.ambientLight.a;
+    for (int i = 0; i < lightsData.dirLightNb; ++i)
+        lighting += DirLightComputation(lightsData.dirLights[i], FragPos, Normal, Diffuse, Specular, ViewDir);
+    for (int i = 0; i < lightsData.pointLightNb; ++i)
+        lighting += PointLightComputation(lightsData.pointLights[i], FragPos, Normal, Diffuse, Specular, ViewDir);
+    for (int i = 0; i < lightsData.spotLightNb; ++i)
+        lighting += SpotLightComputation(lightsData.spotLights[i], FragPos, Normal, Diffuse, Specular, ViewDir);
 
     FragColor = vec4(lighting, 1.f);
 }

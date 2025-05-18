@@ -1,9 +1,9 @@
 {
     "AmbientLight": [
-        1.0,
-        1.0,
-        1.0,
-        0.25
+        255.0,
+        255.0,
+        255.0,
+        63.75
     ],
     "GameObjects": [
         {
@@ -455,8 +455,8 @@
                             "Color": [
                                 0.0,
                                 0.0,
-                                1.0,
-                                1.0
+                                255.0,
+                                255.0
                             ],
                             "Distance": 15.0,
                             "ConstantAttenuation": 1.0,
@@ -495,10 +495,10 @@
                         "SpotLight": {
                             "IsActive": true,
                             "Color": [
-                                1.0,
+                                255.0,
                                 0.0,
                                 0.0,
-                                1.0
+                                255.0
                             ],
                             "InnerCutOff": 40.0,
                             "OuterCutOff": 50.0,
@@ -697,16 +697,16 @@
                                 "EndSize": 1.0,
                                 "SizeVariation": 1.0,
                                 "BeginColor": [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
+                                    255.0,
+                                    255.0,
+                                    255.0,
+                                    255.0
                                 ],
                                 "EndColor": [
-                                    1.0,
+                                    255.0,
                                     0.0,
                                     0.0,
-                                    1.0
+                                    255.0
                                 ],
                                 "BeginVelocity": [
                                     0.0,

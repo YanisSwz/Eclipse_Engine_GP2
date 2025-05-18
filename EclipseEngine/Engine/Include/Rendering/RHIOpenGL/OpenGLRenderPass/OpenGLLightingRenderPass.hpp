@@ -20,14 +20,12 @@ namespace RHI::OpenGL
 		void Rescale(int _width, int _height) override;
 		void Delete() override;
 
-		void Draw(Math::Vec3 _viewPos, GLuint _gPosition, GLuint _gNormal, GLuint _gAlbedoSpec, Math::Vec4 _ambientLight, std::vector<RHI::DirLightData> _dirLightsData, std::vector<RHI::PointLightData> _pointLightsData, std::vector<RHI::SpotLightData> _spotLightsData);
+		void Draw(Math::Vec3 _viewPos, GLuint _gPosition, GLuint _gNormal, GLuint _gAlbedoSpec, RHI::LightsData _lightsData);
 
 	private:
 		const char* m_LightingShaderProgramName = "DeferredLighting.shd";
-		Resource::ShaderProgram* m_shaderLight = nullptr;
+		Resource::ShaderProgram* m_lightShader = nullptr;
 
-		void SetDirLights(std::vector<RHI::DirLightData> _dirLightsData);
-		void SetPointLights(std::vector<RHI::PointLightData> _pointLightsData);
-		void SetSpotLights(std::vector<RHI::SpotLightData> _spotLightsData);
+		GLuint m_ubo = 0;
 	};
 }

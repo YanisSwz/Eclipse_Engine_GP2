@@ -13,7 +13,7 @@ namespace Core
 	RHI::PointLightData PointLight::GetData() const
 	{
 		return RHI::PointLightData{
-			m_color,
+			m_color / 255.f,
 			GetPosition(),
 			m_constantAttenuation,
 			1.f/m_distance,
@@ -38,9 +38,7 @@ namespace Core
 			{"IsActive", IsActive()},
 			{"Color", { color.x, color.y, color.z, color.w }}, // RGBA
 			{"Distance", GetDistance()},
-			{"ConstantAttenuation", GetConstAtt()},
-			{"LinearAttenuation", GetLinAtt()},
-			{"QuadraticAttenuation", GetQuadAtt()}
+			{"ConstantAttenuation", GetConstAtt()}
 		};
 	}
 
@@ -50,21 +48,15 @@ namespace Core
 		float color[4];
 		float distance;
 		float constAtt;
-		float linAtt;
-		float quadAtt;
 
 		_j.at("IsActive").get_to(bIsActive);
 		_j.at("Color").get_to(color);
 		_j.at("Distance").get_to(distance);
 		_j.at("ConstantAttenuation").get_to(constAtt);
-		_j.at("LinearAttenuation").get_to(linAtt);
-		_j.at("QuadraticAttenuation").get_to(quadAtt);
 
 		SetActive(bIsActive);
 		SetColor(color[0], color[1], color[2], color[3]);
 		SetDistance(distance);
 		SetConstAtt(constAtt);
-		SetLinAtt(linAtt);
-		SetQuadAtt(quadAtt);
 	}
 }

@@ -41,6 +41,17 @@ namespace GUI
 					transform->SetRotation(transform->GetRotation());
 					transform->SetScale(transform->GetScale());
 				}
+
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PrefabName"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					m_crtPrefabName = *static_cast<std::string*>(payload->Data);
+
+					m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
+					_scene->InstantiatePrefab(nullptr, m_crtPrefab);
+					m_crtPrefabName.clear();
+					m_crtPrefab = nullptr;
+				}
 				ImGui::EndDragDropTarget();
 			}
 			
@@ -74,7 +85,7 @@ namespace GUI
 		if (!_crtTransform->GetGameObject()->IsActive())
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 0.5f);
 
-		if (ImGui::TreeNodeEx(_crtTransform->GetGameObject()->name.c_str(), treeNodeFlags))
+		if (ImGui::TreeNodeEx((_crtTransform->GetGameObject()->name + "##" + std::to_string(_crtTransform->GetGameObject()->GetID())).c_str(), treeNodeFlags))
 		{
 			if (ImGui::IsItemClicked())
 				newGameObjectSelected = _crtTransform->GetGameObject();
@@ -102,6 +113,18 @@ namespace GUI
 					transform->SetRotation(transform->GetRotation());
 					transform->SetScale(transform->GetScale());
 				}
+
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PrefabName"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(std::string));
+					m_crtPrefabName = *static_cast<std::string*>(payload->Data);
+
+					m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
+					_scene->InstantiatePrefab(_crtTransform->GetGameObject(), m_crtPrefab);
+					m_crtPrefabName.clear();
+					m_crtPrefab = nullptr;
+				}
+
 				ImGui::EndDragDropTarget();
 			}
 
@@ -195,21 +218,6 @@ namespace GUI
 				Core::GameObject* tempNewGOSelected = RecursiveDraw(transform, _scene, _crtGOSelected);
 				if (tempNewGOSelected)
 					newGameObjectSelected = tempNewGOSelected;
-			}
-
-			if (ImGui::BeginDragDropTarget())
-			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PrefabName"))
-				{
-					IM_ASSERT(payload->DataSize == sizeof(std::string));
-					m_crtPrefabName = *static_cast<std::string*>(payload->Data);
-
-					m_crtPrefab = Resource::ResourceManager::GetInstance().GetResource<Resource::Prefab>(m_crtPrefabName);
-					_scene->InstantiatePrefab(_crtTransform->GetGameObject(), m_crtPrefab);
-					m_crtPrefabName.clear();
-					m_crtPrefab = nullptr;
-				}
-				ImGui::EndDragDropTarget();
 			}
 
 			ImGui::TreePop();
