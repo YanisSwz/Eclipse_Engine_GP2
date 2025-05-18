@@ -2,6 +2,8 @@
 #include "Scripting/MonoBehaviour.hpp"
 #include "Scripting/RegisterTypeMacro.hpp"
 #include "Physics/BoxCollider.hpp"
+#include "Audio/AudioSource.hpp"
+#include "Resource/Prefab.hpp"
 
 class PlayerScript : public Core::MonoBehaviour
 {
@@ -18,6 +20,12 @@ public:
 
 private:
 	Core::BoxCollider* m_collider = nullptr;
+	Core::AudioSource* m_source = nullptr;
+	Resource::Prefab* m_fireball = nullptr;
+	float m_speed = 10.f;
+	int m_fireballCount = 0;
+	float m_timer = 0.f;
+	float m_attackInterval = 1.5f;
 };
 
 REGISTER_TYPE(PlayerScript);

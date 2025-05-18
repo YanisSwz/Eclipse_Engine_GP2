@@ -272,6 +272,10 @@ void Vec3::Print(Vec3 _vec)
 	std::cout << "X: " << _vec.x << ", Y: " << _vec.y << ", Z: " << _vec.z << std::endl;
 }
 
+Vec3 Vec3::Lerp(Vec3 _vec1, Vec3 _vec2, float _t)
+{
+	return { Tools::Lerp(_vec1.x, _vec2.x, _t), Tools::Lerp(_vec1.y, _vec2.y, _t), Tools::Lerp(_vec1.z, _vec2.z, _t) };
+}
 
 //####################### OPERATORS #######################
 

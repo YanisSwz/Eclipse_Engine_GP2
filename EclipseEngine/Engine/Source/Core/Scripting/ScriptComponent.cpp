@@ -7,6 +7,12 @@ namespace Core
 	std::filesystem::path ScriptComponent::m_defaultPathScriptHPP = "Assets/Scripts/Defaulthpp.txt";
 	std::filesystem::path ScriptComponent::m_defaultPathScriptCPP = "Assets/Scripts/Defaultcpp.txt";
 
+	ScriptComponent::~ScriptComponent()
+	{
+		if (Instance)
+			delete Instance;
+	}
+
 	void ScriptComponent::Serialize(json& _j)
 	{
 		_j["ScriptComponent"] = json{

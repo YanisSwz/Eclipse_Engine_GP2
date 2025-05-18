@@ -257,4 +257,14 @@ namespace Core
 
 		return gameObjects.empty() ? nullptr : gameObjects[0];
 	}
+
+	GameObject* Scene::FindByTag(std::string _name)
+	{
+		for(int i = 0; i < m_currentGameObjectCount; ++i)
+		{
+			if (m_gameObjects[i].tag == _name)
+				return &m_gameObjects[i];
+		}
+		return nullptr;
+	}
 }

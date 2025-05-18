@@ -52,6 +52,7 @@ namespace Core
 		ECLIPSE_ENGINE void Deserialize(const json& _j);
 		ECLIPSE_ENGINE void SavePrefab(GameObject* _gameObject, Resource::Prefab* _prefab);
 		ECLIPSE_ENGINE GameObject* InstantiatePrefab(GameObject* _parent, Resource::Prefab* _prefab);
+		ECLIPSE_ENGINE GameObject* FindByTag(std::string _name);
 
 	private:
 		static const int MAX_SIZE = 100;

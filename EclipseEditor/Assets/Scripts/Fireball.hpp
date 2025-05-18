@@ -1,15 +1,15 @@
 #pragma once
 #include "Scripting/MonoBehaviour.hpp"
 #include "Scripting/RegisterTypeMacro.hpp"
-#include "Audio/AudioSource.hpp"
 #include "Particles/ParticleEmitter.hpp"
-#include "PlayerScript.hpp"
+#include "Audio/AudioSource.hpp"
+#include "Physics/BoxCollider.hpp"
 
-class EnemyScript : public Core::MonoBehaviour
+class Fireball : public Core::MonoBehaviour
 {
 public:
-	EnemyScript();
-	~EnemyScript() override;
+	Fireball();
+	~Fireball() override;
 
 	void OnStart() override;
 	void OnUpdate(Windowing::IWindow* _window, float _deltaTime) override;
@@ -17,21 +17,18 @@ public:
 	void OnCollisionEnter(Core::ICollider* _collider) override;
 	void OnCollisionStay(Core::ICollider* _collider) override;
 	void OnCollisionExit(Core::ICollider* _collider) override;
-	
-	inline void SetPlayer(PlayerScript* _player) { m_player = _player; }
-	
-	void TakeDamage();
+	void Explode();
 
 private:
-	PlayerScript* m_player = nullptr;
 	Core::BoxCollider* m_collider = nullptr;
 	Core::ParticleEmitter* m_emitter = nullptr;
 	Core::AudioSource* m_source = nullptr;
-	int m_health = 2;
-	float m_speed = 8.f;
+	float m_speed = 30.f;
+	float m_timer = 0.f;
+	float m_duration = 1.5f;
+	float m_originalY = 0.f;
 	bool m_exploding = false;
-	
-	void Explode();
+
 };
 
-REGISTER_TYPE(EnemyScript);
+REGISTER_TYPE(Fireball);

@@ -1,0 +1,107 @@
+[
+    {
+        "EnemySpawner": {
+            "IsActive": true,
+            "Tag": "Untagged",
+            "Transform": {
+                "LocalPosition": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "LocalScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "LocalRotation": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "ParentIndex": -1
+            },
+            "Components": [
+                {
+                    "Model": {
+                        "IsActive": true,
+                        "Mesh": "Star.obj",
+                        "Texture": "Star.img",
+                        "Shader": "DefaultDeferredRendering.shd"
+                    }
+                },
+                {
+                    "ParticleEmitter": {
+                        "IsActive": true,
+                        "ParticleEmitterProps": {
+                            "MaxParticleNumber": 500,
+                            "SpawnRate": 0.009999999776482582,
+                            "SpawnRateVariation": 0.0,
+                            "SimulationDuration": 5.0,
+                            "IsLooping": false
+                        },
+                        "ParticleProps": {
+                            "MeshName": "Quad.obj",
+                            "TextureName": "None",
+                            "IsBillboard": true,
+                            "LifeTime": 1.0,
+                            "LifeTimeVariation": 0.0,
+                            "PositionOffset": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "PositionVariation": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "BeginSize": 75.0,
+                            "EndSize": 25.0,
+                            "SizeVariation": 25.0,
+                            "BeginColor": [
+                                1.0,
+                                0.0,
+                                1.0,
+                                1.0
+                            ],
+                            "EndColor": [
+                                1.0,
+                                0.0,
+                                1.0,
+                                1.0
+                            ],
+                            "BeginVelocity": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "EndVelocity": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "VelocityVariationBegin": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "VelocityVariationEnd": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    }
+                },
+                {
+                    "ScriptComponent": {
+                        "IsActive": true,
+                        "scriptName": "EnemySpawner"
+                    }
+                }
+            ]
+        }
+    }
+]

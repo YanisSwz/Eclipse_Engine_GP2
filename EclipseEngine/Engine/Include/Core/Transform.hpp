@@ -22,7 +22,7 @@ namespace Core
 
 		// Updates
 		ECLIPSE_ENGINE void Update(bool _positionChanged = false, bool _scaleChanged = false, bool _rotationChanged = false);
-		ECLIPSE_ENGINE void LateUpdate();
+		ECLIPSE_ENGINE void LateUpdate(bool _positionChanged = false, bool _scaleChanged = false, bool _rotationChanged = false);
 		ECLIPSE_ENGINE void StartOverride();
 		ECLIPSE_ENGINE void UpdateOverride();
 		ECLIPSE_ENGINE void EndOverride();

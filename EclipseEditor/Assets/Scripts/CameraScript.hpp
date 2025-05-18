@@ -1,0 +1,25 @@
+#pragma once
+#include "Scripting/MonoBehaviour.hpp"
+#include "Scripting/RegisterTypeMacro.hpp"
+
+class CameraScript : public Core::MonoBehaviour
+{
+public:
+	CameraScript();
+	~CameraScript() override;
+
+	void OnStart() override;
+	void OnUpdate(Windowing::IWindow* _window, float _deltaTime) override;
+	void OnDestroy() override;
+	void OnCollisionEnter(Core::ICollider* _collider) override;
+	void OnCollisionStay(Core::ICollider* _collider) override;
+	void OnCollisionExit(Core::ICollider* _collider) override;
+
+private:
+	Core::GameObject* m_player = nullptr;
+	float m_zOffset = 12.f;
+	float m_speed = 5.f;
+	Math::Vec3 targetPos{};
+};
+
+REGISTER_TYPE(CameraScript);

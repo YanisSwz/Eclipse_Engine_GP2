@@ -152,11 +152,11 @@ namespace Core
 		_j.at("Rotation").get_to(rotation);
 		_j.at("Mass").get_to(mass);
 
-		SetDynamic(bIsDynamic);
-		SetOffsetPos(Math::Vec3(offsetPosition[0], offsetPosition[1], offsetPosition[2]));
 		Scale(Math::Vec3(scale[0], scale[1], scale[2]));
+		SetDynamic(bIsDynamic);
 		SetRotation(Math::Quat(rotation[0], rotation[1], rotation[2], rotation[3]));
 		SetMass(mass);
+		SetOffsetPos(Math::Vec3(offsetPosition[0], offsetPosition[1], offsetPosition[2]));
 		SetActive(bIsActive);
 	}
 }

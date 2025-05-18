@@ -639,12 +639,12 @@ namespace GUI
 			ImGui::SetColumnWidth(0, _maxColumnWidth);
 		ImGui::Text(_label);
 		ImGui::NextColumn();
-		float col[4]{ _color.x / 255.f, _color.y / 255.f, _color.z / 255.f, _color.w / 255.f };
+		float col[4]{ _color.x, _color.y, _color.z, _color.w };
 		ImGui::ColorEdit4(invisibleLabel.c_str(), col, flags);
-		_color.x = col[0] * 255.f;
-		_color.y = col[1] * 255.f;
-		_color.z = col[2] * 255.f;
-		_color.w = col[3] * 255.f;
+		_color.x = col[0];
+		_color.y = col[1];
+		_color.z = col[2];
+		_color.w = col[3];
 		ImGui::Columns(1);
 		ImGui::PopID();
 	}
