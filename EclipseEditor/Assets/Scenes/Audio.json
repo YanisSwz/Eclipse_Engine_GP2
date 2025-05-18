@@ -1,0 +1,230 @@
+{
+    "AmbientLight": [
+        1.0,
+        1.0,
+        1.0,
+        0.25
+    ],
+    "GameObjects": [
+        {
+            "Camera": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        0.20000000298023224,
+                        0.20000000298023224,
+                        0.20000000298023224
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Camera": {
+                            "IsActive": true,
+                            "FOV": 60.0,
+                            "Near": 0.10000000149011612,
+                            "Far": 1000.0
+                        }
+                    },
+                    {
+                        "AudioListener": {
+                            "IsActive": true
+                        }
+                    },
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "LizardMage.obj",
+                            "Texture": "LizardMage.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Music player": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "AudioSource": {
+                            "IsActive": true,
+                            "Channel": "Music",
+                            "PlayOnAwake": true,
+                            "IsLooping": true,
+                            "Is3D": false,
+                            "Volume": 1.0,
+                            "Pan": 0.0,
+                            "MinDistance": 1.0,
+                            "MaxDistance": 5.0,
+                            "AudioClip": "music.wav"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "2D sound": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        -0.532618522644043,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "AudioSource": {
+                            "IsActive": true,
+                            "Channel": "SFX",
+                            "PlayOnAwake": true,
+                            "IsLooping": false,
+                            "Is3D": false,
+                            "Volume": 1.0,
+                            "Pan": 0.0,
+                            "MinDistance": 1.0,
+                            "MaxDistance": 5.0,
+                            "AudioClip": "shoot.wav"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "3D sound": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        1.360671043395996,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "AudioSource": {
+                            "IsActive": true,
+                            "Channel": "SFX",
+                            "PlayOnAwake": true,
+                            "IsLooping": true,
+                            "Is3D": true,
+                            "Volume": 1.0,
+                            "Pan": 0.0,
+                            "MinDistance": 1.0,
+                            "MaxDistance": 5.0,
+                            "AudioClip": "mana.flac"
+                        }
+                    },
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Cube.obj",
+                            "Texture": "WhiteTexture.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Additionnal sound": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "AudioSource": {
+                            "IsActive": true,
+                            "Channel": "SFX",
+                            "PlayOnAwake": false,
+                            "IsLooping": true,
+                            "Is3D": false,
+                            "Volume": 1.0,
+                            "Pan": 0.0,
+                            "MinDistance": 1.0,
+                            "MaxDistance": 5.0,
+                            "AudioClip": "fireball.wav"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
