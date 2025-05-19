@@ -6,7 +6,7 @@
             "Transform": {
                 "LocalPosition": [
                     0.0,
-                    0.0,
+                    4.0,
                     0.0
                 ],
                 "LocalScale": [
@@ -15,8 +15,8 @@
                     1.0
                 ],
                 "LocalRotation": [
-                    1.0,
-                    0.0,
+                    0.9659258127212524,
+                    0.258819043636322,
                     0.0,
                     0.0
                 ],
@@ -99,6 +99,50 @@
                     "ScriptComponent": {
                         "IsActive": true,
                         "scriptName": "EnemySpawner"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Light": {
+            "IsActive": true,
+            "Tag": "Untagged",
+            "Transform": {
+                "LocalPosition": [
+                    0.0,
+                    6.599999904632568,
+                    -1.7999999523162842
+                ],
+                "LocalScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "LocalRotation": [
+                    0.8166415691375732,
+                    0.5771451592445374,
+                    0.0,
+                    0.0
+                ],
+                "ParentIndex": 0
+            },
+            "Components": [
+                {
+                    "SpotLight": {
+                        "IsActive": true,
+                        "Color": [
+                            255.0,
+                            198.0,
+                            0.0,
+                            255.0
+                        ],
+                        "InnerCutOff": 19.0,
+                        "OuterCutOff": 65.0,
+                        "Distance": 8.399999618530273,
+                        "ConstantAttenuation": 1.0,
+                        "LinearAttenuation": 0.09000000357627869,
+                        "QuadraticAttenuation": 0.03200000151991844
                     }
                 }
             ]

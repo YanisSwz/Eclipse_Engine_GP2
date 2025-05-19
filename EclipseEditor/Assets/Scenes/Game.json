@@ -220,7 +220,7 @@
                             "Pan": 0.0,
                             "MinDistance": 1.0,
                             "MaxDistance": 5.0,
-                            "AudioClip": "shoot.wav"
+                            "AudioClip": "Fireball shot.wav"
                         }
                     }
                 ]
@@ -277,13 +277,71 @@
                 "Transform": {
                     "LocalPosition": [
                         0.0,
-                        8.882623672485352,
+                        0.6418061256408691,
                         14.0600004196167
                     ],
                     "LocalScale": [
-                        4.0,
-                        4.0,
-                        4.0
+                        0.75,
+                        0.7499999403953552,
+                        0.7499999403953552
+                    ],
+                    "LocalRotation": [
+                        0.23656539618968964,
+                        -3.21300603900454e-08,
+                        0.9716155529022217,
+                        -3.21300603900454e-08
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Sheep.obj",
+                            "Texture": "Sheep.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "BoxCollider": {
+                            "IsActive": true,
+                            "IsDynamic": true,
+                            "OffsetPosition": [
+                                0.0,
+                                0.0,
+                                -0.25
+                            ],
+                            "Scale": [
+                                3.0,
+                                3.0,
+                                4.0
+                            ],
+                            "Rotation": [
+                                0.23656539618968964,
+                                0.0,
+                                0.9716156125068665,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Music player": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
                     ],
                     "LocalRotation": [
                         1.0,
@@ -295,10 +353,349 @@
                 },
                 "Components": [
                     {
+                        "AudioSource": {
+                            "IsActive": true,
+                            "Channel": "Music",
+                            "PlayOnAwake": true,
+                            "IsLooping": true,
+                            "Is3D": false,
+                            "Volume": 1.0,
+                            "Pan": 0.0,
+                            "MinDistance": 1.0,
+                            "MaxDistance": 5.0,
+                            "AudioClip": "Game music.wav"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "EnemySpawner": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        21.799999237060547,
+                        4.0,
+                        -3.799999952316284
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.9659258127212524,
+                        0.258819043636322,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
                         "Model": {
                             "IsActive": true,
-                            "Mesh": "Cube.obj",
-                            "Texture": "WhiteTexture.img",
+                            "Mesh": "Star.obj",
+                            "Texture": "Star.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "ParticleEmitter": {
+                            "IsActive": true,
+                            "ParticleEmitterProps": {
+                                "MaxParticleNumber": 800,
+                                "SpawnRate": 0.009999999776482582,
+                                "SpawnRateVariation": 0.0,
+                                "SimulationDuration": 1.5,
+                                "IsLooping": false
+                            },
+                            "ParticleProps": {
+                                "MeshName": "Quad.obj",
+                                "TextureName": "None",
+                                "IsBillboard": true,
+                                "LifeTime": 1.0,
+                                "LifeTimeVariation": 0.0,
+                                "PositionOffset": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "PositionVariation": [
+                                    4.0,
+                                    4.0,
+                                    4.0
+                                ],
+                                "BeginSize": 10.0,
+                                "EndSize": 8.0,
+                                "SizeVariation": 0.0,
+                                "BeginColor": [
+                                    255.0,
+                                    210.0,
+                                    0.0,
+                                    255.0
+                                ],
+                                "EndColor": [
+                                    255.0,
+                                    230.79998779296875,
+                                    133.99998474121094,
+                                    255.0
+                                ],
+                                "BeginVelocity": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "EndVelocity": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "VelocityVariationBegin": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "VelocityVariationEnd": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "ScriptComponent": {
+                            "IsActive": true,
+                            "scriptName": "EnemySpawner"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Light": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        6.599999904632568,
+                        -1.7999999523162842
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.816641628742218,
+                        0.5771450996398926,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": 7
+                },
+                "Components": [
+                    {
+                        "SpotLight": {
+                            "IsActive": true,
+                            "Color": [
+                                255.0,
+                                198.0,
+                                0.0,
+                                255.0
+                            ],
+                            "InnerCutOff": 19.0,
+                            "OuterCutOff": 65.0,
+                            "Distance": 8.399999618530273,
+                            "ConstantAttenuation": 1.0,
+                            "LinearAttenuation": 0.09000000357627869,
+                            "QuadraticAttenuation": 0.03200000151991844
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "EnemySpawner": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        -13.600000381469727,
+                        4.0,
+                        8.800000190734863
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.9659258127212524,
+                        0.258819043636322,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Star.obj",
+                            "Texture": "Star.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "ParticleEmitter": {
+                            "IsActive": true,
+                            "ParticleEmitterProps": {
+                                "MaxParticleNumber": 800,
+                                "SpawnRate": 0.009999999776482582,
+                                "SpawnRateVariation": 0.0,
+                                "SimulationDuration": 1.5,
+                                "IsLooping": false
+                            },
+                            "ParticleProps": {
+                                "MeshName": "Quad.obj",
+                                "TextureName": "None",
+                                "IsBillboard": true,
+                                "LifeTime": 1.0,
+                                "LifeTimeVariation": 0.0,
+                                "PositionOffset": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "PositionVariation": [
+                                    4.0,
+                                    4.0,
+                                    4.0
+                                ],
+                                "BeginSize": 10.0,
+                                "EndSize": 8.0,
+                                "SizeVariation": 0.0,
+                                "BeginColor": [
+                                    255.0,
+                                    210.0,
+                                    0.0,
+                                    255.0
+                                ],
+                                "EndColor": [
+                                    255.0,
+                                    230.79998779296875,
+                                    133.99998474121094,
+                                    255.0
+                                ],
+                                "BeginVelocity": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "EndVelocity": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "VelocityVariationBegin": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "VelocityVariationEnd": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "ScriptComponent": {
+                            "IsActive": true,
+                            "scriptName": "EnemySpawner"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Light": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        6.599999904632568,
+                        -1.7999999523162842
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        0.816641628742218,
+                        0.5771450996398926,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": 9
+                },
+                "Components": [
+                    {
+                        "SpotLight": {
+                            "IsActive": true,
+                            "Color": [
+                                255.0,
+                                198.0,
+                                0.0,
+                                255.0
+                            ],
+                            "InnerCutOff": 19.0,
+                            "OuterCutOff": 65.0,
+                            "Distance": 8.399999618530273,
+                            "ConstantAttenuation": 1.0,
+                            "LinearAttenuation": 0.09000000357627869,
+                            "QuadraticAttenuation": 0.03200000151991844
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Crate": {
+                "IsActive": true,
+                "Tag": "Enemy",
+                "Transform": {
+                    "LocalPosition": [
+                        -11.649514198303223,
+                        0.6399999856948853,
+                        -11.890436172485352
+                    ],
+                    "LocalScale": [
+                        0.75,
+                        0.7499999403953552,
+                        0.7499999403953552
+                    ],
+                    "LocalRotation": [
+                        0.9854134321212769,
+                        0.0,
+                        0.1701776087284088,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Sheep.obj",
+                            "Texture": "Sheep.img",
                             "Shader": "DefaultDeferredRendering.shd"
                         }
                     },
@@ -309,17 +706,75 @@
                             "OffsetPosition": [
                                 0.0,
                                 0.0,
-                                0.0
+                                -0.25
                             ],
                             "Scale": [
-                                4.0,
-                                4.0,
+                                3.0,
+                                3.0,
                                 4.0
                             ],
                             "Rotation": [
-                                1.0,
+                                0.9854134321212769,
+                                0.0,
+                                0.1701776087284088,
+                                0.0
+                            ],
+                            "Mass": 1.0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Crate": {
+                "IsActive": true,
+                "Tag": "Enemy",
+                "Transform": {
+                    "LocalPosition": [
+                        18.848697662353516,
+                        0.6399999856948853,
+                        4.472009181976318
+                    ],
+                    "LocalScale": [
+                        0.75,
+                        0.7499999403953552,
+                        0.7499999403953552
+                    ],
+                    "LocalRotation": [
+                        0.8975241184234619,
+                        0.0,
+                        -0.44096535444259644,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "Model": {
+                            "IsActive": true,
+                            "Mesh": "Sheep.obj",
+                            "Texture": "Sheep.img",
+                            "Shader": "DefaultDeferredRendering.shd"
+                        }
+                    },
+                    {
+                        "BoxCollider": {
+                            "IsActive": true,
+                            "IsDynamic": true,
+                            "OffsetPosition": [
                                 0.0,
                                 0.0,
+                                -0.25
+                            ],
+                            "Scale": [
+                                3.0,
+                                3.0,
+                                4.0
+                            ],
+                            "Rotation": [
+                                0.8975241184234619,
+                                0.0,
+                                -0.44096535444259644,
                                 0.0
                             ],
                             "Mass": 1.0

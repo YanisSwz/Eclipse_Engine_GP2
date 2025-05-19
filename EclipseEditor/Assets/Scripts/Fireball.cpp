@@ -81,6 +81,9 @@ void Fireball::Explode()
 	Core::Model* model = m_gameObject->GetComponent<Core::Model>();
 	if (model)
 		model->SetActive(false);
+	Core::PointLight* light = m_gameObject->GetComponent<Core::PointLight>();
+	if (light)
+		light->SetActive(false);
 	m_speed = 0.f;
 	if (m_emitter)
 	{

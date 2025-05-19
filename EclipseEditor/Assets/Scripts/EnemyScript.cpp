@@ -38,7 +38,7 @@ void EnemyScript::OnUpdate(Windowing::IWindow* _window, float _deltaTime)
 			m_gameObject->Destroy();
 	}
 
-	if (!m_exploding && m_player && m_collider->IsActive())
+	if (!m_exploding && m_player)
 	{
 		Math::Vec3 direction = m_player->GetGameObject()->transform->GetPosition() - m_gameObject->transform->GetPosition();
 		direction.Normalize();

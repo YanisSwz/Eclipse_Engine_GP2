@@ -103,16 +103,16 @@
                             "EndSize": 35.0,
                             "SizeVariation": 35.0,
                             "BeginColor": [
-                                1.0,
+                                255.0,
+                                45.4455451965332,
                                 0.0,
-                                1.0,
-                                1.0
+                                255.0
                             ],
                             "EndColor": [
-                                1.0,
+                                255.0,
+                                131.28712463378906,
                                 0.0,
-                                1.0,
-                                1.0
+                                255.0
                             ],
                             "BeginVelocity": [
                                 0.0,
@@ -143,11 +143,11 @@
                         "Channel": "SFX",
                         "PlayOnAwake": false,
                         "IsLooping": false,
-                        "Is3D": false,
+                        "Is3D": true,
                         "Volume": 1.0,
                         "Pan": 0.0,
-                        "MinDistance": 1.0,
-                        "MaxDistance": 50.0,
+                        "MinDistance": 20.0,
+                        "MaxDistance": 100.0,
                         "AudioClip": "fireball.wav"
                     }
                 }

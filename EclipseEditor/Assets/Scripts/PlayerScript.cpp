@@ -63,11 +63,11 @@ void PlayerScript::OnUpdate(Windowing::IWindow* _window, float _deltaTime)
 	_deltaTime;
 	m_collider->SetVelocity({ direction.x * m_speed, m_collider->GetVelocity().y, direction.z * m_speed });
 
-	if (_window->GetMouseButton(Windowing::MOUSE_CODE::LEFT_BUTTON, Windowing::INPUT_ACTION::INPUT_PRESS))
+	if (_window->GetKey(Windowing::KEY_CODE::KEY_SPACE, Windowing::INPUT_ACTION::INPUT_PRESS))
 	{
 		if (m_timer >= m_attackInterval)
 		{
-			m_timer -= m_attackInterval;
+			m_timer = 0.f;
 			if (m_fireball != nullptr)
 			{
 				Core::GameObject* fireball = m_scene->InstantiatePrefab(nullptr, m_fireball);
