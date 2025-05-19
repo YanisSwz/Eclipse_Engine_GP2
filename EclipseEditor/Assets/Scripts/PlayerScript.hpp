@@ -25,7 +25,7 @@ private:
 	float m_speed = 10.f;
 	int m_fireballCount = 0;
 	float m_timer = 0.f;
-	float m_attackInterval = 1.5f;
+	float m_attackInterval = 0.75f;
 };
 
 REGISTER_TYPE(PlayerScript);

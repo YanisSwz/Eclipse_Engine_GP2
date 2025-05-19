@@ -48,8 +48,8 @@
                                 0.0
                             ],
                             "Scale": [
-                                100.0,
-                                100.0,
+                                200.0,
+                                200.0,
                                 0.10000000149011612
                             ],
                             "Rotation": [
@@ -281,9 +281,9 @@
                         14.0600004196167
                     ],
                     "LocalScale": [
-                        4.0,
-                        4.0,
-                        4.0
+                        0.75,
+                        0.7499999403953552,
+                        0.7499999403953552
                     ],
                     "LocalRotation": [
                         1.0,
@@ -297,23 +297,23 @@
                     {
                         "Model": {
                             "IsActive": true,
-                            "Mesh": "Cube.obj",
-                            "Texture": "WhiteTexture.img",
+                            "Mesh": "Sheep.obj",
+                            "Texture": "Sheep.img",
                             "Shader": "DefaultDeferredRendering.shd"
                         }
                     },
                     {
                         "BoxCollider": {
-                            "IsActive": true,
+                            "IsActive": false,
                             "IsDynamic": true,
                             "OffsetPosition": [
                                 0.0,
                                 0.0,
-                                0.0
+                                -0.25
                             ],
                             "Scale": [
-                                4.0,
-                                4.0,
+                                3.0,
+                                3.0,
                                 4.0
                             ],
                             "Rotation": [
