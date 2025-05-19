@@ -40,11 +40,8 @@ The project needs Git and CMake installed, and internet access.
 
 ## 📷 Gallery
 
-![Image1](Images/Image1.png)
-![Image2](Images/Image2.png)
-![Image3](Images/Image3.png)
-![Image4](Images/Image4.png)
-![Image5](Images/Image5.png)
-
-
-
+![Image1](Images/Image6.png)
+![Image2](Images/Image7.png)
+![Image3](Images/Image8.png)
+![Image4](Images/Image9.png)
+![Image5](Images/Image10.png)
