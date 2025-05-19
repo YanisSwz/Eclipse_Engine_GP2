@@ -130,12 +130,12 @@
                         "Channel": "SFX",
                         "PlayOnAwake": true,
                         "IsLooping": false,
-                        "Is3D": false,
+                        "Is3D": true,
                         "Volume": 1.0,
                         "Pan": 0.0,
-                        "MinDistance": 1.0,
-                        "MaxDistance": 5.0,
-                        "AudioClip": "mana.flac"
+                        "MinDistance": 10.0,
+                        "MaxDistance": 75.0,
+                        "AudioClip": "Enemy Death.wav"
                     }
                 }
             ]

@@ -395,8 +395,8 @@ namespace Core
 		Set3D(bIs3D);
 		SetMaxVolume(volume);
 		SetPan(pan);
-		SetMinDistance(minDistance);
 		SetMaxDistance(maxDistance);
+		SetMinDistance(minDistance);
 		SetClip(Resource::ResourceManager::GetInstance().GetResource<Resource::AudioClip>(clipName));
 	}
 

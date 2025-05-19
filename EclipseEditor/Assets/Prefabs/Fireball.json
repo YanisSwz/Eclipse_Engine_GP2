@@ -145,11 +145,11 @@
                         "Channel": "SFX",
                         "PlayOnAwake": false,
                         "IsLooping": false,
-                        "Is3D": false,
+                        "Is3D": true,
                         "Volume": 1.0,
                         "Pan": 0.0,
-                        "MinDistance": 1.0,
-                        "MaxDistance": 50.0,
+                        "MinDistance": 20.0,
+                        "MaxDistance": 100.0,
                         "AudioClip": "fireball.wav"
                     }
                 }

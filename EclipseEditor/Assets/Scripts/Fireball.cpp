@@ -39,8 +39,11 @@ void Fireball::OnUpdate(Windowing::IWindow* _window, float _deltaTime)
 		if (m_emitter->IsActive() && !m_emitter->IsPlaying() && m_source->IsActive() && !m_source->IsPlaying())
 			m_gameObject->Destroy();
 	}
-	Math::Vec3 pos = m_gameObject->transform->GetPosition() + m_gameObject->transform->GetRight() * m_speed * _deltaTime;
-	m_gameObject->transform->SetPosition(pos.x, m_originalY, pos.z);
+	if (!m_exploding)
+	{
+		Math::Vec3 pos = m_gameObject->transform->GetPosition() + m_gameObject->transform->GetRight() * m_speed * _deltaTime;
+		m_gameObject->transform->SetPosition(pos.x, m_originalY, pos.z);
+	}
 }
 
 void Fireball::OnDestroy()

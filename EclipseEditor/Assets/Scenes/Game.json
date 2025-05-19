@@ -220,7 +220,7 @@
                             "Pan": 0.0,
                             "MinDistance": 1.0,
                             "MaxDistance": 5.0,
-                            "AudioClip": "shoot.wav"
+                            "AudioClip": "Fireball shot.wav"
                         }
                     }
                 ]
@@ -533,6 +533,47 @@
                         "ScriptComponent": {
                             "IsActive": true,
                             "scriptName": "EnemySpawner"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Music player": {
+                "IsActive": true,
+                "Tag": "Untagged",
+                "Transform": {
+                    "LocalPosition": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "LocalScale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "LocalRotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ParentIndex": -1
+                },
+                "Components": [
+                    {
+                        "AudioSource": {
+                            "IsActive": true,
+                            "Channel": "Music",
+                            "PlayOnAwake": true,
+                            "IsLooping": true,
+                            "Is3D": false,
+                            "Volume": 1.0,
+                            "Pan": 0.0,
+                            "MinDistance": 1.0,
+                            "MaxDistance": 5.0,
+                            "AudioClip": "Game music.wav"
                         }
                     }
                 ]

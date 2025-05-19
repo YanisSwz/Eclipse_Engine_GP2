@@ -67,7 +67,7 @@ void PlayerScript::OnUpdate(Windowing::IWindow* _window, float _deltaTime)
 	{
 		if (m_timer >= m_attackInterval)
 		{
-			m_timer -= m_attackInterval;
+			m_timer = 0.f;
 			if (m_fireball != nullptr)
 			{
 				Core::GameObject* fireball = m_scene->InstantiatePrefab(nullptr, m_fireball);
