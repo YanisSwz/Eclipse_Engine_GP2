@@ -22,8 +22,9 @@ void EnemyScript::OnStart()
 	m_source = m_gameObject->GetComponent<Core::AudioSource>();
 	if (m_source)
 		m_source->SetActive(false);
-
-	m_player = dynamic_cast<PlayerScript*>(m_scene->FindByTag("Player")->GetComponent<Core::ScriptComponent>()->Instance);
+	Core::GameObject* player = m_scene->FindByTag("Player");
+	if (player && player->GetComponent<Core::ScriptComponent>())
+		m_player = dynamic_cast<PlayerScript*>(player->GetComponent<Core::ScriptComponent>()->Instance);
 }
 
 void EnemyScript::OnUpdate(Windowing::IWindow* _window, float _deltaTime)
@@ -78,7 +79,6 @@ void EnemyScript::Explode()
 {
 	m_exploding = true;
 	m_gameObject->GetComponent<Core::Model>()->SetActive(false);
-	//m_collider->SetDynamic(false);
 	m_speed = 0.f;
 	if (m_emitter)
 	{

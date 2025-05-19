@@ -6,7 +6,7 @@
             "Transform": {
                 "LocalPosition": [
                     0.0,
-                    20.719200134277344,
+                    0.0,
                     0.0
                 ],
                 "LocalScale": [
@@ -35,15 +35,13 @@
                     "PointLight": {
                         "IsActive": true,
                         "Color": [
-                            1.0,
-                            0.41584157943725586,
+                            255.0,
+                            60.59405517578125,
                             0.0,
-                            1.0
+                            255.0
                         ],
-                        "Distance": 2.0,
-                        "ConstantAttenuation": 1.0,
-                        "LinearAttenuation": 0.09000000357627869,
-                        "QuadraticAttenuation": 0.03200000151991844
+                        "Distance": 7.0,
+                        "ConstantAttenuation": 1.0
                     }
                 },
                 {

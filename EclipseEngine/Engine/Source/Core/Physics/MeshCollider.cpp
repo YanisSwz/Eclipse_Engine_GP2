@@ -2,6 +2,7 @@
 #include "Logger.hpp"
 #include "Resource/ResourceManager.hpp"
 #include "Resource/Mesh.hpp"
+#include "GameObject.hpp"
 
 // Jolt Includes
 #include <Jolt/Jolt.h>
@@ -223,7 +224,7 @@ namespace Core
 		Math::Quat rotation = GetRotation();
 
 		_j["MeshCollider"] = json{
-			{"IsActive", IsActive()},
+			{"IsActive", GetGameObject()->IsActive()},
 			{"IsDynamic", GetIsDynamic()},
 			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
 			{"Scale", {scale.x, scale.y, scale.z}},

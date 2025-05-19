@@ -181,7 +181,7 @@ namespace Core
 				{"PositionVariation", { positionVariation.x, positionVariation.y, positionVariation.z }},
 				{"BeginSize", particleProps.sizeBegin},
 				{"EndSize", particleProps.sizeEnd},
-				{"SizeVariation", particleProps.sizeEnd},
+				{"SizeVariation", particleProps.sizeVariation},
 				{"BeginColor", { colorBegin.x, colorBegin.y, colorBegin.z, colorBegin.w }}, // RGBA
 				{"EndColor", { colorEnd.x, colorEnd.y, colorEnd.z, colorEnd.w }}, // RGBA
 				{"BeginVelocity", { velocityBegin.x, velocityBegin.y, velocityBegin.z }},

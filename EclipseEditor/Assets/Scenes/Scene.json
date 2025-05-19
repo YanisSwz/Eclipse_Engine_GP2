@@ -129,9 +129,9 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        7.946953773498535,
-                        0.049735020846128464,
-                        4.0613884925842285
+                        5.749000549316406,
+                        1.8545130491256714,
+                        1.5511960983276367
                     ],
                     "LocalScale": [
                         1.0,
@@ -165,9 +165,9 @@
                                 0.0
                             ],
                             "Scale": [
+                                0.75,
                                 1.0,
-                                1.0,
-                                1.0
+                                0.75
                             ],
                             "Rotation": [
                                 0.6930723786354065,
@@ -223,12 +223,12 @@
                                 0.0
                             ],
                             "Scale": [
+                                0.75,
                                 1.0,
-                                1.0,
-                                1.0
+                                0.75
                             ],
                             "Rotation": [
-                                0.16337311267852783,
+                                0.16337309777736664,
                                 0.6011492609977722,
                                 -0.6880829334259033,
                                 -0.3721165955066681
@@ -303,9 +303,9 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        2.241072177886963,
-                        -0.4500010013580322,
-                        -2.6804580688476563
+                        0.5362936854362488,
+                        1.385831356048584,
+                        0.11621123552322388
                     ],
                     "LocalScale": [
                         0.25,
@@ -339,9 +339,9 @@
                                 0.0
                             ],
                             "Scale": [
-                                1.0,
-                                1.0,
-                                1.0
+                                0.25,
+                                0.25,
+                                0.25
                             ],
                             "Rotation": [
                                 0.0,
@@ -349,7 +349,7 @@
                                 0.0,
                                 -0.44885683059692383
                             ],
-                            "Mass": 1.0
+                            "Mass": 5.0
                         }
                     }
                 ]
@@ -431,9 +431,9 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        -5.0,
-                        0.0,
-                        0.0
+                        3.6740427017211914,
+                        1.0603399276733398,
+                        1.255828857421875
                     ],
                     "LocalScale": [
                         1.0,
@@ -458,7 +458,7 @@
                                 255.0,
                                 255.0
                             ],
-                            "Distance": 15.0,
+                            "Distance": 5.0,
                             "ConstantAttenuation": 1.0
                         }
                     }
@@ -471,9 +471,9 @@
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
-                        -8.0,
-                        1.0,
-                        -0.9471156597137451
+                        -2.117011785507202,
+                        1.9648925065994263,
+                        -2.842116355895996
                     ],
                     "LocalScale": [
                         1.0,
@@ -510,14 +510,14 @@
             }
         },
         {
-            "Sound Test": {
+            "DirectionalLight": {
                 "IsActive": true,
                 "Tag": "Untagged",
                 "Transform": {
                     "LocalPosition": [
+                        -2.989328622817993,
                         0.0,
-                        0.0,
-                        0.0
+                        -2.220072031021118
                     ],
                     "LocalScale": [
                         1.0,
@@ -525,40 +525,37 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
+                        0.8917989134788513,
+                        0.052982721477746964,
+                        0.44852808117866516,
+                        -0.026647651568055153
                     ],
                     "ParentIndex": -1
                 },
                 "Components": [
                     {
-                        "AudioSource": {
+                        "DirectionalLight": {
                             "IsActive": true,
-                            "Channel": "SFX",
-                            "PlayOnAwake": true,
-                            "IsLooping": false,
-                            "Is3D": false,
-                            "Volume": 1.0,
-                            "Pan": 0.0,
-                            "MinDistance": 1.0,
-                            "MaxDistance": 5.0,
-                            "AudioClip": "fireball.wav"
+                            "Color": [
+                                0.0,
+                                255.0,
+                                0.0,
+                                136.0
+                            ]
                         }
                     }
                 ]
             }
         },
         {
-            "Wave1": {
+            "Camera": {
                 "IsActive": true,
-                "Tag": "Untagged",
+                "Tag": "",
                 "Transform": {
                     "LocalPosition": [
-                        6.95363712310791,
-                        4.6985979080200195,
-                        0.0
+                        0.0,
+                        2.0408527851104736,
+                        -5.882589817047119
                     ],
                     "LocalScale": [
                         1.0,
@@ -566,235 +563,12 @@
                         1.0
                     ],
                     "LocalRotation": [
-                        1.0,
-                        0.0,
+                        0.9838850498199463,
+                        0.1788022220134735,
                         0.0,
                         0.0
                     ],
                     "ParentIndex": -1
-                },
-                "Components": [
-                    {
-                        "ParticleEmitter": {
-                            "IsActive": true,
-                            "ParticleEmitterProps": {
-                                "MaxParticleNumber": 2000,
-                                "SpawnRate": 0.0010000000474974513,
-                                "SpawnRateVariation": 0.0,
-                                "SimulationDuration": 5.0,
-                                "IsLooping": true
-                            },
-                            "ParticleProps": {
-                                "MeshName": "Cube.obj",
-                                "TextureName": "None",
-                                "IsBillboard": false,
-                                "LifeTime": 1.100000023841858,
-                                "LifeTimeVariation": 0.0,
-                                "PositionOffset": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "PositionVariation": [
-                                    0.0,
-                                    0.0,
-                                    3.0
-                                ],
-                                "BeginSize": 5.0,
-                                "EndSize": 5.0,
-                                "SizeVariation": 5.0,
-                                "BeginColor": [
-                                    0.0,
-                                    40.0,
-                                    255.0,
-                                    255.0
-                                ],
-                                "EndColor": [
-                                    127.0,
-                                    147.0,
-                                    255.0,
-                                    255.0
-                                ],
-                                "BeginVelocity": [
-                                    5.0,
-                                    -10.0,
-                                    0.0
-                                ],
-                                "EndVelocity": [
-                                    5.0,
-                                    5.0,
-                                    0.0
-                                ],
-                                "VelocityVariationBegin": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "VelocityVariationEnd": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ]
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "ParticleEmitter2": {
-                "IsActive": true,
-                "Tag": "Untagged",
-                "Transform": {
-                    "LocalPosition": [
-                        11.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "LocalRotation": [
-                        0.983413577079773,
-                        0.1813773810863495,
-                        0.0,
-                        0.0
-                    ],
-                    "ParentIndex": -1
-                },
-                "Components": [
-                    {
-                        "ParticleEmitter": {
-                            "IsActive": true,
-                            "ParticleEmitterProps": {
-                                "MaxParticleNumber": 2000,
-                                "SpawnRate": 0.0020000000949949026,
-                                "SpawnRateVariation": 0.0,
-                                "SimulationDuration": 5.0,
-                                "IsLooping": true
-                            },
-                            "ParticleProps": {
-                                "MeshName": "Quad.obj",
-                                "TextureName": "None",
-                                "IsBillboard": true,
-                                "LifeTime": 2.0,
-                                "LifeTimeVariation": 0.0,
-                                "PositionOffset": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "PositionVariation": [
-                                    0.5,
-                                    0.5,
-                                    0.5
-                                ],
-                                "BeginSize": 1.0,
-                                "EndSize": 1.0,
-                                "SizeVariation": 1.0,
-                                "BeginColor": [
-                                    255.0,
-                                    255.0,
-                                    255.0,
-                                    255.0
-                                ],
-                                "EndColor": [
-                                    255.0,
-                                    0.0,
-                                    0.0,
-                                    255.0
-                                ],
-                                "BeginVelocity": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "EndVelocity": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "VelocityVariationBegin": [
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ],
-                                "VelocityVariationEnd": [
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "Player Script": {
-                "IsActive": true,
-                "Tag": "Untagged",
-                "Transform": {
-                    "LocalPosition": [
-                        15.12359619140625,
-                        -0.4476907551288605,
-                        10.092803955078125
-                    ],
-                    "LocalScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "LocalRotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "ParentIndex": -1
-                },
-                "Components": [
-                    {
-                        "Model": {
-                            "IsActive": true,
-                            "Mesh": "Cube.obj",
-                            "Texture": "VikingRoom.img",
-                            "Shader": "DefaultDeferredRendering.shd"
-                        }
-                    },
-                    {
-                        "ScriptComponent": {
-                            "IsActive": true,
-                            "scriptName": "PlayerScript"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "Player Camera": {
-                "IsActive": true,
-                "Tag": "Untagged",
-                "Transform": {
-                    "LocalPosition": [
-                        0.0,
-                        3.0,
-                        -5.0
-                    ],
-                    "LocalScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "LocalRotation": [
-                        0.9762960076332092,
-                        0.21643958985805511,
-                        0.0,
-                        0.0
-                    ],
-                    "ParentIndex": 13
                 },
                 "Components": [
                     {
@@ -803,188 +577,6 @@
                             "FOV": 60.0,
                             "Near": 0.10000000149011612,
                             "Far": 1000.0
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "ParticleEmitter3": {
-                "IsActive": true,
-                "Tag": "Untagged",
-                "Transform": {
-                    "LocalPosition": [
-                        11.0,
-                        0.0,
-                        0.0
-                    ],
-                    "LocalScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "LocalRotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "ParentIndex": -1
-                },
-                "Components": [
-                    {
-                        "ParticleEmitter": {
-                            "IsActive": true,
-                            "ParticleEmitterProps": {
-                                "MaxParticleNumber": 2000,
-                                "SpawnRate": 0.0010000000474974513,
-                                "SpawnRateVariation": 0.0,
-                                "SimulationDuration": 5.0,
-                                "IsLooping": true
-                            },
-                            "ParticleProps": {
-                                "MeshName": "Quad.obj",
-                                "TextureName": "None",
-                                "IsBillboard": true,
-                                "LifeTime": 2.0,
-                                "LifeTimeVariation": 0.0,
-                                "PositionOffset": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "PositionVariation": [
-                                    0.5,
-                                    0.5,
-                                    0.5
-                                ],
-                                "BeginSize": 1.0,
-                                "EndSize": 1.0,
-                                "SizeVariation": 1.0,
-                                "BeginColor": [
-                                    0.0,
-                                    0.0,
-                                    255.0,
-                                    255.0
-                                ],
-                                "EndColor": [
-                                    255.0,
-                                    255.0,
-                                    255.0,
-                                    255.0
-                                ],
-                                "BeginVelocity": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "EndVelocity": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "VelocityVariationBegin": [
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ],
-                                "VelocityVariationEnd": [
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "Wave2": {
-                "IsActive": true,
-                "Tag": "Untagged",
-                "Transform": {
-                    "LocalPosition": [
-                        12.424078941345215,
-                        2.0,
-                        0.0
-                    ],
-                    "LocalScale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "LocalRotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "ParentIndex": -1
-                },
-                "Components": [
-                    {
-                        "ParticleEmitter": {
-                            "IsActive": true,
-                            "ParticleEmitterProps": {
-                                "MaxParticleNumber": 2000,
-                                "SpawnRate": 0.0010000000474974513,
-                                "SpawnRateVariation": 0.0,
-                                "SimulationDuration": 5.0,
-                                "IsLooping": true
-                            },
-                            "ParticleProps": {
-                                "MeshName": "Cube.obj",
-                                "TextureName": "None",
-                                "IsBillboard": true,
-                                "LifeTime": 1.0,
-                                "LifeTimeVariation": 0.0,
-                                "PositionOffset": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "PositionVariation": [
-                                    0.0,
-                                    0.0,
-                                    3.0
-                                ],
-                                "BeginSize": 5.0,
-                                "EndSize": 5.0,
-                                "SizeVariation": 5.0,
-                                "BeginColor": [
-                                    127.0,
-                                    147.0,
-                                    255.0,
-                                    255.0
-                                ],
-                                "EndColor": [
-                                    0.0,
-                                    40.0,
-                                    255.0,
-                                    255.0
-                                ],
-                                "BeginVelocity": [
-                                    5.0,
-                                    5.0,
-                                    0.0
-                                ],
-                                "EndVelocity": [
-                                    5.0,
-                                    -10.0,
-                                    0.0
-                                ],
-                                "VelocityVariationBegin": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "VelocityVariationEnd": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ]
-                            }
                         }
                     }
                 ]

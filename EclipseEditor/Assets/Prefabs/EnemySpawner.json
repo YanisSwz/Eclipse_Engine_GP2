@@ -35,10 +35,10 @@
                     "ParticleEmitter": {
                         "IsActive": true,
                         "ParticleEmitterProps": {
-                            "MaxParticleNumber": 500,
+                            "MaxParticleNumber": 800,
                             "SpawnRate": 0.009999999776482582,
                             "SpawnRateVariation": 0.0,
-                            "SimulationDuration": 5.0,
+                            "SimulationDuration": 1.5,
                             "IsLooping": false
                         },
                         "ParticleProps": {
@@ -53,24 +53,24 @@
                                 0.0
                             ],
                             "PositionVariation": [
-                                0.0,
-                                0.0,
-                                0.0
+                                4.0,
+                                4.0,
+                                4.0
                             ],
-                            "BeginSize": 75.0,
-                            "EndSize": 25.0,
-                            "SizeVariation": 25.0,
+                            "BeginSize": 10.0,
+                            "EndSize": 8.0,
+                            "SizeVariation": 0.0,
                             "BeginColor": [
-                                1.0,
+                                255.0,
+                                210.0,
                                 0.0,
-                                1.0,
-                                1.0
+                                255.0
                             ],
                             "EndColor": [
-                                1.0,
-                                0.0,
-                                1.0,
-                                1.0
+                                255.0,
+                                230.79998779296875,
+                                133.99998474121094,
+                                255.0
                             ],
                             "BeginVelocity": [
                                 0.0,
@@ -88,9 +88,9 @@
                                 1.0
                             ],
                             "VelocityVariationEnd": [
-                                1.0,
-                                1.0,
-                                1.0
+                                0.0,
+                                0.0,
+                                0.0
                             ]
                         }
                     }

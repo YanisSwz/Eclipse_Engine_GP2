@@ -125,7 +125,7 @@ namespace Core
 		Math::Quat rotation = GetRotation();
 
 		_j["CapsuleCollider"] = json{
-			{"IsActive", IsActive()},
+			{"IsActive", GetGameObject()->IsActive()},
 			{"IsDynamic", GetIsDynamic()},
 			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
 			{"Scale", {scale.x, scale.y, scale.z}},

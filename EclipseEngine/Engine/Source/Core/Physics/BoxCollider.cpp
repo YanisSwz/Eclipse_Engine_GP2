@@ -1,4 +1,5 @@
 #include "Physics/BoxCollider.hpp"
+#include "GameObject.hpp"
 
 // Jolt Includes
 #include <Jolt/Jolt.h>
@@ -127,7 +128,7 @@ namespace Core
 		Math::Quat rotation = GetRotation();
 
 		_j["BoxCollider"] = json{
-			{"IsActive", IsActive()},
+			{"IsActive", GetGameObject()->IsActive()},
 			{"IsDynamic", GetIsDynamic()},
 			{"OffsetPosition", {offsetPosition.x, offsetPosition.y, offsetPosition.z}},
 			{"Scale", {scale.x, scale.y, scale.z}},

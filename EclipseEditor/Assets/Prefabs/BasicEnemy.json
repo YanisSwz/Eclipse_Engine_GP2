@@ -64,57 +64,57 @@
                     "ParticleEmitter": {
                         "IsActive": true,
                         "ParticleEmitterProps": {
-                            "MaxParticleNumber": 500,
-                            "SpawnRate": 0.009999999776482582,
+                            "MaxParticleNumber": 2000,
+                            "SpawnRate": 0.0010000000474974513,
                             "SpawnRateVariation": 0.0,
-                            "SimulationDuration": 5.0,
+                            "SimulationDuration": 2.5,
                             "IsLooping": false
                         },
                         "ParticleProps": {
                             "MeshName": "Quad.obj",
                             "TextureName": "None",
                             "IsBillboard": true,
-                            "LifeTime": 1.0,
-                            "LifeTimeVariation": 0.0,
+                            "LifeTime": 2.0,
+                            "LifeTimeVariation": 0.5,
                             "PositionOffset": [
                                 0.0,
-                                0.0,
+                                -2.0,
                                 0.0
                             ],
                             "PositionVariation": [
+                                1.0,
                                 0.0,
-                                0.0,
-                                0.0
+                                1.0
                             ],
-                            "BeginSize": 75.0,
-                            "EndSize": 25.0,
-                            "SizeVariation": 25.0,
+                            "BeginSize": 10.0,
+                            "EndSize": 8.0,
+                            "SizeVariation": 0.0,
                             "BeginColor": [
-                                0.003921568859368563,
-                                0.0,
-                                0.003921568859368563,
-                                0.003921568859368563
+                                45.4455451965332,
+                                45.4455451965332,
+                                45.4455451965332,
+                                255.0
                             ],
                             "EndColor": [
-                                0.003921568859368563,
-                                0.0,
-                                0.003921568859368563,
-                                0.003921568859368563
+                                138.86138916015625,
+                                138.86138916015625,
+                                138.86138916015625,
+                                255.0
                             ],
                             "BeginVelocity": [
                                 0.0,
-                                0.0,
+                                3.0,
                                 0.0
                             ],
                             "EndVelocity": [
                                 0.0,
-                                0.0,
+                                1.0,
                                 0.0
                             ],
                             "VelocityVariationBegin": [
-                                1.0,
-                                1.0,
-                                1.0
+                                3.0,
+                                0.5,
+                                3.0
                             ],
                             "VelocityVariationEnd": [
                                 1.0,
