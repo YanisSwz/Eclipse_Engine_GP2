@@ -55,9 +55,9 @@ The project needs Git and CMake installed, and internet access.
 ## ​🌘​ Authors
 
 ### Programmers
-- [Arthur GUEDU](https://gitlabstudents.isartintra.com/a.guedu)
-- [Lucas LEPINAY](https://gitlabstudents.isartintra.com/l.lepinay)
-- [Yanis SCHWARZ](https://gitlabstudents.isartintra.com/y.schwarz)
+- [Arthur GUÉDU](https://github.com/Arthur-GUEDU)
+- [Lucas LEPINAY](https://github.com/LucasLEPINAY)
+- [Yanis SCHWARZ](https://github.com/YanisSwz)
 
 ### Artist
 - Noémie Mermet
