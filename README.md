@@ -60,7 +60,7 @@ The project needs Git and CMake installed, and internet access.
 - [Yanis SCHWARZ](https://github.com/YanisSwz)
 
 ### Artist
-- Noémie Mermet
+- [Noémie Mermet](https://www.artstation.com/noemie_mermet)
 
 ## 📷 Gallery
 
